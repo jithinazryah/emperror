@@ -1,0 +1,230 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Aug 22, 2016, 4:55:21 PM
+    Author     : user
+*/
+@import url("https://fonts.googleapis.com/css?family=Roboto:400,500,700");
+body,p,tr,td,table,div,span{
+    font-family: 'Roboto', sans-serif; 
+}
+@page {
+        size: A4;
+        margin: 40px;
+       // margin-top: 100px;
+    }
+@media print{
+       // size: A4;
+        //margin: 30px;
+        //margin: 20mm;
+        
+        
+        
+    
+}
+.main-tabl{
+    margin: auto;
+}
+thead { display: table-header-group;   }
+tfoot{display: table-footer-group;}
+table { page-break-inside:auto;}
+tr{ page-break-inside:avoid; page-break-after:auto; }
+
+//h6 {page-break-before: always}
+ //table {page-break-after: always}
+table.table{
+    border: 1px solid black;
+    border-collapse: collapse;
+    width:100%;
+}
+.table th {
+    border: 1px solid black;
+    color: #464545;
+    font-size: 13px;
+    font-weight: bold;
+}
+.table td {
+    border: 1px solid black;
+    font-size: 8px;
+    text-align: center;
+    padding: 7px;
+}
+.tbl{
+    border: 1px solid black ! important;
+}
+
+.main{
+    width:900px;
+    margin: auto;
+    font-family: 'Roboto', sans-serif; 
+}
+ h6{
+    margin-bottom: 2px;
+    margin-top: 15px;
+    font-size: 15px;
+    color: #464545;
+}
+
+.main-left{
+    float: left;
+}
+.main-right{
+    float: right;
+}
+.main-right h2{
+    font-size: 30px;
+    margin-bottom: 13px;
+    color: #4e4e4e;
+}
+.header{
+    font-size: 12.5px;
+    display: inline-block;
+    width: 100%;
+}
+.header table{
+    margin-top: 12px;
+}
+.heading{
+    width: 98%;
+    padding: 13px 12px;
+    text-align: center;
+    font-weight: bold;
+    font-size: 17px;
+}
+.topcontent{
+    width:100%;
+    display:inline-block;
+    padding-bottom: 12px;
+}
+.topcontent td{
+    font-size: 13px;
+}
+.topcontent-left{
+    float:left;
+    padding-right: 118px;
+}
+.topcontent-center{
+    float:left;
+}
+.topcontent-right{
+    float:right;
+}
+.content{
+    width:100%;
+}
+.content-body h6{
+    margin-bottom: 8px;
+    margin-top: 10px;
+}
+.para-heading{
+    color: red;
+    font-style: italic;
+}
+.para-content{
+    font-weight: bold;
+    font-size: 12px;
+}
+.para-content1{
+    font-size: 12px;
+}
+.bankdetails{
+    width: 100%;
+    display: inline-block;
+}
+.bankdetails h6{
+    color:red;
+}
+.bankdetails-left{
+    width: 40%;
+    float: left;
+}
+.bankdetails-right{
+    width: 40%;
+    float: right;
+    padding-top: 24px;
+}
+.bankdetails h3{
+    text-decoration: underline;
+}
+.footer{
+    width: 100%;
+    display: inline-block;
+    font-size: 15px;
+    color: #4e4e4e
+}
+.footer p{
+    text-align: center;
+    font-size: 12px;
+}
+.address h4{
+    text-align: left;
+    text-decoration: underline;
+}
+.address p{
+    text-align: left;
+}
+.address h3{
+    text-decoration: underline;
+}
+
+/*
+.ptittle{
+    color: red;
+    font-size: 12px;
+}
+.pcontent{
+    font-size: 10px;
+}
+.dt1
+{
+    width:300px;
+    height:100px;
+    float:left;
+    font-family: 'Roboto', sans-serif;
+    font-size:14px;
+}
+.dt1 table td{
+    font-family: 'Roboto', sans-serif;
+    font-size:12px;
+}
+.dt2
+{
+    width:250px;
+    height:100px;
+    float:right !important;
+    font-family: 'Roboto', sans-serif;
+    font-size:14px;
+}
+.container
+{width:1000px;
+ height:100px;
+}
+.hei{
+    height: 100px;
+}
+.footer
+{width:1000px;
+ height:100px;
+}
+.footer p{
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+    font-size:12px;
+}
+.header{
+    width:1000px;
+    height:100px;
+}
+.left{
+    width:300px;
+    height:100px;
+    float:left;
+}
+.right{
+    width:250px;
+    height:100px;
+    float:right !important;
+}*/
