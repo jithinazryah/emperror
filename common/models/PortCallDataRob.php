@@ -53,7 +53,7 @@ class PortCallDataRob extends \yii\db\ActiveRecord {
                 return [
                     [['appointment_id'], 'required'],
                     [['appointment_id', 'fo_arrival_unit', 'do_arrival_unit', 'go_arrival_unit', 'lo_arrival_unit', 'fresh_water_arrival_unit', 'fo_sailing_unit', 'do_sailing_unit', 'go_sailing_unit', 'lo_sailing_unit', 'fresh_water_sailing_unit', 'additional_info', 'status', 'CB', 'UB'], 'integer'],
-                    [['fo_arrival_quantity', 'do_arrival_quantity', 'go_arrival_quantity', 'lo_arrival_quantity', 'fresh_water_arrival_quantity','fo_sailing_quantity','do_sailing_quantity','go_sailing_quantity','lo_sailing_quantity','lo_sailing_quantity', 'fresh_water_sailing_quantity'], 'safe'],
+                    [['fo_arrival_quantity', 'do_arrival_quantity', 'go_arrival_quantity', 'lo_arrival_quantity', 'fresh_water_arrival_quantity','fo_sailing_quantity','do_sailing_quantity','go_sailing_quantity','lo_sailing_quantity','lo_sailing_quantity', 'fresh_water_sailing_quantity','rob_received'], 'safe'],
                     [['comments'], 'string'],
                     [['DOC', 'DOU'], 'safe'],
                 ];
@@ -87,6 +87,7 @@ class PortCallDataRob extends \yii\db\ActiveRecord {
                     'fresh_water_sailing_unit' => 'Fresh Water Sailing Unit',
                     'fresh_water_sailing_quantity' => 'Fresh Water Sailing Quantity',
                     'additional_info' => 'Additional Info',
+                    'rob_received' => 'ROB Received',
                     'comments' => 'Comments',
                     'status' => 'Status',
                     'CB' => 'Cb',

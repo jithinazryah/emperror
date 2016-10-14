@@ -58,8 +58,9 @@ class SetValues extends Component {
         }
 
         public function DateFormate($date) {
+                 $old = strtotime('1999-01-01 00:00:00');
                 if ($date == Null || $date == '0000-00-00 00:00:00') {
-                        return '(Not Set)';
+                        return ;
                 } else {
                          $f = 'd-M-Y' . (date('H:i:s', strtotime($date)) != '00:00:00' ? ' H:i' : '');
                         return str_replace(' 00:00:00', '', date($f, strtotime($date)));

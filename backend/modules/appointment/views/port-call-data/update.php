@@ -134,6 +134,7 @@ $this->params['breadcrumbs'][] = 'Update';
                                         'model_appointment' => $model_appointment,
                                         'model_port_break' => $model_port_break,
                                         'model_port_cargo_details' => $model_port_cargo_details,
+                                        'model_port_stoppages' => $model_port_stoppages,
                                     ])
                                     ?>
                                 </div>

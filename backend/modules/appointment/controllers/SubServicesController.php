@@ -75,6 +75,8 @@ class SubServicesController extends Controller {
 
         public function actionAdd($id, $sub_id = NULL) {
                 $estimates = EstimatedProforma::findOne(['id' => $id]);
+//                echo "<pre>";
+//                var_dump($estimates);exit;
                 $appointment = Appointment::findOne($estimates->apponitment_id);
                 $mastersub = MasterSubService::findAll(['service_id' => $estimates->service_id]);
                 $subcat = SubServices::findAll(['estid' => $id]);
@@ -102,6 +104,7 @@ class SubServicesController extends Controller {
                             'model' => $model,
                             'appointment' => $appointment,
                             'subcat' => $subcat,
+                            'estimates' => $estimates,
                 ]);
         }
 

@@ -21,7 +21,7 @@ use yii\widgets\ActiveForm;
     <?php
     //var_dump($model->appointment_id);exit;
     ?>
-    <div class="row hidediv">
+    <div class="row hidediv1">
         <div class="col-md-12">
             <?= $form->field($model_imigration, 'arrived_ps')->textInput(['tabindex' => 1]) ?>
 
@@ -249,6 +249,9 @@ use yii\widgets\ActiveForm;
                    var value =  $('#delete_port_vals').val();
                 }
                 return false;
+            });
+            $('.portcall').click(function () {
+                $('.hidediv1').slideToggle();
             });
         });
 </script>

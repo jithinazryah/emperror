@@ -5,8 +5,9 @@
 <?= $form->field($model, 'immigration_commenced')->textInput(['tabindex' => 28]) ?>
 
 <?= $form->field($model, 'pob_outbound')->textInput(['tabindex' => 32]) ?>
+<div class="form-group "></div>
 
-<?= $form->field($model, 'cosp')->textInput(['tabindex' => 36]) ?>
+<?php// $form->field($model, 'cosp')->textInput(['tabindex' => 36]) ?>
 
 <?= $form->field($model, 'anchor_aweigh')->textInput(['tabindex' => 21]) ?>
 
@@ -15,8 +16,8 @@
 <?= $form->field($model, 'immigartion_completed')->textInput(['tabindex' => 29]) ?>
 
 <?= $form->field($model, 'cast_off')->textInput(['tabindex' => 33]) ?>
-
-<?= $form->field($model, 'fasop')->textInput(['tabindex' => 37]) ?>
+<div class="form-group "></div>
+<?php// $form->field($model, 'fasop')->textInput(['tabindex' => 37]) ?>
 
 <?= $form->field($model, 'arrived_pilot_station')->textInput(['tabindex' => 22]) ?>
 
@@ -34,7 +35,9 @@
 
 <?= $form->field($model, 'cargo_completed')->textInput(['tabindex' => 31]) ?>
 
-<?= $form->field($model, 'cleared_channel')->textInput(['tabindex' => 35]) ?>
+<?= $form->field($model, 'cosp')->textInput(['tabindex' => 35]) ?>
+
+<?php// $form->field($model, 'cleared_channel')->textInput(['tabindex' => 35]) ?>
 
 <div class="form-group "></div>
 

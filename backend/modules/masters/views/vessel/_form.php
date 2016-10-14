@@ -39,7 +39,7 @@ use yii\helpers\ArrayHelper;
 
     <?= $form->field($model, 'picture')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'dwt')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'dwt')->textInput(['maxlength' => true, 'class' => 'mtpostfix form-control']) ?>
 
     <?= $form->field($model, 'grt')->textInput(['maxlength' => true, 'class' => 'mtpostfix form-control']) ?>
 
@@ -58,30 +58,32 @@ use yii\helpers\ArrayHelper;
     <?php ActiveForm::end(); ?>
 
     <script>
-        $(document).ready(function () {
-            /*
-             * To add decimal(.000) to the desired text fields
-             */
-            $('.mtpostfix').blur(function () {
-                var str = $(this).val();
-                if (str != '') {
-                    if (str.toLowerCase().indexOf('mt') == -1) {
-                        $(this).val(str + ' MT');
+            $(document).ready(function () {
+                /*
+                 * To add decimal(.000) to the desired text fields
+                 */
+                $('.mtpostfix').blur(function () {
+                    var str = $(this).val();
+                    if (str != '') {
+                        if (str.toLowerCase().indexOf('mt') == -1) {
+                            $(this).val(str + ' MT');
+                        }
                     }
-                }
+                });
+
+
+                $('.mpostfix').blur(function () {
+                    var str = $(this).val();
+                    if (str != '') {
+                        if (str.toLowerCase().indexOf('m') == -1) {
+                            $(this).val(str + ' M');
+                        }
+                    }
+                });
+
+
+
             });
-
-
-            $('.mpostfix').blur(function () {
-                var str = $(this).val();
-                if (str != '') {
-                    $(this).val(str + ' M');
-                }
-            });
-
-
-
-        });
     </script>
 
 </div>

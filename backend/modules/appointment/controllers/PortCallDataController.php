@@ -16,6 +16,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use common\models\ImigrationClearance;
+use common\models\PortStoppages;
 
 /**
  * PortCallDataController implements the CRUD actions for PortCallData model.
@@ -94,7 +95,8 @@ class PortCallDataController extends Controller {
                 $model_additional = PortCallDataAdditional::findAll(['appointment_id' => $id]);
                 $model_imigration = ImigrationClearance::findOne(['appointment_id' => $id]);
                 $model_port_break = PortBreakTimings::findAll(['appointment_id' => $id]);
-                $model_port_cargo_details = PortCargoDetails::findOne($id);
+                $model_port_cargo_details = PortCargoDetails::findOne(['appointment_id' => $id]);
+                $model_port_stoppages = PortStoppages::findAll(['appointment_id' => $id]);
                 if ($model_port_cargo_details == '')
                         $model_port_cargo_details = new PortCargoDetails;
 
@@ -108,6 +110,7 @@ class PortCallDataController extends Controller {
                         $model_rob = PortCallDataRob::findOne(['appointment_id' => $id]);
                         $model_imigration = ImigrationClearance::findOne(['appointment_id' => $id]);
                         $model_port_break = PortBreakTimings::findAll(['appointment_id' => $id]);
+                        $model_port_stoppages = PortStoppages::findAll(['appointment_id' => $id]);
                 } else {
 
                         throw new \yii\web\HttpException(404, 'This Appointment could not be found.Eroor Code:1002');
@@ -131,6 +134,7 @@ class PortCallDataController extends Controller {
                             'model_additional' => $model_additional,
                             'model_port_break' => $model_port_break,
                             'model_port_cargo_details' => $model_port_cargo_details,
+                            'model_port_stoppages' => $model_port_stoppages,
                 ]);
         }
 
@@ -324,11 +328,12 @@ class PortCallDataController extends Controller {
                 if ($model_port_cargo_details == '') {
                         $model_port_cargo_details = new PortCargoDetails;
                 } else {
-                        $model_port_cargo_details = PortCargoDetails::findOne($id);
+                        $model_port_cargo_details = PortCargoDetails::findOne(['appointment_id' => $id]);
                 }
                 if ($model_port_cargo_details->load(Yii::$app->request->post())) {
                         $model_port_cargo_details = $this->saveportcargodetails($model_port_cargo_details, $id);
                 }
+                
                 if (isset($_POST['create']) && $_POST['create'] != '') {
                         $arr = [];
                         $i = 0;
@@ -355,6 +360,7 @@ class PortCallDataController extends Controller {
                                         $port_break->save();
                         }
                 }
+                
                 if (isset($_POST['updatee']) && $_POST['updatee'] != '') {
                         $arr = [];
                         $i = 0;
@@ -383,6 +389,75 @@ class PortCallDataController extends Controller {
                                 PortBreakTimings::findOne($val)->delete();
                         }
                 }
+               
+                if (isset($_POST['create1']) && $_POST['create1'] != '') {
+                        $arr = [];
+                        $i = 0;
+                        foreach ($_POST['create1']['stoppage_from'] as $val) {
+                                $arr[$i]['from'] = $val;
+                                $i++;
+                        }
+                        $i = 0;
+                        foreach ($_POST['create1']['stoppage_to'] as $val) {
+                                $arr[$i]['to'] = $val;
+                                $i++;
+                        }
+                        $i=0;
+                        foreach ($_POST['create1']['comment'] as $val) {
+                                $arr[$i]['comment'] = $val;
+                                $i++;
+                        }
+                        
+                        foreach ($arr as $val) {
+                                $port_stoppages = new PortStoppages;
+                                $port_stoppages->appointment_id = $id;
+                                $port_stoppages->stoppage_from = $val['from'];
+                                $port_stoppages->stoppage_to = $val['to'];
+                                $port_stoppages->comment = $val['comment'];
+                                $port_stoppages->status = 1;
+                                $port_stoppages->CB = Yii::$app->user->identity->id;
+                                $port_stoppages->UB = Yii::$app->user->identity->id;
+                                $port_stoppages->DOC = date('Y-m-d');
+                                $port_stoppages->stoppage_from = $this->changeformat($port_stoppages->stoppage_from);
+                                $port_stoppages->stoppage_to = $this->changeformat($port_stoppages->stoppage_to);
+                                if (!empty($port_stoppages->comment))
+                                        $port_stoppages->save();
+                        }
+                }
+                if (isset($_POST['updatee1']) && $_POST['updatee1'] != '') {
+                        $arr = [];
+                        $i = 0;
+                        foreach ($_POST['updatee'] as $key => $val) {
+                                $arr[$key]['from'] = $val['stoppage_from'][0];
+                                $arr[$key]['to'] = $val['stoppage_to'][0];
+                                $arr[$key]['comment'] = $val['comment'][0];
+                                $i++;
+                        }
+                        
+                        foreach ($arr as $key => $value) {
+
+                                $port_stoppages = PortStoppages::findOne($key);
+                                $port_stoppages->stoppage_from = $value['from'];
+                                $port_stoppages->stoppage_to = $value['to'];
+                                $port_stoppages->comment = $value['comment'];
+                                if ($port_stoppages->comment != '') {
+                                        if (strpos($port_stoppages->stoppage_from, '-') == false) {
+                                                $port_stoppages->stoppage_from = $this->changeformat($port_stoppages->stoppage_from);
+                                        }
+                                        if (strpos($port_stoppages->stoppage_to, '-') == false) {
+                                                $port_stoppages->stoppage_to = $this->changeformat($port_stoppages->stoppage_to);
+                                        }
+                                }
+                                $port_stoppages->save();
+                        }
+                }
+                if (isset($_POST['delete_port_stoppages']) && $_POST['delete_port_stoppages'] != '') {
+                        $vals = rtrim($_POST['delete_port_stoppages'], ',');
+                        $vals = explode(',', $vals);
+                        foreach ($vals as $val) {
+                                PortStoppages::findOne($val)->delete();
+                        }
+                }
                 return $this->redirect(['update', 'id' => $id]);
         }
 
@@ -394,16 +469,108 @@ class PortCallDataController extends Controller {
                 $model_port_cargo_details->save();
                 return $model_port_cargo_details;
         }
+        
+        public function actionPortStoppages() {
+                $id = $_POST['app_id'];
+                if (isset($_POST['create1']) && $_POST['create1'] != '') {
+                        $arr = [];
+                        $i = 0;
+                        foreach ($_POST['create1']['stoppage_from'] as $val) {
+                                $arr[$i]['from'] = $val;
+                                $i++;
+                        }
+                        $i = 0;
+                        foreach ($_POST['create1']['stoppage_to'] as $val) {
+                                $arr[$i]['to'] = $val;
+                                $i++;
+                        }
+                        $i=0;
+                        foreach ($_POST['create1']['comment'] as $val) {
+                                $arr[$i]['comment'] = $val;
+                                $i++;
+                        }
+                        
+                        foreach ($arr as $val) {
+                                $port_stoppages = new PortStoppages;
+                                $port_stoppages->appointment_id = $id;
+                                $port_stoppages->stoppage_from = $val['from'];
+                                $port_stoppages->stoppage_to = $val['to'];
+                                $port_stoppages->comment = $val['comment'];
+                                $port_stoppages->status = 1;
+                                $port_stoppages->CB = Yii::$app->user->identity->id;
+                                $port_stoppages->UB = Yii::$app->user->identity->id;
+                                $port_stoppages->DOC = date('Y-m-d');
+                                $port_stoppages->stoppage_from = $this->changeformat($port_stoppages->stoppage_from);
+                                $port_stoppages->stoppage_to = $this->changeformat($port_stoppages->stoppage_to);
+                                if (!empty($port_stoppages->comment))
+                                        $port_stoppages->save();
+                        }
+                }
+                if (isset($_POST['updatee1']) && $_POST['updatee1'] != '') {
+                        $arr = [];
+                        $i = 0;
+                        foreach ($_POST['updatee'] as $key => $val) {
+                                $arr[$key]['from'] = $val['stoppage_from'][0];
+                                $arr[$key]['to'] = $val['stoppage_to'][0];
+                                $arr[$key]['comment'] = $val['comment'][0];
+                                $i++;
+                        }
+                        
+                        foreach ($arr as $key => $value) {
+
+                                $port_stoppages = PortStoppages::findOne($key);
+                                $port_stoppages->stoppage_from = $value['from'];
+                                $port_stoppages->stoppage_to = $value['to'];
+                                $port_stoppages->comment = $value['comment'];
+                                if ($port_stoppages->comment != '') {
+                                        if (strpos($port_stoppages->stoppage_from, '-') == false) {
+                                                $port_stoppages->stoppage_from = $this->changeformat($port_stoppages->stoppage_from);
+                                        }
+                                        if (strpos($port_stoppages->stoppage_to, '-') == false) {
+                                                $port_stoppages->stoppage_to = $this->changeformat($port_stoppages->stoppage_to);
+                                        }
+                                }
+                                $port_stoppages->save();
+                        }
+                }
+                if (isset($_POST['delete_port_stoppages']) && $_POST['delete_port_stoppages'] != '') {
+                        $vals = rtrim($_POST['delete_port_stoppages'], ',');
+                        $vals = explode(',', $vals);
+                        foreach ($vals as $val) {
+                                PortStoppages::findOne($val)->delete();
+                        }
+                }
+                return $this->redirect(['update', 'id' => $id]);
+        }
 
         public function portcallReport($data, $label) {
                 $arr = [];
-                $check = ['id', 'appointment_id', 'additional_info', 'additional_info', 'comments', 'status', 'CB', 'UB', 'DOC', 'DOU', 'eta', 'ets'];
+                $check = ['id', 'appointment_id', 'additional_info', 'additional_info', 'comments', 'status', 'CB', 'UB', 'DOC', 'DOU', 'eta', 'ets', 'immigration_commenced', 'immigartion_completed','fasop','cleared_channel','eta_next_port'];
                 $i = 0;
                 $old = strtotime('1999-01-01 00:00:00');
                 foreach ($data as $key => $value) {
+
                         if ($value != '' && $value != '0000-00-00 00:00:00' && strtotime($value) > $old) {
                                 if (!in_array($key, $check)) {
-                                        $arr[$label][$data->getAttributeLabel($key)] = $value;
+                                        $mins = date('H:i:s', strtotime($value));
+                                        if ($mins != '00:00:00') {
+                                                $arr[$label]['mins'][$data->getAttributeLabel($key)] = $value;
+                                        } else {
+                                                $arr[$label]['no_mins'][$data->getAttributeLabel($key)] = $value;
+                                        }
+                                }
+                        }
+                }
+                $port_additional = PortCallDataAdditional::findAll(['appointment_id' => $data->appointment_id]);
+                foreach ($port_additional as $key => $value) {
+                        if ($value->value != '' && $value->value != '0000-00-00 00:00:00' && strtotime($value->value) > $old) {
+                                if (!in_array($value->label, $check)) {
+                                        $mins = date('H:i:s', strtotime($value->value));
+                                        if ($mins != '00:00:00') {
+                                                $arr[$label]['mins'][$value->label] = $value->value;
+                                        } else {
+                                                $arr[$label]['no_mins'][$value->label] = $value->value;
+                                        }
                                 }
                         }
                 }
@@ -415,7 +582,8 @@ class PortCallDataController extends Controller {
                 $ports_draft = PortCallDataDraft::findOne(['appointment_id' => $id]);
                 $ports_rob = PortCallDataRob::findOne(['appointment_id' => $id]);
                 $ports_cargo = PortCargoDetails::findOne(['appointment_id' => $id]);
-                //var_dump($ports_cargo);exit;
+                $ports_additional = PortCallDataAdditional::findAll(['appointment_id' => $id]);
+                $port_stoppages = PortStoppages::findAll(['appointment_id' => $id]);
                 // get your HTML raw content without any layouts or scripts
                 $appointment = Appointment::findOne($id);
                 //var_dump($appointment);exit;
@@ -425,6 +593,8 @@ class PortCallDataController extends Controller {
             'ports_draft' => $ports_draft,
             'ports_rob' => $ports_rob,
             'ports_cargo' => $ports_cargo,
+            'ports_additional' => $ports_additional,
+            'port_stoppages' => $port_stoppages,
                 ]);
                 exit;
 
