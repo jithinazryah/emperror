@@ -44,9 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             //  'id',
                             [
                                 'attribute' => 'service_id',
-                                'value' => function($data) {
-                                        return Services::findOne($data->service0)->service;
-                                },
+                                'value' => 'service0.service',
                                 'filter' => ArrayHelper::map(Services::find()->asArray()->all(), 'id', 'service'),
                             ],
                            // 'service_id',

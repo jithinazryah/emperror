@@ -74,6 +74,10 @@ class Services extends \yii\db\ActiveRecord {
                 ];
         }
 
+        public function getService0() {
+                return $this->hasOne(Services::className(), ['id' => 'service_id']);
+        }
+
         public function getSupplierName($supplier_id) {
                 return Contacts::findOne(['id' => $supplier_id])->name;
         }
@@ -97,6 +101,7 @@ class Services extends \yii\db\ActiveRecord {
         public function getCurrency0() {
                 return $this->hasOne(Currency::className(), ['id' => 'currency']);
         }
+
         public function getInvoiceName($invocie_type) {
                 return InvoiceType::findOne(['id' => $invocie_type])->invoice_type;
         }
