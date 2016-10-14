@@ -160,7 +160,7 @@ use common\models\PortCargoDetails;
 </div>
 <style>
     .headstyle{
-        color:#03a9f4;
+        color:#0e62c7;
     }
     .appoint_history1{
         margin-top: 18px;
