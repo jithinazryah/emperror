@@ -57,15 +57,15 @@ and open the template in the editor.
     <tr>
         <td>
             <div class="main-left">
-                <table class="">
+                <table class="tb2">
                     <tr>
                         <td>TO </td> <td style="width: 50px;text-align: center">:</td>
-                        <td style="max-width: 200px"><?= $appointment->getInvoiceAddress($princip); ?></td>
+                        <td style="max-width: 405px"><?= $appointment->getInvoiceAddress($princip); ?></td>
                     </tr>
                 </table>
             </div>
             <div class="main-right">
-                <table class="">
+                <table class="tb2">
                     <tr>
                         <td>Date </td> <td style="width: 50px;text-align: center">:</td>
                         <td style="max-width: 200px"><?= date("d/m/Y") ?></td>
@@ -81,10 +81,6 @@ and open the template in the editor.
     <tr>
         <td>
             <div class="heading">ESTIMATED PORT COST</div>
-        </td>
-    </tr>
-    <tr>
-        <td>
             <div class="topcontent">
                 <div class="topcontent-left">
                     <table class="">
@@ -122,12 +118,7 @@ and open the template in the editor.
                         </tr>
                     </table>
                 </div>
-
             </div>
-        </td>
-    </tr>
-    <tr>
-        <td>
             <div class="content-header">
                 <table class="table tbl">
                     <tr>
@@ -145,10 +136,6 @@ and open the template in the editor.
                     </tr>
                 </table>
             </div>
-        </td>
-    </tr>
-    <tr>
-        <td>
             <div class="content-body">
                 <?php
                 $subepdatotal = 0;
@@ -217,10 +204,7 @@ and open the template in the editor.
                 }
                 ?>
             </div>
-        </td>
-    </tr>
-    <tr>
-        <td>
+            <br/>
             <div class="grandtotal">
                 <table class="table">
                     <tr>
@@ -230,10 +214,6 @@ and open the template in the editor.
                     </tr>
                 </table>
             </div>
-        </td>
-    </tr>
-    <tr>
-        <td>
             <div class="content">
                 <p class="para-heading">- Additional scope of work other than mentioned in the tarrif to be mutually agreed between two parties prior initiation of service.</p>
         <!--            <p class="para-content">
@@ -258,17 +238,6 @@ and open the template in the editor.
                     All services are performed in accordance with the ESL Standard Trading Terms & Conditions which can be viewed at www.emperor.ae and a copy
                     of which is available on request.
                 </p>
-            </div>
-        </td>
-    </tr>
-    <tr>
-        <td>
-            <div class="bankdetails">
-                <div class="bankdetails-left">
-                    <h5>Account Manager</h5> 
-                    <a href="#" style="color: #03a9f4;">accrak@emperor.ae</a>
-                    <h5>T: +971 7 268 9076(Ext: 205)</h5>
-                </div>
             </div>
         </td>
     </tr>
@@ -309,6 +278,17 @@ and open the template in the editor.
                         <td>Bank of Baroda,Newyork <br/>Swift Code : BARBUS33</td>
                     </tr>
                 </table>
+            </div>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            <div class="bankdetails">
+                <div class="bankdetails-left">
+                    <h5>Account Manager</h5> 
+                    <a href="#" style="color: #03a9f4;">accrak@emperor.ae</a>
+                    <h5>T: +971 7 268 9076(Ext: 205)</h5>
+                </div>
             </div>
         </td>
     </tr>
@@ -372,9 +352,9 @@ and open the template in the editor.
 <style>
     .table td {
         border: 1px solid black;
-        font-size: 12px !important;
+        font-size: 9px !important;
         text-align: center;
-        padding: 7px;
+        padding: 3px;
     }
 </style>
 </body>

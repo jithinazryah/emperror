@@ -45,7 +45,7 @@ and open the template in the editor.
                 </div>
                 <div class="main-right">
                     <h2>Statement Of Facts</h2>
-                    <h2 style="font-style: italic;"><?= $appointment->appointment_no ?></h2>
+                    <h2 style="font-style: italic;font-size: 18px;"><?= $appointment->appointment_no ?></h2>
                 </div>
                 <br/>
             </div>

@@ -51,12 +51,14 @@ table.table{
     border: 1px solid black;
     font-size: 8px;
     text-align: center;
-    padding: 7px;
+    padding: 3px;
 }
 .tbl{
     border: 1px solid black ! important;
 }
-
+.tb2 td {
+    font-size: 9px;
+}
 .main{
     width:900px;
     margin: auto;
@@ -72,7 +74,7 @@ table.table{
 .content-body h6 {
     margin-bottom: 2px;
     margin-top: 15px;
-    font-size: 13px;
+    font-size: 10px;
     color: #464545;
 }
 
@@ -107,7 +109,7 @@ table.table{
     padding-bottom: 12px;
 }
 .topcontent td{
-    font-size: 13px;
+    font-size: 9px;
 }
 .topcontent-left{
     float:left;
@@ -127,12 +129,13 @@ table.table{
     margin-top: 10px;
 }
 .para-heading{
+    font-size: 13px;
     color: red;
     font-style: italic;
 }
 .para-content{
     font-weight: bold;
-    font-size: 12px;
+    font-size: 8px;
 }
 .para-content1{
     font-size: 12px;
