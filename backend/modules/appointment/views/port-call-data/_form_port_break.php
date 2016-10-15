@@ -9,33 +9,32 @@ use common\models\PortCargoDetails;
 /* @var $model common\models\PortBreakTimings */
 /* @var $form yii\widgets\ActiveForm */
 ?>
-<div class="port-call-data-form form-inline">
-    <div class="port-cargo-details-form form-inline">
-        <h4 class="headstyle">Cargo Details</h4>
-        <hr class="appoint_history" />
-        <?php $form = ActiveForm::begin(['action' => Yii::$app->homeUrl . '/appointment/port-call-data/port-break', 'method' => 'post',]); ?>
+<div class="port-cargo-details-form form-inline">
+    <h4 class="headstyle">Cargo Details</h4>
+    <hr class="appoint_history" />
+    <?php $form = ActiveForm::begin(['action' => Yii::$app->homeUrl . '/appointment/port-call-data/port-break', 'method' => 'post',]); ?>
 
-        <?= $form->field($model_port_cargo_details, 'cargo_type')->textarea(['rows' => 6]) ?>
+    <?= $form->field($model_port_cargo_details, 'cargo_type')->textarea(['rows' => 6]) ?>
 
-        <?= $form->field($model_port_cargo_details, 'cargo_document')->textarea(['rows' => 6]) ?>
+    <?= $form->field($model_port_cargo_details, 'cargo_document')->textarea(['rows' => 6]) ?>
 
-        <?= $form->field($model_port_cargo_details, 'remarks')->textarea(['rows' => 6]) ?>
+    <?= $form->field($model_port_cargo_details, 'remarks')->textarea(['rows' => 6]) ?>
 
-        <?= $form->field($model_port_cargo_details, 'masters_comment')->textarea(['rows' => 6]) ?>
+    <?= $form->field($model_port_cargo_details, 'masters_comment')->textarea(['rows' => 6]) ?>
 
-        <?= $form->field($model_port_cargo_details, 'loaded_quantity')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model_port_cargo_details, 'loaded_quantity')->textInput(['maxlength' => true]) ?>
 
-        <?= $form->field($model_port_cargo_details, 'bl_quantity')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model_port_cargo_details, 'bl_quantity')->textInput(['maxlength' => true]) ?>
 
-        <?= $form->field($model_port_cargo_details, 'stoppages_delays')->textInput(['maxlength' => true]) ?>
-    </div>
+    <?= $form->field($model_port_cargo_details, 'stoppages_delays')->textInput(['maxlength' => true]) ?>
+    <h4 class="headstyle">Stoppages / Delays</h4>
     <hr class="appoint_history" />
     <div id="port_stoppages"> 
         <input type="hidden" id="app_id"  name="app_id" value="<?= $model_appointment->id; ?>">
         <input type="hidden" id="delete_port_stoppages"  name="delete_port_stoppages" value="">
         <?php
         if (!empty($model_port_stoppages)) {
-               
+
                 foreach ($model_port_stoppages as $data) {
                         ?>
                         <span>
@@ -73,33 +72,36 @@ use common\models\PortCargoDetails;
             </div>
         </span>
         <br/>
-    </div>
+    </div> 
 
 
 
-    <div class="form-group field-portcalldatarob-fresh_water_arrival_quantity">
+
+    <div class="form-group ">
     </div>
-    <div class="form-group field-portcalldatarob-fresh_water_arrival_quantity">
+    <div class="form-group ">
     </div>
-    <div class="form-group field-portcalldatarob-fresh_water_arrival_quantity">
+    <div class="form-group ">
     </div>
-    <div class="form-group field-portcalldatarob-fresh_water_arrival_quantity">
+    <div class="form-group ">
         <a id="addportstoppages" class="btn btn-icon btn-blue addportstoppages" ><i class="fa-plus"></i></a>
 <!--        <button id="addScnt" class="btn btn-icon btn-blue"  ><i class="fa-plus"></i></button>-->
     </div><br/>
-   
-    
+
+
     <?php // Html::submitButton('<span>SAVE</span>', ['class' => 'btn btn-primary'])  ?>
-   
-   
-    
-   
+
+
+
+
     <?php // Html::submitButton('<span>SAVE</span>', ['class' => 'btn btn-primary']) ?>
-     <div class="form-group" style="float: right;">
+    <div class="form-group" style="float: right;">
         <?= Html::submitButton($model->isNewRecord ? 'Create' : 'Update', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary', 'style' => 'margin-top: 18px;']) ?>
     </div>
-     <?php ActiveForm::end(); ?>
+
+<?php ActiveForm::end(); ?>
 </div>
+
 <style>
     .headstyle{
         color:#0e62c7;
@@ -112,7 +114,7 @@ use common\models\PortCargoDetails;
     }
 </style>
 <script>
-       $(document).ready(function () {
+        $(document).ready(function () {
             /*
              * Add more bnutton function
              */
@@ -123,15 +125,15 @@ use common\models\PortCargoDetails;
                 var ver = '<span>\n\
                                 <div class="form-group">\n\
                                 <label class="control-label" for=""></label>\n\
-                                <input type="text" id="" class="form-control" name="create[from][]" required>\n\
+                                 <input type="text" class="form-control" name="create[from][]">\n\
                                 </div> \n\
                                 <div class="form-group">\n\
                                 <label class="control-label" for=""></label>\n\
-                                <input type="text" class="form-control" name="create[too][]" required>\n\
+                                <input type="text" class="form-control" name="create[too][]">\n\
                                 </div> \n\
                                 <div class="form-group ">\n\
                                 <label class="control-label"></label>\n\
-                                <input type="text" id="" class="form-control" name="create[comment][]" required>\n\
+                                <input type="text" class="form-control" name="create[comment][]">\n\
                                 </div>\n\
                                 <div class="form-group">\n\
                                 <a id="remScnt" class="btn btn-icon btn-red remScnt" ><i class="fa-remove"></i></a>\n\
@@ -150,8 +152,8 @@ use common\models\PortCargoDetails;
                 }
                 if (this.hasAttribute("val")) {
                     var valu = $(this).attr('val');
-                   $('#delete_port_stoppages').val($('#delete_port_stoppages').val() + valu + ',');
-                   var value =  $('#delete_port_stoppages').val();
+                    $('#delete_port_stoppages').val($('#delete_port_stoppages').val() + valu + ',');
+                    var value = $('#delete_port_stoppages').val();
                 }
                 return false;
             });

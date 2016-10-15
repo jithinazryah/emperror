@@ -92,7 +92,7 @@ $this->params['breadcrumbs'][] = 'Update';
                         <li class="<?= $stat == 3 ? 'active' : '' ?>">
                             <a href="#port-rob" data-toggle="tab">
                                 <span class="visible-xs"><i class="fa-user"></i></span>
-                                <span class="hidden-xs">Port Break Timings</span>
+                                <span class="hidden-xs">Cargo Details</span>
                             </a>
                         </li>
                     </ul>    

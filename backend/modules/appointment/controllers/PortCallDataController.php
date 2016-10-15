@@ -371,13 +371,13 @@ class PortCallDataController extends Controller {
                 if (isset($_POST['updatee']) && $_POST['updatee'] != '') {
                         $arr = [];
                         $i = 0;
+                        
                         foreach ($_POST['updatee'] as $key => $val) {
-                                $arr[$key]['from'] = $val['stoppage_from'][0];
-                                $arr[$key]['to'] = $val['stoppage_to'][0];
+                                $arr[$key]['from'] = $val['from'][0];
+                                $arr[$key]['to'] = $val['to'][0];
                                 $arr[$key]['comment'] = $val['comment'][0];
                                 $i++;
                         }
-                        
                         foreach ($arr as $key => $value) {
 
                                 $port_stoppages = PortStoppages::findOne($key);
@@ -385,6 +385,7 @@ class PortCallDataController extends Controller {
                                 $port_stoppages->stoppage_to = $value['to'];
                                 $port_stoppages->comment = $value['comment'];
                                 if ($port_stoppages->comment != '') {
+                                        
                                         if (strpos($port_stoppages->stoppage_from, '-') == false) {
                                                 $port_stoppages->stoppage_from = $this->changeformat($port_stoppages->stoppage_from);
                                         }
