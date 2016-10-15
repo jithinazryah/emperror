@@ -337,73 +337,17 @@ class PortCallDataController extends Controller {
                 if (isset($_POST['create']) && $_POST['create'] != '') {
                         $arr = [];
                         $i = 0;
-                        foreach ($_POST['create']['label'] as $val) {
-                                $arr[$i]['label'] = $val;
-                                $i++;
-                        }
-                        $i = 0;
-                        foreach ($_POST['create']['valuee'] as $val) {
-                                $arr[$i]['valuee'] = $val;
-                                $i++;
-                        }
-                        foreach ($arr as $val) {
-                                $port_break = new PortBreakTimings;
-                                $port_break->appointment_id = $id;
-                                $port_break->label = $val['label'];
-                                $port_break->value = $val['valuee'];
-                                $port_break->status = 1;
-                                $port_break->CB = Yii::$app->user->identity->id;
-                                $port_break->UB = Yii::$app->user->identity->id;
-                                $port_break->DOC = date('Y-m-d');
-                                $port_break->value = $this->changeformat($port_break->value);
-                                if (!empty($port_break->label))
-                                        $port_break->save();
-                        }
-                }
-                
-                if (isset($_POST['updatee']) && $_POST['updatee'] != '') {
-                        $arr = [];
-                        $i = 0;
-                        foreach ($_POST['updatee'] as $key => $val) {
-                                $arr[$key]['label'] = $val['label'][0];
-                                $arr[$key]['value'] = $val['value'][0];
-                                $i++;
-                        }
-                        foreach ($arr as $key => $value) {
-
-                                $port_break = PortBreakTimings::findOne($key);
-                                $port_break->label = $value['label'];
-                                $port_break->value = $value['value'];
-                                if ($port_break->value != '') {
-                                        if (strpos($port_break->value, '-') == false) {
-                                                $port_break->value = $this->changeformat($port_break->value);
-                                        }
-                                }
-                                $port_break->save();
-                        }
-                }
-                if (isset($_POST['delete_port_break']) && $_POST['delete_port_break'] != '') {
-                        $vals = rtrim($_POST['delete_port_break'], ',');
-                        $vals = explode(',', $vals);
-                        foreach ($vals as $val) {
-                                PortBreakTimings::findOne($val)->delete();
-                        }
-                }
-               
-                if (isset($_POST['create1']) && $_POST['create1'] != '') {
-                        $arr = [];
-                        $i = 0;
-                        foreach ($_POST['create1']['stoppage_from'] as $val) {
+                        foreach ($_POST['create']['from'] as $val) {
                                 $arr[$i]['from'] = $val;
                                 $i++;
                         }
                         $i = 0;
-                        foreach ($_POST['create1']['stoppage_to'] as $val) {
-                                $arr[$i]['to'] = $val;
+                        foreach ($_POST['create']['too'] as $val) {
+                                $arr[$i]['too'] = $val;
                                 $i++;
                         }
                         $i=0;
-                        foreach ($_POST['create1']['comment'] as $val) {
+                        foreach ($_POST['create']['comment'] as $val) {
                                 $arr[$i]['comment'] = $val;
                                 $i++;
                         }
@@ -412,7 +356,7 @@ class PortCallDataController extends Controller {
                                 $port_stoppages = new PortStoppages;
                                 $port_stoppages->appointment_id = $id;
                                 $port_stoppages->stoppage_from = $val['from'];
-                                $port_stoppages->stoppage_to = $val['to'];
+                                $port_stoppages->stoppage_to = $val['too'];
                                 $port_stoppages->comment = $val['comment'];
                                 $port_stoppages->status = 1;
                                 $port_stoppages->CB = Yii::$app->user->identity->id;
@@ -424,7 +368,7 @@ class PortCallDataController extends Controller {
                                         $port_stoppages->save();
                         }
                 }
-                if (isset($_POST['updatee1']) && $_POST['updatee1'] != '') {
+                if (isset($_POST['updatee']) && $_POST['updatee'] != '') {
                         $arr = [];
                         $i = 0;
                         foreach ($_POST['updatee'] as $key => $val) {
@@ -470,82 +414,10 @@ class PortCallDataController extends Controller {
                 return $model_port_cargo_details;
         }
         
-        public function actionPortStoppages() {
-                $id = $_POST['app_id'];
-                if (isset($_POST['create1']) && $_POST['create1'] != '') {
-                        $arr = [];
-                        $i = 0;
-                        foreach ($_POST['create1']['stoppage_from'] as $val) {
-                                $arr[$i]['from'] = $val;
-                                $i++;
-                        }
-                        $i = 0;
-                        foreach ($_POST['create1']['stoppage_to'] as $val) {
-                                $arr[$i]['to'] = $val;
-                                $i++;
-                        }
-                        $i=0;
-                        foreach ($_POST['create1']['comment'] as $val) {
-                                $arr[$i]['comment'] = $val;
-                                $i++;
-                        }
-                        
-                        foreach ($arr as $val) {
-                                $port_stoppages = new PortStoppages;
-                                $port_stoppages->appointment_id = $id;
-                                $port_stoppages->stoppage_from = $val['from'];
-                                $port_stoppages->stoppage_to = $val['to'];
-                                $port_stoppages->comment = $val['comment'];
-                                $port_stoppages->status = 1;
-                                $port_stoppages->CB = Yii::$app->user->identity->id;
-                                $port_stoppages->UB = Yii::$app->user->identity->id;
-                                $port_stoppages->DOC = date('Y-m-d');
-                                $port_stoppages->stoppage_from = $this->changeformat($port_stoppages->stoppage_from);
-                                $port_stoppages->stoppage_to = $this->changeformat($port_stoppages->stoppage_to);
-                                if (!empty($port_stoppages->comment))
-                                        $port_stoppages->save();
-                        }
-                }
-                if (isset($_POST['updatee1']) && $_POST['updatee1'] != '') {
-                        $arr = [];
-                        $i = 0;
-                        foreach ($_POST['updatee'] as $key => $val) {
-                                $arr[$key]['from'] = $val['stoppage_from'][0];
-                                $arr[$key]['to'] = $val['stoppage_to'][0];
-                                $arr[$key]['comment'] = $val['comment'][0];
-                                $i++;
-                        }
-                        
-                        foreach ($arr as $key => $value) {
-
-                                $port_stoppages = PortStoppages::findOne($key);
-                                $port_stoppages->stoppage_from = $value['from'];
-                                $port_stoppages->stoppage_to = $value['to'];
-                                $port_stoppages->comment = $value['comment'];
-                                if ($port_stoppages->comment != '') {
-                                        if (strpos($port_stoppages->stoppage_from, '-') == false) {
-                                                $port_stoppages->stoppage_from = $this->changeformat($port_stoppages->stoppage_from);
-                                        }
-                                        if (strpos($port_stoppages->stoppage_to, '-') == false) {
-                                                $port_stoppages->stoppage_to = $this->changeformat($port_stoppages->stoppage_to);
-                                        }
-                                }
-                                $port_stoppages->save();
-                        }
-                }
-                if (isset($_POST['delete_port_stoppages']) && $_POST['delete_port_stoppages'] != '') {
-                        $vals = rtrim($_POST['delete_port_stoppages'], ',');
-                        $vals = explode(',', $vals);
-                        foreach ($vals as $val) {
-                                PortStoppages::findOne($val)->delete();
-                        }
-                }
-                return $this->redirect(['update', 'id' => $id]);
-        }
 
         public function portcallReport($data, $label) {
                 $arr = [];
-                $check = ['id', 'appointment_id', 'additional_info', 'additional_info', 'comments', 'status', 'CB', 'UB', 'DOC', 'DOU', 'eta', 'ets', 'immigration_commenced', 'immigartion_completed','fasop','cleared_channel','eta_next_port'];
+                $check = ['id', 'appointment_id', 'additional_info', 'additional_info', 'comments', 'status', 'CB', 'UB', 'DOC', 'DOU', 'eta', 'ets', 'immigration_commenced', 'immigartion_completed','fasop','cleared_channel','eta_next_port','cosp','cast_off','lastline_away','pob_outbound'];
                 $i = 0;
                 $old = strtotime('1999-01-01 00:00:00');
                 foreach ($data as $key => $value) {

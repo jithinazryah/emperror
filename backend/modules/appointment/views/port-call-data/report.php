@@ -45,9 +45,7 @@ and open the template in the editor.
                 </div>
                 <div class="main-right">
                     <h2>Statement Of Facts</h2>
-                    <table class="">
-
-                    </table>
+                    <h2 style="font-style: italic;"><?= $appointment->appointment_no ?></h2>
                 </div>
                 <br/>
             </div>
@@ -135,49 +133,33 @@ and open the template in the editor.
                                             }
                                     }
                             }
-                           // echo '<tr style="border: 2px solid #03a9f4;"><td colspan="4"></td></tr>';
-                            if (!empty($port['ports']['no_mins'])) {
-                                   
-
-                                    foreach ($port['ports']['no_mins'] as $key => $value) {
-                                            $flag++;
-                                            if ($flag == 1) {
-                                                    echo '<tr style="border-top: 2px solid #0e62c7;">';
-                                            }
-                                            ?>
-                                            <td style="width: 20%;border: 2px solid #0e62c7;"><?= $key; ?></td>
-                                            <td style="width: 30%;border: 2px solid #0e62c7;"><?= Yii::$app->SetValues->DateFormate($value); ?></td>
-                                            <?php
-                                            if ($flag == 2) {
-                                                    echo "</tr>";
-                                                    $flag = 0;
-                                            }
-                                    }
-                            }
-                            $flag++;
-                            if ($flag == 1) {
-                                    echo "<tr>";
-                            }
                             ?>
-                            <td style="width: 20%;border: 2px solid #0e62c7;">ETA Next Port</td>
-                            <td style="width: 30%;border: 2px solid #0e62c7;"><?= $ports->eta_next_port ?></td>
-                            <?php
-                            if ($flag == 2) {
-                                    echo "</tr>";
-                            }
-                            ?>
+                            <tr>
+                                <td colspan="4"></td>
+                            </tr>
+                            <tr>
+                                <td style="width: 20%;">COSP</td>
+                                <td style="width: 30%;"><?= $ports->cosp ?></td>
+                                <td style="width: 20%;">Lastline Away</td>
+                                <td style="width: 30%;"><?= $ports->lastline_away ?></td>
+                            </tr>
+                            <tr>
+                                <td style="width: 20%;">Cast Off</td>
+                                <td style="width: 30%;"><?= $ports->cast_off ?></td>
+                                <td style="width: 20%;">Pob Outbound</td>
+                                <td style="width: 30%;"><?= $ports->pob_outbound ?></td>
+                            </tr>
+                            <tr>
+                                <td style="width: 20%;">ETA Next Port</td>
+                                <td style="width: 30%;"><?= $ports->eta_next_port ?></td>
+                            </tr>
 
                         </table>
                         <?php
                 }
                 ?>
 
-
-
-
             </div>
-
-
 
         </td>
     </tr>
@@ -201,7 +183,10 @@ and open the template in the editor.
                         <td style="width: 20%;"><?php if ($appointment->vessel_type == 3) { ?>Tank Inspection Completed<?php } else { ?>Final Draft Survey (Completed)<?php } ?></td>
                         <td style="width: 30%;"><?= Yii::$app->SetValues->DateFormate($ports_draft->finial_survey_completed); ?></td>
                     </tr>
-                    <tr style="border: 2px solid #0e62c7;">
+                    <tr>
+                        <td colspan="4"></td>
+                    </tr>
+                    <tr>
                         <td style="width: 20%;">Cargo Operation Commenced</td>
                         <td style="width: 30%;"><?= Yii::$app->SetValues->DateFormate($ports->cargo_commenced); ?></td>
                         <td style="width: 20%;">Cargo Operation Completed</td>
@@ -321,17 +306,33 @@ and open the template in the editor.
                     </tr>-->
                     <tr>
                         <td style="width: 12.5%;">FWD</td>
-                        <td style="width: 12.5%;"><?php if($ports_draft->fwd_arrival_quantity != ''){ echo $ports_draft->fwd_arrival_quantity.' m'; } ?></td>
+                        <td style="width: 12.5%;"><?php
+                            if ($ports_draft->fwd_arrival_quantity != '') {
+                                    echo $ports_draft->fwd_arrival_quantity . ' m';
+                            }
+                            ?></td>
                         <td style="border: none;width: 1%;"></td>
                         <td style="width: 12.5%;">FWD</td>
-                        <td style="width: 12.5%;"><?php if($ports_draft->fwd_sailing_quantity != ''){ echo $ports_draft->fwd_sailing_quantity.' m'; } ?></td>
+                        <td style="width: 12.5%;"><?php
+                            if ($ports_draft->fwd_sailing_quantity != '') {
+                                    echo $ports_draft->fwd_sailing_quantity . ' m';
+                            }
+                            ?></td>
                     </tr>
                     <tr>
                         <td style="width: 12.5%;">AFT</td>
-                        <td style="width: 12.5%;"><?php if($ports_draft->aft_arrival_quantity != ''){ echo $ports_draft->aft_arrival_quantity.' m'; } ?></td>
+                        <td style="width: 12.5%;"><?php
+                            if ($ports_draft->aft_arrival_quantity != '') {
+                                    echo $ports_draft->aft_arrival_quantity . ' m';
+                            }
+                            ?></td>
                         <td style="border: none;"></td>
                         <td style="width: 12.5%;">AFT</td>
-                        <td style="width: 12.5%;"><?php if($ports_draft->aft_sailing_quantity != ''){ echo $ports_draft->aft_sailing_quantity.' m'; } ?></td>
+                        <td style="width: 12.5%;"><?php
+                            if ($ports_draft->aft_sailing_quantity != '') {
+                                    echo $ports_draft->aft_sailing_quantity . ' m';
+                            }
+                            ?></td>
                     </tr>
                 </table>
             </div>
@@ -421,32 +422,32 @@ and open the template in the editor.
             </div>
             <br/>
             <?php
-            if(!empty($port_stoppages)){
-            ?>
-            <div class="cargodetails">
+            if (!empty($port_stoppages)) {
+                    ?>
+                    <div class="cargodetails">
 
-                <h6>Stoppages / Delays - Description </h6>
-                <table class="table"> 
+                        <h6>Stoppages / Delays - Description </h6>
+                        <table class="table"> 
 
-                    <tr>
-                        <th style="width: 33%;">From</th>
-                        <th style="width: 33%;">To</th>
-                        <th style="width: 34%;">Comment</th>
-                    </tr>
-                    <?php
-                    foreach ($port_stoppages as $port_stoppage) {
-                            ?>
                             <tr>
-                                <td style="width: 33%;height: 13px;"><?= Yii::$app->SetValues->DateFormate($port_stoppage->stoppage_from); ?></td>
-                                <td style="width: 33%;"><?= Yii::$app->SetValues->DateFormate($port_stoppage->stoppage_to); ?></td>
-                                <td style="width:34%;"><?= $port_stoppage->comment; ?></td>
+                                <th style="width: 33%;">From</th>
+                                <th style="width: 33%;">To</th>
+                                <th style="width: 34%;">Comment</th>
                             </tr>
-                    <?php } ?>
-                </table>
-                <br/>
+                            <?php
+                            foreach ($port_stoppages as $port_stoppage) {
+                                    ?>
+                                    <tr>
+                                        <td style="width: 33%;height: 13px;"><?= Yii::$app->SetValues->DateFormate($port_stoppage->stoppage_from); ?></td>
+                                        <td style="width: 33%;"><?= Yii::$app->SetValues->DateFormate($port_stoppage->stoppage_to); ?></td>
+                                        <td style="width:34%;"><?= $port_stoppage->comment; ?></td>
+                                    </tr>
+                            <?php } ?>
+                        </table>
+                        <br/>
 
-            </div>
-            <?php }?>
+                    </div>
+            <?php } ?>
             <br/>
             <!--            <div class="footer">
                             <div class="footer-left">

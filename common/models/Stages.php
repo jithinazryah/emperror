@@ -32,9 +32,9 @@ class Stages extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['category_id', 'stage'], 'required'],
-            [['category_id', 'status', 'CB', 'UB'], 'integer'],
-            [['DOC', 'DOU'], 'safe'],
+            [['stage'], 'required'],
+            [['status', 'CB', 'UB'], 'integer'],
+            [['category_id', 'DOC', 'DOU'], 'safe'],
             [['stage'], 'string', 'max' => 200],
         ];
     }

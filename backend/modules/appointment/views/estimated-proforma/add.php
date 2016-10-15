@@ -53,30 +53,30 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?php
                     $arr = explode(',', $appointment->principal);
                     if (count($arr) == 1) {
-                        ?>
-                        <div class="row">
-                            <div class="col-md-8" style="float:left;"> 
-                                <input type="hidden" name="app_id" value="<?= $appointment->id ?>">
-                                <input type="hidden" name="principal" value="<?= $arr[0]; ?>">  
-                                <?php
-                            } else {
-                                ?>
-
-                                <input type="hidden" name="app_id" value="<?= $appointment->id ?>">
-
-                                <select name = "principal" id = "" class="form-control">
-                                    <option selected = "selected">Select Principal</option>
+                            ?>
+                            <div class="row">
+                                <div class="col-md-8" style="float:left;"> 
+                                    <input type="hidden" name="app_id" value="<?= $appointment->id ?>">
+                                    <input type="hidden" name="principal" value="<?= $arr[0]; ?>">  
                                     <?php
-                                    foreach ($arr as $key => $value) {
-                                        $data = Debtor::findOne(['id' => $value]);
-                                        ?>
-                                        <option value="<?= $value ?>"><?= $data->principal_name ?></option>
-                                    <?php }
+                            } else {
                                     ?>
-                                </select> 
-                            </div>
 
-                            <?php
+                                    <input type="hidden" name="app_id" value="<?= $appointment->id ?>">
+
+                                    <select name = "principal" id = "" class="form-control">
+                                        <option selected = "selected">Select Principal</option>
+                                        <?php
+                                        foreach ($arr as $key => $value) {
+                                                $data = Debtor::findOne(['id' => $value]);
+                                                ?>
+                                                <option value="<?= $value ?>"><?= $data->principal_name ?></option>
+                                        <?php }
+                                        ?>
+                                    </select> 
+                                </div>
+
+                                <?php
                         }
                         ?>
                         <div class="col-md-4" style="float:left;">
@@ -133,7 +133,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <th data-priority="6" >EPDA VALUE</th>
                                     <th data-priority="6">PRINCIPAL</th>
                                     <th data-priority="6">COMMENTS</th>
-                                    <th data-priority="6">Uploads</th>
+                                    <!--<th data-priority="6">Uploads</th>-->
                                     <th data-priority="1">ACTIONS</th>
                                 </tr>
                             </thead>
@@ -142,33 +142,33 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <?php
                                 $i = 0;
                                 foreach ($estimates as $estimate):
-                                    $i++;
-                                    ?>
-                                    <tr>
-                                        <td><?= $i; ?></td>
-                                        <td><span class="co-name"><?= $estimate->service->service ?></span></td>
-                                        <td><?= $estimate->supplier0->name ?></td>
-        <!--                                                                <td><? $estimate->currency0->currency_symbol ?></td>-->
-                                        <td><?= $estimate->unit_rate; ?></td>
-                                        <td><?= $estimate->unit; ?></td>
-        <!--                                                                <td><? $estimate->roe; ?></td>-->
-                                        <td><?= $estimate->epda; ?></td>
-                                        <td><?= $estimate->principal0->principal_name; ?></td>
-                                        <td><?= $estimate->comments; ?></td>
-                                        <td><?= $estimate->images; ?></td>
-                                        <td>
-                                            <?= Html::a('<i class="fa fa-pencil"></i>', ['/appointment/estimated-proforma/add', 'id' => $id, 'prfrma_id' => $estimate->id], ['class' => 'btn btn-icon btn-primary', 'tittle' => 'Edit']) ?>
-                                            <?= Html::a('<i class="fa fa-remove"></i>', ['/appointment/estimated-proforma/delete-performa', 'id' => $estimate->id], ['class' => 'btn btn-icon btn-red', 'tittle' => 'Edit']) ?>
-                                            <?= Html::a('<i class="fa fa-database"></i>', ['/appointment/sub-services/add', 'id' => $estimate->id], ['class' => 'btn btn-success', 'target' => '_blank']) ?>
-    <!--                                            <a href="javascript:;" onclick="showAjaxModal(<?= $estimate->id ?>);" class="btn btn-success">Sub</a>-->
-                                            <?php //Html::a('Sub', [''], ['class' => 'btn btn-success', "onclick" => "showAjaxModal(".$estimate->id.");"])   ?>
-                                        </td>
-                                        <?php
-                                        $epdatotal += $estimate->epda;
+                                        $i++;
                                         ?>
-                                    </tr>	
+                                        <tr>
+                                            <td><?= $i; ?></td>
+                                            <td><span class="co-name"><?= $estimate->service->service ?></span></td>
+                                            <td><?= $estimate->supplier0->name ?></td>
+            <!--                                                                <td><? $estimate->currency0->currency_symbol ?></td>-->
+                                            <td><?= $estimate->unit_rate; ?></td>
+                                            <td><?= $estimate->unit; ?></td>
+            <!--                                                                <td><? $estimate->roe; ?></td>-->
+                                            <td><?= $estimate->epda; ?></td>
+                                            <td><?= $estimate->principal0->principal_name; ?></td>
+                                            <td><?= $estimate->comments; ?></td>
+                                            <td><?php // $estimate->images;   ?></td>
+                                            <td>
+                                                <?= Html::a('<i class="fa fa-pencil"></i>', ['/appointment/estimated-proforma/add', 'id' => $id, 'prfrma_id' => $estimate->id], ['class' => 'btn btn-icon btn-primary', 'tittle' => 'Edit']) ?>
+                                                <?= Html::a('<i class="fa fa-remove"></i>', ['/appointment/estimated-proforma/delete-performa', 'id' => $estimate->id], ['class' => 'btn btn-icon btn-red', 'tittle' => 'Edit']) ?>
+                                                <?= Html::a('<i class="fa fa-database"></i>', ['/appointment/sub-services/add', 'id' => $estimate->id], ['class' => 'btn btn-success', 'target' => '_blank']) ?>
+        <!--                                            <a href="javascript:;" onclick="showAjaxModal(<?= $estimate->id ?>);" class="btn btn-success">Sub</a>-->
+                                                <?php //Html::a('Sub', [''], ['class' => 'btn btn-success', "onclick" => "showAjaxModal(".$estimate->id.");"])   ?>
+                                            </td>
+                                            <?php
+                                            $epdatotal += $estimate->epda;
+                                            ?>
+                                        </tr>	
 
-                                    <?php
+                                        <?php
                                 endforeach;
                                 ?>
                                 <tr>
@@ -184,15 +184,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <td></td>
                                     <td><?= $form->field($model, 'service_id')->dropDownList(ArrayHelper::map(Services::findAll(['status' => 1]), 'id', 'service'), ['prompt' => '-Service-'])->label(false); ?></td>
                                     <td><?= $form->field($model, 'supplier')->dropDownList(ArrayHelper::map(Contacts::findAll(['status' => 1]), 'id', 'name'), ['prompt' => '-Supplier-'])->label(false); ?></td>
-                                   <!--<td><?php //$form->field($model, 'currency')->dropDownList(ArrayHelper::map(Currency::findAll(['status' => 1]), 'id', 'currency_name'), ['prompt' => '-Currency-'])->label(false);                                   ?></td>-->
+                                   <!--<td><?php //$form->field($model, 'currency')->dropDownList(ArrayHelper::map(Currency::findAll(['status' => 1]), 'id', 'currency_name'), ['prompt' => '-Currency-'])->label(false);                                     ?></td>-->
                                     <td><?= $form->field($model, 'unit_rate')->textInput(['placeholder' => 'Unit Rate'])->label(false) ?></td>
                                     <td><?= $form->field($model, 'unit')->textInput(['placeholder' => 'Quantity'])->label(false) ?></td>
-                                    <!--<td><?php //$form->field($model, 'roe')->textInput(['placeholder' => 'ROE'])->label(false)                                   ?></td>-->
+                                    <!--<td><?php //$form->field($model, 'roe')->textInput(['placeholder' => 'ROE'])->label(false)                                     ?></td>-->
                                     <td><?= $form->field($model, 'epda')->textInput(['placeholder' => 'EPDA', 'disabled' => true])->label(false) ?></td>
 
                                     <td><?= $form->field($model, 'principal')->dropDownList(ArrayHelper::map(Debtor::findAll(['status' => 1, 'id' => explode(',', $appointment->principal)]), 'id', 'principal_name'), ['prompt' => '-Principal-'])->label(false); ?></td>
                                     <td><?= $form->field($model, 'comments')->textInput(['placeholder' => 'Comments'])->label(false) ?></td>
-                                    <td><?= $form->field($model, 'images[]')->fileInput(['multiple' => true])->label(false) ?></td>
+                                    <td><?php // $form->field($model, 'images[]')->fileInput(['multiple' => true])->label(false)   ?></td>
                                     <td><?= Html::submitButton($model->isNewRecord ? 'Add' : 'Update', ['class' => 'btn btn-success']) ?>
                                     </td>
                                     <?php ActiveForm::end(); ?>
@@ -204,65 +204,66 @@ $this->params['breadcrumbs'][] = $this->title;
                             </tbody>
 
                         </table>
+                        
                     </div>
                 </div>
                 <script>
-                    $("document").ready(function () {
-                        $('#estimatedproforma-service_id').change(function () {
-                            var service_id = $(this).val();
-                            $.ajax({
-                                type: 'POST',
-                                cache: false,
-                                data: {service_id: service_id},
-                                url: '<?= Yii::$app->homeUrl; ?>/appointment/estimated-proforma/supplier',
-                                success: function (data) {
-                                    if (data != '') {
-                                        $("#estimatedproforma-supplier").html(data);
-                                    } else {
-                                        $("#estimatedproforma-supplier").prop('disabled', true);
+                        $("document").ready(function () {
+                            $('#estimatedproforma-service_id').change(function () {
+                                var service_id = $(this).val();
+                                $.ajax({
+                                    type: 'POST',
+                                    cache: false,
+                                    data: {service_id: service_id},
+                                    url: '<?= Yii::$app->homeUrl; ?>/appointment/estimated-proforma/supplier',
+                                    success: function (data) {
+                                        if (data != '') {
+                                            $("#estimatedproforma-supplier").html(data);
+                                        } else {
+                                            $("#estimatedproforma-supplier").prop('disabled', true);
+                                        }
                                     }
-                                }
+                                });
                             });
-                        });
 
-                    });
+                        });
                 </script>
                 <script type="text/javascript">
-                    jQuery(document).ready(function ($)
-                    {
-                        $("#estimatedproforma-service_id").select2({
-                            //placeholder: 'Select your country...',
-                            allowClear: true
-                        }).on('select2-open', function ()
+                        jQuery(document).ready(function ($)
                         {
-                            // Adding Custom Scrollbar
-                            $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
-                        });
-                        //                            $("#estimatedproforma-supplier").select2({
-                        //                                //placeholder: 'Select your country...',
-                        //                                allowClear: true
-                        //                            }).on('select2-open', function ()
-                        //                            {
-                        //                                // Adding Custom Scrollbar
-                        //                                $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
-                        //                            });
-                        $("#estimatedproforma-currency").select2({
-                            //placeholder: 'Select your country...',
-                            allowClear: true
-                        }).on('select2-open', function ()
-                        {
-                            // Adding Custom Scrollbar
-                            $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
-                        });
-                        $("#estimatedproforma-principal").select2({
-                            //placeholder: 'Select your country...',
-                            allowClear: true
-                        }).on('select2-open', function ()
-                        {
-                            // Adding Custom Scrollbar
-                            $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
-                        });
-                    });</script>
+                            $("#estimatedproforma-service_id").select2({
+                                //placeholder: 'Select your country...',
+                                allowClear: true
+                            }).on('select2-open', function ()
+                            {
+                                // Adding Custom Scrollbar
+                                $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                            });
+                            //                            $("#estimatedproforma-supplier").select2({
+                            //                                //placeholder: 'Select your country...',
+                            //                                allowClear: true
+                            //                            }).on('select2-open', function ()
+                            //                            {
+                            //                                // Adding Custom Scrollbar
+                            //                                $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                            //                            });
+                            $("#estimatedproforma-currency").select2({
+                                //placeholder: 'Select your country...',
+                                allowClear: true
+                            }).on('select2-open', function ()
+                            {
+                                // Adding Custom Scrollbar
+                                $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                            });
+                            $("#estimatedproforma-principal").select2({
+                                //placeholder: 'Select your country...',
+                                allowClear: true
+                            }).on('select2-open', function ()
+                            {
+                                // Adding Custom Scrollbar
+                                $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                            });
+                        });</script>
 
 
                 <link rel="stylesheet" href="<?= Yii::$app->homeUrl; ?>/js/select2/select2.css">
@@ -270,23 +271,23 @@ $this->params['breadcrumbs'][] = $this->title;
                 <script src="<?= Yii::$app->homeUrl; ?>/js/select2/select2.min.js"></script>
 
                 <script>
-                    $(document).ready(function () {
-                        $("#estimatedproforma-unit_rate").keyup(function () {
-                            multiply();
+                        $(document).ready(function () {
+                            $("#estimatedproforma-unit_rate").keyup(function () {
+                                multiply();
+                            });
+                            $("#estimatedproforma-unit").keyup(function () {
+                                multiply();
+                            });
                         });
-                        $("#estimatedproforma-unit").keyup(function () {
-                            multiply();
-                        });
-                    });
-                    function multiply() {
-                        var rate = $("#estimatedproforma-unit_rate").val();
-                        var unit = $("#estimatedproforma-unit").val();
-                        if (rate != '' && unit != '') {
-                            $("#estimatedproforma-epda").val(rate * unit);
-                        }
+                        function multiply() {
+                            var rate = $("#estimatedproforma-unit_rate").val();
+                            var unit = $("#estimatedproforma-unit").val();
+                            if (rate != '' && unit != '') {
+                                $("#estimatedproforma-epda").val(rate * unit);
+                            }
 
-                    }
-                    $("#estimatedproforma-epda").prop("disabled", true);
+                        }
+                        $("#estimatedproforma-epda").prop("disabled", true);
                 </script>
                 <div style="float:right;padding-top: 5px;">
                     <?php
@@ -304,22 +305,22 @@ $this->params['breadcrumbs'][] = $this->title;
 <!--<a href="javascript:;" onclick="showAjaxModal();" class="btn btn-primary btn-single btn-sm">Show Me</a>-->
 <!-- Modal code -->
 <script type="text/javascript">
-    /*function showAjaxModal(id)
-     {
-     jQuery('#add-sub').modal('show', {backdrop: 'static'});
-     jQuery('#add-sub .modal-body').html(id);
-     /*setTimeout(function ()
-     {
-     jQuery.ajax({
-     url: "data/ajax-content.txt",
-     success: function (response)
-     {
-     jQuery('#modal-7 .modal-body').html(response);
-     }
-     });
-     }, 800); // just an example
-     
-     }*/
+        /*function showAjaxModal(id)
+         {
+         jQuery('#add-sub').modal('show', {backdrop: 'static'});
+         jQuery('#add-sub .modal-body').html(id);
+         /*setTimeout(function ()
+         {
+         jQuery.ajax({
+         url: "data/ajax-content.txt",
+         success: function (response)
+         {
+         jQuery('#modal-7 .modal-body').html(response);
+         }
+         });
+         }, 800); // just an example
+         
+         }*/
 </script>
 <div class="modal fade" id="add-sub">
     <div class="modal-dialog">

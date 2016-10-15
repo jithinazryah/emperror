@@ -197,12 +197,12 @@ class AppointmentController extends Controller {
                         $port_data = Ports::find()->where(['id' => $port_id])->one();
                         $last_appointment = Appointment::find()->orderBy(['id' => SORT_DESC])->where(['port_of_call' => $port_id])->one();
                         if (empty($last_appointment))
-                                echo $port_data->code . '0001';
+                                echo 'EN'.$port_data->code . '0001';
                         else {
                                 $last = substr($last_appointment->appointment_no, -4);
                                 $last = ltrim($last, '0');
 
-                                echo $port_data->code . (sprintf('%04d', ++$last));
+                                echo 'EN'.$port_data->code . (sprintf('%04d', ++$last));
                         }
                 } else {
                         return '';
