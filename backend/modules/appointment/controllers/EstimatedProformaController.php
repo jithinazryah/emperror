@@ -9,6 +9,7 @@ use common\models\Appointment;
 use common\models\MasterSubService;
 use common\models\EstimatedProformaSearch;
 use common\models\AppointmentSearch;
+use common\models\UploadFile;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -80,55 +81,57 @@ class EstimatedProformaController extends Controller {
         }
 
         public function actionAdd($id, $prfrma_id = NULL, $check = NULL) {
-        $estimates = EstimatedProforma::findAll(['apponitment_id' => $id]);
-        $appointment = Appointment::findOne($id);
-        if (empty($estimates) && !empty($check)) {
-            $this->CheckPerforma($id, $appointment);
-            $estimates = EstimatedProforma::findAll(['apponitment_id' => $id]);
-        }
-        if (!isset($prfrma_id)) {
-            $model = new EstimatedProforma;
-        } else {
-            $model = $this->findModel($prfrma_id);
-        }
-        if ($model->load(Yii::$app->request->post()) && $this->SetValues($model, $id)) {
-            $model->epda = $model->unit_rate * $model->unit;
-            $service_category = Services::findOne(['id' => $model->service_id]);
-            $model->service_category = $service_category->category_id;
-            $model->images = UploadedFile::getInstances($model, 'images');
-            $temp = '';
-            foreach ($model->images as $file) {
-                $imageName = $file->name;
-                if($prfrma_id != ''){
-                    $dir = Yii::$app->homeUrl.'uploads/estimatedproforma/' . $prfrma_id;
-                } else{
-                    $last_estimate = EstimatedProforma::find()->orderBy(['id' => SORT_DESC])->one();
-                    $newestimate_id = $last_estimate->id + 1;
-                    $dir = Yii::$app->homeUrl.'uploads/estimatedproforma/' . $newestimate_id;
-                } 
-                $path = $dir.'/'.$imageName;
-                if (!is_dir($dir)) {
-                    FileHelper::createDirectory($dir);
-                    //mkdir($dir); 
-                    $file->saveAs($path);
-                }else{
-                    $file->saveAs($path);
+                $estimates = EstimatedProforma::findAll(['apponitment_id' => $id]);
+                $appointment = Appointment::findOne($id);
+                $model_upload = new UploadFile();
+                if (empty($estimates) && !empty($check)) {
+                        $this->CheckPerforma($id, $appointment);
+                        $estimates = EstimatedProforma::findAll(['apponitment_id' => $id]);
                 }
-                $temp .= $path.',';
-            }
-            //echo $temp;exit;
-            $model->images = $temp;
-            if ($model->save()) {
-                return $this->redirect(['add', 'id' => $id]);
-            }
+                if (!isset($prfrma_id)) {
+                        $model = new EstimatedProforma;
+                } else {
+                        $model = $this->findModel($prfrma_id);
+                }
+                if ($model->load(Yii::$app->request->post()) && $this->SetValues($model, $id)) {
+                        $model->epda = $model->unit_rate * $model->unit;
+                        $service_category = Services::findOne(['id' => $model->service_id]);
+                        $model->service_category = $service_category->category_id;
+                        if ($model->save()) {
+                                return $this->redirect(['add', 'id' => $id]);
+                        }
+                }
+
+                return $this->render('add', [
+                            'model' => $model,
+                            'estimates' => $estimates,
+                            'appointment' => $appointment,
+                            'id' => $id,
+                            'model_upload' => $model_upload,
+                ]);
         }
-        return $this->render('add', [
-                    'model' => $model,
-                    'estimates' => $estimates,
-                    'appointment' => $appointment,
-                    'id' => $id,
-        ]);
-    }
+
+        public function actionUploads() {
+                $id = $_POST['app_id'];
+                $model_upload = new UploadFile();
+                $model_upload->filee = UploadedFile::getInstances($model_upload, 'filee');
+                foreach ($model_upload->filee as $file) {
+                        $fileName = $file->name;
+                        $parent_dir = Yii::$app->homeUrl . 'uploads/appointment/' . $id;
+                        $child_dir = $parent_dir . '/estimatedproforma';
+                        if (!is_dir($parent_dir)) {
+                                echo 'no directory';
+                                exit;
+                                mkdir($parent_dir);
+                                mkdir($child_dir);
+                                FileHelper::createDirectory($parent_dir);
+                                FileHelper::createDirectory($child_dir);
+                        } else {
+                                echo 'exist';
+                                exit;
+                        }
+                }
+        }
 
         public function CheckPerforma($id, $appointment) {
                 $appntment = Appointment::find()->where('id != :id and principal = :principal and DOC < NOW() ', ['id' => $id, 'principal' => $appointment->principal])->orderBy(['id' => SORT_DESC])->all();
@@ -199,7 +202,7 @@ class EstimatedProformaController extends Controller {
 
         public function actionEstimateConfirm($id) {
                 $appointment = Appointment::findOne($id);
-                $new_appid = substr($appointment->appointment_no,2);
+                $new_appid = substr($appointment->appointment_no, 2);
                 $estimates = EstimatedProforma::findAll(['apponitment_id' => $id]);
                 if (!empty($estimates)) {
                         $appointment->appointment_no = $new_appid;
@@ -282,7 +285,7 @@ class EstimatedProformaController extends Controller {
                 echo $content = $this->renderPartial('report', [
             'appointment' => $appointment,
             'estimates' => $estimates,
-                    'princip' => $princip,
+            'princip' => $princip,
                 ]);
                 exit;
 

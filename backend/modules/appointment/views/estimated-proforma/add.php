@@ -7,6 +7,7 @@ use common\models\Services;
 use common\models\Currency;
 use common\models\Contacts;
 use common\models\Debtor;
+use common\models\UploadFile;
 use common\models\Appointment;
 use yii\helpers\ArrayHelper;
 use yii\db\Expression;
@@ -155,7 +156,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             <td><?= $estimate->epda; ?></td>
                                             <td><?= $estimate->principal0->principal_name; ?></td>
                                             <td><?= $estimate->comments; ?></td>
-                                            <td><?php // $estimate->images;   ?></td>
+                                            <!--<td><?php // $estimate->images;      ?></td>-->
                                             <td>
                                                 <?= Html::a('<i class="fa fa-pencil"></i>', ['/appointment/estimated-proforma/add', 'id' => $id, 'prfrma_id' => $estimate->id], ['class' => 'btn btn-icon btn-primary', 'tittle' => 'Edit']) ?>
                                                 <?= Html::a('<i class="fa fa-remove"></i>', ['/appointment/estimated-proforma/delete-performa', 'id' => $estimate->id], ['class' => 'btn btn-icon btn-red', 'tittle' => 'Edit']) ?>
@@ -184,15 +185,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <td></td>
                                     <td><?= $form->field($model, 'service_id')->dropDownList(ArrayHelper::map(Services::findAll(['status' => 1]), 'id', 'service'), ['prompt' => '-Service-'])->label(false); ?></td>
                                     <td><?= $form->field($model, 'supplier')->dropDownList(ArrayHelper::map(Contacts::findAll(['status' => 1]), 'id', 'name'), ['prompt' => '-Supplier-'])->label(false); ?></td>
-                                   <!--<td><?php //$form->field($model, 'currency')->dropDownList(ArrayHelper::map(Currency::findAll(['status' => 1]), 'id', 'currency_name'), ['prompt' => '-Currency-'])->label(false);                                     ?></td>-->
+                                   <!--<td><?php //$form->field($model, 'currency')->dropDownList(ArrayHelper::map(Currency::findAll(['status' => 1]), 'id', 'currency_name'), ['prompt' => '-Currency-'])->label(false);                                        ?></td>-->
                                     <td><?= $form->field($model, 'unit_rate')->textInput(['placeholder' => 'Unit Rate'])->label(false) ?></td>
                                     <td><?= $form->field($model, 'unit')->textInput(['placeholder' => 'Quantity'])->label(false) ?></td>
-                                    <!--<td><?php //$form->field($model, 'roe')->textInput(['placeholder' => 'ROE'])->label(false)                                     ?></td>-->
+                                    <!--<td><?php //$form->field($model, 'roe')->textInput(['placeholder' => 'ROE'])->label(false)                                        ?></td>-->
                                     <td><?= $form->field($model, 'epda')->textInput(['placeholder' => 'EPDA', 'disabled' => true])->label(false) ?></td>
 
                                     <td><?= $form->field($model, 'principal')->dropDownList(ArrayHelper::map(Debtor::findAll(['status' => 1, 'id' => explode(',', $appointment->principal)]), 'id', 'principal_name'), ['prompt' => '-Principal-'])->label(false); ?></td>
                                     <td><?= $form->field($model, 'comments')->textInput(['placeholder' => 'Comments'])->label(false) ?></td>
-                                    <td><?php // $form->field($model, 'images[]')->fileInput(['multiple' => true])->label(false)   ?></td>
+                                    <td><?php // $form->field($model, 'images[]')->fileInput(['multiple' => true])->label(false)      ?></td>
                                     <td><?= Html::submitButton($model->isNewRecord ? 'Add' : 'Update', ['class' => 'btn btn-success']) ?>
                                     </td>
                                     <?php ActiveForm::end(); ?>
@@ -204,103 +205,115 @@ $this->params['breadcrumbs'][] = $this->title;
                             </tbody>
 
                         </table>
-                        
+                        <br/>
+                        <div style="float: right;">
+                            <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data'], 'action' => Yii::$app->homeUrl . 'appointment/estimated-proforma/uploads', 'method' => 'post']) ?>
+                            <input type="hidden" name="app_id" value="<?= $appointment->id ?>">
+                            <?php //$form->field($model_upload, 'filee[]')->fileInput(['multiple' => true]) ?>
+                            <?= $form->field($model_upload, 'filee[]')->fileInput(['multiple' => true, 'accept' => 'image/*']) ?>
+
+                            <?= Html::submitButton('Add', ['class' => 'btn btn-success']) ?>
+
+
+                            <?php ActiveForm::end() ?>  
+                        </div>
                     </div>
                 </div>
-                <script>
-                        $("document").ready(function () {
-                            $('#estimatedproforma-service_id').change(function () {
-                                var service_id = $(this).val();
-                                $.ajax({
-                                    type: 'POST',
-                                    cache: false,
-                                    data: {service_id: service_id},
-                                    url: '<?= Yii::$app->homeUrl; ?>/appointment/estimated-proforma/supplier',
-                                    success: function (data) {
-                                        if (data != '') {
-                                            $("#estimatedproforma-supplier").html(data);
-                                        } else {
-                                            $("#estimatedproforma-supplier").prop('disabled', true);
-                                        }
+            </div>
+            <script>
+                    $("document").ready(function () {
+                        $('#estimatedproforma-service_id').change(function () {
+                            var service_id = $(this).val();
+                            $.ajax({
+                                type: 'POST',
+                                cache: false,
+                                data: {service_id: service_id},
+                                url: '<?= Yii::$app->homeUrl; ?>/appointment/estimated-proforma/supplier',
+                                success: function (data) {
+                                    if (data != '') {
+                                        $("#estimatedproforma-supplier").html(data);
+                                    } else {
+                                        $("#estimatedproforma-supplier").prop('disabled', true);
                                     }
-                                });
+                                }
                             });
-
                         });
-                </script>
-                <script type="text/javascript">
-                        jQuery(document).ready(function ($)
+
+                    });
+            </script>
+            <script type="text/javascript">
+                    jQuery(document).ready(function ($)
+                    {
+                        $("#estimatedproforma-service_id").select2({
+                            //placeholder: 'Select your country...',
+                            allowClear: true
+                        }).on('select2-open', function ()
                         {
-                            $("#estimatedproforma-service_id").select2({
-                                //placeholder: 'Select your country...',
-                                allowClear: true
-                            }).on('select2-open', function ()
-                            {
-                                // Adding Custom Scrollbar
-                                $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
-                            });
-                            //                            $("#estimatedproforma-supplier").select2({
-                            //                                //placeholder: 'Select your country...',
-                            //                                allowClear: true
-                            //                            }).on('select2-open', function ()
-                            //                            {
-                            //                                // Adding Custom Scrollbar
-                            //                                $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
-                            //                            });
-                            $("#estimatedproforma-currency").select2({
-                                //placeholder: 'Select your country...',
-                                allowClear: true
-                            }).on('select2-open', function ()
-                            {
-                                // Adding Custom Scrollbar
-                                $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
-                            });
-                            $("#estimatedproforma-principal").select2({
-                                //placeholder: 'Select your country...',
-                                allowClear: true
-                            }).on('select2-open', function ()
-                            {
-                                // Adding Custom Scrollbar
-                                $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
-                            });
-                        });</script>
-
-
-                <link rel="stylesheet" href="<?= Yii::$app->homeUrl; ?>/js/select2/select2.css">
-                <link rel="stylesheet" href="<?= Yii::$app->homeUrl; ?>/js/select2/select2-bootstrap.css">
-                <script src="<?= Yii::$app->homeUrl; ?>/js/select2/select2.min.js"></script>
-
-                <script>
-                        $(document).ready(function () {
-                            $("#estimatedproforma-unit_rate").keyup(function () {
-                                multiply();
-                            });
-                            $("#estimatedproforma-unit").keyup(function () {
-                                multiply();
-                            });
+                            // Adding Custom Scrollbar
+                            $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
                         });
-                        function multiply() {
-                            var rate = $("#estimatedproforma-unit_rate").val();
-                            var unit = $("#estimatedproforma-unit").val();
-                            if (rate != '' && unit != '') {
-                                $("#estimatedproforma-epda").val(rate * unit);
-                            }
+                        //                            $("#estimatedproforma-supplier").select2({
+                        //                                //placeholder: 'Select your country...',
+                        //                                allowClear: true
+                        //                            }).on('select2-open', function ()
+                        //                            {
+                        //                                // Adding Custom Scrollbar
+                        //                                $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                        //                            });
+                        $("#estimatedproforma-currency").select2({
+                            //placeholder: 'Select your country...',
+                            allowClear: true
+                        }).on('select2-open', function ()
+                        {
+                            // Adding Custom Scrollbar
+                            $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                        });
+                        $("#estimatedproforma-principal").select2({
+                            //placeholder: 'Select your country...',
+                            allowClear: true
+                        }).on('select2-open', function ()
+                        {
+                            // Adding Custom Scrollbar
+                            $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+                        });
+                    });</script>
 
+
+            <link rel="stylesheet" href="<?= Yii::$app->homeUrl; ?>/js/select2/select2.css">
+            <link rel="stylesheet" href="<?= Yii::$app->homeUrl; ?>/js/select2/select2-bootstrap.css">
+            <script src="<?= Yii::$app->homeUrl; ?>/js/select2/select2.min.js"></script>
+
+            <script>
+                    $(document).ready(function () {
+                        $("#estimatedproforma-unit_rate").keyup(function () {
+                            multiply();
+                        });
+                        $("#estimatedproforma-unit").keyup(function () {
+                            multiply();
+                        });
+                    });
+                    function multiply() {
+                        var rate = $("#estimatedproforma-unit_rate").val();
+                        var unit = $("#estimatedproforma-unit").val();
+                        if (rate != '' && unit != '') {
+                            $("#estimatedproforma-epda").val(rate * unit);
                         }
-                        $("#estimatedproforma-epda").prop("disabled", true);
-                </script>
-                <div style="float:right;padding-top: 5px;">
-                    <?php
-                    echo Html::a('<span> Estimated Proforma Completed & Proceed to Portcall</span>', ['estimated-proforma/estimate-confirm', 'id' => $appointment->id], ['class' => 'btn btn-secondary']);
-                    ?>      
 
-                </div>
+                    }
+                    $("#estimatedproforma-epda").prop("disabled", true);
+            </script>
+            <div style="float:right;padding-top: 5px;">
+                <?php
+                echo Html::a('<span> Estimated Proforma Completed & Proceed to Portcall</span>', ['estimated-proforma/estimate-confirm', 'id' => $appointment->id], ['class' => 'btn btn-secondary']);
+                ?>      
 
             </div>
-            <?php //Pjax::end();     ?> 
-        </div>
 
+        </div>
+        <?php //Pjax::end();     ?> 
     </div>
+
+</div>
 </div>
 <!--<a href="javascript:;" onclick="showAjaxModal();" class="btn btn-primary btn-single btn-sm">Show Me</a>-->
 <!-- Modal code -->

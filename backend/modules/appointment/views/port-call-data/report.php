@@ -457,7 +457,10 @@ and open the template in the editor.
                                 Agent
                             </div>
                         </div>-->
-
+        </td>
+    </tr>
+    <tr>
+        <td>
             <div class="footer">
                 <div class="main-left">
                     <h4> Master<br/><br/><?= $appointment->vessel0->vessel_name ?><br/><br/>Dated:<?= date('d/m/Y') ?></h4>
