@@ -7,6 +7,7 @@ use common\models\Appointment;
 use common\models\EstimatedProforma;
 use common\models\Debtor;
 use common\models\PortCallData;
+use common\models\Vessel;
 ?>
 <!DOCTYPE html>
 <!--
@@ -61,8 +62,12 @@ and open the template in the editor.
             <div class="content">
                 <table class="table tbl">
                     <tr>
-                        <td style="width: 20%;">Vessel Name</td>
-                        <td style="width: 30%;"><?= $appointment->vessel0->vessel_name ?></td>
+                        <td style="width: 20%;"><?php echo common\models\VesselType::findOne($appointment->vessel_type)->vessel_type; ?> Name</td>
+                        <td style="width: 30%;"> <?php if ($appointment->vessel_type == 1) {
+                                                                    echo  'T - ' . Vessel::findOne($appointment->tug)->vessel_name . ' / B - ' . Vessel::findOne($appointment->barge)->vessel_name;
+                                                            } else {
+                                                                             echo  Vessel::findOne($appointment->vessel)->vessel_name;
+                                                            } ?></td>
                         <td style="width: 20%;">Cargo Quantity</td>
                         <td style="width: 30%;"><?= $appointment->quantity ?></td>
                     </tr>
@@ -463,7 +468,11 @@ and open the template in the editor.
         <td>
             <div class="footer">
                 <div class="main-left">
-                    <h4> Master<br/><br/><?= $appointment->vessel0->vessel_name ?><br/><br/>Dated:<?= date('d/m/Y') ?></h4>
+                    <h4> Master<br/><br/><?php if ($appointment->vessel_type == 1) {
+                                                                    echo  'T - ' . Vessel::findOne($appointment->tug)->vessel_name . ' / B - ' . Vessel::findOne($appointment->barge)->vessel_name;
+                                                            } else {
+                                                                             echo  Vessel::findOne($appointment->vessel)->vessel_name;
+                                                            } ?><br/><br/>Dated:<?= date('d/m/Y') ?></h4>
 
                 </div>
                 <div class="main-right">

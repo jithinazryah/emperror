@@ -12,11 +12,14 @@ use common\models\AppointmentSearch;
 use common\models\PortCallDataSearch;
 use common\models\PortBreakTimings;
 use common\models\PortCargoDetails;
+use common\models\UploadFile;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use common\models\ImigrationClearance;
 use common\models\PortStoppages;
+use yii\web\UploadedFile;
+use yii\helpers\FileHelper;
 
 /**
  * PortCallDataController implements the CRUD actions for PortCallData model.
@@ -97,6 +100,7 @@ class PortCallDataController extends Controller {
                 $model_port_break = PortBreakTimings::findAll(['appointment_id' => $id]);
                 $model_port_cargo_details = PortCargoDetails::findOne(['appointment_id' => $id]);
                 $model_port_stoppages = PortStoppages::findAll(['appointment_id' => $id]);
+                $model_upload = new UploadFile();
                 if ($model_port_cargo_details == '')
                         $model_port_cargo_details = new PortCargoDetails;
 
@@ -135,6 +139,7 @@ class PortCallDataController extends Controller {
                             'model_port_break' => $model_port_break,
                             'model_port_cargo_details' => $model_port_cargo_details,
                             'model_port_stoppages' => $model_port_stoppages,
+                            'model_upload' => $model_upload,
                 ]);
         }
 
@@ -333,7 +338,7 @@ class PortCallDataController extends Controller {
                 if ($model_port_cargo_details->load(Yii::$app->request->post())) {
                         $model_port_cargo_details = $this->saveportcargodetails($model_port_cargo_details, $id);
                 }
-                
+
                 if (isset($_POST['create']) && $_POST['create'] != '') {
                         $arr = [];
                         $i = 0;
@@ -346,12 +351,12 @@ class PortCallDataController extends Controller {
                                 $arr[$i]['too'] = $val;
                                 $i++;
                         }
-                        $i=0;
+                        $i = 0;
                         foreach ($_POST['create']['comment'] as $val) {
                                 $arr[$i]['comment'] = $val;
                                 $i++;
                         }
-                        
+
                         foreach ($arr as $val) {
                                 $port_stoppages = new PortStoppages;
                                 $port_stoppages->appointment_id = $id;
@@ -371,7 +376,7 @@ class PortCallDataController extends Controller {
                 if (isset($_POST['updatee']) && $_POST['updatee'] != '') {
                         $arr = [];
                         $i = 0;
-                        
+
                         foreach ($_POST['updatee'] as $key => $val) {
                                 $arr[$key]['from'] = $val['from'][0];
                                 $arr[$key]['to'] = $val['to'][0];
@@ -385,7 +390,7 @@ class PortCallDataController extends Controller {
                                 $port_stoppages->stoppage_to = $value['to'];
                                 $port_stoppages->comment = $value['comment'];
                                 if ($port_stoppages->comment != '') {
-                                        
+
                                         if (strpos($port_stoppages->stoppage_from, '-') == false) {
                                                 $port_stoppages->stoppage_from = $this->changeformat($port_stoppages->stoppage_from);
                                         }
@@ -414,11 +419,10 @@ class PortCallDataController extends Controller {
                 $model_port_cargo_details->save();
                 return $model_port_cargo_details;
         }
-        
 
         public function portcallReport($data, $label) {
                 $arr = [];
-                $check = ['id', 'appointment_id', 'additional_info', 'additional_info', 'comments', 'status', 'CB', 'UB', 'DOC', 'DOU', 'eta', 'ets', 'immigration_commenced', 'immigartion_completed','fasop','cleared_channel','eta_next_port','cosp','cast_off','lastline_away','pob_outbound'];
+                $check = ['id', 'appointment_id', 'additional_info', 'additional_info', 'comments', 'status', 'CB', 'UB', 'DOC', 'DOU', 'eta', 'ets', 'immigration_commenced', 'immigartion_completed', 'fasop', 'cleared_channel', 'eta_next_port', 'cosp', 'cast_off', 'lastline_away', 'pob_outbound'];
                 $i = 0;
                 $old = strtotime('1999-01-01 00:00:00');
                 foreach ($data as $key => $value) {

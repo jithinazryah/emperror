@@ -207,11 +207,16 @@ $this->params['breadcrumbs'][] = $this->title;
                         </table>
                         <br/>
                         <div style="float: right;">
+                            <?= Yii::$app->UploadFile->ListFile($appointment->id,Yii::$app->params['estimatePath']); ?>
                             <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data'], 'action' => Yii::$app->homeUrl . 'appointment/estimated-proforma/uploads', 'method' => 'post']) ?>
-                            <input type="hidden" name="app_id" value="<?= $appointment->id ?>">
+                            <?php 
+                            $model_upload->appointment_id = $appointment->id;
+                            $model_upload->type = Yii::$app->params['estimatePath'];
+                            ?>
                             <?php //$form->field($model_upload, 'filee[]')->fileInput(['multiple' => true]) ?>
                             <?= $form->field($model_upload, 'filee[]')->fileInput(['multiple' => true, 'accept' => 'image/*']) ?>
-
+                            <?= $form->field($model_upload, 'appointment_id')->hiddenInput()->label(false) ?>
+                            <?= $form->field($model_upload, 'type')->hiddenInput()->label(false) ?>
                             <?= Html::submitButton('Add', ['class' => 'btn btn-success']) ?>
 
 

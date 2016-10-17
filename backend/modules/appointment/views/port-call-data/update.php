@@ -12,6 +12,7 @@ use common\models\PortBreakTimings;
 use yii\helpers\ArrayHelper;
 use yii\db\Expression;
 use common\components\AppointmentWidget;
+use common\models\UploadFile;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\PortCallData */
@@ -141,7 +142,22 @@ $this->params['breadcrumbs'][] = 'Update';
                             </div>
 
                         </div>
+                        <div class="panel-body">
+                            <?= Yii::$app->UploadFile->ListFile($model_appointment->id, Yii::$app->params['datPath']); ?>
+                            <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data'], 'action' => Yii::$app->homeUrl . 'appointment/estimated-proforma/uploads', 'method' => 'post']) ?>
+                            <?php
+                            $model_upload->appointment_id = $model_appointment->id;
+                            $model_upload->type = Yii::$app->params['datPath'];
+                            ?>
+                            <?php //$form->field($model_upload, 'filee[]')->fileInput(['multiple' => true]) ?>
+                            <?= $form->field($model_upload, 'filee[]')->fileInput(['multiple' => true, 'accept' => 'image/*']) ?>
+                            <?= $form->field($model_upload, 'appointment_id')->hiddenInput()->label(false) ?>
+                            <?= $form->field($model_upload, 'type')->hiddenInput()->label(false) ?>
+                            <?= Html::submitButton('Add', ['class' => 'btn btn-success']) ?>
 
+
+                            <?php ActiveForm::end() ?>  
+                        </div>
                     </div>
                 </div>
                 <div style="float:right;padding-top: 5px;">

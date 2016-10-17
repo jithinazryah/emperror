@@ -112,25 +112,16 @@ class EstimatedProformaController extends Controller {
         }
 
         public function actionUploads() {
-                $id = $_POST['app_id'];
                 $model_upload = new UploadFile();
-                $model_upload->filee = UploadedFile::getInstances($model_upload, 'filee');
-                foreach ($model_upload->filee as $file) {
-                        $fileName = $file->name;
-                        $parent_dir = Yii::$app->homeUrl . 'uploads/appointment/' . $id;
-                        $child_dir = $parent_dir . '/estimatedproforma';
-                        if (!is_dir($parent_dir)) {
-                                echo 'no directory';
-                                exit;
-                                mkdir($parent_dir);
-                                mkdir($child_dir);
-                                FileHelper::createDirectory($parent_dir);
-                                FileHelper::createDirectory($child_dir);
-                        } else {
-                                echo 'exist';
-                                exit;
+                if ($model_upload->load(Yii::$app->request->post())) {
+                        $files = UploadedFile::getInstances($model_upload, 'filee');
+                       
+                        if (Yii::$app->UploadFile->Upload($files, $model_upload)) {
+                                
+                                return $this->redirect(Yii::$app->request->referrer);
                         }
                 }
+                
         }
 
         public function CheckPerforma($id, $appointment) {
@@ -141,7 +132,7 @@ class EstimatedProformaController extends Controller {
                         if (!empty($performa_check)) {
                                 $this->SetData($performa_check, $id);
                                 break;
-                                return TRUE;
+                                return true;
                         }
                 }
         }

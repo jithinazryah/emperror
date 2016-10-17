@@ -25,4 +25,11 @@ class UploadFile extends Model {
                 ];
         }
 
+        public function attributeLabels() {
+                return [
+                    'filee' => 'Choose afile to Upload',
+                    
+                ];
+        }
+
 }

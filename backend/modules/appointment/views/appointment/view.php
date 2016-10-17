@@ -98,7 +98,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                     }, $model),
                                             'value' => call_user_func(function($model) {
                                                             if ($model->vessel_type == 1) {
-                                                                    return 'T -' . Vessel::findOne($model->tug)->vessel_name . ' / B -' . Vessel::findOne($model->barge)->vessel_name;
+                                                                    return 'T - ' . Vessel::findOne($model->tug)->vessel_name . ' / B - ' . Vessel::findOne($model->barge)->vessel_name;
                                                             } else {
                                                                     return Vessel::findOne($model->vessel)->vessel_name;
                                                             }
