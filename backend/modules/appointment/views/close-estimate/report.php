@@ -8,6 +8,9 @@ use common\models\EstimatedProforma;
 use common\models\Debtor;
 use common\models\PortCallData;
 use common\models\Vessel;
+use common\models\CloseEstimate;
+use common\models\Services;
+use common\models\InvoiceType;
 ?>
 <!DOCTYPE html>
 <!--
@@ -69,29 +72,31 @@ and open the template in the editor.
                             </p>
                         </td>
                         <td style="width: 25%;">Invoice No : </td>
-                        <td style="width: 25%;">Invoice Date : <?php echo date('d/m/Y'); ?></td>
+                        <td style="width: 25%;">Invoice Date : <?php echo date('d-M-y'); ?></td>
                     </tr>
                     <tr>
-                        <td style="width: 25%;"></td>
-                        <td style="width: 25%;"><b></b></td>
+                        <td style="width: 25%;">EPDA Ref :</td>
+                        <td style="width: 25%;">Customer Code :<?php echo Debtor::findOne(['id' => $princip->principal])->principal_id; ?></td>
 
                     </tr>
                     <tr>
                         <td rowspan="3" style="width: 50%; font-weight: bold;">
                             <p>
-                                Debtor<br>
-                                Marine Core & Charterers <br>
-                                P.O. Box 117241, Dubai, U.A.E.<br>
-                                Tel.: +971 4 4538338<br>
-                                Fax.: +971 4 4537943<br>
-                                Attn Manisha:- +971-52-6451840<br>
+                                <?php echo Debtor::findOne(['id' => $princip->principal])->invoicing_address; ?>
                             </p>
                         </td>
-                        <td style="width: 25%;">Vessel Name : </td>
-                        <td style="width: 25%;">Ops Reference : </td>
+                        <td style="width: 25%;">Vessel Name : <?php
+                            if ($appointment->vessel_type == 1) {
+                                    echo 'T - ' . Vessel::findOne($appointment->tug)->vessel_name . ' / B - ' . Vessel::findOne($appointment->barge)->vessel_name;
+                            } else {
+                                    echo Vessel::findOne($appointment->vessel)->vessel_name;
+                            }
+                            ?>
+                        </td>
+                        <td style="width: 25%;">Ops Reference :<?= $appointment->appointment_no ?> </td>
                     </tr>
                     <tr>
-                        <td style="width: 25%;">Port of Call : </td>
+                        <td style="width: 25%;">Port of Call :<?= $appointment->portOfCall->port_name ?> </td>
                         <td style="width: 25%;"></td>
                     </tr>
                     <tr>
@@ -104,6 +109,9 @@ and open the template in the editor.
     </tr>
     <tr>
         <td>
+            <?php
+            $estimates = CloseEstimate::findAll(['apponitment_id' => $appointment->id, 'invoice_type' => $princip->invoice_type]);
+            ?>
             <div class="closeestimate-content">
                 <h6>Disbursement Summary:</h6>
                 <h6>Total Disbursement</h6>
@@ -114,12 +122,26 @@ and open the template in the editor.
                         <th style="width: 25%;">Invoice Reference </th>
                         <th style="width: 25%;">Amount</th>
                     </tr>
-                    <tr>
-                        <td style="width: 10%;"></td>
-                        <td style="width: 40%;"></td>
-                        <td style="width: 25%;"></td>
-                        <td style="width: 25%;"></td>
-                    </tr>
+                    <?php
+                    $i = 0;
+                    $grandtotal = 0;
+                    $epdatotal = 0;
+                    $fdatotal = 0;
+                    foreach ($estimates as $estimate):
+                            $i++;
+                            ?>
+                            <tr>
+                                <td style="width: 10%;"><?= $i ?></td>
+                                <td style="width: 40%;"><?php echo Services::findOne(['id' => $estimate->service_id])->service; ?></td>
+                                <td style="width: 25%;"><?php echo InvoiceType::findOne(['id' => $estimate->invoice_type])->invoice_type; ?></td>
+                                <?php
+                                $subcategories = SubServices::findAll(['estid' => $estimate->id]);
+                                ?>
+                                <td style="width: 25%;"></td>
+                            </tr>
+                            <?php
+                    endforeach;
+                    ?>
                     <tr>
                         <td style="width: 10%;"></td>
                         <td  colspan="2"style="width: 65%;">Total</td>

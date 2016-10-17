@@ -190,14 +190,17 @@ class CloseEstimateController extends Controller {
                 }
         }
 
-        public function actionReport($id) {
-                
+        public function actionReport() {
+                $invoice_type = $_POST['invoice_type'];
+                $app = $_POST['app_id'];
+                $princip = CloseEstimate::findOne(['invoice_type' => $invoice_type, 'apponitment_id' => $app]);
                 // get your HTML raw content without any layouts or scripts
-                $appointment = Appointment::findOne($id);
+                $appointment = Appointment::findOne($app);
                 //var_dump($appointment);exit;
                 echo $content = $this->renderPartial('report', [
             'appointment' => $appointment,
-            
+            'invoice_type' => $invoice_type,
+            'princip' => $princip,
                 ]);
                 exit;
 
