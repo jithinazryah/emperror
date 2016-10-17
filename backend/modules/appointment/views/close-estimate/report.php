@@ -125,8 +125,6 @@ and open the template in the editor.
                     <?php
                     $i = 0;
                     $grandtotal = 0;
-                    $epdatotal = 0;
-                    $fdatotal = 0;
                     foreach ($close_estimates as $close_estimate):
                             $i++;
                             ?>
@@ -134,18 +132,18 @@ and open the template in the editor.
                                 <td style="width: 10%;"><?= $i ?></td>
                                 <td style="width: 40%;"><?php echo Services::findOne(['id' => $close_estimate->service_id])->service; ?></td>
                                 <td style="width: 25%;"><?php echo InvoiceType::findOne(['id' => $close_estimate->invoice_type])->invoice_type; ?></td>
+                                <td style="width: 25%;"><?= $close_estimate->total ?></td>
                                 <?php
-                                $subcategories = SubServices::findAll(['estid' => $estimate->id]);
+                                $grandtotal += $close_estimate->total;
                                 ?>
-                                <td style="width: 25%;"></td>
                             </tr>
                             <?php
                     endforeach;
                     ?>
                     <tr>
                         <td style="width: 10%;"></td>
-                        <td  colspan="2"style="width: 65%;">Total</td>
-                        <td style="width: 25%;"></td>
+                        <td  colspan="2"style="width: 65%;text-align:right;font-weight: bold;">Total</td>
+                        <td style="width: 25%;font-weight: bold;">AED<?= $grandtotal ?></td>
                     </tr>
                 </table>
             </div>
@@ -223,7 +221,11 @@ and open the template in the editor.
                         </tr>
                         <tr>
                             <td>Vessel </td> <td>:</td>
-                            <td>Tug Talentlink-3 / Barge Talentlink-5</td>
+                            <td><?php if ($appointment->vessel_type == 1) {
+                                                                    echo  'T - ' . Vessel::findOne($appointment->tug)->vessel_name . ' / B - ' . Vessel::findOne($appointment->barge)->vessel_name;
+                                                            } else {
+                                                                             echo  Vessel::findOne($appointment->vessel)->vessel_name;
+                                                            } ?></td>
                         </tr>
                     </table>
                 </div>
