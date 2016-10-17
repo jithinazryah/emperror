@@ -76,10 +76,6 @@ and open the template in the editor.
                     </tr>
                 </table>
             </div>
-        </td>
-    </tr>
-    <tr>
-        <td>
             <div class="heading">ESTIMATED PORT COST</div>
             <div class="topcontent">
                 <div class="topcontent-left">

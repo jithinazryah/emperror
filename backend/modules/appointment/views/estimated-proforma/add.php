@@ -156,7 +156,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             <td><?= $estimate->epda; ?></td>
                                             <td><?= $estimate->principal0->principal_name; ?></td>
                                             <td><?= $estimate->comments; ?></td>
-                                            <!--<td><?php // $estimate->images;      ?></td>-->
+                                            <!--<td><?php // $estimate->images;        ?></td>-->
                                             <td>
                                                 <?= Html::a('<i class="fa fa-pencil"></i>', ['/appointment/estimated-proforma/add', 'id' => $id, 'prfrma_id' => $estimate->id], ['class' => 'btn btn-icon btn-primary', 'tittle' => 'Edit']) ?>
                                                 <?= Html::a('<i class="fa fa-remove"></i>', ['/appointment/estimated-proforma/delete-performa', 'id' => $estimate->id], ['class' => 'btn btn-icon btn-red', 'tittle' => 'Edit']) ?>
@@ -185,15 +185,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <td></td>
                                     <td><?= $form->field($model, 'service_id')->dropDownList(ArrayHelper::map(Services::findAll(['status' => 1]), 'id', 'service'), ['prompt' => '-Service-'])->label(false); ?></td>
                                     <td><?= $form->field($model, 'supplier')->dropDownList(ArrayHelper::map(Contacts::findAll(['status' => 1]), 'id', 'name'), ['prompt' => '-Supplier-'])->label(false); ?></td>
-                                   <!--<td><?php //$form->field($model, 'currency')->dropDownList(ArrayHelper::map(Currency::findAll(['status' => 1]), 'id', 'currency_name'), ['prompt' => '-Currency-'])->label(false);                                        ?></td>-->
+                                   <!--<td><?php //$form->field($model, 'currency')->dropDownList(ArrayHelper::map(Currency::findAll(['status' => 1]), 'id', 'currency_name'), ['prompt' => '-Currency-'])->label(false);                                          ?></td>-->
                                     <td><?= $form->field($model, 'unit_rate')->textInput(['placeholder' => 'Unit Rate'])->label(false) ?></td>
                                     <td><?= $form->field($model, 'unit')->textInput(['placeholder' => 'Quantity'])->label(false) ?></td>
-                                    <!--<td><?php //$form->field($model, 'roe')->textInput(['placeholder' => 'ROE'])->label(false)                                        ?></td>-->
+                                    <!--<td><?php //$form->field($model, 'roe')->textInput(['placeholder' => 'ROE'])->label(false)                                          ?></td>-->
                                     <td><?= $form->field($model, 'epda')->textInput(['placeholder' => 'EPDA', 'disabled' => true])->label(false) ?></td>
 
                                     <td><?= $form->field($model, 'principal')->dropDownList(ArrayHelper::map(Debtor::findAll(['status' => 1, 'id' => explode(',', $appointment->principal)]), 'id', 'principal_name'), ['prompt' => '-Principal-'])->label(false); ?></td>
                                     <td><?= $form->field($model, 'comments')->textInput(['placeholder' => 'Comments'])->label(false) ?></td>
-                                    <td><?php // $form->field($model, 'images[]')->fileInput(['multiple' => true])->label(false)      ?></td>
+                                    <td><?php // $form->field($model, 'images[]')->fileInput(['multiple' => true])->label(false)        ?></td>
                                     <td><?= Html::submitButton($model->isNewRecord ? 'Add' : 'Update', ['class' => 'btn btn-success']) ?>
                                     </td>
                                     <?php ActiveForm::end(); ?>
@@ -206,10 +206,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
                         </table>
                         <br/>
-                        <div style="float: right;">
-                            <?= Yii::$app->UploadFile->ListFile($appointment->id,Yii::$app->params['estimatePath']); ?>
+                        <div style="text-align: center;">
+                            <h4 class="sub-heading">Uploaded Files : <?= Yii::$app->UploadFile->ListFile($appointment->id, Yii::$app->params['estimatePath']); ?></h4>
+                        </div>
+                        <br/>
+                        <div style="float: left; margin-left: 46%;">
+                            <?php // Yii::$app->UploadFile->ListFile($appointment->id, Yii::$app->params['estimatePath']); ?>
                             <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data'], 'action' => Yii::$app->homeUrl . 'appointment/estimated-proforma/uploads', 'method' => 'post']) ?>
-                            <?php 
+                            <?php
                             $model_upload->appointment_id = $appointment->id;
                             $model_upload->type = Yii::$app->params['estimatePath'];
                             ?>
@@ -217,7 +221,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?= $form->field($model_upload, 'filee[]')->fileInput(['multiple' => true, 'accept' => 'image/*']) ?>
                             <?= $form->field($model_upload, 'appointment_id')->hiddenInput()->label(false) ?>
                             <?= $form->field($model_upload, 'type')->hiddenInput()->label(false) ?>
-                            <?= Html::submitButton('Add', ['class' => 'btn btn-success']) ?>
+                            <?= Html::submitButton('Upload', ['class' => 'btn btn-success']) ?>
 
 
                             <?php ActiveForm::end() ?>  

@@ -142,8 +142,13 @@ $this->params['breadcrumbs'][] = 'Update';
                             </div>
 
                         </div>
-                        <div class="panel-body">
-                            <?= Yii::$app->UploadFile->ListFile($model_appointment->id, Yii::$app->params['datPath']); ?>
+                        <br/>
+                        <div style="text-align: center;">
+                            <h4 class="sub-heading">Uploaded Files : <?= Yii::$app->UploadFile->ListFile($model_appointment->id, Yii::$app->params['datPath']); ?></h4>
+                        </div>
+                        <br/>
+                        <div class="panel-body" style="margin-left:46%;">
+                            <?php// Yii::$app->UploadFile->ListFile($model_appointment->id, Yii::$app->params['datPath']); ?>
                             <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data'], 'action' => Yii::$app->homeUrl . 'appointment/estimated-proforma/uploads', 'method' => 'post']) ?>
                             <?php
                             $model_upload->appointment_id = $model_appointment->id;
@@ -153,7 +158,7 @@ $this->params['breadcrumbs'][] = 'Update';
                             <?= $form->field($model_upload, 'filee[]')->fileInput(['multiple' => true, 'accept' => 'image/*']) ?>
                             <?= $form->field($model_upload, 'appointment_id')->hiddenInput()->label(false) ?>
                             <?= $form->field($model_upload, 'type')->hiddenInput()->label(false) ?>
-                            <?= Html::submitButton('Add', ['class' => 'btn btn-success']) ?>
+                            <?= Html::submitButton('Upload', ['class' => 'btn btn-success']) ?>
 
 
                             <?php ActiveForm::end() ?>  

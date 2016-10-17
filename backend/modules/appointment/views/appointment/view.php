@@ -264,7 +264,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                     <td><?= $i; ?></td>
                                                     <th><span class="co-name"><?= $estimate->service->service ?></span></th>
                                                     <td><?= $estimate->supplier0->name ?></td>
-        <!--                                                <td><?php // $estimate->currency0->currency_symbol                                      ?></td>-->
+        <!--                                                <td><?php // $estimate->currency0->currency_symbol                                            ?></td>-->
                                                     <td><?= $estimate->unit_rate; ?></td>
                                                     <td><?= $estimate->unit; ?></td>
                                                     <td><?= $estimate->roe; ?></td>
@@ -281,7 +281,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                     </tbody>
 
                                 </table>
-
+                            </div>
+                            <br/>
+                            <div>
+                                <h6 class="sub-heading">Uploaded Files: <?= Yii::$app->UploadFile->ListFile($appointment->id, Yii::$app->params['estimatePath']); ?></h6>
                             </div>
                             <script type="text/javascript">
                                     jQuery(document).ready(function ($)
@@ -353,10 +356,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             <div class="table-responsive" data-pattern="priority-columns" data-focus-btn-icon="fa-asterisk" data-sticky-table-header="true" data-add-display-all-btn="true" data-add-focus-btn="true">
 
                                 <div class="port-call-data-form form-inline" style="padding-top: 10px;">
-                                    <p style="margin-left: 35px;margin-bottom: 10px;font-size: 23px;color: black;"><b>PortCallData</b></p>
+                                    <p class="main-heading"><b>PortCallData</b></p>
                                     <?php
                                     if (!empty($imigration)) {
-                                            echo '<p style="margin-left: 35px;margin-bottom: 10px;font-size: 18px;color:#09a2dc;"><b>Imigration Clearence Details</b></p>';
+                                            echo '<p class="sub-heading"><b>Imigration Clearence Details</b></p>';
                                             echo '<hr class="appoint_history" />';
                                             echo $this->render('_imigration', [
                                                 'model' => $imigration,
@@ -366,7 +369,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ?>
 
                                     <hr class="appoint_history" />
-                                    <p style="margin-left: 35px;margin-bottom: 10px;font-size: 18px;color:#09a2dc;"><b>Port Call Details</b></p>
+                                    <p class="sub-heading"><b>Port Call Details</b></p>
                                     <hr class="appoint_history" />
                                     <div class="form-group field-portcalldata-eta">
                                         <label class="control-label" for="portcalldata-eta">ETA  :</label>
@@ -457,7 +460,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <div class="table-responsive" data-pattern="priority-columns" data-focus-btn-icon="fa-asterisk" data-sticky-table-header="true" data-add-display-all-btn="true" data-add-focus-btn="true">
 
                                 <div class="port-call-data-form form-inline" style="padding-top: 10px;">
-                                    <p style="margin-left: 35px;margin-bottom: 10px;font-size: 23px;color: black;"><b>PortCallDataDraft</b></p>
+                                    <p class="main-heading"><b>PortCallDataDraft</b></p>
                                     <hr class="appoint_history" />
                                     <div class="form-group field-portcalldata-ets">
                                         <label class="control-label" for="portcalldata-ets">DATA ID  :</label>
@@ -593,7 +596,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <div class="table-responsive" data-pattern="priority-columns" data-focus-btn-icon="fa-asterisk" data-sticky-table-header="true" data-add-display-all-btn="true" data-add-focus-btn="true">
 
                                 <div class="port-call-data-form form-inline" style="padding-top: 10px;">
-                                    <p style="margin-left: 35px;margin-bottom: 10px;font-size: 23px;color: black;"><b>PortCallDataRob</b></p>
+                                    <p class="main-heading"><b>PortCallDataRob</b></p>
                                     <hr class="appoint_history" />
                                     <div class="form-group field-portcalldata-ets">
                                         <label class="control-label" for="portcalldata-ets">FO ARRIVAL  :</label>
@@ -741,7 +744,9 @@ $this->params['breadcrumbs'][] = $this->title;
 
                             </div>
                         </div>
-
+                        <div>
+                            <h6 class="sub-heading">Uploaded Files: <?= Yii::$app->UploadFile->ListFile($appointment->id, Yii::$app->params['datPath']); ?></h6>
+                        </div>
                     </div>
 
                     <div class="tab-pane" id="profile-5">
@@ -812,7 +817,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                     </tbody>
 
                                 </table>
-
+                            </div>
+                            <br/>
+                            <div>
+                                <h6 class="sub-heading">Uploaded Files: <?= Yii::$app->UploadFile->ListFile($appointment->id, Yii::$app->params['closePath']); ?></h6>
                             </div>
                             <script type="text/javascript">
                                     jQuery(document).ready(function ($)

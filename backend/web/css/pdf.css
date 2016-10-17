@@ -12,19 +12,19 @@ body,p,tr,td,table,div,span{
     font-family: 'Roboto', sans-serif; 
 }
 @page {
-        size: A4;
-       // margin: 40px;
-       // margin-top: 100px;
-    }
+    size: A4;
+    // margin: 40px;
+    // margin-top: 100px;
+}
 @media print{
-    
-       // size: A4;
-        //margin: 30px;
-        //margin: 20mm;
-        
-        
-        
-    
+
+    // size: A4;
+    //margin: 30px;
+    //margin: 20mm;
+
+
+
+
 }
 .main-tabl{
     margin: auto;
@@ -35,7 +35,7 @@ table { page-break-inside:auto;}
 tr{ page-break-inside:avoid; page-break-after:auto; }
 
 //h6 {page-break-before: always}
- //table {page-break-after: always}
+//table {page-break-after: always}
 table.table{
     border: 1px solid black;
     border-collapse: collapse;
@@ -65,7 +65,7 @@ table.table{
     font-family: 'Roboto', sans-serif; 
     white-space: nowrap;
 }
- h6{
+h6{
     margin-bottom: 2px;
     margin-top: 15px;
     font-size: 15px;
@@ -125,11 +125,11 @@ table.table{
     width:100%;
 }
 .content-body h6{
-    margin-bottom: 8px;
-    margin-top: 10px;
+    margin-bottom: 3px;
+    margin-top: 4px;
 }
 .para-heading{
-    font-size: 13px;
+    font-size: 12px;
     color: red;
     font-style: italic;
 }
@@ -138,7 +138,7 @@ table.table{
     font-size: 8px;
 }
 .para-content1{
-    font-size: 12px;
+    font-size: 8px;
 }
 .bankdetails{
     width: 100%;
@@ -178,6 +178,87 @@ table.table{
 }
 .address h3{
     text-decoration: underline;
+}
+.closeestimate-content td{
+    font-size: 9px;
+    text-align: left;
+}
+
+.closeestimate-content h6 {
+    margin-bottom: 4px;
+    margin-top: 6px;
+    font-size: 12px;
+    color: #464545;
+}
+.bank{
+    width:100%;
+    display:inline-block;
+}
+.bank-left{
+    width:50%;
+    float:left; 
+}
+.bank-right{
+    width: 50%;
+    float: right;
+    padding-top: 33px;
+}
+.bank  h6{
+    margin-bottom: 4px;
+    margin-top: 6px;
+    font-size: 12px;
+    color: black;
+}
+.bank  p{
+    margin-bottom: 4px;
+    margin-top: 6px;
+    font-size: 12px;
+    color: black;
+}
+.bank td{
+    font-size: 9px;
+}
+.close-estimate-footer{
+    width:100%;
+    display:inline-block;
+}
+.close-estimate-footer p{
+    font-size: 10px;
+    font-style: italic;
+}
+.close-left{
+    width:50%;
+    float:left; 
+    padding-top:76px;
+}
+.close-right{
+    width:50%;
+    float: right;
+    /*margin-left: 21%;*/
+}
+.close-right h6{
+    font-size: 12px;
+    padding-left: 129px;
+    color: #464545;
+}
+.signature{
+    padding-left: 221px;
+    padding-top: 45px;
+}
+.tbclose {
+    padding-right: 104px;
+    padding-bottom: 96px;
+    padding-top: 50px;
+}
+.tbl3{
+    padding-top: 10px;
+    padding-bottom: 12px;
+}
+.receipts h6{
+    margin-bottom: 4px;
+    margin-top: 12px;
+    font-size: 12px;
+    color: #464545;
 }
 
 /*

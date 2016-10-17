@@ -27,7 +27,7 @@ class UploadFile extends Model {
 
         public function attributeLabels() {
                 return [
-                    'filee' => 'Choose afile to Upload',
+                    'filee' => 'Choose a file to Upload',
                     
                 ];
         }

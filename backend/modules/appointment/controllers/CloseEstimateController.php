@@ -8,10 +8,13 @@ use common\models\Appointment;
 use common\models\CloseEstimateSearch;
 use common\models\AppointmentSearch;
 use yii\web\Controller;
+use common\models\UploadFile;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use common\models\EstimatedProforma;
 use kartik\mpdf\Pdf;
+use yii\web\UploadedFile;
+use yii\helpers\FileHelper;
 
 /**
  * CloseEstimateController implements the CRUD actions for CloseEstimate model.
@@ -75,7 +78,8 @@ class CloseEstimateController extends Controller {
 
         public function actionAdd($id, $prfrma_id = NULL) {
                 $estimates = CloseEstimate::findAll(['apponitment_id' => $id]);
-                 $appointment = Appointment::findOne($id);
+                $appointment = Appointment::findOne($id);
+                $model_upload = new UploadFile();
                 if (empty($estimates)) {
                         $this->InsertCloseEstimate($id);
                         $estimates = CloseEstimate::findAll(['apponitment_id' => $id]);
@@ -88,17 +92,18 @@ class CloseEstimateController extends Controller {
 
                 if ($model->load(Yii::$app->request->post()) && $this->SetValues($model, $id)) {
                         $model->epda = $model->unit_rate * $model->unit;
-                        if($model->save()){
-                                 return $this->redirect(['add', 'id' => $id]);
+                        if ($model->save()) {
+                                return $this->redirect(['add', 'id' => $id]);
                         }
-                       // return $this->refresh();
-                } 
-                        return $this->render('add', [
-                                    'model' => $model,
-                                    'estimates' => $estimates,
-                                    'appointment' => $appointment,
-                                    'id' => $id,
-                        ]);
+                        // return $this->refresh();
+                }
+                return $this->render('add', [
+                            'model' => $model,
+                            'estimates' => $estimates,
+                            'appointment' => $appointment,
+                            'id' => $id,
+                            'model_upload' => $model_upload,
+                ]);
         }
 
         /*
@@ -176,7 +181,7 @@ class CloseEstimateController extends Controller {
                         return false;
                 }
         }
-        
+
         public function actionSupplier() {
                 if (Yii::$app->request->isAjax) {
                         $service_id = $_POST['service_id'];
@@ -184,11 +189,17 @@ class CloseEstimateController extends Controller {
                         echo $services_data->supplier_options;
                 }
         }
-        
+
         public function actionReport($id) {
-                //$close_estimates = CloseEstimate::findAll(['apponitment_id' => $id]);
+                
                 // get your HTML raw content without any layouts or scripts
-                $content = $this->renderPartial('pdf');
+                $appointment = Appointment::findOne($id);
+                //var_dump($appointment);exit;
+                echo $content = $this->renderPartial('report', [
+            'appointment' => $appointment,
+            
+                ]);
+                exit;
 
                 // setup kartik\mpdf\Pdf component
                 $pdf = new Pdf([
@@ -197,23 +208,23 @@ class CloseEstimateController extends Controller {
                     // A4 paper format
                     'format' => Pdf::FORMAT_A4,
                     // portrait orientation
-                    'orientation' => Pdf::ORIENT_PORTRAIT,
+//                    'orientation' => Pdf::ORIENT_PORTRAIT,
                     // stream to browser inline
-                    'destination' => Pdf::DEST_BROWSER,
+//                    'destination' => Pdf::DEST_BROWSER,
                     // your html content input
                     'content' => $content,
                     // format content from your own css file if needed or use the
                     // enhanced bootstrap css built by Krajee for mPDF formatting 
                     'cssFile' => '@backend/web/css/pdf.css',
-                    // any css to be embedded if required
-                    //'cssInline' => '.kv-heading-1{font-size:18px}',
-                    // set mPDF properties on the fly
-                    //'options' => ['title' => 'Krajee Report Title'],
-                    // call mPDF methods on the fly
-                    'methods' => [
-                        'SetHeader' => ['Close Estimate generated on '.date("d/m/Y h:m:s")],
-                        'SetFooter' => ['|page {PAGENO}'],
-                    ]
+                        // any css to be embedded if required
+                        //'cssInline' => '.kv-heading-1{font-size:18px}',
+                        // set mPDF properties on the fly
+                        //'options' => ['title' => 'Krajee Report Title'],
+                        // call mPDF methods on the fly
+                        /*                    'methods' => [
+                          'SetHeader' => ['Estimated proforma generated on ' . date("d/m/Y h:m:s")],
+                          'SetFooter' => ['|page {PAGENO}'],
+                          ] */
                 ]);
 
                 // return the pdf output as per the destination setting
