@@ -110,7 +110,7 @@ and open the template in the editor.
     <tr>
         <td>
             <?php
-            $estimates = CloseEstimate::findAll(['apponitment_id' => $appointment->id, 'invoice_type' => $princip->invoice_type]);
+            $close_estimates = CloseEstimate::findAll(['apponitment_id' => $appointment->id, 'invoice_type' => $princip->invoice_type]);
             ?>
             <div class="closeestimate-content">
                 <h6>Disbursement Summary:</h6>
@@ -127,13 +127,13 @@ and open the template in the editor.
                     $grandtotal = 0;
                     $epdatotal = 0;
                     $fdatotal = 0;
-                    foreach ($estimates as $estimate):
+                    foreach ($close_estimates as $close_estimate):
                             $i++;
                             ?>
                             <tr>
                                 <td style="width: 10%;"><?= $i ?></td>
-                                <td style="width: 40%;"><?php echo Services::findOne(['id' => $estimate->service_id])->service; ?></td>
-                                <td style="width: 25%;"><?php echo InvoiceType::findOne(['id' => $estimate->invoice_type])->invoice_type; ?></td>
+                                <td style="width: 40%;"><?php echo Services::findOne(['id' => $close_estimate->service_id])->service; ?></td>
+                                <td style="width: 25%;"><?php echo InvoiceType::findOne(['id' => $close_estimate->invoice_type])->invoice_type; ?></td>
                                 <?php
                                 $subcategories = SubServices::findAll(['estid' => $estimate->id]);
                                 ?>
