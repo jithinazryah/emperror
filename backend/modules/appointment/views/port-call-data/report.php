@@ -63,11 +63,13 @@ and open the template in the editor.
                 <table class="table tbl">
                     <tr>
                         <td style="width: 20%;"><?php echo common\models\VesselType::findOne($appointment->vessel_type)->vessel_type; ?> Name</td>
-                        <td style="width: 30%;"> <?php if ($appointment->vessel_type == 1) {
-                                                                    echo  'T - ' . Vessel::findOne($appointment->tug)->vessel_name . ' / B - ' . Vessel::findOne($appointment->barge)->vessel_name;
-                                                            } else {
-                                                                             echo  Vessel::findOne($appointment->vessel)->vessel_name;
-                                                            } ?></td>
+                        <td style="width: 30%;"> <?php
+                            if ($appointment->vessel_type == 1) {
+                                    echo 'T - ' . Vessel::findOne($appointment->tug)->vessel_name . ' / B - ' . Vessel::findOne($appointment->barge)->vessel_name;
+                            } else {
+                                    echo Vessel::findOne($appointment->vessel)->vessel_name;
+                            }
+                            ?></td>
                         <td style="width: 20%;">Cargo Quantity</td>
                         <td style="width: 30%;"><?= $appointment->quantity ?></td>
                     </tr>
@@ -116,7 +118,7 @@ and open the template in the editor.
                         return strtotime($port) < strtotime($b) ? -1 : 1;
                 }
 
-                if (!empty($port)) {
+                if (!empty($ports)) {
                         ?>
                         <h6>Events</h6>
                         <table class="table">
@@ -143,20 +145,21 @@ and open the template in the editor.
                                 <td colspan="4"></td>
                             </tr>
                             <tr>
-                                <td style="width: 20%;">COSP</td>
-                                <td style="width: 30%;"><?= $ports->cosp ?></td>
-                                <td style="width: 20%;">Lastline Away</td>
-                                <td style="width: 30%;"><?= $ports->lastline_away ?></td>
+                                <td style="width: 20%;">Pob Outbound</td>
+                                <td style="width: 30%;"><?= Yii::$app->SetValues->DateFormate($ports->pob_outbound); ?></td>
+                                <td style="width: 20%;">Cast Off</td>
+                                <td style="width: 30%;"><?= Yii::$app->SetValues->DateFormate($ports->cast_off); ?></td>
                             </tr>
                             <tr>
-                                <td style="width: 20%;">Cast Off</td>
-                                <td style="width: 30%;"><?= $ports->cast_off ?></td>
-                                <td style="width: 20%;">Pob Outbound</td>
-                                <td style="width: 30%;"><?= $ports->pob_outbound ?></td>
+                                <td style="width: 20%;">Lastline Away</td>
+                                <td style="width: 30%;"><?= Yii::$app->SetValues->DateFormate($ports->lastline_away); ?></td>
+                                <td style="width: 20%;">COSP</td>
+                                <td style="width: 30%;"><?= Yii::$app->SetValues->DateFormate($ports->cosp); ?></td>
+
                             </tr>
                             <tr>
                                 <td style="width: 20%;">ETA Next Port</td>
-                                <td style="width: 30%;"><?= $ports->eta_next_port ?></td>
+                                <td style="width: 30%;"><?= Yii::$app->SetValues->DateFormate($ports->eta_next_port); ?></td>
                             </tr>
 
                         </table>
@@ -447,12 +450,12 @@ and open the template in the editor.
                                         <td style="width: 33%;"><?= Yii::$app->SetValues->DateFormate($port_stoppage->stoppage_to); ?></td>
                                         <td style="width:34%;"><?= $port_stoppage->comment; ?></td>
                                     </tr>
-                            <?php } ?>
+        <?php } ?>
                         </table>
                         <br/>
 
                     </div>
-            <?php } ?>
+<?php } ?>
             <br/>
             <!--            <div class="footer">
                             <div class="footer-left">
@@ -468,11 +471,13 @@ and open the template in the editor.
         <td>
             <div class="footer">
                 <div class="main-left">
-                    <h4> Master<br/><br/><?php if ($appointment->vessel_type == 1) {
-                                                                    echo  'T - ' . Vessel::findOne($appointment->tug)->vessel_name . ' / B - ' . Vessel::findOne($appointment->barge)->vessel_name;
-                                                            } else {
-                                                                             echo  Vessel::findOne($appointment->vessel)->vessel_name;
-                                                            } ?><br/><br/>Dated:<?= date('d/m/Y') ?></h4>
+                    <h4> Master<br/><br/><?php
+                        if ($appointment->vessel_type == 1) {
+                                echo 'T - ' . Vessel::findOne($appointment->tug)->vessel_name . ' / B - ' . Vessel::findOne($appointment->barge)->vessel_name;
+                        } else {
+                                echo Vessel::findOne($appointment->vessel)->vessel_name;
+                        }
+                        ?><br/><br/>Dated:<?= date('d/m/Y') ?></h4>
 
                 </div>
                 <div class="main-right">

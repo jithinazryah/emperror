@@ -21,7 +21,7 @@ class UploadFile extends Model {
                     [['appointment_id', 'type_id',], 'integer'],
                     [['type'], 'string', 'max' => 200],
 //                    [['filee'], 'file', 'skipOnEmpty' => false, 'extensions' => 'pdf','txt'],
-                    [['filee'], 'file', 'skipOnEmpty' => false, 'extensions' => 'png, jpg', 'maxFiles' => 4],
+                    [['filee'], 'file', 'skipOnEmpty' => false, 'extensions' => 'pdf,txt,doc,docx,xls,xlsx', 'maxFiles' => 4],
                 ];
         }
 

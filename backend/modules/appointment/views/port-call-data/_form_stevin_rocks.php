@@ -12,10 +12,10 @@
 
 <?= $form->field($model, 'lastline_away')->textInput(['tabindex' => 26]) ?>
 
-<?= $form->field($model, 'cleared_channel')->textInput(['tabindex' => 27]) ?>
+<?php// $form->field($model, 'cleared_channel')->textInput(['tabindex' => 27]) ?>
 
-<?= $form->field($model, 'cosp')->textInput(['tabindex' => 28]) ?>
+<?= $form->field($model, 'cosp')->textInput(['tabindex' => 27]) ?>
 
-<?= $form->field($model, 'fasop')->textInput(['tabindex' => 29]) ?>
+<?php// $form->field($model, 'fasop')->textInput(['tabindex' => 29]) ?>
 
-<?= $form->field($model, 'eta_next_port')->textInput(['tabindex' => 30]) ?>
+<?= $form->field($model, 'eta_next_port')->textInput(['tabindex' => 28]) ?>

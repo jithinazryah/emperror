@@ -45,7 +45,7 @@ class EstimatedProforma extends \yii\db\ActiveRecord {
                     [['DOC', 'DOU', 'epda'], 'safe'],
                     [['unit_rate', 'unit'], 'string', 'max' => 50],
                     [['roe'], 'string', 'max' => 15],
-                    [['attachments'], 'file', 'extensions' => 'pdf', 'maxFiles' => 4],
+                    
                 ];
         }
 
@@ -67,7 +67,6 @@ class EstimatedProforma extends \yii\db\ActiveRecord {
                     'principal' => 'Principal',
                     'invoice_type' => 'Invoice Type',
                     'comments' => 'Comments',
-                    'images' => 'Images',
                     'status' => 'Status',
                     'CB' => 'Cb',
                     'UB' => 'Ub',

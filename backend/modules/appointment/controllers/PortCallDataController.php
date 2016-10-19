@@ -320,11 +320,15 @@ class PortCallDataController extends Controller {
                 $year = substr($data, 4, 4);
                 $hour = substr($data, 9, 2);
                 $min = substr($data, 11, 2);
-
 //        echo $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min.':00 </br>';
 //        echo '2016-08-17 00:00:00';
 //        exit;
-                return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min . ':00';
+                if($hour != '' && $min != ''){
+                        return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min . ':00';
+                }else{
+                        return $year . '-' . $month . '-' . $day;
+                }
+                
         }
 
         public function actionPortBreak() {
@@ -426,7 +430,6 @@ class PortCallDataController extends Controller {
                 $i = 0;
                 $old = strtotime('1999-01-01 00:00:00');
                 foreach ($data as $key => $value) {
-
                         if ($value != '' && $value != '0000-00-00 00:00:00' && strtotime($value) > $old) {
                                 if (!in_array($key, $check)) {
                                         $mins = date('H:i:s', strtotime($value));
@@ -438,6 +441,7 @@ class PortCallDataController extends Controller {
                                 }
                         }
                 }
+
                 $port_additional = PortCallDataAdditional::findAll(['appointment_id' => $data->appointment_id]);
                 foreach ($port_additional as $key => $value) {
                         if ($value->value != '' && $value->value != '0000-00-00 00:00:00' && strtotime($value->value) > $old) {

@@ -17,7 +17,7 @@
 
 <?= $form->field($model, 'pob_outbound')->textInput(['tabindex' => 33]) ?>
 
-<?= $form->field($model, 'cleared_channel')->textInput(['tabindex' => 37]) ?>
+<div class="form-group"></div>
 
 <?= $form->field($model, 'gangway_down')->textInput(['tabindex' => 22]) ?>
 
