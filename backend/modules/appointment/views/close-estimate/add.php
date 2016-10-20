@@ -236,7 +236,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <br/>
                         <div style="float: left;margin-left: 46%;">
                             <?php // Yii::$app->UploadFile->ListFile($appointment->id, Yii::$app->params['closePath']); ?>
-                            <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data'], 'action' => Yii::$app->homeUrl . 'appointment/estimated-proforma/uploads', 'method' => 'post']) ?>
+                            <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data'], 'action' => Yii::$app->homeUrl . 'appointment/close-estimate/uploads', 'method' => 'post']) ?>
                             <?php
                             $model_upload->appointment_id = $appointment->id;
                             $model_upload->type = Yii::$app->params['closePath'];

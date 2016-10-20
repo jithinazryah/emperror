@@ -149,7 +149,7 @@ $this->params['breadcrumbs'][] = 'Update';
                         <br/>
                         <div class="panel-body" style="margin-left:46%;">
                             <?php// Yii::$app->UploadFile->ListFile($model_appointment->id, Yii::$app->params['datPath']); ?>
-                            <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data'], 'action' => Yii::$app->homeUrl . 'appointment/estimated-proforma/uploads', 'method' => 'post']) ?>
+                            <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data'], 'action' => Yii::$app->homeUrl . 'appointment/port-call-data/uploads', 'method' => 'post']) ?>
                             <?php
                             $model_upload->appointment_id = $model_appointment->id;
                             $model_upload->type = Yii::$app->params['datPath'];

@@ -457,6 +457,18 @@ class PortCallDataController extends Controller {
                 }
                 return $arr;
         }
+        public function actionUploads() {
+                $model_upload = new UploadFile();
+                if ($model_upload->load(Yii::$app->request->post())) {
+                        $files = UploadedFile::getInstances($model_upload, 'filee');
+                       
+                        if (Yii::$app->UploadFile->Upload($files, $model_upload)) {
+                                
+                                return $this->redirect(Yii::$app->request->referrer);
+                        }
+                }
+                
+        }
 
         public function actionReports($id) {
                 $ports = PortCallData::findOne(['appointment_id' => $id]);
