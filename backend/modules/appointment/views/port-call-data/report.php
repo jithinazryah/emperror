@@ -118,7 +118,7 @@ and open the template in the editor.
                         return strtotime($port) < strtotime($b) ? -1 : 1;
                 }
 
-                if (!empty($ports)) {
+                if (!empty($port)) {
                         ?>
                         <h6>Events</h6>
                         <table class="table">
@@ -139,11 +139,13 @@ and open the template in the editor.
                                                     $flag = 0;
                                             }
                                     }
+                                    ?>
+                                    <tr>
+                                        <td colspan = "4"></td>
+                                    </tr>
+                                    <?php
                             }
                             ?>
-                            <tr>
-                                <td colspan="4"></td>
-                            </tr>
                             <tr>
                                 <td style="width: 20%;">Pob Outbound</td>
                                 <td style="width: 30%;"><?= Yii::$app->SetValues->DateFormate($ports->pob_outbound); ?></td>

@@ -27,11 +27,11 @@ use common\models\Vessel;
         <td class="labell">VESSEL-NAME </td><td class="colen">:</td><td class="value">
             <?php
             if ($appointment->vessel_type == 1) {
-                    echo Vessel::findOne($appointment->tug)->vessel_name . ',' . Vessel::findOne($appointment->barge)->vessel_name;
+                    echo 'T - ' . Vessel::findOne($appointment->tug)->vessel_name . ' / B - ' . Vessel::findOne($appointment->barge)->vessel_name;
             } else {
                     echo Vessel::findOne($appointment->vessel)->vessel_name;
             }
-            ?>    
+            ?>
 
         </td>
         <!--<td class="labell">LAST-PORT </td><td class="colen">:</td><td class="value">Tug & Barge </td>-->

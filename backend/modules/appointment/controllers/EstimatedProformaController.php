@@ -224,6 +224,7 @@ class EstimatedProformaController extends Controller {
                         $model = new EstimatedProforma;
                         $model->apponitment_id = $id;
                         $model->service_id = $value->service_id;
+                        $model->service_category = $value->service_category;
                         $model->supplier = $value->supplier;
                         $model->unit_rate = $value->unit_rate;
                         $model->unit = $value->unit;

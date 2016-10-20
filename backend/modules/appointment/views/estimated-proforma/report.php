@@ -8,6 +8,7 @@ use common\models\EstimatedProforma;
 use common\models\Debtor;
 use common\models\ServiceCategorys;
 use common\models\Services;
+use common\models\Vessel;
 ?>
 <!DOCTYPE html>
 <!--
@@ -56,26 +57,29 @@ and open the template in the editor.
 <tbody>
     <tr>
         <td>
-            <div class="main-left">
-                <table class="tb2">
-                    <tr>
-                        <td>TO </td> <td style="width: 50px;text-align: center">:</td>
-                        <td style="max-width: 405px"><?= $appointment->getInvoiceAddress($princip); ?></td>
-                    </tr>
-                </table>
+            <div class="heading-top"> 
+                <div class="main-left">
+                    <table class="tb2">
+                        <tr>
+                            <td>TO </td> <td style="width: 50px;text-align: center">:</td>
+                            <td style="max-width: 405px"><?= $appointment->getInvoiceAddress($princip); ?></td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="main-right">
+                    <table class="tb2">
+                        <tr>
+                            <td>Date </td> <td style="width: 50px;text-align: center">:</td>
+                            <td style="max-width: 200px"><?= date("d/m/Y") ?></td>
+                        </tr>
+                        <tr>
+                            <td>Client Code </td> <td style="width: 50px;text-align: center">:</td>
+                            <td style="max-width: 200px"><?= $appointment->getClintCode($appointment->principal); ?></td>
+                        </tr>
+                    </table>
+                </div>
             </div>
-            <div class="main-right">
-                <table class="tb2">
-                    <tr>
-                        <td>Date </td> <td style="width: 50px;text-align: center">:</td>
-                        <td style="max-width: 200px"><?= date("d/m/Y") ?></td>
-                    </tr>
-                    <tr>
-                        <td>Client Code </td> <td style="width: 50px;text-align: center">:</td>
-                        <td style="max-width: 200px"><?= $appointment->getClintCode($appointment->principal); ?></td>
-                    </tr>
-                </table>
-            </div>
+            <br/>
             <div class="heading">ESTIMATED PORT COST</div>
             <div class="topcontent">
                 <div class="topcontent-left">
@@ -94,7 +98,15 @@ and open the template in the editor.
                     <table class="">
                         <tr>
                             <td>Vessel </td> <td>:</td>
-                            <td><?= $appointment->vessel0->vessel_name ?></td>
+                            <td><?php
+                                if ($appointment->vessel_type == 1) {
+                                        echo 'T - ' . Vessel::findOne($appointment->tug)->vessel_name . ' / B - ' . Vessel::findOne($appointment->barge)->vessel_name;
+                                } else {
+                                        echo Vessel::findOne($appointment->vessel)->vessel_name;
+                                }
+                                ?>
+
+                            </td>
                         </tr>
                         <tr>
                             <td>Purpose </td> <td>:</td>

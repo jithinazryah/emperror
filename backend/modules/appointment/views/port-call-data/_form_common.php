@@ -5,8 +5,8 @@
 <?= $form->field($model, 'immigration_commenced')->textInput(['tabindex' => 28]) ?>
 
 <?= $form->field($model, 'pob_outbound')->textInput(['tabindex' => 32]) ?>
-<div class="form-group "></div>
 
+<?= $form->field($model, 'eta_next_port')->textInput(['tabindex' => 38]) ?>
 <?php// $form->field($model, 'cosp')->textInput(['tabindex' => 36]) ?>
 
 <?= $form->field($model, 'anchor_aweigh')->textInput(['tabindex' => 21]) ?>
@@ -27,7 +27,7 @@
 
 <?= $form->field($model, 'lastline_away')->textInput(['tabindex' => 34]) ?>
 
-<?= $form->field($model, 'eta_next_port')->textInput(['tabindex' => 38]) ?>
+<div class="form-group "></div>
 
 <?= $form->field($model, 'pob_inbound')->textInput(['tabindex' => 23]) ?>
 
