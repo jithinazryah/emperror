@@ -194,9 +194,12 @@ class EstimatedProformaController extends Controller {
         public function actionEstimateConfirm($id) {
                 $appointment = Appointment::findOne($id);
                 $new_appid = substr($appointment->appointment_no, 2);
+                $old_appid = substr($appointment->appointment_no, 0,2);
                 $estimates = EstimatedProforma::findAll(['apponitment_id' => $id]);
                 if (!empty($estimates)) {
-                        $appointment->appointment_no = $new_appid;
+                        if($old_appid == 'EN'){
+                                $appointment->appointment_no = $new_appid;
+                        }
                         $appointment->stage = 2;
                         $appointment->sub_stages = 2;
                         $appointment->save();
