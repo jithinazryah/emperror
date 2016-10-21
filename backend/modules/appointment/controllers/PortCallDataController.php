@@ -306,8 +306,33 @@ class PortCallDataController extends Controller {
                         $a = ['additional_info', 'comments', 'status'];
                         foreach ($data as $key => $dta) {
                                 if (!in_array($key, $a)) {
-                                        if (strlen($dta) < 15 && $dta != NULL)
-                                                $model->$key = $this->ChangeFormat($dta);
+                                        if (strpos($dta, '-') == false) {
+                                                if (strlen($dta) < 16 && strlen($dta) > 8 && $dta != NULL) {
+                                                        $model->$key = $this->ChangeFormat($dta);
+                                                } else {
+                                                        $model->$key = '';
+                                                }
+                                        } else {
+                                                if (strlen($dta) < 19 && strlen($dta) >= 10 && $dta != NULL) {
+                                                        $year = substr($dta, 0, 4);
+                                                        $month = substr($dta, 5, 2);
+                                                        $day = substr($dta, 8, 2);
+                                                        $hour = substr($dta, 11, 2);
+                                                        $min = substr($dta, 14, 2);
+                                                        $sec = substr($dta, 17, 2);
+                                                        if ($hour != '' && $min != '' && $sec != '') {
+                                                                $model->$key = $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min . ':' . $sec;
+                                                        } elseif ($hour != '' && $min != '') {
+                                                                $model->$key = $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min;
+                                                        } elseif ($hour != '') {
+                                                                $model->$key = $year . '-' . $month . '-' . $day . ' ' . $hour . ':00';
+                                                        } else {
+                                                                $model->$key = $year . '-' . $month . '-' . $day;
+                                                        }
+                                                } else {
+                                                        $model->$key = '';
+                                                }
+                                        }
                                 }
                         }
                 }
@@ -320,15 +345,16 @@ class PortCallDataController extends Controller {
                 $year = substr($data, 4, 4);
                 $hour = substr($data, 9, 2);
                 $min = substr($data, 11, 2);
-//        echo $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min.':00 </br>';
-//        echo '2016-08-17 00:00:00';
-//        exit;
-                if($hour != '' && $min != ''){
-                        return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min . ':00';
-                }else{
+                $sec = substr($data, 13, 2);
+                if ($hour != '' && $min != '' && $sec != '') {
+                        return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min . ':' . $sec;
+                } elseif ($hour != '' && $min != '') {
+                        return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min;
+                } elseif ($hour != '') {
+                        return $year . '-' . $month . '-' . $day . ' ' . $hour . ':00';
+                } else {
                         return $year . '-' . $month . '-' . $day;
                 }
-                
         }
 
         public function actionPortBreak() {
@@ -457,17 +483,17 @@ class PortCallDataController extends Controller {
                 }
                 return $arr;
         }
+
         public function actionUploads() {
                 $model_upload = new UploadFile();
                 if ($model_upload->load(Yii::$app->request->post())) {
                         $files = UploadedFile::getInstances($model_upload, 'filee');
-                       
+
                         if (Yii::$app->UploadFile->Upload($files, $model_upload)) {
-                                
+
                                 return $this->redirect(Yii::$app->request->referrer);
                         }
                 }
-                
         }
 
         public function actionReports($id) {

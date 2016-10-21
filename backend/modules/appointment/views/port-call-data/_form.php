@@ -201,7 +201,7 @@ use yii\widgets\ActiveForm;
             margin-left: 28px;
             height: 150px;
         }
-        .hidediv{
+        .hidediv1{
             display:none;
         }
     </style>
