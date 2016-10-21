@@ -46,7 +46,11 @@ $this->params['breadcrumbs'][] = 'Update';
                 <hr class="appoint_history" />
                 <div style="float:left;">
                     <?php
-                    echo Html::a('<i class="fa-print"></i><span>Generate SOF Report</span>', ['port-call-data/reports', 'id' => $model_appointment->id], ['class' => 'btn btn-secondary btn-icon btn-icon-standalone']);
+                    echo Html::a('<i class="fa-print"></i><span>Generate SOF Report</span>', ['port-call-data/reports'], ['class' => 'btn btn-secondary btn-icon btn-icon-standalone', 'onclick' => "window.open('reports?id=$model_appointment->id', 'newwindow', 'width=750, height=800');return false;"]);
+                    ?>
+                    <?php // Html::beginForm(['estimated-proforma/reports'], 'post', ['target' => 'print_popup','onSubmit' => "window.open('about:blank','print_popup','width=1000,height=800');"]) ?>
+                    <?php
+                    //echo Html::a('<i class="fa-print"></i><span>Generate SOF Report</span>', ['port-call-data/reports', 'id' => $model_appointment->id], ['class' => 'btn btn-secondary btn-icon btn-icon-standalone', 'onclick' => "window.open('reports', 'newwindow', 'width=750, height=800');return false;"]);
                     ?>
                 </div>
                 <div style="float: left;">
@@ -148,7 +152,7 @@ $this->params['breadcrumbs'][] = 'Update';
                         </div>
                         <br/>
                         <div class="panel-body" style="margin-left:46%;">
-                            <?php// Yii::$app->UploadFile->ListFile($model_appointment->id, Yii::$app->params['datPath']); ?>
+                            <?php // Yii::$app->UploadFile->ListFile($model_appointment->id, Yii::$app->params['datPath']); ?>
                             <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data'], 'action' => Yii::$app->homeUrl . 'appointment/port-call-data/uploads', 'method' => 'post']) ?>
                             <?php
                             $model_upload->appointment_id = $model_appointment->id;

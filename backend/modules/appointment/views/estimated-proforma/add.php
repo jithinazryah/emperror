@@ -49,7 +49,8 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?php // endif; ?>
                 </div>
                 <div style="float: left;">
-                    <?= Html::beginForm(['estimated-proforma/reports'], 'post', ['target' => '_blank']) ?>
+                    
+                    <?= Html::beginForm(['estimated-proforma/reports'], 'post', ['target' => 'print_popup','onSubmit' => "window.open('about:blank','print_popup','width=1000,height=800');"]) ?>
                     <!--<form name="estimate" action="<?= Yii::$app->homeUrl ?>appointment/estimated-proforma/reports" method="post">-->
                     <?php
                     $arr = explode(',', $appointment->principal);
@@ -80,6 +81,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <?php
                         }
                         ?>
+                               
                         <div class="col-md-4" style="float:left;">
                             <?= Html::submitButton('<i class="fa-print"></i><span>Generate Report</span>', ['class' => 'btn btn-secondary btn-icon btn-icon-standalone']) ?>
    <!--<input type="submit" name="b1" value="Submit">-->

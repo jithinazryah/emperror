@@ -32,7 +32,7 @@ class EstimatedProformaController extends Controller {
                         'class' => VerbFilter::className(),
                         'actions' => [
                             'delete' => ['POST'],
-                            'reports' => ['POST'],
+                           // 'reports' => ['POST'],
                         ],
                     ],
                 ];
@@ -115,13 +115,12 @@ class EstimatedProformaController extends Controller {
                 $model_upload = new UploadFile();
                 if ($model_upload->load(Yii::$app->request->post())) {
                         $files = UploadedFile::getInstances($model_upload, 'filee');
-                       
+
                         if (Yii::$app->UploadFile->Upload($files, $model_upload)) {
-                                
+
                                 return $this->redirect(Yii::$app->request->referrer);
                         }
                 }
-                
         }
 
         public function CheckPerforma($id, $appointment) {
@@ -194,10 +193,10 @@ class EstimatedProformaController extends Controller {
         public function actionEstimateConfirm($id) {
                 $appointment = Appointment::findOne($id);
                 $new_appid = substr($appointment->appointment_no, 2);
-                $old_appid = substr($appointment->appointment_no, 0,2);
+                $old_appid = substr($appointment->appointment_no, 0, 2);
                 $estimates = EstimatedProforma::findAll(['apponitment_id' => $id]);
                 if (!empty($estimates)) {
-                        if($old_appid == 'EN'){
+                        if ($old_appid == 'EN') {
                                 $appointment->appointment_no = $new_appid;
                         }
                         $appointment->stage = 2;
