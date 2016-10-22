@@ -33,7 +33,7 @@ use common\models\Vessel;
         }
         .print{
             margin-top: 18px;
-            margin-left: 434px;
+            margin-left: 532px;
         }
     </style>
     <table class="main-tabl" border="0" > 

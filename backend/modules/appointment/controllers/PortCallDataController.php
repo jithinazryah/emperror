@@ -101,13 +101,16 @@ class PortCallDataController extends Controller {
                 $model_port_cargo_details = PortCargoDetails::findOne(['appointment_id' => $id]);
                 $model_port_stoppages = PortStoppages::findAll(['appointment_id' => $id]);
                 $model_upload = new UploadFile();
+                $model = $this->dateformat($model, $model->attributes);
                 if ($model_port_cargo_details == '')
                         $model_port_cargo_details = new PortCargoDetails;
 
                 if (empty($model_appointment))
                         throw new \yii\web\HttpException(404, 'This Appointment could not be found.Eroor Code:1001');
                 $model_add = new PortCallDataAdditional();
-
+                /*
+                 * If the data depends on the appointment ID is empty then creating a new entry
+                 */
                 if ($this->Check($id, $model, $model_draft, $model_rob, $model_imigration)) {
                         $model = PortCallData::findOne(['appointment_id' => $id]);
                         $model_draft = PortCallDataDraft::findOne(['appointment_id' => $id]);
@@ -126,8 +129,16 @@ class PortCallDataController extends Controller {
                 } else if ($model_rob->load(Yii::$app->request->post()) && $model_draft->load(Yii::$app->request->post())) {
                         $this->saveportcalldraftrob($model_rob, $model_draft);
                 }
-
-                //$model_immigration = new ImigrationClearance();
+                $model = $this->dateformat($model);
+                $model_imigration = $this->dateformat($model_imigration);
+                $model_draft = $this->dateformat($model_draft);
+                foreach ($model_additional as $additional) {
+                         $additional->value = $this->SingleDateFormat($additional->value);
+                }
+                foreach ($model_port_stoppages as $port_stoppages) {
+                         $port_stoppages->stoppage_from = $this->SingleDateFormat($port_stoppages->stoppage_from);
+                         $port_stoppages->stoppage_to = $this->SingleDateFormat($port_stoppages->stoppage_to);
+                }
                 return $this->render('update', [
                             'model' => $model,
                             'model_draft' => $model_draft,
@@ -143,10 +154,13 @@ class PortCallDataController extends Controller {
                 ]);
         }
 
-        public function SavePortcallData($model) {
+        public function SavePortcallData($model, $model_imigration) {
                 Yii::$app->SetValues->Attributes($model);
-                $this->dateformat($model, $_POST['PortCallData']);
+                Yii::$app->SetValues->Attributes($model_imigration);
+                $this->dateformat($model);
+                $this->dateformat($model_imigration);
                 $model->save();
+                $model_imigration->save();
                 if (isset($_POST['create']) && $_POST['create'] != '') {
                         //echo 'create';exit;
                         $arr = [];
@@ -170,13 +184,12 @@ class PortCallDataController extends Controller {
                                 $aditional = new PortCallDataAdditional;
                                 $aditional->appointment_id = $model->appointment_id;
                                 $aditional->label = $val['label'];
-                                $aditional->value = $val['valuee'];
+                                $aditional->value = $this->SingleDateFormat($val['valuee']);
                                 $aditional->comment = $val['comment'];
                                 $aditional->status = 1;
                                 $aditional->CB = Yii::$app->user->identity->id;
                                 $aditional->UB = Yii::$app->user->identity->id;
                                 $aditional->DOC = date('Y-m-d');
-                                $aditional->value = $this->changeformat($aditional->value);
                                 if (!empty($aditional->label))
                                         $aditional->save();
                         }
@@ -197,14 +210,8 @@ class PortCallDataController extends Controller {
                         foreach ($arr as $key => $value) {
                                 $aditional = PortCallDataAdditional::findOne($key);
                                 $aditional->label = $value['label'];
-                                $aditional->value = $value['value'];
+                                $aditional->value = $this->SingleDateFormat($value['value']);
                                 $aditional->comment = $value['comment'];
-                                if ($aditional->value != '') {
-                                        if (strpos($aditional->value, '-') == false) {
-                                                $aditional->value = $this->changeformat($aditional->value);
-                                        }
-                                }
-
                                 $aditional->save();
                         }
                 }
@@ -222,14 +229,9 @@ class PortCallDataController extends Controller {
         public function SavePortcallDraftRob($model_rob, $model_draft) {
                 Yii::$app->SetValues->Attributes($model_draft);
                 Yii::$app->SetValues->Attributes($model_rob);
-                if ($model_draft->validate() && $model_rob->validate()) {
-                        $model_draft->intial_survey_commenced = $this->changeformat($model_draft->intial_survey_commenced);
-                        $model_draft->finial_survey_commenced = $this->changeformat($model_draft->finial_survey_commenced);
-                        $model_draft->intial_survey_completed = $this->changeformat($model_draft->intial_survey_completed);
-                        $model_draft->finial_survey_completed = $this->changeformat($model_draft->finial_survey_completed);
-                        $model_draft->save();
-                        $model_rob->save();
-                }
+                $this->dateformat($model_draft);
+                $model_draft->save();
+                $model_rob->save();
         }
 
         public function Check($id, $model, $model_draft, $model_rob, $model_imigration) {
@@ -301,59 +303,66 @@ class PortCallDataController extends Controller {
                 }
         }
 
-        public function DateFormat($model, $data) {
-                if ($model != null && $data != '') {
-                        $a = ['additional_info', 'comments', 'status'];
-                        foreach ($data as $key => $dta) {
+        public function DateFormat($model) {
+                if (!empty($model)) {
+                        $a = ['id','appointment_id','additional_info', 'comments', 'status', 'type', 'data_id', 'label', 'CB', 'UB', 'DOC', 'fwd_arrival_unit', 'fwd_arrival_quantity', 'aft_arrival_unit',
+                            'aft_arrival_quantity', 'mean_arrival_unit', 'mean_arrival_quantity', 'fwd_sailing_unit', 'fwd_sailing_quantity', 'aft_sailing_unit', 'aft_sailing_quantity',
+                            'mean_sailing_unit', 'mean_sailing_quantity',];
+                        foreach ($model->attributes as $key => $dta) {
                                 if (!in_array($key, $a)) {
-                                        if (strpos($dta, '-') == false) {
-                                                if (strlen($dta) < 16 && strlen($dta) > 8 && $dta != NULL) {
-                                                        $model->$key = $this->ChangeFormat($dta);
-                                                } else {
-                                                        $model->$key = '';
-                                                }
-                                        } else {
-                                                if (strlen($dta) < 19 && strlen($dta) >= 10 && $dta != NULL) {
-                                                        $year = substr($dta, 0, 4);
-                                                        $month = substr($dta, 5, 2);
-                                                        $day = substr($dta, 8, 2);
-                                                        $hour = substr($dta, 11, 2);
-                                                        $min = substr($dta, 14, 2);
-                                                        $sec = substr($dta, 17, 2);
-                                                        if ($hour != '' && $min != '' && $sec != '') {
-                                                                $model->$key = $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min . ':' . $sec;
-                                                        } elseif ($hour != '' && $min != '') {
-                                                                $model->$key = $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min;
-                                                        } elseif ($hour != '') {
-                                                                $model->$key = $year . '-' . $month . '-' . $day . ' ' . $hour . ':00';
-                                                        } else {
-                                                                $model->$key = $year . '-' . $month . '-' . $day;
-                                                        }
-                                                } else {
-                                                        $model->$key = '';
-                                                }
-                                        }
+                                        $model->$key = $this->SingleDateFormat($dta);
                                 }
                         }
+                        return $model;
                 }
-                return $model;
         }
 
         public function ChangeFormat($data) {
+
                 $day = substr($data, 0, 2);
                 $month = substr($data, 2, 2);
                 $year = substr($data, 4, 4);
-                $hour = substr($data, 9, 2);
-                $min = substr($data, 11, 2);
-                $sec = substr($data, 13, 2);
-                if ($hour != '' && $min != '' && $sec != '') {
+                $hour = substr($data, 9, 2) == '' ? '00' : substr($data, 9, 2);
+                $min = substr($data, 11, 2) == '' ? '00' : substr($data, 11, 2);
+                $sec = substr($data, 13, 2) == '' ? '00' : substr($data, 13, 2);
+                if ($hour != '00' && $min != '00' && $sec != '00') {
+                        //echo '1';exit;
                         return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min . ':' . $sec;
-                } elseif ($hour != '' && $min != '') {
+                } elseif ($hour != '00' && $min != '00') {
+                        //echo '2';exit;
                         return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min;
-                } elseif ($hour != '') {
+                } elseif ($hour != '00') {
+                        //echo '3';exit;
                         return $year . '-' . $month . '-' . $day . ' ' . $hour . ':00';
                 } else {
+
                         return $year . '-' . $month . '-' . $day;
+                }
+        }
+
+        public function SingleDateFormat($dta) {
+                if (strpos($dta, '-') == false) {
+
+                        if (strlen($dta) < 16 && strlen($dta) >= 8 && $dta != NULL)
+                                return $this->ChangeFormat($dta);
+                        //echo $model->$key;exit;
+                }else {
+                        $year = substr($dta, 0, 4);
+                        $month = substr($dta, 5, 2);
+                        $day = substr($dta, 8, 2);
+                        $hour = substr($dta, 11, 2) == '' ? '00' : substr($dta, 11, 2);
+                        $min = substr($dta, 14, 2) == '' ? '00' : substr($dta, 14, 2);
+                        $sec = substr($dta, 17, 2) == '' ? '00' : substr($dta, 17, 2);
+
+                        if ($hour != '00' && $min != '00' && $sec != '00') {
+                                return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min . ':' . $sec;
+                        } elseif ($hour != '00' && $min != '00') {
+                                return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min;
+                        } elseif ($hour != '00') {
+                                return $year . '-' . $month . '-' . $day . ' ' . $hour . ':00';
+                        } else {
+                                return $year . '-' . $month . '-' . $day;
+                        }
                 }
         }
 
@@ -390,15 +399,13 @@ class PortCallDataController extends Controller {
                         foreach ($arr as $val) {
                                 $port_stoppages = new PortStoppages;
                                 $port_stoppages->appointment_id = $id;
-                                $port_stoppages->stoppage_from = $val['from'];
-                                $port_stoppages->stoppage_to = $val['too'];
+                                $port_stoppages->stoppage_from = $this->SingleDateFormat($val['from']);
+                                $port_stoppages->stoppage_to = $this->SingleDateFormat($val['too']);
                                 $port_stoppages->comment = $val['comment'];
                                 $port_stoppages->status = 1;
                                 $port_stoppages->CB = Yii::$app->user->identity->id;
                                 $port_stoppages->UB = Yii::$app->user->identity->id;
                                 $port_stoppages->DOC = date('Y-m-d');
-                                $port_stoppages->stoppage_from = $this->changeformat($port_stoppages->stoppage_from);
-                                $port_stoppages->stoppage_to = $this->changeformat($port_stoppages->stoppage_to);
                                 if (!empty($port_stoppages->comment))
                                         $port_stoppages->save();
                         }
@@ -416,19 +423,13 @@ class PortCallDataController extends Controller {
                         foreach ($arr as $key => $value) {
 
                                 $port_stoppages = PortStoppages::findOne($key);
-                                $port_stoppages->stoppage_from = $value['from'];
-                                $port_stoppages->stoppage_to = $value['to'];
+                                $port_stoppages->stoppage_from = $this->SingleDateFormat($value['from']);
+                                $port_stoppages->stoppage_to = $this->SingleDateFormat($value['to']);
                                 $port_stoppages->comment = $value['comment'];
                                 if ($port_stoppages->comment != '') {
-
-                                        if (strpos($port_stoppages->stoppage_from, '-') == false) {
-                                                $port_stoppages->stoppage_from = $this->changeformat($port_stoppages->stoppage_from);
-                                        }
-                                        if (strpos($port_stoppages->stoppage_to, '-') == false) {
-                                                $port_stoppages->stoppage_to = $this->changeformat($port_stoppages->stoppage_to);
-                                        }
+                                        $port_stoppages->save();
                                 }
-                                $port_stoppages->save();
+                                
                         }
                 }
                 if (isset($_POST['delete_port_stoppages']) && $_POST['delete_port_stoppages'] != '') {

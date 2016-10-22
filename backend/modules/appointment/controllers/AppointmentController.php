@@ -94,9 +94,10 @@ class AppointmentController extends Controller {
          */
         public function actionCreate() {
                 $model = new Appointment();
-                if ($model->load(Yii::$app->request->post()) && Yii::$app->SetValues->Attributes($model) && $this->Principal($model, $_POST['Appointment']['principal']) && $this->ChangeFormat($model)) {
+                if ($model->load(Yii::$app->request->post()) && Yii::$app->SetValues->Attributes($model) && $this->Principal($model, $_POST['Appointment']['principal'])) {
                         $model->stage = 1;
                         $model->sub_stages = 1;
+                        $model->eta = $this->SingleDateFormat($model->eta);
                         $model->save();
                         $this->PortCall($model);
                         if (!empty(Yii::$app->request->post(check))) {
@@ -120,9 +121,13 @@ class AppointmentController extends Controller {
         public function actionUpdate($id) {
                 $model = $this->findModel($id);
 
-                if ($model->load(Yii::$app->request->post()) && Yii::$app->SetValues->Attributes($model) && $this->Principal($model, $_POST['Appointment']['principal']) && $this->ChangeFormat($model) && $model->save()) {
+                if ($model->load(Yii::$app->request->post()) && Yii::$app->SetValues->Attributes($model) && $this->Principal($model, $_POST['Appointment']['principal'])) {
+                        $model->eta = $this->SingleDateFormat($model->eta);
+                        $model->save();
+                        $model->eta = $this->SingleDateFormat($model->eta);
                         return $this->redirect(['view', 'id' => $model->id]);
                 } else {
+                        $model->eta = $this->SingleDateFormat($model->eta);
                         return $this->render('update', [
                                     'model' => $model,
                         ]);
@@ -197,12 +202,12 @@ class AppointmentController extends Controller {
                         $port_data = Ports::find()->where(['id' => $port_id])->one();
                         $last_appointment = Appointment::find()->orderBy(['id' => SORT_DESC])->where(['port_of_call' => $port_id])->one();
                         if (empty($last_appointment))
-                                echo 'EN'.$port_data->code . '0001';
+                                echo 'EN' . $port_data->code . '0001';
                         else {
                                 $last = substr($last_appointment->appointment_no, -4);
                                 $last = ltrim($last, '0');
 
-                                echo 'EN'.$port_data->code . (sprintf('%04d', ++$last));
+                                echo 'EN' . $port_data->code . (sprintf('%04d', ++$last));
                         }
                 } else {
                         return '';
@@ -222,19 +227,53 @@ class AppointmentController extends Controller {
                 }
         }
 
-        public function ChangeFormat($model) {
-                $data = $model->eta;
+        public function ChangeFormat($data) {
+
                 $day = substr($data, 0, 2);
                 $month = substr($data, 2, 2);
                 $year = substr($data, 4, 4);
-                $hour = substr($data, 9, 2);
-                $min = substr($data, 11, 2);
+                $hour = substr($data, 9, 2) == '' ? '00' : substr($data, 9, 2);
+                $min = substr($data, 11, 2) == '' ? '00' : substr($data, 11, 2);
+                $sec = substr($data, 13, 2) == '' ? '00' : substr($data, 13, 2);
+                if ($hour != '00' && $min != '00' && $sec != '00') {
+                        //echo '1';exit;
+                        return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min . ':' . $sec;
+                } elseif ($hour != '00' && $min != '00') {
+                        //echo '2';exit;
+                        return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min;
+                } elseif ($hour != '00') {
+                        //echo '3';exit;
+                        return $year . '-' . $month . '-' . $day . ' ' . $hour . ':00';
+                } else {
 
-//        echo $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min.':00 </br>';
-//        echo '2016-08-17 00:00:00';
-//        exit;
-                $model->eta = $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min . ':00';
-                return $model;
+                        return $year . '-' . $month . '-' . $day;
+                }
+        }
+
+        public function SingleDateFormat($dta) {
+                if (strpos($dta, '-') == false) {
+
+                        if (strlen($dta) < 16 && strlen($dta) >= 8 && $dta != NULL)
+                                return $this->ChangeFormat($dta);
+                        //echo $model->$key;exit;
+                }else {
+                        $year = substr($dta, 0, 4);
+                        $month = substr($dta, 5, 2);
+                        $day = substr($dta, 8, 2);
+                        $hour = substr($dta, 11, 2) == '' ? '00' : substr($dta, 11, 2);
+                        $min = substr($dta, 14, 2) == '' ? '00' : substr($dta, 14, 2);
+                        $sec = substr($dta, 17, 2) == '' ? '00' : substr($dta, 17, 2);
+
+                        if ($hour != '00' && $min != '00' && $sec != '00') {
+                                return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min . ':' . $sec;
+                        } elseif ($hour != '00' && $min != '00') {
+                                return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min;
+                        } elseif ($hour != '00') {
+                                return $year . '-' . $month . '-' . $day . ' ' . $hour . ':00';
+                        } else {
+                                return $year . '-' . $month . '-' . $day;
+                        }
+                }
         }
 
 }
