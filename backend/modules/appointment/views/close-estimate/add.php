@@ -53,7 +53,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 </div>-->
                 <div style="float: left;">
                     <?php// Html::beginForm(['close-estimate/report'], 'post', ['target' => '_blank']) ?>
-                    <?= Html::beginForm(['close-estimate/report'], 'post', ['target' => 'print_popup','onSubmit' => "window.open('about:blank','print_popup','width=1000,height=800');"]) ?>
+                    <?= Html::beginForm(['close-estimate/report'], 'post', ['target' => 'print_popup','onSubmit' => "window.open('about:blank','print_popup','width=1200,height=800');"]) ?>
                     <!--<form name="estimate" action="<?= Yii::$app->homeUrl ?>appointment/estimated-proforma/reports" method="post">-->
                     <?php
 //                    $arr = explode(',', $appointment->principal);
