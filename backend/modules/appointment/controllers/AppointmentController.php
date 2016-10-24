@@ -95,8 +95,8 @@ class AppointmentController extends Controller {
         public function actionCreate() {
                 $model = new Appointment();
                 if ($model->load(Yii::$app->request->post()) && Yii::$app->SetValues->Attributes($model) && $this->Principal($model, $_POST['Appointment']['principal'])) {
-                        $model->stage = 1;
-                        $model->sub_stages = 1;
+//                        $model->stage = 1;
+//                        $model->sub_stages = 1;
                         $model->eta = $this->SingleDateFormat($model->eta);
                         $model->save();
                         $this->PortCall($model);
