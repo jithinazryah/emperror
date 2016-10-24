@@ -225,7 +225,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ?>
                                 </div>
                                 <div style="float: left;">
-                                    <?= Html::submitButton('<i class="fa-print"></i><span>Generate Report</span>', ['class' => 'btn btn-secondary btn-icon btn-icon-standalone']) ?>
+                                    <?= Html::submitButton('<i class="fa-print"></i><span>Generate EPDA</span>', ['class' => 'btn btn-secondary btn-icon btn-icon-standalone']) ?>
 <!--<input type="submit" name="b1" value="Submit">-->
                                     <?= Html::endForm() ?>
                                     <?php
@@ -798,7 +798,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ?>
                                 </div>
                                 <div style="float: left;">
-                                    <?= Html::submitButton('<i class="fa-print"></i><span>Generate Report</span>', ['class' => 'btn btn-secondary btn-icon btn-icon-standalone']) ?>
+                                    <?= Html::submitButton('<i class="fa-print"></i><span>Generate Fnal DA</span>', ['class' => 'btn btn-secondary btn-icon btn-icon-standalone']) ?>
 <!--<input type="submit" name="b1" value="Submit">-->
                                     <?= Html::endForm() ?>
                                     <?php

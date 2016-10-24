@@ -91,7 +91,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         }
                         ?>
                         <div class="col-md-4" style="float:left;">
-                            <?= Html::submitButton('<i class="fa-print"></i><span>Generate Report</span>', ['class' => 'btn btn-secondary btn-icon btn-icon-standalone']) ?>
+                            <?= Html::submitButton('<i class="fa-print"></i><span>Generate Final DA</span>', ['class' => 'btn btn-secondary btn-icon btn-icon-standalone']) ?>
    <!--<input type="submit" name="b1" value="Submit">-->
                             <?= Html::endForm() ?>
                             <?php
@@ -221,7 +221,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <td><?= $form->field($model, 'payment_type')->dropDownList(['1' => 'Manual', '2' => 'Check'], ['prompt' => '-Payment Type-'])->label(false) ?></td>
                                     <td><?= $form->field($model, 'total')->textInput(['placeholder' => 'TOTAL'])->label(false) ?></td>
                                     <td><?= $form->field($model, 'invoice_type')->dropDownList(ArrayHelper::map(InvoiceType::findAll(['status' => 1]), 'id', 'invoice_type'), ['prompt' => '-Invoice Type-'])->label(false); ?></td>
-                                    <td><?= $form->field($model, 'principal')->dropDownList(ArrayHelper::map(Debtor::findAll(['status' => 1]), 'id', 'principal_name'), ['prompt' => '-Principal-'])->label(false); ?></td>
+                                    <td><?= $form->field($model, 'principal')->dropDownList(ArrayHelper::map(Debtor::findAll(['status' => 1, 'id' => explode(',', $appointment->principal)]), 'id', 'principal_name'), ['prompt' => '-Principal-'])->label(false); ?></td>
                                     <td><?= $form->field($model, 'comments')->textInput(['placeholder' => 'Comments'])->label(false) ?></td>
                                     <td><?= Html::submitButton($model->isNewRecord ? 'Add' : 'Update', ['class' => 'btn btn-success']) ?>
                                     </td>
