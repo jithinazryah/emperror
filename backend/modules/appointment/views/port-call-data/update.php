@@ -171,7 +171,7 @@ $this->params['breadcrumbs'][] = 'Update';
                 </div>
                 <div style="float:right;padding-top: 5px;">
                     <?php
-                    echo Html::a('<span> Portcall Data Completed & Proceed to Close Estimate</span>', ['port-call-data/portcall-conmplete', 'id' => $model_appointment->id], ['class' => 'btn btn-secondary']);
+                    echo Html::a('<span> Portcall Data Completed & Proceed to Close Estimate</span>', ['port-call-data/portcall-complete', 'id' => $model_appointment->id], ['class' => 'btn btn-secondary']);
                     ?>
                 </div>          
             </div>

@@ -12,6 +12,7 @@ use common\models\Terminal;
 use common\models\Debtor;
 use common\models\Contacts;
 use common\models\Purpose;
+use common\models\CloseEstimate;
 use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
@@ -194,7 +195,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ?>
                                 </div>
                                 <div style="float: left;margin-left: 8px;margin-right: 8px;">
-                                    <?= Html::beginForm(['estimated-proforma/reports'], 'post', ['target' => 'print_popup','onSubmit' => "window.open('about:blank','print_popup','width=1200,height=800');"]) ?>
+                                    <?= Html::beginForm(['estimated-proforma/reports'], 'post', ['target' => 'print_popup', 'onSubmit' => "window.open('about:blank','print_popup','width=1200,height=800');"]) ?>
                         <!--<form name="estimate" action="<?= Yii::$app->homeUrl ?>appointment/estimated-proforma/reports" method="post">-->
                                     <?php
                                     $arr = explode(',', $appointment->principal);
@@ -264,7 +265,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                     <td><?= $i; ?></td>
                                                     <th><span class="co-name"><?= $estimate->service->service ?></span></th>
                                                     <td><?= $estimate->supplier0->name ?></td>
-        <!--                                                <td><?php // $estimate->currency0->currency_symbol                                            ?></td>-->
+        <!--                                                <td><?php // $estimate->currency0->currency_symbol                                               ?></td>-->
                                                     <td><?= $estimate->unit_rate; ?></td>
                                                     <td><?= $estimate->unit; ?></td>
                                                     <td><?= $estimate->roe; ?></td>
@@ -752,7 +753,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <div class="tab-pane" id="profile-5">
 
                         <div class="panel-body">
-                            <div class="row">
+                            <div class="row" style="display: inline-block">
                                 <div style="float: left;margin-left: 10px;">
                                     <?php
                                     if (empty($closeestimates)) {
@@ -762,12 +763,50 @@ $this->params['breadcrumbs'][] = $this->title;
                                     }
                                     ?>
                                 </div>
-                                <div style="float: left;margin-left: 10px;">
+                                <div style="float: left;margin-left: 8px;margin-right: 8px;">
+                                    <?= Html::beginForm(['close-estimate/report'], 'post', ['target' => 'print_popup', 'onSubmit' => "window.open('about:blank','print_popup','width=1000,height=800');"]) ?>
+                        <!--<form name="estimate" action="<?= Yii::$app->homeUrl ?>appointment/estimated-proforma/reports" method="post">-->
                                     <?php
-                                    echo Html::a('<i class="fa-print"></i><span>Generate Report</span>', ['close-estimate/report', 'id' => $appointment->id], ['class' => 'btn btn-secondary btn-icon btn-icon-standalone']);
+                                    $arr = CloseEstimate::find()->select('invoice_type')->distinct()->where(['apponitment_id' => $appointment->id])->all();
+                                    if (count($arr) == 1) {
+                                            ?>
+                                            <?php
+                                            $arr = CloseEstimate::find()->select('invoice_type')->distinct()->where(['apponitment_id' => $appointment->id])->one();
+                                            ?>
+                                            <input type="hidden" name="app_id" value="<?= $appointment->id ?>">
+                                            <input type="hidden" name="invoice_type" value="<?= $arr->invoice_type ?>">  
+                                            <?php
+                                    } else {
+                                            ?>
+
+                                            <input type="hidden" name="app_id" value="<?= $appointment->id ?>">
+
+                                            <select name = "invoice_type" id = "" class="form-control">
+                                                <option selected = "selected">Select Invoice Type</option>
+                                                <?php
+                                                foreach ($arr as $key => $value) {
+
+                                                        $data = InvoiceType::findOne(['id' => $value->invoice_type]);
+                                                        ?>
+                                                        <option value="<?= $value->invoice_type ?>"><?= $data->invoice_type ?></option>
+                                                <?php }
+                                                ?>
+                                            </select> 
+
+                                            <?php
+                                    }
                                     ?>
                                 </div>
+                                <div style="float: left;">
+                                    <?= Html::submitButton('<i class="fa-print"></i><span>Generate Report</span>', ['class' => 'btn btn-secondary btn-icon btn-icon-standalone']) ?>
+<!--<input type="submit" name="b1" value="Submit">-->
+                                    <?= Html::endForm() ?>
+                                    <?php
+//                    echo Html::a('<i class="fa-print"></i><span>Generate Report</span>', ['estimated-proforma/report', 'id' => $appointment->id], ['class' => 'btn btn-secondary btn-icon btn-icon-standalone']);
+                                    ?> 
+                                </div>
                             </div>
+
                             <div class="table-responsive" data-pattern="priority-columns" data-focus-btn-icon="fa-asterisk" data-sticky-table-header="true" data-add-display-all-btn="true" data-add-focus-btn="true">
 
                                 <table cellspacing="0" class="table table-small-font table-bordered table-striped">

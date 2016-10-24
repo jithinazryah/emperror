@@ -69,7 +69,7 @@ use common\models\Vessel;
                             <table class="tb2">
                                 <tr>
                                     <td>Date </td> <td style="width: 50px;text-align: center">:</td>
-                                    <td style="max-width: 200px"><?= date("d/m/Y") ?></td>
+                                    <td style="max-width: 200px"><?= date("d-M-Y h:m") ?></td>
                                 </tr>
                                 <tr>
                                     <td>Client Code </td> <td style="width: 50px;text-align: center">:</td>
@@ -89,7 +89,7 @@ use common\models\Vessel;
                                 </tr>
                                 <tr>
                                     <td>ETA </td> <td>:</td>
-                                    <td><?= $appointment->eta ?></td>
+                                    <td><?= Yii::$app->SetValues->DateFormate($appointment->eta); ?></td>
                                 </tr>
                             </table>
                         </div>

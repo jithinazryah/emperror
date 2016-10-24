@@ -161,7 +161,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             <!--<td><?php // $estimate->images;        ?></td>-->
                                             <td>
                                                 <?= Html::a('<i class="fa fa-pencil"></i>', ['/appointment/estimated-proforma/add', 'id' => $id, 'prfrma_id' => $estimate->id], ['class' => 'btn btn-icon btn-primary', 'tittle' => 'Edit']) ?>
-                                                <?= Html::a('<i class="fa fa-remove"></i>', ['/appointment/estimated-proforma/delete-performa', 'id' => $estimate->id], ['class' => 'btn btn-icon btn-red', 'tittle' => 'Edit']) ?>
+                                                <?= Html::a('<i class="fa fa-remove"></i>', ['/appointment/estimated-proforma/delete-performa', 'id' => $estimate->id], ['class' => 'btn btn-icon btn-red', 'tittle' => 'Edit', 'data-confirm' => 'Are you sure you want to delete this item?']) ?>
                                                 <?= Html::a('<i class="fa fa-database"></i>', ['/appointment/sub-services/add', 'id' => $estimate->id], ['class' => 'btn btn-success', 'target' => '_blank']) ?>
         <!--                                            <a href="javascript:;" onclick="showAjaxModal(<?= $estimate->id ?>);" class="btn btn-success">Sub</a>-->
                                                 <?php //Html::a('Sub', [''], ['class' => 'btn btn-success', "onclick" => "showAjaxModal(".$estimate->id.");"])   ?>

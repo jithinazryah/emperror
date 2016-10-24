@@ -275,7 +275,7 @@ class PortCallDataController extends Controller {
                 return $this->redirect(['index']);
         }
 
-        public function actionPortcallConmplete($id) {
+        public function actionPortcallComplete($id) {
                 $appointment = Appointment::findOne($id);
 //                $ports = PortCallData::findAll(['apponitment_id' => $id]);
 //                if (!empty($ports)) {

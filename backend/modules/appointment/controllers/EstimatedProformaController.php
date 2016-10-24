@@ -79,7 +79,10 @@ class EstimatedProformaController extends Controller {
                         ]);
                 }
         }
-
+        
+        /*
+         * Create new Estimated Proforma and Update an existing Estimated Proforma model.
+         */
         public function actionAdd($id, $prfrma_id = NULL, $check = NULL) {
                 $estimates = EstimatedProforma::findAll(['apponitment_id' => $id]);
                 $appointment = Appointment::findOne($id);

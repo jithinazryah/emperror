@@ -76,6 +76,9 @@ class CloseEstimateController extends Controller {
                 }
         }
 
+        /*
+         * Create new Close Estimate and Update an existing CloseEstimate model.
+         */
         public function actionAdd($id, $prfrma_id = NULL) {
                 $estimates = CloseEstimate::findAll(['apponitment_id' => $id]);
                 $appointment = Appointment::findOne($id);
@@ -107,17 +110,29 @@ class CloseEstimateController extends Controller {
         }
 
         /*
-         * 
+         * Restore Estimated Proforma Values into Close Estimate
          */
 
         public function InsertCloseEstimate($id) {
                 $estimates = EstimatedProforma::findAll(['apponitment_id' => $id]);
                 foreach ($estimates as $estimate) {
-                        $closeestimate = new CloseEstimate;
-                        $closeestimate->attributes = $estimate->attributes;
-                        $closeestimate->fda = $closeestimate->epda;
-                        $closeestimate->DOC = date('y-m-d');
-                        $closeestimate->save();
+                        $model = new CloseEstimate;
+                        $model->apponitment_id = $id;
+                        $model->service_id = $estimate->service_id;
+                        $model->supplier = $estimate->supplier;
+                        $model->unit_rate = $estimate->unit_rate;
+                        $model->unit = $estimate->unit;
+                        $model->epda = $estimate->epda;
+                        $model->principal = $estimate->principal;
+                        $model->invoice_type = $estimate->invoice_type;
+                        $model->comments = $estimate->comments;
+                        $model->status = $estimate->status;
+                        $model->CB = Yii::$app->user->identity->id;
+                        $model->UB = Yii::$app->user->identity->id;
+                        $model->fda = $estimate->epda;
+                        $model->DOC = date('Y-m-d');
+                        $model->save();
+                        
                 }
                 return true;
         }
@@ -189,6 +204,10 @@ class CloseEstimateController extends Controller {
                         echo $services_data->supplier_options;
                 }
         }
+        
+        /*
+         * Function for Multiple File Upload
+         */
         public function actionUploads() {
                 $model_upload = new UploadFile();
                 if ($model_upload->load(Yii::$app->request->post())) {
@@ -201,7 +220,11 @@ class CloseEstimateController extends Controller {
                 }
                 
         }
-
+        
+        /*
+         * Generate Close Estimate Report depends on Invoice Tyype
+         */
+        
         public function actionReport() {
                 $invoice_type = $_POST['invoice_type'];
                 $app = $_POST['app_id'];

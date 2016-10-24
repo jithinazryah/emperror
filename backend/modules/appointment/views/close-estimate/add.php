@@ -58,12 +58,16 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?php
 //                    $arr = explode(',', $appointment->principal);
                     $arr = CloseEstimate::find()->select('invoice_type')->distinct()->where(['apponitment_id' => $appointment->id])->all();
+                    
                     if (count($arr) == 1) {
                             ?>
                             <div class="row">
+                                <?php
+                                $arr = CloseEstimate::find()->select('invoice_type')->distinct()->where(['apponitment_id' => $appointment->id])->one();
+                                ?>
                                 <div class="col-md-8" style="float:left;"> 
                                     <input type="hidden" name="app_id" value="<?= $appointment->id ?>">
-                                    <input type="hidden" name="invoice_type" value="<?= $arr[0]; ?>">  
+                                    <input type="hidden" name="invoice_type" value="<?= $arr->invoice_type ?>">  
                                     <?php
                             } else {
                                     ?>
@@ -181,7 +185,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             <td><?= $estimate->comments; ?></td>
                                             <td>
                                                 <?= Html::a('<i class="fa fa-pencil"></i>', ['/appointment/close-estimate/add', 'id' => $id, 'prfrma_id' => $estimate->id], ['class' => 'btn btn-icon btn-primary']) ?>
-                                            <?= Html::a('<i class="fa-remove"></i>', ['/appointment/close-estimate/delete-close-estimate', 'id' => $estimate->id], ['class' => 'btn btn-icon btn-red']) ?>
+                                            <?= Html::a('<i class="fa-remove"></i>', ['/appointment/close-estimate/delete-close-estimate', 'id' => $estimate->id], ['class' => 'btn btn-icon btn-red', 'data-confirm' => 'Are you sure you want to delete this item?']) ?>
                                             </td>
                                             <?php
                                             $epdatotal += $estimate->epda;

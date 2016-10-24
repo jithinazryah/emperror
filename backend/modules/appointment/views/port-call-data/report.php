@@ -104,7 +104,8 @@ and open the template in the editor.
                                 <td style="width: 20%;">Next Port</td>
                                 <td style="width: 30%;"><?= $appointment->next_port ?></td>
                                 <td style="width: 20%;">NOR Tendered</td>
-                                <td style="width: 30%;"><?= $ports->nor_tendered ?></td>
+                                <td style="width: 30%;"><?= Yii::$app->SetValues->DateFormate($ports->nor_tendered); ?>
+                                </td>
                             </tr>
 
                         </table>
