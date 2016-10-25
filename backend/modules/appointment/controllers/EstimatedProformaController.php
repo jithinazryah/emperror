@@ -202,12 +202,12 @@ class EstimatedProformaController extends Controller {
                         if ($old_appid == 'EN') {
                                 $appointment->appointment_no = $new_appid;
                         }
-                        $appointment->stage = 2;
-                        $appointment->sub_stages = 2;
-                        $appointment->save();
+//                        $appointment->stage = 2;
+//                        $appointment->sub_stages = 2;
+//                        $appointment->save();
                         return $this->redirect(['/appointment/port-call-data/update', 'id' => $appointment->id]);
                 } else {
-                        Yii::$app->getSession()->setFlash('error', 'Estimated Proforma Not Ccompleted..');
+                        Yii::$app->getSession()->setFlash('error', 'Estimated Proforma Not Completed..');
                         return $this->redirect(['add', 'id' => $id]);
                 }
         }

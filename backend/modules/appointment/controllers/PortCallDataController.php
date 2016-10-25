@@ -102,6 +102,7 @@ class PortCallDataController extends Controller {
                 $model_port_stoppages = PortStoppages::findAll(['appointment_id' => $id]);
                 $model_upload = new UploadFile();
                 $model = $this->dateformat($model, $model->attributes);
+                $this->AddStages($model, $model_appointment);
                 if ($model_port_cargo_details == '')
                         $model_port_cargo_details = new PortCargoDetails;
 
@@ -126,6 +127,7 @@ class PortCallDataController extends Controller {
                 if ($model->load(Yii::$app->request->post()) && $model_imigration->load(Yii::$app->request->post())) {
                         $this->saveportcalldata($model, $model_imigration);
                         $model_additional = PortCallDataAdditional::findAll(['appointment_id' => $id]);
+                        $this->AddStages($model, $model_appointment);
                 } else if ($model_rob->load(Yii::$app->request->post()) && $model_draft->load(Yii::$app->request->post())) {
                         $this->saveportcalldraftrob($model_rob, $model_draft);
                 }
@@ -232,6 +234,31 @@ class PortCallDataController extends Controller {
                 $this->dateformat($model_draft);
                 $model_draft->save();
                 $model_rob->save();
+        }
+
+        public function AddStages($model, $model_appointment) {
+                if (!empty($model->eta)) {
+                        $model_appointment->stage = 1;
+                        $model_appointment->save();
+                }
+                if (!empty($model->eosp)) {
+                        if ($model_appointment->stage != 2 && $model_appointment->stage < 2) {
+                                $model_appointment->stage = 2;
+                                $model_appointment->save();
+                        }
+                }
+                if (!empty($model->all_fast)) {
+                        if ($model_appointment->stage != 3 && $model_appointment->stage < 3) {
+                                $model_appointment->stage = 3;
+                                $model_appointment->save();
+                        }
+                }
+                if (!empty($model->cast_off)) {
+                        if ($model_appointment->stage != 4 && $model_appointment->stage < 4) {
+                                $model_appointment->stage = 4;
+                                $model_appointment->save();
+                        }
+                }
         }
 
         public function Check($id, $model, $model_draft, $model_rob, $model_imigration) {
@@ -646,7 +673,8 @@ class PortCallDataController extends Controller {
                 // return the pdf output as per the destination setting
                 return $pdf->render();
         }
-        public function actionRemove($path){
+
+        public function actionRemove($path) {
                 unlink($path);
                 return $this->redirect(Yii::$app->request->referrer);
         }
