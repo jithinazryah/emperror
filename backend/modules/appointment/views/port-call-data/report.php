@@ -86,7 +86,7 @@ and open the template in the editor.
                                     }
                                     ?></td>
                                 <td style="width: 20%;">Cargo Quantity</td>
-                                <td style="width: 30%;"><?= $appointment->quantity ?></td>
+                                <td style="width: 30%;"><?= $ports_cargo->loaded_quantity ?></td>
                             </tr>
                             <tr>
                                 <td style="width: 20%;">Load Port</td>
