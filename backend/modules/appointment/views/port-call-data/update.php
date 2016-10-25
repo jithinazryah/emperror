@@ -195,6 +195,9 @@ $this->params['breadcrumbs'][] = 'Update';
                 padding: 30px;
                 margin-bottom: 30px;
             }
+            .form .form-group.has-success .control-label, form .form-group.has-success .radio, form .form-group.has-success .checkbox, form .form-group.has-success .radio-inline, form .form-group.has-success .checkbox-inline {
+                color: #8ef305;
+            }
 
         </style>
     </div>
