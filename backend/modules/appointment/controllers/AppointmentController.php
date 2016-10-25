@@ -147,7 +147,7 @@ class AppointmentController extends Controller {
                 $port_rob = new PortCallDataRob();
                 $port_imigration = new ImigrationClearance();
                 $port_data->appointment_id = $model->id;
-                $port_data->eta = $model->eta;
+                $port_data->eta = $this->SingleDateFormat($model->eta);
                 $port_draft->appointment_id = $model->id;
                 $port_rob->appointment_id = $model->id;
                 $port_imigration->appointment_id = $model->id;
