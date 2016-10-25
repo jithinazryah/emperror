@@ -10,6 +10,7 @@ use common\models\Services;
 use common\models\Currency;
 use common\models\Terminal;
 use common\models\Debtor;
+use common\models\InvoiceType;
 use common\models\Contacts;
 use common\models\Purpose;
 use common\models\CloseEstimate;
@@ -605,7 +606,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         if ($rob->fo_arrival_unit == 1) {
                                                 echo 'Metric Ton';
                                         } elseif ($rob->fo_arrival_unit == 2) {
-                                                echo 'Litter';
+                                                echo 'Litre';
                                         }
                                         ?>
 
@@ -618,7 +619,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         if ($rob->do_arrival_unit == 1) {
                                                 echo 'Metric Ton';
                                         } elseif ($rob->do_arrival_unit == 2) {
-                                                echo 'Litter';
+                                                echo 'Litre';
                                         }
                                         ?>
 
@@ -631,7 +632,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         if ($rob->go_arrival_unit == 1) {
                                                 echo 'Metric Ton';
                                         } elseif ($rob->go_arrival_unit == 2) {
-                                                echo 'Litter';
+                                                echo 'Litre';
                                         }
                                         ?>
 
@@ -644,7 +645,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         if ($rob->lo_arrival_unit == 1) {
                                                 echo 'Metric Ton';
                                         } elseif ($rob->lo_arrival_unit == 2) {
-                                                echo 'Litter';
+                                                echo 'Litre';
                                         }
                                         ?>
 
@@ -657,7 +658,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         if ($rob->fresh_water_arrival_unit == 1) {
                                                 echo 'Metric Ton';
                                         } elseif ($rob->fresh_water_arrival_unit == 2) {
-                                                echo 'Litter';
+                                                echo 'Litre';
                                         }
                                         ?>
 
@@ -670,7 +671,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         if ($rob->fo_sailing_unit == 1) {
                                                 echo 'Metric Ton';
                                         } elseif ($rob->fo_sailing_unit == 2) {
-                                                echo 'Litter';
+                                                echo 'Litre';
                                         }
                                         ?>
 
@@ -683,7 +684,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         if ($rob->do_sailing_unit == 1) {
                                                 echo 'Metric Ton';
                                         } elseif ($rob->do_sailing_unit == 2) {
-                                                echo 'Litter';
+                                                echo 'Litre';
                                         }
                                         ?>
 
@@ -696,7 +697,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         if ($rob->go_sailing_unit == 1) {
                                                 echo 'Metric Ton';
                                         } elseif ($rob->go_sailing_unit == 2) {
-                                                echo 'Litter';
+                                                echo 'Litre';
                                         }
                                         ?>
 
@@ -709,7 +710,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         if ($rob->lo_sailing_unit == 1) {
                                                 echo 'Metric Ton';
                                         } elseif ($rob->lo_sailing_unit == 2) {
-                                                echo 'Litter';
+                                                echo 'Litre';
                                         }
                                         ?>
 
@@ -722,7 +723,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         if ($rob->fresh_water_sailing_unit == 1) {
                                                 echo 'Metric Ton';
                                         } elseif ($rob->fresh_water_sailing_unit == 2) {
-                                                echo 'Litter';
+                                                echo 'Litre';
                                         }
                                         ?>
 

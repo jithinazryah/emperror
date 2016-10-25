@@ -159,7 +159,7 @@ $this->params['breadcrumbs'][] = 'Update';
                             $model_upload->type = Yii::$app->params['datPath'];
                             ?>
                             <?php //$form->field($model_upload, 'filee[]')->fileInput(['multiple' => true]) ?>
-                            <?= $form->field($model_upload, 'filee[]')->fileInput(['multiple' => true, 'accept' => 'image/*']) ?>
+                            <?= $form->field($model_upload, 'filee[]')->fileInput(['multiple' => true]) ?>
                             <?= $form->field($model_upload, 'appointment_id')->hiddenInput()->label(false) ?>
                             <?= $form->field($model_upload, 'type')->hiddenInput()->label(false) ?>
                             <?= Html::submitButton('Upload', ['class' => 'btn btn-success']) ?>

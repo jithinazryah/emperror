@@ -94,10 +94,10 @@ AppAsset::register($this);
                                 <li>
                                     <?= Html::a('Appointmets', ['/appointment/appointment/index'], ['class' => 'title']) ?>
                                 </li>
-                                 <li>
-                                    <?= Html::a('Test', ['/appointment/test/index'], ['class' => 'title']) ?>
+   <!--                               <li>
+                                    <?php// Html::a('Test', ['/appointment/test/index'], ['class' => 'title']) ?>
                                 </li>
-<!--                                <li>
+                               <li>
                                     <?php// Html::a('Estimated Proforma', ['/appointment/estimated-proforma/index'], ['class' => 'title']) ?>
                                 </li>
                                 <li>

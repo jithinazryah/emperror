@@ -53,55 +53,55 @@ use yii\widgets\ActiveForm;
     <div class="form-group "><h4 class="portcall-rob">ROB- SAILING</h4></div>
     <div class="form-group "></div>
 
-    <?php $arr = array('1' => 'Metric Ton', '2' => 'Liter'); ?>
+    <?php $arr = array('1' => 'Metric Ton', '2' => 'Litre'); ?>
 
-    <?= $form->field($model_rob, 'fo_arrival_unit')->dropDownList($arr, ['prompt' => '-choose arrival unit-', 'tabindex' => 11]) ?>
+    <?= $form->field($model_rob, 'fo_arrival_unit')->dropDownList($arr, ['tabindex' => 11]) ?>
 
     <?= $form->field($model_rob, 'fo_arrival_quantity')->textInput(['tabindex' => 12, 'class' => 'decimal form-control']) ?>
 
     <div class="form-group "></div>
 
-    <?= $form->field($model_rob, 'fo_sailing_unit')->dropDownList($arr, ['prompt' => '-choose sailing unit-', 'tabindex' => 21]) ?>
+    <?= $form->field($model_rob, 'fo_sailing_unit')->dropDownList($arr, ['tabindex' => 21]) ?>
 
     <?= $form->field($model_rob, 'fo_sailing_quantity')->textInput(['tabindex' => 22, 'class' => 'decimal form-control']) ?>
 
 
-    <?= $form->field($model_rob, 'do_arrival_unit')->dropDownList($arr, ['prompt' => '-choose arrival unit-', 'tabindex' => 13]) ?>
+    <?= $form->field($model_rob, 'do_arrival_unit')->dropDownList($arr, ['tabindex' => 13]) ?>
 
     <?= $form->field($model_rob, 'do_arrival_quantity')->textInput(['tabindex' => 14, 'class' => 'decimal form-control']) ?>
 
     <div class="form-group "></div>
 
-    <?= $form->field($model_rob, 'do_sailing_unit')->dropDownList($arr, ['prompt' => '-choose sailing unit-', 'tabindex' => 23]) ?>
+    <?= $form->field($model_rob, 'do_sailing_unit')->dropDownList($arr, ['tabindex' => 23]) ?>
 
     <?= $form->field($model_rob, 'do_sailing_quantity')->textInput(['tabindex' => 24, 'class' => 'decimal form-control']) ?>
 
-    <?= $form->field($model_rob, 'go_arrival_unit')->dropDownList($arr, ['prompt' => '-choose arrival unit-', 'tabindex' => 15]) ?>
+    <?= $form->field($model_rob, 'go_arrival_unit')->dropDownList($arr, ['tabindex' => 15]) ?>
 
     <?= $form->field($model_rob, 'go_arrival_quantity')->textInput(['tabindex' => 16, 'class' => 'decimal form-control']) ?>
 
     <div class="form-group "></div>
 
-    <?= $form->field($model_rob, 'go_sailing_unit')->dropDownList($arr, ['prompt' => '-choose sailing unit-', 'tabindex' => 25]) ?>
+    <?= $form->field($model_rob, 'go_sailing_unit')->dropDownList($arr, ['tabindex' => 25]) ?>
 
     <?= $form->field($model_rob, 'go_sailing_quantity')->textInput(['tabindex' => 26, 'class' => 'decimal form-control']) ?>
 
-    <?= $form->field($model_rob, 'lo_arrival_unit')->dropDownList($arr, ['prompt' => '-choose arrival unit-', 'tabindex' => 17]) ?>
+    <?= $form->field($model_rob, 'lo_arrival_unit')->dropDownList($arr, ['tabindex' => 17]) ?>
 
     <?= $form->field($model_rob, 'lo_arrival_quantity')->textInput(['tabindex' => 18, 'class' => 'decimal form-control']) ?>
 
     <div class="form-group "></div>
 
-    <?= $form->field($model_rob, 'lo_sailing_unit')->dropDownList($arr, ['prompt' => '-choose sailing unit-', 'tabindex' => 27]) ?>
+    <?= $form->field($model_rob, 'lo_sailing_unit')->dropDownList($arr, ['tabindex' => 27]) ?>
 
     <?= $form->field($model_rob, 'lo_sailing_quantity')->textInput(['tabindex' => 28, 'class' => 'decimal form-control']) ?>
 
-    <?= $form->field($model_rob, 'fresh_water_arrival_unit')->dropDownList($arr, ['prompt' => '-choose arrival unit-', 'tabindex' => 19]) ?>
+    <?= $form->field($model_rob, 'fresh_water_arrival_unit')->dropDownList($arr, ['tabindex' => 19]) ?>
 
     <?= $form->field($model_rob, 'fresh_water_arrival_quantity')->textInput(['tabindex' => 20, 'class' => 'decimal form-control']) ?>
 
     <div class="form-group "></div>
-    <?= $form->field($model_rob, 'fresh_water_sailing_unit')->dropDownList($arr, ['prompt' => '-choose sailing unit-', 'tabindex' => 29]) ?>
+    <?= $form->field($model_rob, 'fresh_water_sailing_unit')->dropDownList($arr, ['tabindex' => 29]) ?>
 
     <?= $form->field($model_rob, 'fresh_water_sailing_quantity')->textInput(['tabindex' => 30, 'class' => 'decimal form-control']) ?>
 
