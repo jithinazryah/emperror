@@ -46,7 +46,9 @@ $this->params['breadcrumbs'][] = 'Update';
                 <hr class="appoint_history" />
                 <div style="float:left;">
                     <?php
-                    echo Html::a('<i class="fa-print"></i><span>Generate SOF Report</span>', ['port-call-data/reports'], ['class' => 'btn btn-secondary btn-icon btn-icon-standalone', 'onclick' => "window.open('reports?id=$model_appointment->id', 'newwindow', 'width=750, height=800');return false;"]);
+                    echo Html::a('<i class="fa-print"></i><span>SOF Report</span>', ['port-call-data/reports'], ['class' => 'btn btn-secondary btn-icon btn-icon-standalone', 'onclick' => "window.open('reports?id=$model_appointment->id', 'newwindow', 'width=750, height=800');return false;"]);
+                    echo Html::a('<i class="fa-print"></i><span>Sailing Report</span>', ['port-call-data/sailing'], ['class' => 'btn btn-secondary btn-icon btn-icon-standalone', 'onclick' => "window.open('sailing?id=$model_appointment->id', 'newwindow', 'width=750, height=800');return false;"]);
+                    echo Html::a('<i class="fa-print"></i><span>Arrival Report</span>', ['port-call-data/arrival'], ['class' => 'btn btn-secondary btn-icon btn-icon-standalone', 'onclick' => "window.open('arrival?id=$model_appointment->id', 'newwindow', 'width=750, height=800');return false;"]);
                     ?>
                     <?php // Html::beginForm(['estimated-proforma/reports'], 'post', ['target' => 'print_popup','onSubmit' => "window.open('about:blank','print_popup','width=1000,height=800');"]) ?>
                     <?php

@@ -133,11 +133,11 @@ class PortCallDataController extends Controller {
                 $model_imigration = $this->dateformat($model_imigration);
                 $model_draft = $this->dateformat($model_draft);
                 foreach ($model_additional as $additional) {
-                         $additional->value = $this->SingleDateFormat($additional->value);
+                        $additional->value = $this->SingleDateFormat($additional->value);
                 }
                 foreach ($model_port_stoppages as $port_stoppages) {
-                         $port_stoppages->stoppage_from = $this->SingleDateFormat($port_stoppages->stoppage_from);
-                         $port_stoppages->stoppage_to = $this->SingleDateFormat($port_stoppages->stoppage_to);
+                        $port_stoppages->stoppage_from = $this->SingleDateFormat($port_stoppages->stoppage_from);
+                        $port_stoppages->stoppage_to = $this->SingleDateFormat($port_stoppages->stoppage_to);
                 }
                 return $this->render('update', [
                             'model' => $model,
@@ -305,7 +305,7 @@ class PortCallDataController extends Controller {
 
         public function DateFormat($model) {
                 if (!empty($model)) {
-                        $a = ['id','appointment_id','additional_info', 'comments', 'status', 'type', 'data_id', 'label', 'CB', 'UB', 'DOC', 'fwd_arrival_unit', 'fwd_arrival_quantity', 'aft_arrival_unit',
+                        $a = ['id', 'appointment_id', 'additional_info', 'comments', 'status', 'type', 'data_id', 'label', 'CB', 'UB', 'DOC', 'fwd_arrival_unit', 'fwd_arrival_quantity', 'aft_arrival_unit',
                             'aft_arrival_quantity', 'mean_arrival_unit', 'mean_arrival_quantity', 'fwd_sailing_unit', 'fwd_sailing_quantity', 'aft_sailing_unit', 'aft_sailing_quantity',
                             'mean_sailing_unit', 'mean_sailing_quantity',];
                         foreach ($model->attributes as $key => $dta) {
@@ -429,7 +429,6 @@ class PortCallDataController extends Controller {
                                 if ($port_stoppages->comment != '') {
                                         $port_stoppages->save();
                                 }
-                                
                         }
                 }
                 if (isset($_POST['delete_port_stoppages']) && $_POST['delete_port_stoppages'] != '') {
@@ -518,6 +517,106 @@ class PortCallDataController extends Controller {
                 ]);
                 exit;
 
+                // setup kartik\mpdf\Pdf component
+                $pdf = new Pdf([
+                    // set to use core fonts only
+                    //'mode' => Pdf::MODE_CORE,
+                    // A4 paper format
+                    'format' => Pdf::FORMAT_A4,
+                    // portrait orientation
+//                    'orientation' => Pdf::ORIENT_PORTRAIT,
+                    // stream to browser inline
+//                    'destination' => Pdf::DEST_BROWSER,
+                    // your html content input
+                    'content' => $content,
+                    // format content from your own css file if needed or use the
+                    // enhanced bootstrap css built by Krajee for mPDF formatting 
+                    'cssFile' => '@backend/web/css/pdf.css',
+                        // any css to be embedded if required
+                        //'cssInline' => '.kv-heading-1{font-size:18px}',
+                        // set mPDF properties on the fly
+                        //'options' => ['title' => 'Krajee Report Title'],
+                        // call mPDF methods on the fly
+                        /*                    'methods' => [
+                          'SetHeader' => ['Estimated proforma generated on ' . date("d/m/Y h:m:s")],
+                          'SetFooter' => ['|page {PAGENO}'],
+                          ] */
+                ]);
+
+                // return the pdf output as per the destination setting
+                return $pdf->render();
+        }
+
+        public function actionSailing($id) {
+                $ports = PortCallData::findOne(['appointment_id' => $id]);
+                $ports_draft = PortCallDataDraft::findOne(['appointment_id' => $id]);
+                $ports_rob = PortCallDataRob::findOne(['appointment_id' => $id]);
+                $ports_cargo = PortCargoDetails::findOne(['appointment_id' => $id]);
+                $ports_additional = PortCallDataAdditional::findAll(['appointment_id' => $id]);
+                $port_stoppages = PortStoppages::findAll(['appointment_id' => $id]);
+                // get your HTML raw content without any layouts or scripts
+                $appointment = Appointment::findOne($id);
+                echo $content = $this->renderPartial('sailing_report', [
+            'appointment' => $appointment,
+            'ports' => $ports,
+            'ports_draft' => $ports_draft,
+            'ports_rob' => $ports_rob,
+            'ports_cargo' => $ports_cargo,
+            'ports_additional' => $ports_additional,
+            'port_stoppages' => $port_stoppages,
+                ]);
+                exit;
+                // setup kartik\mpdf\Pdf component
+                $pdf = new Pdf([
+                    // set to use core fonts only
+                    //'mode' => Pdf::MODE_CORE,
+                    // A4 paper format
+                    'format' => Pdf::FORMAT_A4,
+                    // portrait orientation
+//                    'orientation' => Pdf::ORIENT_PORTRAIT,
+                    // stream to browser inline
+//                    'destination' => Pdf::DEST_BROWSER,
+                    // your html content input
+                    'content' => $content,
+                    // format content from your own css file if needed or use the
+                    // enhanced bootstrap css built by Krajee for mPDF formatting 
+                    'cssFile' => '@backend/web/css/pdf.css',
+                        // any css to be embedded if required
+                        //'cssInline' => '.kv-heading-1{font-size:18px}',
+                        // set mPDF properties on the fly
+                        //'options' => ['title' => 'Krajee Report Title'],
+                        // call mPDF methods on the fly
+                        /*                    'methods' => [
+                          'SetHeader' => ['Estimated proforma generated on ' . date("d/m/Y h:m:s")],
+                          'SetFooter' => ['|page {PAGENO}'],
+                          ] */
+                ]);
+
+                // return the pdf output as per the destination setting
+                return $pdf->render();
+        }
+
+        public function actionArrival($id) {
+                $ports = PortCallData::findOne(['appointment_id' => $id]);
+                $ports_draft = PortCallDataDraft::findOne(['appointment_id' => $id]);
+                $ports_rob = PortCallDataRob::findOne(['appointment_id' => $id]);
+                $ports_cargo = PortCargoDetails::findOne(['appointment_id' => $id]);
+                $ports_additional = PortCallDataAdditional::findAll(['appointment_id' => $id]);
+                $port_stoppages = PortStoppages::findAll(['appointment_id' => $id]);
+                $port_imigration = ImigrationClearance::findAll(['appointment_id' => $id]);
+                // get your HTML raw content without any layouts or scripts
+                $appointment = Appointment::findOne($id);
+                echo $content = $this->renderPartial('arrival_report', [
+            'appointment' => $appointment,
+            'ports' => $ports,
+            'ports_draft' => $ports_draft,
+            'ports_rob' => $ports_rob,
+            'ports_cargo' => $ports_cargo,
+            'ports_additional' => $ports_additional,
+            'port_stoppages' => $port_stoppages,
+            'port_imigration' => $port_imigration,
+                ]);
+                exit;
                 // setup kartik\mpdf\Pdf component
                 $pdf = new Pdf([
                     // set to use core fonts only
