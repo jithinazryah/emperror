@@ -124,6 +124,7 @@ $this->params['breadcrumbs'][] = 'Update';
                                     $this->render('_form_draft_rob', [
                                         'model_draft' => $model_draft,
                                         'model_rob' => $model_rob,
+                                        'model_appointment' => $model_appointment,
                                         'model' => $model,
                                     ])
                                     ?>
@@ -186,6 +187,11 @@ $this->params['breadcrumbs'][] = 'Update';
             }
             .form-control{
                 border: 1px solid #8a8a8a;
+            }
+            .nav.nav-tabs+.tab-content {
+                background-color: #ffffd9 !important;
+                padding: 30px;
+                margin-bottom: 30px;
             }
 
         </style>

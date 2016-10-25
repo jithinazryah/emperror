@@ -20,18 +20,19 @@ use yii\widgets\ActiveForm;
     <div class="form-group "></div>
     <div class="form-group "><h4 class="portcall-rob">DRAFT- ARRIVAL</h4></div>
     <div class="form-group "><h4 class="portcall-rob">DRAFT- SAILING</h4></div>
-    <?= $form->field($model_draft, 'intial_survey_commenced')->textInput(['tabindex' => 1]) ?>
+    <?= $model_appointment->vessel_type ?>
+    <?php echo $form->field($model_draft, 'intial_survey_commenced')->textInput(['tabindex' => 1])->label($model_appointment->vessel_type ==3 ? 'Ullaging/ Sampling Commenced':'Initial Survey Commenced') ?>
 
-    <?= $form->field($model_draft, 'finial_survey_commenced')->textInput(['tabindex' => 3]) ?>
+    <?= $form->field($model_draft, 'finial_survey_commenced')->textInput(['tabindex' => 3])->label($model_appointment->vessel_type ==3 ? 'Tank Inspection Commenced':'Final Survey Commenced') ?>
     <div class="form-group "></div>
 
     <?= $form->field($model_draft, 'fwd_arrival_quantity')->textInput(['tabindex' => 5, 'class' => 'decimaldraft form-control']) ?>
 
     <?= $form->field($model_draft, 'fwd_sailing_quantity')->textInput(['tabindex' => 8, 'class' => 'decimaldraft form-control']) ?>
 
-    <?= $form->field($model_draft, 'intial_survey_completed')->textInput(['tabindex' => 2]) ?>
+    <?= $form->field($model_draft, 'intial_survey_completed')->textInput(['tabindex' => 2])->label($model_appointment->vessel_type ==3 ? 'Ullaging/ Sampling Completed':'Initial Survey Completed') ?>
 
-    <?= $form->field($model_draft, 'finial_survey_completed')->textInput(['tabindex' => 4]) ?>
+    <?= $form->field($model_draft, 'finial_survey_completed')->textInput(['tabindex' => 4])->label($model_appointment->vessel_type ==3 ? 'Tank Inspection Completed':'Final Survey Completed') ?>
     <div class="form-group "></div>
 
     <?= $form->field($model_draft, 'aft_arrival_quantity')->textInput(['tabindex' => 6, 'class' => 'decimaldraft form-control']) ?>
