@@ -99,7 +99,13 @@ and open the template in the editor.
                                 <td style="width: 20%;">Load Port</td>
                                 <td style="width: 30%;"><?= $appointment->portOfCall->port_name ?></td>
                                 <td style="width: 20%;">Cargo Type</td>
-                                <td style="width: 30%;"><?= $appointment->cargo ?></td>
+                                <td style="width: 30%;"><?php
+                                    if (empty($ports_cargo->cargo_type)) {
+                                            echo $appointment->cargo_type;
+                                    }else{
+                                           echo $ports_cargo->cargo_type; 
+                                    }
+                                    ?>
                             </tr>
                             <tr>
                                 <td style="width: 20%;">Last Port</td>
