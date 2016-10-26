@@ -20,7 +20,7 @@ use yii\db\Expression;
 <div class="appointment-form form-inline">
 
     <?php $form = ActiveForm::begin(); ?>
-    <?= $form->errorSummary($model) ?>
+    <?php// $form->errorSummary($model) ?>
 
     <?= $form->field($model, 'vessel_type')->dropDownList(ArrayHelper::map(VesselType::findAll(['status' => 1]), 'id', 'vessel_type'), ['prompt' => '-Choose a Vessel Type-', 'class' => 'form-control vessels']) ?>
 

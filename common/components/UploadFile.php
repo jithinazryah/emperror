@@ -42,11 +42,12 @@ class UploadFile extends Component {
                 $attach = '';
                 $folder = $this->folderName(0, 10000, $id);
                 $path = Yii::getAlias(Yii::$app->params['uploadPath']) . '/'.Yii::$app->params['mainPath'].'/'.Yii::$app->params['appointmentPath'].'/' . $folder . '/' . $id . '/' . $type;
+                
                 foreach (glob("{$path}/*") as $file) {
                         if ($file != '') {
                                 $arry = explode('/', $file);
                                 $path= Yii::$app->params['mainPath'].'/'.Yii::$app->params['appointmentPath'].'/' . $folder . '/' . $id . '/' . $type . '/' . end($arry);
-                                $attach.='<a target="_blank" href="' . Yii::$app->homeUrl . '/'.Yii::$app->params['mainPath'].'/'.Yii::$app->params['appointmentPath'].'/' . $folder . '/' . $id . '/' . $type . '/' . end($arry) . '">' . end($arry) . '</a>&nbsp;&nbsp;<a href="' . Yii::$app->homeUrl . 'appointment/port-call-data/remove?path='. $path .'"><i class="fa fa-remove"></i></a>&nbsp;&nbsp;|&nbsp;&nbsp;';
+                                $attach.='<a target="_blank" href="' . Yii::$app->homeUrl . '/'.Yii::$app->params['mainPath'].'/'.Yii::$app->params['appointmentPath'].'/' . $folder . '/' . $id . '/' . $type . '/' . end($arry) . '">' . end($arry) . '</a>&nbsp;&nbsp;<a href="' . Yii::$app->homeUrl .Yii::$app->params['appointmentPath'].'/' .$type.'/'. 'remove?path='. $path .'"><i class="fa fa-remove"></i></a>&nbsp;&nbsp;|&nbsp;&nbsp;';
                         }
                 }
                 // echo $attach;exit;

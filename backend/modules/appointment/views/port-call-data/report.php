@@ -86,7 +86,14 @@ and open the template in the editor.
                                     }
                                     ?></td>
                                 <td style="width: 20%;">Cargo Quantity</td>
-                                <td style="width: 30%;"><?= $ports_cargo->loaded_quantity ?></td>
+                                <td style="width: 30%;"><?php
+                                    if (empty($ports_cargo->loaded_quantity)) {
+                                            echo $appointment->quantity;
+                                    }else{
+                                           echo $ports_cargo->loaded_quantity; 
+                                    }
+                                    ?>
+                                </td>
                             </tr>
                             <tr>
                                 <td style="width: 20%;">Load Port</td>

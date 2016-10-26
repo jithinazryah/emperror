@@ -304,15 +304,16 @@ class PortCallDataController extends Controller {
 
         public function actionPortcallComplete($id) {
                 $appointment = Appointment::findOne($id);
-//                $ports = PortCallData::findAll(['apponitment_id' => $id]);
-//                if (!empty($ports)) {
-//                        $appointment->stage = 2;
+                $ports = PortCallData::findAll(['appointment_id' => $id]);
+                if (!empty($ports) && $appointment->stage == 4) {
+                        $appointment->stage = 5;
 //                        $appointment->sub_stages = 2;
-//                        $appointment->save();
-//                        return $this->redirect(['/appointment/close-estimate/add', 'id' => $appointment->id]);
-//                } else {
-//                        
-//                }
+                        $appointment->save();
+                        return $this->redirect(['/appointment/close-estimate/add', 'id' => $appointment->id]);
+                } else {
+                        Yii::$app->getSession()->setFlash('porterror', 'Portcall Data Not Completed..');
+                        return $this->redirect(['update', 'id' => $id]);
+                }
         }
 
         /**

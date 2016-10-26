@@ -44,6 +44,11 @@ $this->params['breadcrumbs'][] = 'Update';
                 <?= AppointmentWidget::widget(['id' => $model_appointment->id]) ?>
 
                 <hr class="appoint_history" />
+                <div class="error">
+                    <?php //if (Yii::$app->session->hasFlash('error')): ?>
+                    <?= Yii::$app->session->getFlash('porterror'); ?>
+                    <?php // endif; ?>
+                </div>
                 <div style="float:left;">
                     <?php
                     echo Html::a('<i class="fa-print"></i><span>SOF Report</span>', ['port-call-data/reports'], ['class' => 'btn btn-secondary btn-icon btn-icon-standalone', 'onclick' => "window.open('reports?id=$model_appointment->id', 'newwindow', 'width=750, height=800');return false;"]);
@@ -197,6 +202,12 @@ $this->params['breadcrumbs'][] = 'Update';
             }
             .form .form-group.has-success .control-label, form .form-group.has-success .radio, form .form-group.has-success .checkbox, form .form-group.has-success .radio-inline, form .form-group.has-success .checkbox-inline {
                 color: #8ef305;
+            }
+            .error{
+                color: #0553b1;
+                padding-bottom: 5px;
+                font-size: 18px;
+                font-weight: bold;
             }
 
         </style>

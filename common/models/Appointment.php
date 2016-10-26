@@ -46,9 +46,9 @@ class Appointment extends \yii\db\ActiveRecord {
          */
         public function rules() {
                 return [
-                    [['vessel_type', 'port_of_call'], 'required'],
+                    [['vessel_type', 'port_of_call','eta','principal'], 'required'],
                     [['vessel_type', 'vessel', 'port_of_call', 'tug', 'barge', 'nominator', 'terminal', 'charterer', 'shipper', 'stage', 'sub_stages', 'status', 'CB', 'UB'], 'integer'],
-                    [['eta', 'DOC', 'DOU', 'cargo_details'], 'safe'],
+                    [['DOC', 'DOU', 'cargo_details'], 'safe'],
                     [['birth_no', 'appointment_no'], 'string', 'max' => 50],
                     [['no_of_principal', 'quantity'], 'string', 'max' => 15],
                     [['purpose', 'last_port', 'next_port'], 'string', 'max' => 200],

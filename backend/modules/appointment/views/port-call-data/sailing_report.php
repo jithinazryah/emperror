@@ -74,7 +74,7 @@ and open the template in the editor.
             <tr>
                 <td>
                     <div class="general-details">
-                    <h6>General Details:</h6>
+                        <h6>General Details:</h6>
                         <table class="table tbl">
                             <tr>
                                 <td style="width: 20%;">Vessel Name</td>
@@ -96,7 +96,14 @@ and open the template in the editor.
                             </tr>
                             <tr>
                                 <td style="width: 20%;">Cargo Quantity</td>
-                                <td style="width: 30%;"><?= $ports_cargo->loaded_quantity ?></td>
+                                <td style="width: 30%;"><?php
+                                    if (empty($ports_cargo->loaded_quantity)) {
+                                            echo $appointment->quantity;
+                                    } else {
+                                            echo $ports_cargo->loaded_quantity;
+                                    }
+                                    ?>
+                                </td>
                                 <td style="width: 20%;">Cargo type</td>
                                 <td style="width: 30%;"><?= $ports_cargo->cargo_type ?>
                                 </td>
@@ -110,9 +117,9 @@ and open the template in the editor.
                             </tr>
                         </table>
                     </div>
-                    
+
                     <div class="timings">
-                    <h6>Timings:</h6>
+                        <h6>Timings:</h6>
                         <table class="table tbl">
                             <tr>
                                 <td style="width: 30%;">Cargo Operation Commenced</td>
@@ -135,9 +142,9 @@ and open the template in the editor.
                             </tr>
                         </table>
                     </div>
-                    
-                     <div class="rob-sailing">
-                    <h6>ROB-SAILING:</h6>
+
+                    <div class="rob-sailing">
+                        <h6>ROB-SAILING:</h6>
                         <table class="table tbl">
                             <tr>
                                 <th style="width: 33%;">FO</th>
@@ -169,9 +176,9 @@ and open the template in the editor.
                             </tr>
                         </table>
                     </div>
-                    
+
                     <div class="draft-departure">
-                    <h6>DRAFT DEPARTURE:</h6>
+                        <h6>DRAFT DEPARTURE:</h6>
                         <table class="table tbl">
                             <tr>
                                 <td style="width: 50%;">FWD</td>

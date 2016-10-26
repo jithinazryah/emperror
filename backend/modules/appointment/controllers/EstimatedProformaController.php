@@ -315,5 +315,9 @@ class EstimatedProformaController extends Controller {
                 // return the pdf output as per the destination setting
                 return $pdf->render();
         }
+        public function actionRemove($path) {
+                unlink($path);
+                return $this->redirect(Yii::$app->request->referrer);
+        }
 
 }
