@@ -5,6 +5,7 @@ use yii\widgets\DetailView;
 use common\models\SubServices;
 use common\models\Appointment;
 use common\models\EstimatedProforma;
+use common\models\PortCargoDetails;
 use common\models\Debtor;
 use common\models\PortCallData;
 use common\models\Vessel;
@@ -99,13 +100,7 @@ and open the template in the editor.
                                 <td style="width: 20%;">Load Port</td>
                                 <td style="width: 30%;"><?= $appointment->portOfCall->port_name ?></td>
                                 <td style="width: 20%;">Cargo Type</td>
-                                <td style="width: 30%;"><?php
-                                    if (empty($ports_cargo->cargo_type)) {
-                                            echo $appointment->cargo_type;
-                                    }else{
-                                           echo $ports_cargo->cargo_type; 
-                                    }
-                                    ?>
+                                <td style="width: 30%;"><?= $ports_cargo->cargo_type; ?></td>
                             </tr>
                             <tr>
                                 <td style="width: 20%;">Last Port</td>
