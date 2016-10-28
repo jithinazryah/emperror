@@ -32,7 +32,7 @@ class EstimatedProformaController extends Controller {
                         'class' => VerbFilter::className(),
                         'actions' => [
                             'delete' => ['POST'],
-                           // 'reports' => ['POST'],
+                        // 'reports' => ['POST'],
                         ],
                     ],
                 ];
@@ -79,10 +79,11 @@ class EstimatedProformaController extends Controller {
                         ]);
                 }
         }
-        
+
         /*
          * Create new Estimated Proforma and Update an existing Estimated Proforma model.
          */
+
         public function actionAdd($id, $prfrma_id = NULL, $check = NULL) {
                 $estimates = EstimatedProforma::findAll(['apponitment_id' => $id]);
                 $appointment = Appointment::findOne($id);
@@ -204,7 +205,7 @@ class EstimatedProformaController extends Controller {
                         }
 //                        $appointment->stage = 2;
 //                        $appointment->sub_stages = 2;
-//                        $appointment->save();
+                        $appointment->save();
                         return $this->redirect(['/appointment/port-call-data/update', 'id' => $appointment->id]);
                 } else {
                         Yii::$app->getSession()->setFlash('error', 'Estimated Proforma Not Completed..');
@@ -315,6 +316,7 @@ class EstimatedProformaController extends Controller {
                 // return the pdf output as per the destination setting
                 return $pdf->render();
         }
+
         public function actionRemove($path) {
                 unlink($path);
                 return $this->redirect(Yii::$app->request->referrer);

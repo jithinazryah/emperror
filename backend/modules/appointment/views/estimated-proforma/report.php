@@ -223,11 +223,11 @@ use common\models\Vessel;
                     </div>
                     <div class="content">
                         <p class="para-heading">- Additional scope of work other than mentioned in the tarrif to be mutually agreed between two parties prior initiation of service.</p>
-                <!--            <p class="para-content">
+                            <p class="para-content">
                             Please note that this is a pro-forma disbursement account only. It is intended to be an estimate of the actual disbursement account and is for guidance purposes only. 
                             Whilst Emperor Shipping Lines does take every care to ensure that the figures and information contained in the pro-forma disbursement account are as accurate as possibles
                             ,the actual disbursement account may, and often does, for various reasons beyond our control, vary from the pro-forma disbursement account. 
-                        </p>-->
+                        </p>
 
                         <p class="para-content">
                             This duty exists regardless of any difference between the figures in this pro-forma disbursement account and the actual disbursement account.

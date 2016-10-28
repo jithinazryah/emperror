@@ -52,51 +52,38 @@ and open the template in the editor.
     <!--    </head>
         <body >-->
     <table class="main-tabl" border="0"> 
-        <thead> 
-            <tr> 
-                <th style="width:100%">
-        <div class="header">
-            <div class="main-left">
-                <img src="<?= Yii::$app->homeUrl ?>/images/report-logo.jpg" style="width: 100px;height: 100px;"/>
 
-            </div>
-            <div class="main-right">
-                <h2>Statement Of Facts</h2>
-                <h2 style="font-style: italic;font-size: 18px;"><?= $appointment->appointment_no ?></h2>
-            </div>
-            <br/>
-        </div>
-        </th> 
-        </tr> 
-
-        </thead> 
         <tbody>
             <tr>
                 <td>
                     <div class="general-details">
                         <h6>General Details:</h6>
-                        <table class="table tbl">
+                        <table>
                             <tr>
-                                <td style="width: 20%;">Vessel Name</td>
-                                <td style="width: 30%;"><?php
+                                <td style="width: 50%;">Vessel Name</td>
+                                <td style="width: 50%;">:<?php
                                     if ($appointment->vessel_type == 1) {
                                             echo 'T - ' . Vessel::findOne($appointment->tug)->vessel_name . ' / B - ' . Vessel::findOne($appointment->barge)->vessel_name;
                                     } else {
                                             echo Vessel::findOne($appointment->vessel)->vessel_name;
                                     }
                                     ?></td>
-                                <td style="width: 20%;">Load Port</td>
-                                <td style="width: 30%;"><?= $appointment->cargo ?></td>
                             </tr>
                             <tr>
-                                <td style="width: 20%;">Last Port</td>
-                                <td style="width: 30%;"><?= $appointment->last_port ?></td>
-                                <td style="width: 20%;">Next Port</td>
-                                <td style="width: 30%;"><?= $appointment->next_port ?></td>
+                                <td style="width: 50%;">Load Port</td>
+                                <td style="width: 50%;">:<?= $appointment->cargo ?></td>
                             </tr>
                             <tr>
-                                <td style="width: 20%;">Cargo Quantity</td>
-                                <td style="width: 30%;"><?php
+                                <td style="width: 50%;">Last Port</td>
+                                <td style="width: 50%;">:<?= $appointment->last_port ?></td>
+                            </tr>
+                            <tr>
+                                <td style="width: 50%;">Next Port</td>
+                                <td style="width: 50%;">:<?= $appointment->next_port ?></td>
+                            </tr>
+                            <tr>
+                                <td style="width: 50%;">Cargo Quantity</td>
+                                <td style="width: 50%;">:<?php
                                     if (empty($ports_cargo->loaded_quantity)) {
                                             echo $appointment->quantity;
                                     } else {
@@ -104,15 +91,19 @@ and open the template in the editor.
                                     }
                                     ?>
                                 </td>
+                            </tr>
+                            <tr>
                                 <td style="width: 20%;">Cargo type</td>
-                                <td style="width: 30%;"><?= $ports_cargo->cargo_type ?>
+                                <td style="width: 30%;">:<?= $ports_cargo->cargo_type ?>
                                 </td>
                             </tr>
                             <tr>
                                 <td style="width: 20%;">Operation</td>
-                                <td style="width: 30%;"><?= Purpose::findOne($appointment->purpose)->purpose; ?></td>
+                                <td style="width: 30%;">:<?= Purpose::findOne($appointment->purpose)->purpose; ?></td>
+                            </tr>
+                            <tr>
                                 <td style="width: 20%;">NOR Tendered</td>
-                                <td style="width: 30%;"><?= Yii::$app->SetValues->DateFormate($ports->nor_tendered); ?>
+                                <td style="width: 30%;">:<?= Yii::$app->SetValues->DateFormate($ports->nor_tendered); ?>
                                 </td>
                             </tr>
                         </table>
@@ -120,69 +111,184 @@ and open the template in the editor.
 
                     <div class="timings">
                         <h6>Timings:</h6>
-                        <table class="table tbl">
+                        <table>
                             <tr>
-                                <td style="width: 30%;">Cargo Operation Commenced</td>
-                                <td style="width: 20%;"><?= Yii::$app->SetValues->DateFormate($ports->cargo_commenced); ?></td>
-                                <td style="width: 30%;">Cargo Operation Completed</td>
-                                <td style="width: 20%;"><?= Yii::$app->SetValues->DateFormate($ports->cargo_completed); ?></td>
+                                <td style="width: 50%;">ETA</td>
+                                <td style="width: 50%;">:<?= Yii::$app->SetValues->DateFormate($ports->eta); ?></td>
                             </tr>
                             <tr>
-                                <td style="width: 30%;">Pilot on board</td>
-                                <td style="width: 20%;"><?= Yii::$app->SetValues->DateFormate($ports->pob_outbound); ?></td>
-                                <td style="width: 30%;">Cast off from berth</td>
-                                <td style="width: 20%;"><?= Yii::$app->SetValues->DateFormate($ports->cast_off); ?></td>
+                                <td style="width: 50%;">ETS</td>
+                                <td style="width: 50%;">:<?= Yii::$app->SetValues->DateFormate($ports->ets); ?></td>
                             </tr>
                             <tr>
-                                <td style="width: 30%;">COSP</td>
-                                <td style="width: 20%;"><?= Yii::$app->SetValues->DateFormate($ports->cosp); ?></td>
-                                <td style="width: 30%;">ETA Next Port</td>
-                                <td style="width: 20%;"><?= Yii::$app->SetValues->DateFormate($ports->eta_next_port); ?>
+                                <td style="width: 50%;">NOR Tendered</td>
+                                <td style="width: 50%;">:<?= Yii::$app->SetValues->DateFormate($ports->nor_tendered); ?>
                                 </td>
                             </tr>
+                            <tr>
+                                <td style="width: 50%;">POB Inbound</td>
+                                <td style="width: 50%;">:<?= Yii::$app->SetValues->DateFormate($ports->pob_inbound); ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 50%;">First Line Ashore</td>
+                                <td style="width: 50%;">:<?= Yii::$app->SetValues->DateFormate($ports->first_line_ashore); ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 50%;">All Fast</td>
+                                <td style="width: 50%;">:<?= Yii::$app->SetValues->DateFormate($ports->all_fast); ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 50%;">Gangway Down</td>
+                                <td style="width: 50%;">:<?= Yii::$app->SetValues->DateFormate($ports->gangway_down); ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 50%;">Agent On Board</td>
+                                <td style="width: 50%;">:<?= Yii::$app->SetValues->DateFormate($ports->agent_on_board); ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 50%;">Immigration Commenced</td>
+                                <td style="width: 50%;">:<?= Yii::$app->SetValues->DateFormate($ports->immigration_commenced); ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 50%;">Immigration Completed</td>
+                                <td style="width: 50%;">:<?= Yii::$app->SetValues->DateFormate($ports->immigartion_completed); ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 50%;">Last Line Away</td>
+                                <td style="width: 50%;">:<?= Yii::$app->SetValues->DateFormate($ports->lastline_away); ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 50%;">Pilot Away</td>
+                                <td style="width: 50%;">:<?= Yii::$app->SetValues->DateFormate($ports->pilot_away); ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 50%;">Customs Clearance On Arrival</td>
+                                <td style="width: 50%;">:<?= Yii::$app->SetValues->DateFormate($ports->customs_clearance_onarrival); ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 50%;">Customs Clearance On Departure</td>
+                                <td style="width: 50%;">:<?= Yii::$app->SetValues->DateFormate($ports->customs_clearance_ondeparture); ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 50%;">Hoses Connected</td>
+                                <td style="width: 50%;">:<?= Yii::$app->SetValues->DateFormate($ports->hoses_connected); ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 50%;">Pre Discharge Safety</td>
+                                <td style="width: 50%;">:<?= Yii::$app->SetValues->DateFormate($ports->pre_discharge_safety); ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 50%;">Hoses Disconnected</td>
+                                <td style="width: 50%;">:<?= Yii::$app->SetValues->DateFormate($ports->hoses_disconnected); ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 50%;">SBE</td>
+                                <td style="width: 50%;">:<?= Yii::$app->SetValues->DateFormate($ports->sbe); ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 50%;">Surveyor On Board</td>
+                                <td style="width: 50%;">:<?= Yii::$app->SetValues->DateFormate($ports->surveyor_on_board); ?>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="width: 50%;">Cargo Operation Commenced</td>
+                                <td style="width: 50%;">:<?= Yii::$app->SetValues->DateFormate($ports->cargo_commenced); ?></td>
+
+                            </tr>
+                            <tr>
+                                <td style="width: 50%;">Cargo Operation Completed</td>
+                                <td style="width: 50%;">:<?= Yii::$app->SetValues->DateFormate($ports->cargo_completed); ?></td>
+                            </tr>
+                            <tr>
+                                <td style="width: 50%;">Pilot on board</td>
+                                <td style="width: 50%;">:<?= Yii::$app->SetValues->DateFormate($ports->pob_outbound); ?></td>
+                            </tr>
+                            <tr>
+                                <td style="width: 50%;">Cast off from berth</td>
+                                <td style="width: 50%;">:<?= Yii::$app->SetValues->DateFormate($ports->cast_off); ?></td>
+                            </tr>
+                            <tr>
+                                <td style="width: 50%;">COSP</td>
+                                <td style="width: 50%;">:<?= Yii::$app->SetValues->DateFormate($ports->cosp); ?></td>
+                            </tr>
+                            <tr>
+                                <td style="width: 50%;">ETA Next Port</td>
+                                <td style="width: 50%;">:<?= Yii::$app->SetValues->DateFormate($ports->eta_next_port); ?>
+                                </td>
+                            </tr>
+                            <?php
+                            if (!empty($ports_additional)) {
+                                    foreach ($ports_additional as $ports_add) {
+                                            ?>
+                                            <tr>
+                                                <td style="width: 50%;"><?= $ports_add->label ?></td>
+                                                <td style="width: 50%;">:<?= Yii::$app->SetValues->DateFormate($ports_add->value); ?>
+                                                </td>
+                                            </tr>   
+                                    <?php
+                                    }
+                            }
+                            ?>
                         </table>
                     </div>
 
                     <div class="rob-sailing">
                         <h6>ROB-SAILING:</h6>
-                        <table class="table tbl">
+                        <table>
                             <tr>
-                                <th style="width: 33%;">FO</th>
-                                <th style="width: 33%;">DO</th>
-                                <th style="width: 34%;">Fresh Water</th>
-                            </tr>
-                            <tr>
-                                <th style="width: 33%;"><?php
+                                <td style="width: 50%;">FO</td>
+                                <td style="width: 50%;">:<?php
                                     if ($ports_rob->fo_sailing_quantity != '' && $ports_rob->fo_sailing_quantity != NULL) {
                                             echo $ports_rob->fo_sailing_quantity
                                             ?> <?=
                                             $ports_rob->fo_sailing_unit == 1 ? 'MT' : 'L';
                                     }
-                                    ?></th>
-                                <th style="width: 33%;"><?php
+                                    ?></td>
+                            </tr>
+                            <tr>
+                                <td style="width: 50%;">DO</td>
+                                <td style="width: 50%;">:<?php
                                     if ($ports_rob->do_sailing_quantity != '') {
                                             echo $ports_rob->do_sailing_quantity
                                             ?> <?=
                                             $ports_rob->do_sailing_unit == 1 ? 'MT' : 'L';
                                     }
-                                    ?></th>
-                                <th style="width: 34%;"><?php
+                                    ?></td>
+                            </tr>
+                            <tr>
+                                <td style="width: 50%;">Fresh Water</td>
+                                <td style="width: 50%;">:<?php
                                     if ($ports_rob->fresh_water_sailing_quantity != '') {
                                             echo $ports_rob->fresh_water_sailing_quantity
                                             ?> <?=
                                             $ports_rob->fresh_water_sailing_unit == 1 ? 'MT' : 'L';
                                     }
-                                    ?></th>
+                                    ?></td>
                             </tr>
                         </table>
                     </div>
 
                     <div class="draft-departure">
                         <h6>DRAFT DEPARTURE:</h6>
-                        <table class="table tbl">
+                        <table>
                             <tr>
                                 <td style="width: 50%;">FWD</td>
-                                <td style="width: 50%;"><?php
+                                <td style="width: 50%;">:<?php
                                     if ($ports_draft->fwd_sailing_quantity != '') {
                                             echo $ports_draft->fwd_sailing_quantity . ' m';
                                     }
@@ -190,7 +296,7 @@ and open the template in the editor.
                             </tr>
                             <tr>
                                 <td style="width: 50%;">AFT</td>
-                                <td style="width: 50%;"><?php
+                                <td style="width: 50%;">:<?php
                                     if ($ports_draft->aft_sailing_quantity != '') {
                                             echo $ports_draft->aft_sailing_quantity . ' m';
                                     }

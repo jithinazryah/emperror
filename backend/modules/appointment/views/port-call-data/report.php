@@ -90,8 +90,8 @@ and open the template in the editor.
                                 <td style="width: 30%;"><?php
                                     if (empty($ports_cargo->loaded_quantity)) {
                                             echo $appointment->quantity;
-                                    }else{
-                                           echo $ports_cargo->loaded_quantity; 
+                                    } else {
+                                            echo $ports_cargo->loaded_quantity;
                                     }
                                     ?>
                                 </td>
@@ -100,7 +100,7 @@ and open the template in the editor.
                                 <td style="width: 20%;">Load Port</td>
                                 <td style="width: 30%;"><?= $appointment->portOfCall->port_name ?></td>
                                 <td style="width: 20%;">Cargo Type</td>
-                                <td style="width: 30%;"><?= $ports_cargo->cargo_type; ?></td>
+                                <td style="width: 30%;"><?= $appointment->cargo; ?></td>
                             </tr>
                             <tr>
                                 <td style="width: 20%;">Last Port</td>
@@ -432,6 +432,34 @@ and open the template in the editor.
                             </tr>
                         </table>
                         <br/>
+                        <?php
+                        if (!empty($port_stoppages)) {
+                                ?>
+                                <div class="cargodetails">
+
+                                    <h6>Stoppages / Delays - Description </h6>
+                                    <table class="table"> 
+
+                                        <tr>
+                                            <th style="width: 33%;">From</th>
+                                            <th style="width: 33%;">To</th>
+                                            <th style="width: 34%;">Comment</th>
+                                        </tr>
+                                        <?php
+                                        foreach ($port_stoppages as $port_stoppage) {
+                                                ?>
+                                                <tr>
+                                                    <td style="width: 33%;height: 13px;"><?= Yii::$app->SetValues->DateFormate($port_stoppage->stoppage_from); ?></td>
+                                                    <td style="width: 33%;"><?= Yii::$app->SetValues->DateFormate($port_stoppage->stoppage_to); ?></td>
+                                                    <td style="width:34%;"><?= $port_stoppage->comment; ?></td>
+                                                </tr>
+                                        <?php } ?>
+                                    </table>
+                                    <br/>
+
+                                </div>
+                        <?php } ?>
+                        <br/>
                         <table class="table">
                             <tr>
                                 <th style="width: 25%;">Remarks (if any):</th>
@@ -454,34 +482,7 @@ and open the template in the editor.
 
                         </table>
                     </div>
-                    <br/>
-                    <?php
-                    if (!empty($port_stoppages)) {
-                            ?>
-                            <div class="cargodetails">
 
-                                <h6>Stoppages / Delays - Description </h6>
-                                <table class="table"> 
-
-                                    <tr>
-                                        <th style="width: 33%;">From</th>
-                                        <th style="width: 33%;">To</th>
-                                        <th style="width: 34%;">Comment</th>
-                                    </tr>
-                                    <?php
-                                    foreach ($port_stoppages as $port_stoppage) {
-                                            ?>
-                                            <tr>
-                                                <td style="width: 33%;height: 13px;"><?= Yii::$app->SetValues->DateFormate($port_stoppage->stoppage_from); ?></td>
-                                                <td style="width: 33%;"><?= Yii::$app->SetValues->DateFormate($port_stoppage->stoppage_to); ?></td>
-                                                <td style="width:34%;"><?= $port_stoppage->comment; ?></td>
-                                            </tr>
-                                    <?php } ?>
-                                </table>
-                                <br/>
-
-                            </div>
-                    <?php } ?>
                     <br/>
                     <!--            <div class="footer">
                                     <div class="footer-left">
