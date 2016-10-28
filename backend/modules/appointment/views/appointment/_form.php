@@ -42,7 +42,7 @@ use yii\db\Expression;
 //        }
 //    }
     ?>
-    <?= $form->field($model, 'vessel')->dropDownList(ArrayHelper::map(Vessel::findAll(['status' => 1]), 'id', 'vessel_name'), ['prompt' => '-Choose a Vessel-', 'disabled' => $model->vessel_type ==1 ? TRUE : FALSE]) ?>
+    <?= $form->field($model, 'vessel')->dropDownList(ArrayHelper::map(Vessel::findAll(['status' => 1, 'vessel_type' => $model->vessel_type]), 'id', 'vessel_name'), ['prompt' => '-Choose a Vessel-', 'disabled' => $model->vessel_type ==1 ? TRUE : FALSE]) ?>
 
 
     <?= $form->field($model, 'tug')->dropDownList(ArrayHelper::map(Vessel::findAll(['status' => 1, 'vessel_type' => 4]), 'id', 'vessel_name'), ['prompt' => '-Choose a Tug-', 'disabled' => $model->vessel_type !=1 ? TRUE : FALSE]) ?>
@@ -82,9 +82,6 @@ use yii\db\Expression;
     <?= $form->field($model, 'purpose')->dropDownList(ArrayHelper::map(Purpose::findAll(['status' => 1]), 'id', 'purpose'), ['prompt' => '-Choose a Purpose-']) ?>
 
     <?= $form->field($model, 'cargo')->textInput(['maxlength' => true, 'disabled' => $model->isNewRecord ? FALSE : $model->status == 0 ? TRUE : FALSE]) ?>
-
-
-    <?= $form->field($model, 'cargo_details')->textarea(['rows' => 6]) ?>        
 
     <?= $form->field($model, 'quantity')->textInput(['maxlength' => true]) ?>
 

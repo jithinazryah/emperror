@@ -61,7 +61,7 @@ use common\models\Vessel;
                             <table class="tb2">
                                 <tr>
                                     <td>TO </td> <td style="width: 50px;text-align: center">:</td>
-                                    <td style="max-width: 405px"><?= $appointment->getInvoiceAddress($princip); ?></td>
+                                    <td style="max-width: 405px"><?= $appointment->getDebtorName($princip); ?></td>
                                 </tr>
                             </table>
                         </div>
@@ -117,11 +117,11 @@ use common\models\Vessel;
                             <table class="">
                                 <tr>
                                     <td>Ref No </td> <td>:</td>
-                                    <td><?= $appointment->appointment_no ?></td>
+                                    <td></td>
                                 </tr>
                                 <tr>
                                     <td>Ops no </td> <td>:</td>
-                                    <td>TBC</td>
+                                    <td><?= $appointment->appointment_no ?></td>
                                 </tr>
                             </table>
                         </div>
@@ -220,9 +220,11 @@ use common\models\Vessel;
                                 <td style="width: 8%;font-weight: bold;">AED <?= $grandtotal + $subepdatotal; ?></td>
                             </tr>
                         </table>
+                        <button style="float:right;background-color: yellow;padding-left: 20px;padding-right: 20px;">E & OE</button>
                     </div>
+                    <br/>
                     <div class="content">
-                        <p class="para-heading">- Additional scope of work other than mentioned in the tarrif to be mutually agreed between two parties prior initiation of service.</p>
+                        <p class="para-heading" style="font-size: 10px;">- Additional scope of work other than mentioned in the tarrif to be mutually agreed between two parties prior initiation of service.</p>
                             <p class="para-content">
                             Please note that this is a pro-forma disbursement account only. It is intended to be an estimate of the actual disbursement account and is for guidance purposes only. 
                             Whilst Emperor Shipping Lines does take every care to ensure that the figures and information contained in the pro-forma disbursement account are as accurate as possibles
@@ -294,7 +296,7 @@ use common\models\Vessel;
                         <div class="bankdetails-left">
                             <h5>Account Manager</h5> 
                             <a href="#" style="color: #03a9f4;">accrak@emperor.ae</a>
-                            <h5>T: +971 7 268 9076(Ext: 205)</h5>
+                            <h5>T: +971 7 268 9676(Ext: 205)</h5>
                         </div>
                     </div>
                 </td>
@@ -319,7 +321,7 @@ use common\models\Vessel;
                             </tr>
                             <tr>
                                 <td colspan="2"><h4 style="text-align: center;font-weight: bold;text-decoration: underline;">CONTACT DETAILS:</h4>
-                                    <p>TEL: +971 7 268 9670 (24x7) <br/> FAX: +971 7 208 9677 <br/> COMMON EMAIL:<a href="#" style="color: #03a9f4;">OPSARAK@EMPEROR.AE</a></p>
+                                    <p>TEL: +971 7 268 9676 (24x7) <br/> FAX: +971 7 268 9677 <br/> COMMON EMAIL:<a href="#" style="color: #03a9f4;">OPSRAK@EMPEROR.AE</a></p>
                                 </td>
                             </tr>
                             <tr>
