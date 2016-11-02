@@ -518,6 +518,7 @@ class PortCallDataController extends Controller {
                 $ports_imigration = ImigrationClearance::findOne(['appointment_id' => $data->appointment_id]);
                 foreach ($ports_imigration as $key => $value) {
                         if ($value != '' && $value != '0000-00-00 00:00:00' && strtotime($value) > $old) {
+                                $check = ['id', 'appointment_id', 'status', 'CB', 'UB', 'DOC', 'DOU'];
                                 if (!in_array($key, $check)) {
                                         $mins = date('H:i:s', strtotime($value));
                                         if ($mins != '00:00:00') {
@@ -606,6 +607,7 @@ class PortCallDataController extends Controller {
                 $ports_cargo = PortCargoDetails::findOne(['appointment_id' => $id]);
                 $ports_additional = PortCallDataAdditional::findAll(['appointment_id' => $id]);
                 $port_stoppages = PortStoppages::findAll(['appointment_id' => $id]);
+                $ports_imigration = ImigrationClearance::findOne(['appointment_id' => $id]);
                 // get your HTML raw content without any layouts or scripts
                 $appointment = Appointment::findOne($id);
                 echo $content = $this->renderPartial('sailing_report', [
@@ -616,6 +618,7 @@ class PortCallDataController extends Controller {
             'ports_cargo' => $ports_cargo,
             'ports_additional' => $ports_additional,
             'port_stoppages' => $port_stoppages,
+            'ports_imigration' => $ports_imigration,
                 ]);
                 exit;
                 // setup kartik\mpdf\Pdf component

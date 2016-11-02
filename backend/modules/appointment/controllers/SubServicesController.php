@@ -80,6 +80,15 @@ class SubServicesController extends Controller {
                 $appointment = Appointment::findOne($estimates->apponitment_id);
                 $mastersub = MasterSubService::findAll(['service_id' => $estimates->service_id]);
                 $subcat = SubServices::findAll(['estid' => $id]);
+                $subtotal = 0;
+                if (!empty($subcat)) {
+                        foreach ($subcat as $sub) {
+                                $subtotal += $sub->total;
+                        }
+                        $estimates = EstimatedProforma::findOne(['id' => $sub->estid]);
+                        $estimates->epda = $subtotal;
+                        $estimates->save();
+                }
                 if (empty($subcat)) {
                         if (!empty($mastersub)) {
                                 $this->SetData($mastersub, $id, $estimates->apponitment_id);
@@ -91,6 +100,7 @@ class SubServicesController extends Controller {
                 } else {
                         $model = $this->findModel($sub_id);
                 }
+
                 if ($model->load(Yii::$app->request->post()) && Yii::$app->SetValues->Attributes($model, $id)) {
                         $model->total = $model->unit * $model->unit_price;
                         $model->service_id = $estimates->apponitment_id;

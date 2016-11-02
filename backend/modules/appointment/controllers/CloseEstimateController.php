@@ -85,10 +85,10 @@ class CloseEstimateController extends Controller {
                 $estimates = CloseEstimate::findAll(['apponitment_id' => $id]);
                 $appointment = Appointment::findOne($id);
                 $model_upload = new UploadFile();
-                if (empty($estimates)) {
-                        $this->InsertCloseEstimate($id);
-                        $estimates = CloseEstimate::findAll(['apponitment_id' => $id]);
-                }
+//                if (empty($estimates)) {
+//                        $this->InsertCloseEstimate($id);
+//                        $estimates = CloseEstimate::findAll(['apponitment_id' => $id]);
+//                }
                 if (!isset($prfrma_id)) {
                         $model = new CloseEstimate;
                 } else {
@@ -115,7 +115,7 @@ class CloseEstimateController extends Controller {
          * Restore Estimated Proforma Values into Close Estimate
          */
 
-        public function InsertCloseEstimate($id) {
+        public function actionInsertCloseEstimate($id) {
                 $estimates = EstimatedProforma::findAll(['apponitment_id' => $id]);
                 foreach ($estimates as $estimate) {
                         $model = new CloseEstimate;
@@ -135,7 +135,7 @@ class CloseEstimateController extends Controller {
                         $model->DOC = date('Y-m-d');
                         $model->save();
                 }
-                return true;
+                return $this->redirect(Yii::$app->request->referrer);
         }
 
         public function actionDeleteCloseEstimate($id) {

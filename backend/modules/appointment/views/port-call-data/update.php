@@ -59,8 +59,8 @@ $this->params['breadcrumbs'][] = 'Update';
                 </div>
                 <?php
                 //echo Html::a('<i class="fa-print"></i><span>SOF Report</span>', ['port-call-data/reports'], ['class' => 'btn btn-secondary btn-icon btn-icon-standalone', 'onclick' => "window.open('reports?id=$model_appointment->id', 'newwindow', 'width=750, height=800');return false;"]);
-                echo Html::a('<i class="fa-print"></i><span>Sailing Report</span>', ['port-call-data/sailing'], ['class' => 'btn btn-secondary btn-icon btn-icon-standalone', 'onclick' => "window.open('sailing?id=$model_appointment->id', 'newwindow', 'width=750, height=800');return false;"]);
-                echo Html::a('<i class="fa-print"></i><span>Arrival Report</span>', ['port-call-data/arrival'], ['class' => 'btn btn-secondary btn-icon btn-icon-standalone', 'onclick' => "window.open('arrival?id=$model_appointment->id', 'newwindow', 'width=750, height=800');return false;"]);
+                echo Html::a('<i class="fa-print"></i><span>Sailing Report</span>', ['port-call-data/sailing'], ['class' => 'btn btn-secondary btn-icon btn-icon-standalone', 'onclick' => "window.open('sailing?id=$model_appointment->id', 'newwindow', 'width=750, height=500');return false;"]);
+                echo Html::a('<i class="fa-print"></i><span>Arrival Report</span>', ['port-call-data/arrival'], ['class' => 'btn btn-secondary btn-icon btn-icon-standalone', 'onclick' => "window.open('arrival?id=$model_appointment->id', 'newwindow', 'width=750, height=500');return false;"]);
                 ?>
             </div>
             <div style="float: left;">

@@ -46,10 +46,10 @@ use common\models\Vessel;
                 <th style="width:100%">
         <div class="header">
             <div class="main-left">
-                <img src="<?= Yii::$app->homeUrl ?>/images/logoleft.jpg" style="width: 100px;height: 100px;"/>
+                <img src="<?= Yii::$app->homeUrl ?>/images/logoleft.jpg" style="width: 90px;height: 75px;"/>
             </div>
             <div class="main-right">
-                <img src="<?= Yii::$app->homeUrl ?>/images/logoright.jpg" style="width: 100px;height: 100px;"/>
+                <img src="<?= Yii::$app->homeUrl ?>/images/logoright.jpg" style="width: 90px;height: 75px;"/>
             </div>
             <br/>
         </div>
@@ -261,7 +261,7 @@ use common\models\Vessel;
                                 <td style="width: 8%;font-weight: bold;">AED <?= $amount ?></td>
                             </tr>
                         </table>
-                        <button style="float:right;background-color: yellow;padding-left: 20px;padding-right: 20px;">E & OE</button>
+                        <button style="float:right;background-color: yellow;">E & OE</button>
                     </div>
                     <br/>
                     <div class="content">

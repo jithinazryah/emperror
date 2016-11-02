@@ -158,7 +158,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             <td><?= $estimate->unit; ?></td>
             <!--                                                                <td><? $estimate->roe; ?></td>-->
                                             <td><?= $estimate->epda; ?></td>
-                                            <td><?= $estimate->principal; ?></td>
+                                            <td><?= $estimate->principal0->principal_id; ?></td>
                                             <td><?= $estimate->rate_to_category; ?></td>
                                             <td><?= $estimate->comments; ?></td>
                                             <!--<td><?php // $estimate->images;                ?></td>-->

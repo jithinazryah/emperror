@@ -106,7 +106,7 @@ class EstimatedProformaController extends Controller {
                                 return $this->redirect(['add', 'id' => $id]);
                         }
                 }
-
+                
                 return $this->render('add', [
                             'model' => $model,
                             'estimates' => $estimates,
@@ -330,14 +330,17 @@ class EstimatedProformaController extends Controller {
                 $model_report->status = 1;
                 $model_report->save();
 //                return $this->redirect(Yii::$app->request->referrer);
-                
-                echo "<script>window.close();</script>";exit;
+
+                echo "<script>window.close();</script>";
+                exit;
         }
+
         public function actionShowReport($id) {
                 $model_report = EstimateReport::find($id)->one();
-                echo $model_report->report;exit;
-                
+                echo $model_report->report;
+                exit;
         }
+
         public function actionRemoveReport($id) {
                 EstimateReport::findOne($id)->delete();
                 return $this->redirect(Yii::$app->request->referrer);

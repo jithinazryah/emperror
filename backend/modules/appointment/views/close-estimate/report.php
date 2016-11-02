@@ -49,11 +49,11 @@ and open the template in the editor.
                 <th style="width:100%">
         <div class="header">
             <div class="main-left">
-                <img src="<?= Yii::$app->homeUrl ?>/images/logoleft.jpg" style="width: 100px;height: 100px;"/>
+                <img src="<?= Yii::$app->homeUrl ?>/images/logoleft.jpg" style="width: 90px;height: 75px;"/>
 
             </div>
             <div class="main-right">
-                <img src="<?= Yii::$app->homeUrl ?>/images/logoright.jpg" style="width: 100px;height: 100px;"/>
+                <img src="<?= Yii::$app->homeUrl ?>/images/logoright.jpg" style="width: 90px;height: 75px;"/>
             </div>
             <br/>
         </div>
@@ -137,9 +137,9 @@ and open the template in the editor.
                                         <td style="width: 10%;"><?= $i ?></td>
                                         <td style="width: 40%;"><?php echo Services::findOne(['id' => $close_estimate->service_id])->service; ?></td>
                                         <td style="width: 25%;"><?php echo InvoiceType::findOne(['id' => $close_estimate->invoice_type])->invoice_type; ?></td>
-                                        <td style="width: 25%;"><?= $close_estimate->total ?></td>
+                                        <td style="width: 25%;"><?= $close_estimate->fda ?></td>
                                         <?php
-                                        $grandtotal += $close_estimate->total;
+                                        $grandtotal += $close_estimate->fda;
                                         ?>
                                     </tr>
                                     <?php
@@ -174,7 +174,7 @@ and open the template in the editor.
                         <table class="table tbl">
                             <tr>
                                 <td style="width: 75%;">Total Due in our favour </th>
-                                <td style="width: 25%;">AED</th>
+                                <td style="width: 25%;">AED<?= $grandtotal ?></th>
                             </tr>
                         </table>
                     </div>
@@ -183,8 +183,11 @@ and open the template in the editor.
             <tr>
                 <td>
                     <div class="bank">
+                        <?php
+                       // $result = Yii::$app->numToWord->convert_number_to_words($grandtotal);
+                        ?>
                         <p>Amount chargeable (in words)</p>
-                        <h6>UAE Dirhams Ten Thousand Eight Hundred Twenty Only</h6>
+                        <h6>UAE Dirhams <?php// $result ?> </h6>
                         <h6>Company's Bank Details:</h6>
                         <div class="bank-left">
                             <table class="tbl3">

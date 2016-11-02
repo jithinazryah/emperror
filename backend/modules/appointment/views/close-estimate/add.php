@@ -53,12 +53,12 @@ $this->params['breadcrumbs'][] = $this->title;
                                 </div>-->
                 <div style="float: left;">
                     <?php// Html::beginForm(['close-estimate/report'], 'post', ['target' => '_blank']) ?>
-                    <?= Html::beginForm(['close-estimate/report'], 'post', ['target' => 'print_popup','onSubmit' => "window.open('about:blank','print_popup','width=1200,height=800');"]) ?>
+                    <?= Html::beginForm(['close-estimate/report'], 'post', ['target' => 'print_popup','onSubmit' => "window.open('about:blank','print_popup','width=1200,height=600');"]) ?>
                     <!--<form name="estimate" action="<?= Yii::$app->homeUrl ?>appointment/estimated-proforma/reports" method="post">-->
                     <?php
 //                    $arr = explode(',', $appointment->principal);
                     $arr = CloseEstimate::find()->select('invoice_type')->distinct()->where(['apponitment_id' => $appointment->id])->all();
-                    
+                   // echo count($arr);exit;
                     if (count($arr) == 1) {
                             ?>
                             <div class="row">
@@ -99,6 +99,12 @@ $this->params['breadcrumbs'][] = $this->title;
                             ?> 
                         </div>   
                     </div>
+                </div>
+                <div style="float:left;margin-right: 10px;">
+                    <?php
+                    echo Html::a('<span>Load Estimated Proforma</span>', ['close-estimate/insert-close-estimate', 'id' => $appointment->id], ['class' => 'btn btn-secondary']);
+                    ?>      
+
                 </div>
                 <ul class="estimat nav nav-tabs nav-tabs-justified">
                     <li>
