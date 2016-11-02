@@ -35,6 +35,10 @@ use common\models\Vessel;
             margin-top: 18px;
             margin-left: 532px;
         }
+        .save{
+            margin-top: 18px;
+            margin-left: 6px !important;
+        }
     </style>
     <table class="main-tabl" border="0" > 
         <thead> 
@@ -145,9 +149,10 @@ use common\models\Vessel;
                     </div>
                     <div class="content-body">
                         <?php
-                        $subepdatotal = 0;
+                        $grandtotal = 0;
                         $service_categories = ServiceCategorys::find()->orderBy(['(sort_order)' => SORT_ASC])->all();
                         foreach ($service_categories as $service_category) {
+                                $subtotal = 0;
                                 $estimates = EstimatedProforma::findAll(['apponitment_id' => $appointment->id, 'principal' => $princip, 'service_category' => $service_category->id]);
                                 if (!empty($estimates)) {
                                         ?>
@@ -155,10 +160,12 @@ use common\models\Vessel;
                                         <?php
                                         foreach ($estimates as $estimate) {
                                                 $subcategories = SubServices::findAll(['estid' => $estimate->id]);
-                                                if (!empty($subcategories)) {
-                                                        $subtotal = 0;
-                                                        ?>
-                                                        <table class="table">
+                                                ?>
+                                                <table class="table">
+                                                    <?php
+                                                    if (!empty($subcategories)) {
+                                                            ?>
+
                                                             <?php
                                                             foreach ($subcategories as $subcategory) {
                                                                     ?>
@@ -175,39 +182,32 @@ use common\models\Vessel;
                                                                     </tr>
                                                                     <?php
                                                             }
-                                                            $grandtotal+=$subtotal;
+                                                    } else {
                                                             ?>
-                                                            <tr>
-                                                                <td colspan="5" style="text-align: center;">Sub total:</td>
-                                                                <td style="font-weight: bold;">AED <?= $subtotal ?></td>
-                                                            </tr>
-                                                        </table>
-                                                <?php } else {
-                                                        ?>
 
-                                                        <table class="table">
                                                             <tr>
                                                                 <td style="width: 30%;"><?= $estimate->service->service ?></td>
-                                                                <td style="width: 30%;"></td>
+                                                                <td style="width: 30%;"><?= $estimate->rate_to_category ?></td>
                                                                 <td style="width: 8%;"><?= $estimate->unit ?></td>
                                                                 <td style="width: 16%;"><?= $estimate->comments ?></td>
                                                                 <td style="width: 8%;"><?= $estimate->unit_rate ?></td>
                                                                 <td style="width: 8%;font-weight: bold;"><?= $estimate->epda ?></td>
                                                                 <?php
-                                                                $epdasubtotal += $estimate->epda;
+                                                                $subtotal += $estimate->epda;
                                                                 ?>
                                                             </tr>
-                                                            <tr>
-                                                                <td colspan="5" style="text-align: center;font-weight: bold;">Sub total:</td>
-                                                                <td style="font-weight: bold;">AED <?= $epdasubtotal ?></td>
-                                                            </tr>
-                                                        </table>
-
-                                                        <?php
-                                                        $subepdatotal += $estimate->epda;
-                                                }
-                                        }
+                                                            <?php
+                                                    }
+                                            }
+                                            ?>
+                                            <tr>
+                                                <td colspan="5" style="text-align: center;font-weight: bold;">Sub total:</td>
+                                                <td style="font-weight: bold;">AED <?= $subtotal ?></td>
+                                            </tr>
+                                        </table> 
+                                        <?php
                                 }
+                                $grandtotal+=$subtotal;
                         }
                         ?>
                     </div>
@@ -215,9 +215,50 @@ use common\models\Vessel;
                     <div class="grandtotal">
                         <table class="table">
                             <tr>
+                                <?php
+                                $usd = $grandtotal / $appointment->USD;
+                                ?>
                                 <td style="width: 84%; text-align: center;"><b>Grand Total Estimate</b></td>
-                                <td style="width: 8%;">USD 123456</td>
-                                <td style="width: 8%;font-weight: bold;">AED <?= $grandtotal + $subepdatotal; ?></td>
+                                <td style="width: 8%;font-weight: bold;">USD <?= round($usd, 3); ?></td>
+                                <?php
+                                $s = explode('.', $grandtotal);
+                                $amount = $s[0];
+                                $decimal = $s[1];
+                                $amount = moneyFormatIndia($amount);
+
+                                //echo $amount;
+
+                                function moneyFormatIndia($num) {
+                                        $explrestunits = "";
+                                        if (strlen($num) > 3) {
+                                                $lastthree = substr($num, strlen($num) - 3, strlen($num));
+                                                $restunits = substr($num, 0, strlen($num) - 3); // extracts the last three digits
+                                                $restunits = (strlen($restunits) % 2 == 1) ? "0" . $restunits : $restunits; // explodes the remaining digits in 2's formats, adds a zero in the beginning to maintain the 2's grouping.
+                                                $expunit = str_split($restunits, 2);
+                                                for ($i = 0; $i < sizeof($expunit); $i++) {
+                                                        // creates each of the 2's group and adds a comma to the end
+                                                        if ($i == 0) {
+                                                                $explrestunits .= (int) $expunit[$i] . ","; // if is first value , convert into integer
+                                                        } else {
+                                                                $explrestunits .= $expunit[$i] . ",";
+                                                        }
+                                                }
+                                                $thecash = $explrestunits . $lastthree;
+                                        } else {
+                                                $thecash = $num;
+                                        }
+                                        return $thecash; // writes the final format where $currency is the currency symbol.
+                                }
+
+                                if ($decimal != 0) {
+                                        $amount = $amount . '.' . $decimal . '/-';
+                                } else {
+                                        $amount = $amount . '/-';
+                                }
+                                //setlocale(LC_MONETARY, 'en_us');
+                                //$gt = money_format('%i', $grandtotal);
+                                ?>
+                                <td style="width: 8%;font-weight: bold;">AED <?= $amount ?></td>
                             </tr>
                         </table>
                         <button style="float:right;background-color: yellow;padding-left: 20px;padding-right: 20px;">E & OE</button>
@@ -225,7 +266,7 @@ use common\models\Vessel;
                     <br/>
                     <div class="content">
                         <p class="para-heading" style="font-size: 10px;">- Additional scope of work other than mentioned in the tarrif to be mutually agreed between two parties prior initiation of service.</p>
-                            <p class="para-content">
+                        <p class="para-content">
                             Please note that this is a pro-forma disbursement account only. It is intended to be an estimate of the actual disbursement account and is for guidance purposes only. 
                             Whilst Emperor Shipping Lines does take every care to ensure that the figures and information contained in the pro-forma disbursement account are as accurate as possibles
                             ,the actual disbursement account may, and often does, for various reasons beyond our control, vary from the pro-forma disbursement account. 
@@ -369,9 +410,17 @@ use common\models\Vessel;
             document.body.innerHTML = restorepage;
         }
 </script>
-<div class="print">
-    <button onclick="printContent('print')" style="font-weight: bold !important;">Print</button>
-    <button onclick="window.close();" style="font-weight: bold !important;">Close</button>
+<div style="display:inline-block">
+    <div class="print" style="float:left;">
+        <button onclick="printContent('print')" style="font-weight: bold !important;">Print</button>
+        <button onclick="window.close();" style="font-weight: bold !important;">Close</button>
+
+    </div>
+    <div class="save" style="float:left;">
+        <?php
+        echo Html::a('<span>SAVE</span>', ['/appointment/estimated-proforma/save-report', 'id' => $appointment->id], ['class' => 'btn btn-gray']);
+        ?> 
+    </div>
 </div>
 <!--</body>
 </html>-->
