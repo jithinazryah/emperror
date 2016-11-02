@@ -7,6 +7,7 @@ use common\models\CloseEstimate;
 use common\models\Appointment;
 use common\models\CloseEstimateSearch;
 use common\models\AppointmentSearch;
+use common\models\PortCallData;
 use yii\web\Controller;
 use common\models\UploadFile;
 use yii\web\NotFoundHttpException;
@@ -79,6 +80,7 @@ class CloseEstimateController extends Controller {
         /*
          * Create new Close Estimate and Update an existing CloseEstimate model.
          */
+
         public function actionAdd($id, $prfrma_id = NULL) {
                 $estimates = CloseEstimate::findAll(['apponitment_id' => $id]);
                 $appointment = Appointment::findOne($id);
@@ -132,7 +134,6 @@ class CloseEstimateController extends Controller {
                         $model->fda = $estimate->epda;
                         $model->DOC = date('Y-m-d');
                         $model->save();
-                        
                 }
                 return true;
         }
@@ -204,38 +205,40 @@ class CloseEstimateController extends Controller {
                         echo $services_data->supplier_options;
                 }
         }
-        
+
         /*
          * Function for Multiple File Upload
          */
+
         public function actionUploads() {
                 $model_upload = new UploadFile();
                 if ($model_upload->load(Yii::$app->request->post())) {
                         $files = UploadedFile::getInstances($model_upload, 'filee');
-                       
+
                         if (Yii::$app->UploadFile->Upload($files, $model_upload)) {
-                                
+
                                 return $this->redirect(Yii::$app->request->referrer);
                         }
                 }
-                
         }
-        
+
         /*
          * Generate Close Estimate Report depends on Invoice Tyype
          */
-        
+
         public function actionReport() {
                 $invoice_type = $_POST['invoice_type'];
                 $app = $_POST['app_id'];
                 $princip = CloseEstimate::findOne(['invoice_type' => $invoice_type, 'apponitment_id' => $app]);
                 // get your HTML raw content without any layouts or scripts
                 $appointment = Appointment::findOne($app);
+                $ports = PortCallData::findOne($app);
                 //var_dump($appointment);exit;
                 echo $content = $this->renderPartial('report', [
             'appointment' => $appointment,
             'invoice_type' => $invoice_type,
             'princip' => $princip,
+            'ports' => $ports,
                 ]);
                 exit;
 
@@ -268,6 +271,7 @@ class CloseEstimateController extends Controller {
                 // return the pdf output as per the destination setting
                 return $pdf->render();
         }
+
         public function actionRemove($path) {
                 unlink($path);
                 return $this->redirect(Yii::$app->request->referrer);

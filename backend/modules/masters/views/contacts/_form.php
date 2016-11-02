@@ -26,7 +26,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'comment')->textarea(['rows' => 6]) ?>
 
-    <?= $form->field($model, 'contact_type')->dropDownList(['1' => 'Nominator', '2' => 'Charterer', '3' => 'Shipper', '4' => 'Supplier'],['multiple'=>'multiple']) ?>
+    <?= $form->field($model, 'contact_type',['template' => "<div class='overly'></div>\n{label}\n{input}\n{hint}\n{error}"])->dropDownList(['1' => 'Nominator', '2' => 'Charterer', '3' => 'Shipper', '4' => 'Supplier'],['options' => Yii::$app->SetValues->Selected($model->contact_type),'multiple'=>'multiple']) ?>
 
     <?= $form->field($model, 'status')->dropDownList(['1' => 'Enabled', '0' => 'Disabled']) ?>
 

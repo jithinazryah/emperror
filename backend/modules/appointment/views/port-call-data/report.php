@@ -35,7 +35,7 @@ and open the template in the editor.
             }
         }
         .table td {
-            // border: 1px solid black;
+            border: 1px solid black;
             font-size: 12px;
             text-align: left;
             padding: 7px;
@@ -55,19 +55,19 @@ and open the template in the editor.
         <thead> 
             <tr> 
                 <th style="width:100%">
-        <div class="header">
-            <div class="main-left">
-                <img src="<?= Yii::$app->homeUrl ?>/images/report-logo.jpg" style="width: 100px;height: 100px;"/>
+                    <div class="header">
+                        <div class="main-left">
+                            <img src="<?= Yii::$app->homeUrl ?>/images/report-logo.jpg" style="width: 100px;height: 100px;"/>
 
-            </div>
-            <div class="main-right">
-                <h2>Statement Of Facts</h2>
-                <h2 style="font-style: italic;font-size: 18px;"><?= $appointment->appointment_no ?></h2>
-            </div>
-            <br/>
-        </div>
-        </th> 
-        </tr> 
+                        </div>
+                        <div class="main-right">
+                            <h2>Statement Of Facts</h2>
+                            <h2 style="font-style: italic;font-size: 18px;"><?= $appointment->appointment_no ?></h2>
+                        </div>
+                        <br/>
+                    </div>
+                </th> 
+            </tr> 
 
         </thead> 
         <tbody>
@@ -81,17 +81,17 @@ and open the template in the editor.
                                 <td style="width: 20%;"><?php echo common\models\VesselType::findOne($appointment->vessel_type)->vessel_type; ?> Name</td>
                                 <td style="width: 30%;"> <?php
                                     if ($appointment->vessel_type == 1) {
-                                            echo 'T - ' . Vessel::findOne($appointment->tug)->vessel_name . ' / B - ' . Vessel::findOne($appointment->barge)->vessel_name;
+                                        echo 'T - ' . Vessel::findOne($appointment->tug)->vessel_name . ' / B - ' . Vessel::findOne($appointment->barge)->vessel_name;
                                     } else {
-                                            echo Vessel::findOne($appointment->vessel)->vessel_name;
+                                        echo Vessel::findOne($appointment->vessel)->vessel_name;
                                     }
                                     ?></td>
                                 <td style="width: 20%;">Cargo Quantity</td>
                                 <td style="width: 30%;"><?php
                                     if (empty($ports_cargo->loaded_quantity)) {
-                                            echo $appointment->quantity;
+                                        echo $appointment->quantity;
                                     } else {
-                                            echo $ports_cargo->loaded_quantity;
+                                        echo $ports_cargo->loaded_quantity;
                                     }
                                     ?>
                                 </td>
@@ -133,63 +133,63 @@ and open the template in the editor.
 //                var_dump($port['ports']['mins']);
 //                exit;
                         if (!empty($port['ports']['no_mins']))
-                                uasort($port['ports']['no_mins'], 'cmp');
+                            uasort($port['ports']['no_mins'], 'cmp');
 
                         if (!empty($port['ports']['mins']))
-                                uasort($port['ports']['mins'], 'cmp');
+                            uasort($port['ports']['mins'], 'cmp');
 
                         function cmp($port, $b) {
-                                return strtotime($port) < strtotime($b) ? -1 : 1;
+                            return strtotime($port) < strtotime($b) ? -1 : 1;
                         }
 
                         if (!empty($port)) {
-                                ?>
-                                <h6>Events</h6>
-                                <table class="table">
-                                    <?php
-                                    $flag = 0;
-                                    if (!empty($port['ports']['mins'])) {
-                                            foreach ($port['ports']['mins'] as $key => $value) {
-                                                    $flag++;
-                                                    if ($flag == 1) {
-                                                            echo "<tr>";
-                                                    }
-                                                    ?>
-                                                    <td style="width: 20%;"><?= $key; ?></td>
-                                                    <td style="width: 30%;"><?= Yii::$app->SetValues->DateFormate($value); ?></td>
-                                                    <?php
-                                                    if ($flag == 2) {
-                                                            echo "</tr>";
-                                                            $flag = 0;
-                                                    }
-                                            }
-                                            ?>
-                                            <tr>
-                                                <td colspan = "4"></td>
-                                            </tr>
-                                            <?php
+                            ?>
+                            <h6>Events</h6>
+                            <table class="table">
+                                <?php
+                                $flag = 0;
+                                if (!empty($port['ports']['mins'])) {
+                                    foreach ($port['ports']['mins'] as $key => $value) {
+                                        $flag++;
+                                        if ($flag == 1) {
+                                            echo "<tr>";
+                                        }
+                                        ?>
+                                        <td style="width: 20%;"><?= $key; ?></td>
+                                        <td style="width: 30%;"><?= Yii::$app->SetValues->DateFormate($value); ?></td>
+                                        <?php
+                                        if ($flag == 2) {
+                                            echo "</tr>";
+                                            $flag = 0;
+                                        }
                                     }
                                     ?>
                                     <tr>
-                                        <td style="width: 20%;">Pob Outbound</td>
-                                        <td style="width: 30%;"><?= Yii::$app->SetValues->DateFormate($ports->pob_outbound); ?></td>
-                                        <td style="width: 20%;">Cast Off</td>
-                                        <td style="width: 30%;"><?= Yii::$app->SetValues->DateFormate($ports->cast_off); ?></td>
+                                        <td colspan = "4"></td>
                                     </tr>
-                                    <tr>
-                                        <td style="width: 20%;">Lastline Away</td>
-                                        <td style="width: 30%;"><?= Yii::$app->SetValues->DateFormate($ports->lastline_away); ?></td>
-                                        <td style="width: 20%;">COSP</td>
-                                        <td style="width: 30%;"><?= Yii::$app->SetValues->DateFormate($ports->cosp); ?></td>
+                                    <?php
+                                }
+                                ?>
+                                <tr>
+                                    <td style="width: 20%;">Pob Outbound</td>
+                                    <td style="width: 30%;"><?= Yii::$app->SetValues->DateFormate($ports->pob_outbound); ?></td>
+                                    <td style="width: 20%;">Cast Off</td>
+                                    <td style="width: 30%;"><?= Yii::$app->SetValues->DateFormate($ports->cast_off); ?></td>
+                                </tr>
+                                <tr>
+                                    <td style="width: 20%;">Lastline Away</td>
+                                    <td style="width: 30%;"><?= Yii::$app->SetValues->DateFormate($ports->lastline_away); ?></td>
+                                    <td style="width: 20%;">COSP</td>
+                                    <td style="width: 30%;"><?= Yii::$app->SetValues->DateFormate($ports->cosp); ?></td>
 
-                                    </tr>
-                                    <tr>
-                                        <td style="width: 20%;">ETA Next Port</td>
-                                        <td style="width: 30%;"><?= Yii::$app->SetValues->DateFormate($ports->eta_next_port); ?></td>
-                                    </tr>
+                                </tr>
+                                <tr>
+                                    <td style="width: 20%;">ETA Next Port</td>
+                                    <td style="width: 30%;"><?= Yii::$app->SetValues->DateFormate($ports->eta_next_port); ?></td>
+                                </tr>
 
-                                </table>
-                                <?php
+                            </table>
+                            <?php
                         }
                         ?>
 
@@ -266,45 +266,45 @@ and open the template in the editor.
                             <tr>
                                 <td style="width: 16.66%;"><?php
                                     if ($ports_rob->fo_arrival_quantity != '') {
-                                            echo $ports_rob->fo_arrival_quantity
-                                            ?><?=
-                                            $ports_rob->fo_arrival_unit == 1 ? 'MT' : 'L';
+                                        echo $ports_rob->fo_arrival_quantity
+                                        ?><?=
+                                        $ports_rob->fo_arrival_unit == 1 ? 'MT' : 'L';
                                     }
                                     ?></td>
                                 <td style="width: 16.66%;"><?php
                                     if ($ports_rob->do_arrival_quantity != '') {
-                                            echo $ports_rob->do_arrival_quantity
-                                            ?> <?=
-                                            $ports_rob->do_arrival_unit == 1 ? 'MT' : 'L';
+                                        echo $ports_rob->do_arrival_quantity
+                                        ?> <?=
+                                        $ports_rob->do_arrival_unit == 1 ? 'MT' : 'L';
                                     }
                                     ?></td>
                                 <td style="width: 16.66%;"><?php
                                     if ($ports_rob->fresh_water_arrival_quantity != '') {
-                                            echo $ports_rob->fresh_water_arrival_quantity
-                                            ?> <?=
-                                            $ports_rob->fresh_water_arrival_unit == 1 ? 'MT' : 'L';
+                                        echo $ports_rob->fresh_water_arrival_quantity
+                                        ?> <?=
+                                        $ports_rob->fresh_water_arrival_unit == 1 ? 'MT' : 'L';
                                     }
                                     ?></td>
                                 <td style="border: none;width: 1%;"></td>
                                 <td style="width: 16.66%;"><?php
                                     if ($ports_rob->fo_sailing_quantity != '' && $ports_rob->fo_sailing_quantity != NULL) {
-                                            echo $ports_rob->fo_sailing_quantity
-                                            ?> <?=
-                                            $ports_rob->fo_sailing_unit == 1 ? 'MT' : 'L';
+                                        echo $ports_rob->fo_sailing_quantity
+                                        ?> <?=
+                                        $ports_rob->fo_sailing_unit == 1 ? 'MT' : 'L';
                                     }
                                     ?></td>
                                 <td style="width: 16.66%;"><?php
                                     if ($ports_rob->do_sailing_quantity != '') {
-                                            echo $ports_rob->do_sailing_quantity
-                                            ?> <?=
-                                            $ports_rob->do_sailing_unit == 1 ? 'MT' : 'L';
+                                        echo $ports_rob->do_sailing_quantity
+                                        ?> <?=
+                                        $ports_rob->do_sailing_unit == 1 ? 'MT' : 'L';
                                     }
                                     ?></td>
                                 <td style="width: 16.66%;"><?php
                                     if ($ports_rob->fresh_water_sailing_quantity != '') {
-                                            echo $ports_rob->fresh_water_sailing_quantity
-                                            ?> <?=
-                                            $ports_rob->fresh_water_sailing_unit == 1 ? 'MT' : 'L';
+                                        echo $ports_rob->fresh_water_sailing_quantity
+                                        ?> <?=
+                                        $ports_rob->fresh_water_sailing_unit == 1 ? 'MT' : 'L';
                                     }
                                     ?></td>
                             </tr>
@@ -342,14 +342,14 @@ and open the template in the editor.
                                 <td style="width: 12.5%;">FWD</td>
                                 <td style="width: 12.5%;"><?php
                                     if ($ports_draft->fwd_arrival_quantity != '') {
-                                            echo $ports_draft->fwd_arrival_quantity . ' m';
+                                        echo $ports_draft->fwd_arrival_quantity . ' m';
                                     }
                                     ?></td>
                                 <td style="border: none;width: 1%;"></td>
                                 <td style="width: 12.5%;">FWD</td>
                                 <td style="width: 12.5%;"><?php
                                     if ($ports_draft->fwd_sailing_quantity != '') {
-                                            echo $ports_draft->fwd_sailing_quantity . ' m';
+                                        echo $ports_draft->fwd_sailing_quantity . ' m';
                                     }
                                     ?></td>
                             </tr>
@@ -357,14 +357,14 @@ and open the template in the editor.
                                 <td style="width: 12.5%;">AFT</td>
                                 <td style="width: 12.5%;"><?php
                                     if ($ports_draft->aft_arrival_quantity != '') {
-                                            echo $ports_draft->aft_arrival_quantity . ' m';
+                                        echo $ports_draft->aft_arrival_quantity . ' m';
                                     }
                                     ?></td>
                                 <td style="border: none;"></td>
                                 <td style="width: 12.5%;">AFT</td>
                                 <td style="width: 12.5%;"><?php
                                     if ($ports_draft->aft_sailing_quantity != '') {
-                                            echo $ports_draft->aft_sailing_quantity . ' m';
+                                        echo $ports_draft->aft_sailing_quantity . ' m';
                                     }
                                     ?></td>
                             </tr>
@@ -379,7 +379,9 @@ and open the template in the editor.
                 <td>
 
 
-
+                    <?php
+                    if($check != ''){
+                    ?>
                     <div class="portbreakdetails">
                         <h6>Port Break Timing:</h6>
                         <table class="table">
@@ -402,6 +404,9 @@ and open the template in the editor.
                             </tr>
                         </table>
                     </div>
+                    <?php
+                    }
+                    ?>
 
 
 
@@ -434,30 +439,30 @@ and open the template in the editor.
                         <br/>
                         <?php
                         if (!empty($port_stoppages)) {
-                                ?>
-                                <div class="cargodetails">
+                            ?>
+                            <div class="cargodetails">
 
-                                    <h6>Stoppages / Delays - Description </h6>
-                                    <table class="table"> 
+                                <h6>Stoppages / Delays - Description </h6>
+                                <table class="table"> 
 
+                                    <tr>
+                                        <th style="width: 33%;">From</th>
+                                        <th style="width: 33%;">To</th>
+                                        <th style="width: 34%;">Comment</th>
+                                    </tr>
+                                    <?php
+                                    foreach ($port_stoppages as $port_stoppage) {
+                                        ?>
                                         <tr>
-                                            <th style="width: 33%;">From</th>
-                                            <th style="width: 33%;">To</th>
-                                            <th style="width: 34%;">Comment</th>
+                                            <td style="width: 33%;height: 13px;"><?= Yii::$app->SetValues->DateFormate($port_stoppage->stoppage_from); ?></td>
+                                            <td style="width: 33%;"><?= Yii::$app->SetValues->DateFormate($port_stoppage->stoppage_to); ?></td>
+                                            <td style="width:34%;"><?= $port_stoppage->comment; ?></td>
                                         </tr>
-                                        <?php
-                                        foreach ($port_stoppages as $port_stoppage) {
-                                                ?>
-                                                <tr>
-                                                    <td style="width: 33%;height: 13px;"><?= Yii::$app->SetValues->DateFormate($port_stoppage->stoppage_from); ?></td>
-                                                    <td style="width: 33%;"><?= Yii::$app->SetValues->DateFormate($port_stoppage->stoppage_to); ?></td>
-                                                    <td style="width:34%;"><?= $port_stoppage->comment; ?></td>
-                                                </tr>
-                                        <?php } ?>
-                                    </table>
-                                    <br/>
+                                    <?php } ?>
+                                </table>
+                                <br/>
 
-                                </div>
+                            </div>
                         <?php } ?>
                         <br/>
                         <table class="table">
@@ -500,9 +505,9 @@ and open the template in the editor.
                         <div class="main-left">
                             <h4> Master<br/><br/><?php
                                 if ($appointment->vessel_type == 1) {
-                                        echo 'T - ' . Vessel::findOne($appointment->tug)->vessel_name . ' / B - ' . Vessel::findOne($appointment->barge)->vessel_name;
+                                    echo 'T - ' . Vessel::findOne($appointment->tug)->vessel_name . ' / B - ' . Vessel::findOne($appointment->barge)->vessel_name;
                                 } else {
-                                        echo Vessel::findOne($appointment->vessel)->vessel_name;
+                                    echo Vessel::findOne($appointment->vessel)->vessel_name;
                                 }
                                 ?><br/><br/>Dated:<?= date('d/m/Y') ?></h4>
 
@@ -520,13 +525,13 @@ and open the template in the editor.
 </div>
 <!--</body>-->
 <script>
-        function printContent(el) {
-            var restorepage = document.body.innerHTML;
-            var printcontent = document.getElementById(el).innerHTML;
-            document.body.innerHTML = printcontent;
-            window.print();
-            document.body.innerHTML = restorepage;
-        }
+    function printContent(el) {
+        var restorepage = document.body.innerHTML;
+        var printcontent = document.getElementById(el).innerHTML;
+        document.body.innerHTML = printcontent;
+        window.print();
+        document.body.innerHTML = restorepage;
+    }
 </script>
 <div class="print">
     <button onclick="printContent('print')" style="font-weight: bold !important;">Print</button>

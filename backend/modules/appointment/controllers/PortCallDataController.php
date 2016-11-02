@@ -356,6 +356,9 @@ class PortCallDataController extends Controller {
                 if ($hour != '00' && $min != '00' && $sec != '00') {
                         //echo '1';exit;
                         return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min . ':' . $sec;
+                } elseif ($hour == '00' && $min != '00') {
+                        //echo '2';exit;
+                        return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min;
                 } elseif ($hour != '00' && $min != '00') {
                         //echo '2';exit;
                         return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min;
@@ -384,6 +387,9 @@ class PortCallDataController extends Controller {
 
                         if ($hour != '00' && $min != '00' && $sec != '00') {
                                 return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min . ':' . $sec;
+                        } elseif ($hour == '00' && $min != '00') {
+                                //echo '2';exit;
+                                return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min;
                         } elseif ($hour != '00' && $min != '00') {
                                 return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min;
                         } elseif ($hour != '00') {
@@ -509,6 +515,19 @@ class PortCallDataController extends Controller {
                                 }
                         }
                 }
+                $ports_imigration = ImigrationClearance::findOne(['appointment_id' => $data->appointment_id]);
+                foreach ($ports_imigration as $key => $value) {
+                        if ($value != '' && $value != '0000-00-00 00:00:00' && strtotime($value) > $old) {
+                                if (!in_array($key, $check)) {
+                                        $mins = date('H:i:s', strtotime($value));
+                                        if ($mins != '00:00:00') {
+                                                $arr[$label]['mins'][$ports_imigration->getAttributeLabel($key)] = $value;
+                                        } else {
+                                                $arr[$label]['no_mins'][$ports_imigration->getAttributeLabel($key)] = $value;
+                                        }
+                                }
+                        }
+                }
                 return $arr;
         }
 
@@ -524,13 +543,16 @@ class PortCallDataController extends Controller {
                 }
         }
 
-        public function actionReports($id) {
+        public function actionReports() {
+                $id = $_POST['app_id'];
+                $check = $_POST['check'];
                 $ports = PortCallData::findOne(['appointment_id' => $id]);
                 $ports_draft = PortCallDataDraft::findOne(['appointment_id' => $id]);
                 $ports_rob = PortCallDataRob::findOne(['appointment_id' => $id]);
                 $ports_cargo = PortCargoDetails::findOne(['appointment_id' => $id]);
                 $ports_additional = PortCallDataAdditional::findAll(['appointment_id' => $id]);
                 $port_stoppages = PortStoppages::findAll(['appointment_id' => $id]);
+                $ports_imigration = ImigrationClearance::findOne(['appointment_id' => $id]);
                 // get your HTML raw content without any layouts or scripts
                 $appointment = Appointment::findOne($id);
                 //var_dump($appointment);exit;
@@ -542,6 +564,8 @@ class PortCallDataController extends Controller {
             'ports_cargo' => $ports_cargo,
             'ports_additional' => $ports_additional,
             'port_stoppages' => $port_stoppages,
+            'ports_imigration' => $ports_imigration,
+            'check' => $check,
                 ]);
                 exit;
 

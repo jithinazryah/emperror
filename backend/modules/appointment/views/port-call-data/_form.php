@@ -25,7 +25,7 @@ use yii\widgets\ActiveForm;
         <div class="col-md-12">
             <?= $form->field($model_imigration, 'arrived_ps')->textInput(['tabindex' => 1]) ?>
 
-            <?= $form->field($model_imigration, 'pob_inbound')->textInput(['tabindex' => 2]) ?>
+            <?php// $form->field($model_imigration, 'pob_inbound')->textInput(['tabindex' => 2]) ?>
 
             <?= $form->field($model_imigration, 'first_line_ashore')->textInput(['tabindex' => 3]) ?>
 

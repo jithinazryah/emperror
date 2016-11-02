@@ -9,6 +9,7 @@ use common\models\Appointment;
 use common\models\MasterSubService;
 use common\models\EstimatedProformaSearch;
 use common\models\AppointmentSearch;
+use common\models\EstimateReport;
 use common\models\UploadFile;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -280,10 +281,10 @@ class EstimatedProformaController extends Controller {
                 // get your HTML raw content without any layouts or scripts
                 $appointment = Appointment::findOne($app);
                 //var_dump($appointment);exit;
-                echo $content = $this->renderPartial('report', [
-            'appointment' => $appointment,
-            'estimates' => $estimates,
-            'princip' => $princip,
+                return Yii::$app->session['epda'] = $this->renderPartial('report', [
+                    'appointment' => $appointment,
+                    'estimates' => $estimates,
+                    'princip' => $princip,
                 ]);
                 exit;
 
@@ -320,6 +321,19 @@ class EstimatedProformaController extends Controller {
         public function actionRemove($path) {
                 unlink($path);
                 return $this->redirect(Yii::$app->request->referrer);
+        }
+
+        public function actionSaveReport($id) {
+                $model_report = new EstimateReport();
+                $model_report->appointment_id = $id;
+                $model_report->report = Yii::$app->session['epda'];
+                $model_report->status = 1;
+                $model_report->save();
+        }
+        public function actionShowReport($id) {
+                $model_report = EstimateReport::find($id)->one();
+                echo $model_report->report;exit;
+                
         }
 
 }

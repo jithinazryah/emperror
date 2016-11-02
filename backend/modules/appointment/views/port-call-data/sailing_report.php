@@ -35,7 +35,7 @@ and open the template in the editor.
             }
         }
         .table td {
-            // border: 1px solid black;
+            border: 1px solid black;
             font-size: 12px;
             text-align: left;
             padding: 7px;
@@ -63,9 +63,9 @@ and open the template in the editor.
                                 <td style="width: 50%;">Vessel Name</td>
                                 <td style="width: 50%;">:<?php
                                     if ($appointment->vessel_type == 1) {
-                                            echo 'T - ' . Vessel::findOne($appointment->tug)->vessel_name . ' / B - ' . Vessel::findOne($appointment->barge)->vessel_name;
+                                        echo 'T - ' . Vessel::findOne($appointment->tug)->vessel_name . ' / B - ' . Vessel::findOne($appointment->barge)->vessel_name;
                                     } else {
-                                            echo Vessel::findOne($appointment->vessel)->vessel_name;
+                                        echo Vessel::findOne($appointment->vessel)->vessel_name;
                                     }
                                     ?></td>
                             </tr>
@@ -85,9 +85,9 @@ and open the template in the editor.
                                 <td style="width: 50%;">Cargo Quantity</td>
                                 <td style="width: 50%;">:<?php
                                     if (empty($ports_cargo->loaded_quantity)) {
-                                            echo $appointment->quantity;
+                                        echo $appointment->quantity;
                                     } else {
-                                            echo $ports_cargo->loaded_quantity;
+                                        echo $ports_cargo->loaded_quantity;
                                     }
                                     ?>
                                 </td>
@@ -233,15 +233,15 @@ and open the template in the editor.
                             </tr>
                             <?php
                             if (!empty($ports_additional)) {
-                                    foreach ($ports_additional as $ports_add) {
-                                            ?>
-                                            <tr>
-                                                <td style="width: 50%;"><?= $ports_add->label ?></td>
-                                                <td style="width: 50%;">:<?= Yii::$app->SetValues->DateFormate($ports_add->value); ?>
-                                                </td>
-                                            </tr>   
+                                foreach ($ports_additional as $ports_add) {
+                                    ?>
+                                    <tr>
+                                        <td style="width: 50%;"><?= $ports_add->label ?></td>
+                                        <td style="width: 50%;">:<?= Yii::$app->SetValues->DateFormate($ports_add->value); ?>
+                                        </td>
+                                    </tr>   
                                     <?php
-                                    }
+                                }
                             }
                             ?>
                         </table>
@@ -251,32 +251,30 @@ and open the template in the editor.
                         <h6>ROB-SAILING:</h6>
                         <table>
                             <tr>
-                                <td style="width: 50%;">FO</td>
-                                <td style="width: 50%;">:<?php
+                                <td style="width: 33%;">FO</td>
+                                <td style="width: 33%;">DO</td>
+                                <td style="width: 34%;">FW</td>
+                            </tr>
+                            <tr>
+                                <td style="width: 33%;"><?php
                                     if ($ports_rob->fo_sailing_quantity != '' && $ports_rob->fo_sailing_quantity != NULL) {
-                                            echo $ports_rob->fo_sailing_quantity
-                                            ?> <?=
-                                            $ports_rob->fo_sailing_unit == 1 ? 'MT' : 'L';
+                                        echo $ports_rob->fo_sailing_quantity
+                                        ?> <?=
+                                        $ports_rob->fo_sailing_unit == 1 ? 'MT' : 'L';
                                     }
                                     ?></td>
-                            </tr>
-                            <tr>
-                                <td style="width: 50%;">DO</td>
-                                <td style="width: 50%;">:<?php
+                                <td style="width: 33%;"><?php
                                     if ($ports_rob->do_sailing_quantity != '') {
-                                            echo $ports_rob->do_sailing_quantity
-                                            ?> <?=
-                                            $ports_rob->do_sailing_unit == 1 ? 'MT' : 'L';
+                                        echo $ports_rob->do_sailing_quantity
+                                        ?> <?=
+                                        $ports_rob->do_sailing_unit == 1 ? 'MT' : 'L';
                                     }
                                     ?></td>
-                            </tr>
-                            <tr>
-                                <td style="width: 50%;">Fresh Water</td>
-                                <td style="width: 50%;">:<?php
+                                <td style="width: 34%;"><?php
                                     if ($ports_rob->fresh_water_sailing_quantity != '') {
-                                            echo $ports_rob->fresh_water_sailing_quantity
-                                            ?> <?=
-                                            $ports_rob->fresh_water_sailing_unit == 1 ? 'MT' : 'L';
+                                        echo $ports_rob->fresh_water_sailing_quantity
+                                        ?> <?=
+                                        $ports_rob->fresh_water_sailing_unit == 1 ? 'MT' : 'L';
                                     }
                                     ?></td>
                             </tr>
@@ -288,17 +286,17 @@ and open the template in the editor.
                         <table>
                             <tr>
                                 <td style="width: 50%;">FWD</td>
-                                <td style="width: 50%;">:<?php
-                                    if ($ports_draft->fwd_sailing_quantity != '') {
-                                            echo $ports_draft->fwd_sailing_quantity . ' m';
-                                    }
-                                    ?></td>
+                                <td style="width: 50%;">AFT</td>
                             </tr>
                             <tr>
-                                <td style="width: 50%;">AFT</td>
-                                <td style="width: 50%;">:<?php
+                                <td style="width: 50%;"><?php
+                                    if ($ports_draft->fwd_sailing_quantity != '') {
+                                        echo $ports_draft->fwd_sailing_quantity . ' m';
+                                    }
+                                    ?></td>
+                                <td style="width: 50%;"><?php
                                     if ($ports_draft->aft_sailing_quantity != '') {
-                                            echo $ports_draft->aft_sailing_quantity . ' m';
+                                        echo $ports_draft->aft_sailing_quantity . ' m';
                                     }
                                     ?></td>
                             </tr>
@@ -312,13 +310,13 @@ and open the template in the editor.
 </div>
 <!--</body>-->
 <script>
-        function printContent(el) {
-            var restorepage = document.body.innerHTML;
-            var printcontent = document.getElementById(el).innerHTML;
-            document.body.innerHTML = printcontent;
-            window.print();
-            document.body.innerHTML = restorepage;
-        }
+    function printContent(el) {
+        var restorepage = document.body.innerHTML;
+        var printcontent = document.getElementById(el).innerHTML;
+        document.body.innerHTML = printcontent;
+        window.print();
+        document.body.innerHTML = restorepage;
+    }
 </script>
 <div class="print">
     <button onclick="printContent('print')" style="font-weight: bold !important;">Print</button>

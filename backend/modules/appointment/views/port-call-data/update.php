@@ -49,166 +49,169 @@ $this->params['breadcrumbs'][] = 'Update';
                     <?= Yii::$app->session->getFlash('porterror'); ?>
                     <?php // endif; ?>
                 </div>
-                <div style="float:left;">
-                    <?php
-                    echo Html::a('<i class="fa-print"></i><span>SOF Report</span>', ['port-call-data/reports'], ['class' => 'btn btn-secondary btn-icon btn-icon-standalone', 'onclick' => "window.open('reports?id=$model_appointment->id', 'newwindow', 'width=750, height=800');return false;"]);
-                    echo Html::a('<i class="fa-print"></i><span>Sailing Report</span>', ['port-call-data/sailing'], ['class' => 'btn btn-secondary btn-icon btn-icon-standalone', 'onclick' => "window.open('sailing?id=$model_appointment->id', 'newwindow', 'width=750, height=800');return false;"]);
-                    echo Html::a('<i class="fa-print"></i><span>Arrival Report</span>', ['port-call-data/arrival'], ['class' => 'btn btn-secondary btn-icon btn-icon-standalone', 'onclick' => "window.open('arrival?id=$model_appointment->id', 'newwindow', 'width=750, height=800');return false;"]);
-                    ?>
-                    <?php // Html::beginForm(['estimated-proforma/reports'], 'post', ['target' => 'print_popup','onSubmit' => "window.open('about:blank','print_popup','width=1000,height=800');"]) ?>
-                    <?php
-                    //echo Html::a('<i class="fa-print"></i><span>Generate SOF Report</span>', ['port-call-data/reports', 'id' => $model_appointment->id], ['class' => 'btn btn-secondary btn-icon btn-icon-standalone', 'onclick' => "window.open('reports', 'newwindow', 'width=750, height=800');return false;"]);
-                    ?>
+
+                <div style="float:left;margin-right: 5px;">
+                    <?= Html::beginForm(['port-call-data/reports'], 'post', ['target' => 'print_popup', 'onSubmit' => "window.open('about:blank','print_popup','width=1000,height=500');"]) ?>
+                    <input type="hidden" name="app_id" value="<?= $model_appointment->id ?>">
+                    <input type="checkbox" id="queue-order" name="check" value="1" checked="checked" uncheckValue="0">
+                    <?= Html::submitButton('<i class="fa-print"></i><span>SOF Report</span>', ['class' => 'btn btn-secondary btn-icon btn-icon-standalone']) ?>
+                    <?= Html::endForm() ?>
                 </div>
-                <div style="float: left;">
-                    <ul class="nav nav-tabs nav-tabs-justified">
-                        <li>
-                            <?php
-                            echo Html::a('<span class="visible-xs"><i class="fa-home"></i></span><span class="hidden-xs">Appointment</span>', ['appointment/update', 'id' => $model_appointment->id]);
-                            ?>
+                <?php
+                //echo Html::a('<i class="fa-print"></i><span>SOF Report</span>', ['port-call-data/reports'], ['class' => 'btn btn-secondary btn-icon btn-icon-standalone', 'onclick' => "window.open('reports?id=$model_appointment->id', 'newwindow', 'width=750, height=800');return false;"]);
+                echo Html::a('<i class="fa-print"></i><span>Sailing Report</span>', ['port-call-data/sailing'], ['class' => 'btn btn-secondary btn-icon btn-icon-standalone', 'onclick' => "window.open('sailing?id=$model_appointment->id', 'newwindow', 'width=750, height=800');return false;"]);
+                echo Html::a('<i class="fa-print"></i><span>Arrival Report</span>', ['port-call-data/arrival'], ['class' => 'btn btn-secondary btn-icon btn-icon-standalone', 'onclick' => "window.open('arrival?id=$model_appointment->id', 'newwindow', 'width=750, height=800');return false;"]);
+                ?>
+            </div>
+            <div style="float: left;">
+                <ul class="nav nav-tabs nav-tabs-justified">
+                    <li>
+                        <?php
+                        echo Html::a('<span class="visible-xs"><i class="fa-home"></i></span><span class="hidden-xs">Appointment</span>', ['appointment/update', 'id' => $model_appointment->id]);
+                        ?>
 
-                        </li>
-                        <li>
-                            <?php
-                            echo Html::a('<span class="visible-xs"><i class="fa-home"></i></span><span class="hidden-xs">Estimated Proforma</span>', ['estimated-proforma/add', 'id' => $model_appointment->id]);
-                            ?>
+                    </li>
+                    <li>
+                        <?php
+                        echo Html::a('<span class="visible-xs"><i class="fa-home"></i></span><span class="hidden-xs">Estimated Proforma</span>', ['estimated-proforma/add', 'id' => $model_appointment->id]);
+                        ?>
 
-                        </li>
-                        <li class="active">
-                            <?php
-                            echo Html::a('<span class="visible-xs"><i class="fa-home"></i></span><span class="hidden-xs">Port call Data</span>', ['port-call-data/update', 'id' => $model_appointment->id]);
-                            ?>
+                    </li>
+                    <li class="active">
+                        <?php
+                        echo Html::a('<span class="visible-xs"><i class="fa-home"></i></span><span class="hidden-xs">Port call Data</span>', ['port-call-data/update', 'id' => $model_appointment->id]);
+                        ?>
 
-                        </li>
-                        <li>
-                            <?php
-                            echo Html::a('<span class="visible-xs"><i class="fa-home"></i></span><span class="hidden-xs">Close Estimate</span>', ['close-estimate/add', 'id' => $model_appointment->id]);
-                            ?>
+                    </li>
+                    <li>
+                        <?php
+                        echo Html::a('<span class="visible-xs"><i class="fa-home"></i></span><span class="hidden-xs">Close Estimate</span>', ['close-estimate/add', 'id' => $model_appointment->id]);
+                        ?>
 
-                        </li>
-                    </ul>
-                    <?php //Html::a('<i class="fa-th-list"></i><span> Manage Port Call Data</span>', ['index'], ['class' => 'btn btn-warning  btn-icon btn-icon-standalone'])  ?>
-                    <ul class="nav nav-tabs nav-tabs-justified colo" style="background-color:#CCCCCC;padding-top: 5px;">
-                        <li class="<?= $stat == 1 || $stat == NULL ? 'active' : '' ?>">
-                            <a  href="#port-data" data-toggle="tab">
-                                <span class="visible-xs"><i class="fa-home"></i></span>
-                                <span class="hidden-xs">Port Call Data</span>
-                            </a>
-                        </li>
-                        <li class="<?= $stat == 2 ? 'active' : '' ?>">
-                            <a href="#port-draft" data-toggle="tab">
-                                <span class="visible-xs"><i class="fa-user"></i></span>
-                                <span class="hidden-xs">Port Call Data Draft-Rob</span>
-                            </a>
-                        </li>
-                        <li class="<?= $stat == 3 ? 'active' : '' ?>">
-                            <a href="#port-rob" data-toggle="tab">
-                                <span class="visible-xs"><i class="fa-user"></i></span>
-                                <span class="hidden-xs">Cargo Details</span>
-                            </a>
-                        </li>
-                    </ul>    
-                    <div class="tab-content">
-                        <div class="tab-pane <?= $stat == 1 || $stat == NULL ? 'active' : '' ?>" id="port-data">
-                            <div class="panel-body">
-                                <div class="port-call-data-create">
-                                    <?=
-                                    $this->render('_form', [
-                                        'model' => $model,
-                                        'model_add' => $model_add,
-                                        'model_imigration' => $model_imigration,
-                                        'model_appointment' => $model_appointment,
-                                        'model_additional' => $model_additional,
-                                    ])
-                                    ?>
-                                </div>
+                    </li>
+                </ul>
+                <?php //Html::a('<i class="fa-th-list"></i><span> Manage Port Call Data</span>', ['index'], ['class' => 'btn btn-warning  btn-icon btn-icon-standalone'])  ?>
+                <ul class="nav nav-tabs nav-tabs-justified colo" style="background-color:#CCCCCC;padding-top: 5px;">
+                    <li class="<?= $stat == 1 || $stat == NULL ? 'active' : '' ?>">
+                        <a  href="#port-data" data-toggle="tab">
+                            <span class="visible-xs"><i class="fa-home"></i></span>
+                            <span class="hidden-xs">Port Call Data</span>
+                        </a>
+                    </li>
+                    <li class="<?= $stat == 2 ? 'active' : '' ?>">
+                        <a href="#port-draft" data-toggle="tab">
+                            <span class="visible-xs"><i class="fa-user"></i></span>
+                            <span class="hidden-xs">Port Call Data Draft-Rob</span>
+                        </a>
+                    </li>
+                    <li class="<?= $stat == 3 ? 'active' : '' ?>">
+                        <a href="#port-rob" data-toggle="tab">
+                            <span class="visible-xs"><i class="fa-user"></i></span>
+                            <span class="hidden-xs">Cargo Details</span>
+                        </a>
+                    </li>
+                </ul>    
+                <div class="tab-content">
+                    <div class="tab-pane <?= $stat == 1 || $stat == NULL ? 'active' : '' ?>" id="port-data">
+                        <div class="panel-body">
+                            <div class="port-call-data-create">
+                                <?=
+                                $this->render('_form', [
+                                    'model' => $model,
+                                    'model_add' => $model_add,
+                                    'model_imigration' => $model_imigration,
+                                    'model_appointment' => $model_appointment,
+                                    'model_additional' => $model_additional,
+                                ])
+                                ?>
                             </div>
-                        </div>
-                        <div class="tab-pane <?= $stat == 2 ? 'active' : '' ?>" id="port-draft">
-                            <div class="panel-body">
-                                <div class="port-call-data-draft-create">
-                                    <?=
-                                    $this->render('_form_draft_rob', [
-                                        'model_draft' => $model_draft,
-                                        'model_rob' => $model_rob,
-                                        'model_appointment' => $model_appointment,
-                                        'model' => $model,
-                                    ])
-                                    ?>
-                                </div>
-                            </div>
-
-                        </div>
-                        <div class="tab-pane <?= $stat == 3 ? 'active' : '' ?>" id="port-rob">
-                            <div class="panel-body">
-                                <div class="port-call-data-port-break-create">
-                                    <?=
-                                    $this->render('_form_port_break', [
-                                        'model_appointment' => $model_appointment,
-                                        'model_port_break' => $model_port_break,
-                                        'model_port_cargo_details' => $model_port_cargo_details,
-                                        'model_port_stoppages' => $model_port_stoppages,
-                                    ])
-                                    ?>
-                                </div>
-                            </div>
-
-                        </div>
-                        <br/>
-                        <div style="text-align: center;">
-                            <h4 class="sub-heading">Uploaded Files : <?= Yii::$app->UploadFile->ListFile($model_appointment->id, Yii::$app->params['datPath']); ?></h4>
-                        </div>
-                        <br/>
-                        <div class="panel-body" style="margin-left:46%;">
-                            <?php // Yii::$app->UploadFile->ListFile($model_appointment->id, Yii::$app->params['datPath']); ?>
-                            <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data'], 'action' => Yii::$app->homeUrl . 'appointment/port-call-data/uploads', 'method' => 'post']) ?>
-                            <?php
-                            $model_upload->appointment_id = $model_appointment->id;
-                            $model_upload->type = Yii::$app->params['datPath'];
-                            ?>
-                            <?php //$form->field($model_upload, 'filee[]')->fileInput(['multiple' => true]) ?>
-                            <?= $form->field($model_upload, 'filee[]')->fileInput(['multiple' => true]) ?>
-                            <?= $form->field($model_upload, 'appointment_id')->hiddenInput()->label(false) ?>
-                            <?= $form->field($model_upload, 'type')->hiddenInput()->label(false) ?>
-                            <?= Html::submitButton('Upload', ['class' => 'btn btn-success']) ?>
-
-
-                            <?php ActiveForm::end() ?>  
                         </div>
                     </div>
-                </div>
-                <div style="float:right;padding-top: 5px;">
-                    <?php
-                    echo Html::a('<span> Portcall Data Completed & Proceed to Close Estimate</span>', ['port-call-data/portcall-complete', 'id' => $model_appointment->id], ['class' => 'btn btn-secondary']);
-                    ?>
-                </div>          
-            </div>
-        </div>
-        <style>
-            .colo.nav.nav-tabs>li.active>a {
-                background-color: #b9c7a7;
-            }
-            .colo.nav.nav-tabs>li>a:hover {
-                border: none;
-                background-color: #c3d2b0;
-            }
-            .form-control{
-                border: 1px solid #8a8a8a;
-            }
-            .nav.nav-tabs+.tab-content {
-                background-color: #ffffd9 !important;
-                padding: 30px;
-                margin-bottom: 30px;
-            }
-            .form .form-group.has-success .control-label, form .form-group.has-success .radio, form .form-group.has-success .checkbox, form .form-group.has-success .radio-inline, form .form-group.has-success .checkbox-inline {
-                color: #8ef305;
-            }
-            .error{
-                color: #0553b1;
-                padding-bottom: 5px;
-                font-size: 18px;
-                font-weight: bold;
-            }
+                    <div class="tab-pane <?= $stat == 2 ? 'active' : '' ?>" id="port-draft">
+                        <div class="panel-body">
+                            <div class="port-call-data-draft-create">
+                                <?=
+                                $this->render('_form_draft_rob', [
+                                    'model_draft' => $model_draft,
+                                    'model_rob' => $model_rob,
+                                    'model_appointment' => $model_appointment,
+                                    'model' => $model,
+                                ])
+                                ?>
+                            </div>
+                        </div>
 
-        </style>
+                    </div>
+                    <div class="tab-pane <?= $stat == 3 ? 'active' : '' ?>" id="port-rob">
+                        <div class="panel-body">
+                            <div class="port-call-data-port-break-create">
+                                <?=
+                                $this->render('_form_port_break', [
+                                    'model_appointment' => $model_appointment,
+                                    'model_port_break' => $model_port_break,
+                                    'model_port_cargo_details' => $model_port_cargo_details,
+                                    'model_port_stoppages' => $model_port_stoppages,
+                                ])
+                                ?>
+                            </div>
+                        </div>
+
+                    </div>
+                    <br/>
+                    <div style="text-align: center;">
+                        <h4 class="sub-heading">Uploaded Files : <?= Yii::$app->UploadFile->ListFile($model_appointment->id, Yii::$app->params['datPath']); ?></h4>
+                    </div>
+                    <br/>
+                    <div class="panel-body" style="margin-left:46%;">
+                        <?php // Yii::$app->UploadFile->ListFile($model_appointment->id, Yii::$app->params['datPath']); ?>
+                        <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data'], 'action' => Yii::$app->homeUrl . 'appointment/port-call-data/uploads', 'method' => 'post']) ?>
+                        <?php
+                        $model_upload->appointment_id = $model_appointment->id;
+                        $model_upload->type = Yii::$app->params['datPath'];
+                        ?>
+                        <?php //$form->field($model_upload, 'filee[]')->fileInput(['multiple' => true]) ?>
+                        <?= $form->field($model_upload, 'filee[]')->fileInput(['multiple' => true]) ?>
+                        <?= $form->field($model_upload, 'appointment_id')->hiddenInput()->label(false) ?>
+                        <?= $form->field($model_upload, 'type')->hiddenInput()->label(false) ?>
+                        <?= Html::submitButton('Upload', ['class' => 'btn btn-success']) ?>
+
+
+                        <?php ActiveForm::end() ?>  
+                    </div>
+                </div>
+            </div>
+            <div style="float:right;padding-top: 5px;">
+                <?php
+                echo Html::a('<span> Portcall Data Completed & Proceed to Close Estimate</span>', ['port-call-data/portcall-complete', 'id' => $model_appointment->id], ['class' => 'btn btn-secondary']);
+                ?>
+            </div>          
+        </div>
     </div>
+    <style>
+        .colo.nav.nav-tabs>li.active>a {
+            background-color: #b9c7a7;
+        }
+        .colo.nav.nav-tabs>li>a:hover {
+            border: none;
+            background-color: #c3d2b0;
+        }
+        .form-control{
+            border: 1px solid #8a8a8a;
+        }
+        .nav.nav-tabs+.tab-content {
+            background-color: #ffffd9 !important;
+            padding: 30px;
+            margin-bottom: 30px;
+        }
+        .form .form-group.has-success .control-label, form .form-group.has-success .radio, form .form-group.has-success .checkbox, form .form-group.has-success .radio-inline, form .form-group.has-success .checkbox-inline {
+            color: #8ef305;
+        }
+        .error{
+            color: #0553b1;
+            padding-bottom: 5px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+    </style>
+</div>

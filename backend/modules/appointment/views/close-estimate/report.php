@@ -105,8 +105,8 @@ and open the template in the editor.
                                 <td style="width: 25%;"></td>
                             </tr>
                             <tr>
-                                <td style="width: 25%;">Arrival Date : </td>
-                                <td style="width: 25%;">Sailing Date : </td>
+                                <td style="width: 25%;">Arrival Date :<?= Yii::$app->SetValues->DateFormate($ports->eosp); ?></td>
+                                <td style="width: 25%;">Sailing Date :<?= Yii::$app->SetValues->DateFormate($ports->cast_off); ?></td>
                             </tr>
                         </table>
                     </div>

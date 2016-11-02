@@ -33,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="panel-body">
                     <?php // echo $this->render('_search', ['model' => $searchModel]);  ?>
 
-                    <?= Html::a('<i class="fa-th-list"></i><span> Create Currency</span>', ['create'], ['class' => 'btn btn-warning  btn-icon btn-icon-standalone']) ?>
+                    <?php// Html::a('<i class="fa-th-list"></i><span> Create Currency</span>', ['create'], ['class' => 'btn btn-warning  btn-icon btn-icon-standalone']) ?>
                     <?php Pjax::begin(); ?>                                                                                                        <?=
                     GridView::widget([
                         'dataProvider' => $dataProvider,
@@ -57,7 +57,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             // 'UB',
                             // 'DOC',
                             // 'DOU',
-                            ['class' => 'yii\grid\ActionColumn'],
+                            ['class' => 'yii\grid\ActionColumn', 'template' => '{update}',],
                         ],
                     ]);
                     ?>
