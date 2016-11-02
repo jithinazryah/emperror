@@ -219,7 +219,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             <h4 class="sub-heading">Previously Generated EPDA'S</h4>
                             <?php
                             foreach ($estmate_reports as $estmate_report) {
-                                    echo Html::a($estmate_report->date_time . ' | ', ['/appointment/estimated-proforma/show-report'], ['onclick' => "window.open('show-report?id=$estmate_report->id', 'newwindow', 'width=750, height=500');return false;"]);
+                                    echo Html::a($estmate_report->date_time , ['/appointment/estimated-proforma/show-report'], ['onclick' => "window.open('show-report?id=$estmate_report->id', 'newwindow', 'width=750, height=500');return false;"]).'&nbsp;&nbsp;<a href="remove-report?id='. $estmate_report->id .'"><i class="fa fa-remove"></i></a>&nbsp;&nbsp;|&nbsp;&nbsp;';
+                                    //echo Html::a($estmate_report->date_time . ' | ', ['/appointment/estimated-proforma/show-report'], ['onclick' => "window.open('show-report?id=$estmate_report->id', 'newwindow', 'width=750, height=500');return false;"]);
                             }
                             ?>
                         </div>

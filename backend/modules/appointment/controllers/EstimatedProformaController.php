@@ -338,5 +338,9 @@ class EstimatedProformaController extends Controller {
                 echo $model_report->report;exit;
                 
         }
+        public function actionRemoveReport($id) {
+                EstimateReport::findOne($id)->delete();
+                return $this->redirect(Yii::$app->request->referrer);
+        }
 
 }
