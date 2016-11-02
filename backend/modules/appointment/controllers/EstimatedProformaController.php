@@ -329,6 +329,9 @@ class EstimatedProformaController extends Controller {
                 $model_report->report = Yii::$app->session['epda'];
                 $model_report->status = 1;
                 $model_report->save();
+//                return $this->redirect(Yii::$app->request->referrer);
+                
+                echo "<script>window.close();</script>";exit;
         }
         public function actionShowReport($id) {
                 $model_report = EstimateReport::find($id)->one();

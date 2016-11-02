@@ -243,6 +243,9 @@ class AppointmentController extends Controller {
                 if ($hour != '00' && $min != '00' && $sec != '00') {
                         //echo '1';exit;
                         return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min . ':' . $sec;
+                } elseif ($hour == '00' && $min != '00') {
+                        //echo '2';exit;
+                        return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min;
                 } elseif ($hour != '00' && $min != '00') {
                         //echo '2';exit;
                         return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min;
@@ -271,6 +274,9 @@ class AppointmentController extends Controller {
 
                         if ($hour != '00' && $min != '00' && $sec != '00') {
                                 return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min . ':' . $sec;
+                        } elseif ($hour == '00' && $min != '00') {
+                                //echo '2';exit;
+                                return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min;
                         } elseif ($hour != '00' && $min != '00') {
                                 return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min;
                         } elseif ($hour != '00') {

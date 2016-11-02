@@ -220,7 +220,6 @@ $this->params['breadcrumbs'][] = $this->title;
                             <?php
                             foreach ($estmate_reports as $estmate_report) {
                                     echo Html::a($estmate_report->date_time . ' | ', ['/appointment/estimated-proforma/show-report'], ['onclick' => "window.open('show-report?id=$estmate_report->id', 'newwindow', 'width=750, height=500');return false;"]);
-                                    // echo Html::a('Report '.$estmate_report->id, ['/appointment/estimated-proforma/show-report', 'id' => $estmate_report->id], ['target' => '_blank']);  
                             }
                             ?>
                         </div>
