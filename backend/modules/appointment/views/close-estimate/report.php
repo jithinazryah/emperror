@@ -81,13 +81,28 @@ and open the template in the editor.
                             </tr>
                             <tr>
                                 <td style="width: 25%;">EPDA Ref :</td>
-                                <td style="width: 25%;">Customer Code :<?php echo Debtor::findOne(['id' => $princip->principal])->principal_id; ?></td>
+                                <td style="width: 25%;">Customer Code :
+                                    <?php
+                                    if ($princip->principal != '') {
+                                            echo $appointment->getClintCode($princip->principal);
+                                    } else {
+                                            echo $appointment->getClintCode($appointment->principal);
+                                    }
+                                    ?>
+
+                                </td>
 
                             </tr>
                             <tr>
                                 <td rowspan="3" style="width: 50%; font-weight: bold;">
                                     <p>
-                                        <?php echo Debtor::findOne(['id' => $princip->principal])->invoicing_address; ?>
+                                        <?php
+                                        if ($princip->principal != '') {
+                                                echo $appointment->getInvoiceAddress($princip->principal);
+                                        } else {
+                                                echo $appointment->getInvoiceAddress($appointment->principal);
+                                        }
+                                        ?>
                                     </p>
                                 </td>
                                 <td style="width: 25%;">Vessel Name : <?php
@@ -148,7 +163,7 @@ and open the template in the editor.
                             <tr>
                                 <td style="width: 10%;"></td>
                                 <td  colspan="2"style="width: 65%;text-align:right;font-weight: bold;">Total</td>
-                                <td style="width: 25%;font-weight: bold;">AED<?= $grandtotal ?></td>
+                                <td style="width: 25%;font-weight: bold;">AED <?= Yii::$app->SetValues->NumberFormat($grandtotal); ?></td>
                             </tr>
                         </table>
                     </div>
@@ -173,8 +188,15 @@ and open the template in the editor.
                         <h6>Total Outstanding</h6>
                         <table class="table tbl">
                             <tr>
-                                <td style="width: 75%;">Total Due in our favour </th>
-                                <td style="width: 25%;">AED<?= $grandtotal ?></th>
+                                <td style="width: 75%;">Total Due in our favour </td>
+                                <td style="width: 25%;font-weight: bold;">AED <?= Yii::$app->SetValues->NumberFormat($grandtotal); ?></td>
+                            </tr>
+                            <?php
+                            $usd = round($grandtotal * $appointment->USD, 3);
+                            ?>
+                            <tr>
+                                <td style="width: 75%;"></th>
+                                <td style="width: 25%;font-weight: bold;">USD <?= Yii::$app->SetValues->NumberFormat($usd); ?></td>
                             </tr>
                         </table>
                     </div>
@@ -183,11 +205,9 @@ and open the template in the editor.
             <tr>
                 <td>
                     <div class="bank">
-                        <?php
-                       // $result = Yii::$app->numToWord->convert_number_to_words($grandtotal);
-                        ?>
                         <p>Amount chargeable (in words)</p>
-                        <h6>UAE Dirhams <?php// $result ?> </h6>
+                        <h6>UAE Dirhams <?php echo ucfirst(Yii::$app->NumToWord->ConvertNumberToWords($grandtotal)) . ' Only'; ?> </h6>
+                        <h6>USD <?php echo ucfirst(Yii::$app->NumToWord->ConvertNumberToWords($usd)) . ' Only'; ?> </h6>
                         <h6>Company's Bank Details:</h6>
                         <div class="bank-left">
                             <table class="tbl3">
@@ -254,6 +274,23 @@ and open the template in the editor.
                                 <p class="signature">Authorised Signatory</p>
                             </div>
                         </div>
+                    </div>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="footer">
+                        <span>
+                            <p>
+                                Emperor Shipping Lines LLC, P.O.Box-328231, Saqr Port, Al Shaam, Ras Al Khaimah, UAE
+                            </p>
+                            <p>
+                                Tel: +971 7 268 9676 / Fax: +917 7 268 9677
+                            </p>
+                            <p>
+                                www.emperor.ae
+                            </p>
+                        </span>
                     </div>
                 </td>
             </tr>

@@ -158,9 +158,13 @@ $this->params['breadcrumbs'][] = 'Update';
 
                     </div>
                     <br/>
+                    <hr class="appoint_history" />
                     <div style="text-align: center;">
-                        <h4 class="sub-heading">Uploaded Files : <?= Yii::$app->UploadFile->ListFile($model_appointment->id, Yii::$app->params['datPath']); ?></h4>
+                        <h4 class="sub-heading">Uploaded Files</h4>
+                            <br/>
+                            <span class="upload_file_list"><?= Yii::$app->UploadFile->ListFile($model_appointment->id, Yii::$app->params['datPath']); ?></span>
                     </div>
+                    <hr class="appoint_history" />
                     <br/>
                     <div class="panel-body" style="margin-left:46%;">
                         <?php // Yii::$app->UploadFile->ListFile($model_appointment->id, Yii::$app->params['datPath']); ?>

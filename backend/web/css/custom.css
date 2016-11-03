@@ -181,3 +181,14 @@ form .form-group .form-control{
     font-size: 18px;
     color: #0049a0;
 }
+.upload_file_list {
+    background-color: #FF9800;
+    color: #fff;
+    padding: 8px;
+    font-size: 13px;
+    font-weight: bold;
+}
+.upload_file_list a:hover {
+    text-decoration: none;
+    color: #8BC34A;
+}

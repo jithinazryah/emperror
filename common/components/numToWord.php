@@ -1,4 +1,3 @@
-
 <?php
 
 /*
@@ -8,16 +7,22 @@
  */
 
 /**
- * Description of DateFormat
+ * Description of SetValues
  *
- * @author admin
+ * @author user
  */
-class numToWord extends CApplicationComponent {
+
+namespace common\components;
+
+use Yii;
+use yii\base\Component;
+
+class NumToWord extends Component {
         /*
          * default Upload image function
          */
 
-        public function convert_number_to_words($number) {
+        public function ConvertNumberToWords($number) {
                 $hyphen = ' ';
                 $conjunction = ' and ';
                 $separator = ' ';
@@ -81,7 +86,7 @@ class numToWord extends CApplicationComponent {
                 }
 
                 if ($number < 0) {
-                        return $negative . $this->convert_number_to_words(abs($number));
+                        return $negative . $this->ConvertNumberToWords(abs($number));
                 }
 
                 $string = $fraction = null;
@@ -107,17 +112,17 @@ class numToWord extends CApplicationComponent {
                                 $remainder = $number % 100;
                                 $string = $dictionary[$hundreds] . ' ' . $dictionary[100];
                                 if ($remainder) {
-                                        $string .= $conjunction . $this->convert_number_to_words($remainder);
+                                        $string .= $conjunction . $this->ConvertNumberToWords($remainder);
                                 }
                                 break;
                         default:
                                 $baseUnit = 10 * pow(100, floor(log($number / 10, 100))); // Thanks to rici and Patashu
                                 $numBaseUnits = (int) ($number / $baseUnit);
                                 $remainder = $number % $baseUnit;
-                                $string = $this->convert_number_to_words($numBaseUnits) . ' ' . $dictionary[$baseUnit];
+                                $string = $this->ConvertNumberToWords($numBaseUnits) . ' ' . $dictionary[$baseUnit];
                                 if ($remainder) {
                                         $string .= $remainder < 100 ? $conjunction : $separator;
-                                        $string .= $this->convert_number_to_words($remainder);
+                                        $string .= $this->ConvertNumberToWords($remainder);
                                 }
                                 break;
                 }
@@ -128,7 +133,7 @@ class numToWord extends CApplicationComponent {
                         foreach (str_split((string) $fraction) as $number) {
                                 $words[] = $dictionary[$number];
                         }
-                        $string .= $this->convert_number_to_words($fraction) . " Paise";
+                        $string .= $this->ConvertNumberToWords($fraction) . " Paise";
                 }
 
                 return $string;

@@ -11,8 +11,8 @@ return [
         'UploadFile' => [
                               'class' => 'common\components\UploadFile'
                     ],
-        'numToWord' => [
-                              'class' => 'common\components\numToWord'
+        'NumToWord' => [
+                              'class' => 'common\components\NumToWord'
                     ],
     ],
 ];

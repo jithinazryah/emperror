@@ -105,4 +105,8 @@ class CloseEstimate extends \yii\db\ActiveRecord
         public function getInvoice() {
                 return $this->hasOne(InvoiceType::className(), ['id' => 'invoice_type']);
         }
+        public function getCustomerCode($principal) {
+                $data = Debtor::findOne(['id' => $principal]);
+                return $data->principal_id;
+        }
 }

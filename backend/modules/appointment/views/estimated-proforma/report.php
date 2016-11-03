@@ -202,7 +202,7 @@ use common\models\Vessel;
                                             ?>
                                             <tr>
                                                 <td colspan="5" style="text-align: center;font-weight: bold;">Sub total:</td>
-                                                <td style="font-weight: bold;">AED <?= $subtotal ?></td>
+                                                <td style="font-weight: bold;">AED <?= Yii::$app->SetValues->NumberFormat($subtotal); ?></td>
                                             </tr>
                                         </table> 
                                         <?php
@@ -215,50 +215,9 @@ use common\models\Vessel;
                     <div class="grandtotal">
                         <table class="table">
                             <tr>
-                                <?php
-                                $usd = $grandtotal / $appointment->USD;
-                                ?>
                                 <td style="width: 84%; text-align: center;"><b>Grand Total Estimate</b></td>
-                                <td style="width: 8%;font-weight: bold;">USD <?= round($usd, 3); ?></td>
-                                <?php
-                                $s = explode('.', $grandtotal);
-                                $amount = $s[0];
-                                $decimal = $s[1];
-                                $amount = moneyFormatIndia($amount);
-
-                                //echo $amount;
-
-                                function moneyFormatIndia($num) {
-                                        $explrestunits = "";
-                                        if (strlen($num) > 3) {
-                                                $lastthree = substr($num, strlen($num) - 3, strlen($num));
-                                                $restunits = substr($num, 0, strlen($num) - 3); // extracts the last three digits
-                                                $restunits = (strlen($restunits) % 2 == 1) ? "0" . $restunits : $restunits; // explodes the remaining digits in 2's formats, adds a zero in the beginning to maintain the 2's grouping.
-                                                $expunit = str_split($restunits, 2);
-                                                for ($i = 0; $i < sizeof($expunit); $i++) {
-                                                        // creates each of the 2's group and adds a comma to the end
-                                                        if ($i == 0) {
-                                                                $explrestunits .= (int) $expunit[$i] . ","; // if is first value , convert into integer
-                                                        } else {
-                                                                $explrestunits .= $expunit[$i] . ",";
-                                                        }
-                                                }
-                                                $thecash = $explrestunits . $lastthree;
-                                        } else {
-                                                $thecash = $num;
-                                        }
-                                        return $thecash; // writes the final format where $currency is the currency symbol.
-                                }
-
-                                if ($decimal != 0) {
-                                        $amount = $amount . '.' . $decimal . '/-';
-                                } else {
-                                        $amount = $amount . '/-';
-                                }
-                                //setlocale(LC_MONETARY, 'en_us');
-                                //$gt = money_format('%i', $grandtotal);
-                                ?>
-                                <td style="width: 8%;font-weight: bold;">AED <?= $amount ?></td>
+                                <td style="width: 8%;font-weight: bold;">USD <?= round($grandtotal * $appointment->USD, 3); ?></td>
+                                <td style="width: 8%;font-weight: bold;">AED <?= Yii::$app->SetValues->NumberFormat($grandtotal); ?></td>
                             </tr>
                         </table>
                         <button style="float:right;background-color: yellow;">E & OE</button>
