@@ -130,7 +130,11 @@ and open the template in the editor.
             <tr>
                 <td>
                     <?php
-                    $close_estimates = CloseEstimate::findAll(['apponitment_id' => $appointment->id, 'invoice_type' => $princip->invoice_type]);
+                    if ($princip->principal != '') {
+                            $close_estimates = CloseEstimate::findAll(['apponitment_id' => $appointment->id, 'invoice_type' => $princip->invoice_type, 'principal' => $princip->principal]);
+                    } else {
+                            $close_estimates = CloseEstimate::findAll(['apponitment_id' => $appointment->id, 'invoice_type' => $princip->invoice_type]);
+                    }
                     ?>
                     <div class="closeestimate-content">
                         <h6>Disbursement Summary:</h6>

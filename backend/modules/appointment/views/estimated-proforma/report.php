@@ -9,6 +9,7 @@ use common\models\Debtor;
 use common\models\ServiceCategorys;
 use common\models\Services;
 use common\models\Vessel;
+use common\models\EstimateReport;
 ?>
 <!DOCTYPE html>
 
@@ -121,10 +122,21 @@ use common\models\Vessel;
                             <table class="">
                                 <tr>
                                     <td>Ref No </td> <td>:</td>
-                                    <td></td>
+                                    <?php
+                                    $arr = ['1' => 'A', '2' => 'B', '3' => 'C', '4' => 'D', '5' => 'E', '6' => 'F', '7' => 'G', '8' => 'H', '9' => 'I', '10' => 'J', '11' => 'K', '12' => 'L'];
+                                    $last_report_saved = EstimateReport::find()->orderBy(['id' => SORT_DESC])->where(['appointment_id' => $appointment->id])->All();
+                                    $c = count($last_report_saved);
+                                    if ($c == 0) {
+                                            $ref_no = 'EMPRK-'  . $appointment->id . '/' . date('Y');
+                                    } else {
+                                            $ref_no = 'EMPRK-' . $appointment->id .$arr[$c] . '/' . date('Y');
+                                    }
+                                    ?>
+                                    <td><?php echo $ref_no; ?></td>
                                 </tr>
                                 <tr>
-                                    <td>Ops no </td> <td>:</td>
+                                    <td>Ops no </td> 
+                                    <td>:</td>
                                     <td><?= $appointment->appointment_no ?></td>
                                 </tr>
                             </table>
@@ -216,7 +228,7 @@ use common\models\Vessel;
                         <table class="table">
                             <tr>
                                 <td style="width: 84%; text-align: center;"><b>Grand Total Estimate</b></td>
-                                <td style="width: 8%;font-weight: bold;">USD <?= round($grandtotal * $appointment->USD, 3); ?></td>
+                                <td style="width: 8%;font-weight: bold;">USD <?= Yii::$app->SetValues->NumberFormat(round($grandtotal * $appointment->USD, 3)) ?></td>
                                 <td style="width: 8%;font-weight: bold;">AED <?= Yii::$app->SetValues->NumberFormat($grandtotal); ?></td>
                             </tr>
                         </table>

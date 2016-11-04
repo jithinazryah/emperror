@@ -11,6 +11,7 @@ use common\models\Debtor;
 use common\models\Appointment;
 use yii\helpers\ArrayHelper;
 use yii\db\Expression;
+use common\components\AppointmentWidget;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\EstimatedProforma */
@@ -39,50 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
             <?php //Pjax::begin();    ?> 
             <div class="panel-body">
-                <div class="row appoint">
-                    <div class="col-sm-3" style="text-align: right">
-                        <label>VESSEL-TYPE</label>
-                        <b>: <?= $appointment->vesselType->vessel_type; ?></b>
-                    </div>
-                    <div class="col-sm-2" style="text-align: right">
-                        <label>VESSEL-NAME</label>      
-                        <b>: <?= $appointment->vessel0->vessel_name; ?></b>
-                    </div>
-                    <div class="col-sm-2" style="text-align: right">
-                        <label>LAST-PORT</label>      
-                        <b>: <?= $appointment->last_port; ?></b>
-                    </div>
-                    <div class="col-sm-2" style="text-align: right">
-                        <label>NEXT-PORT</label>      
-                        <b>: <?= $appointment->next_port; ?></b>
-                    </div>
-                    <div class="col-sm-2" style="text-align: right">
-                        <label>PORT OF CALL</label>      
-                        <b>: <?= $appointment->portOfCall->port_name; ?></b>
-                    </div>
-                </div>
-                <div class="row appoint">
-                    <div class="col-sm-3" style="text-align: right">
-                        <label>PURPOSE</label>      
-                        <b>: <?= $appointment->purpose0->purpose; ?></b>
-                    </div>
-                    <div class="col-sm-2" style="text-align: right">
-                        <label>CARGO</label>      
-                        <b>: <?= $appointment->cargo; ?></b>
-                    </div>
-                    <div class="col-sm-2" style="text-align: right">
-                        <label>QUANTITY</label>      
-                        <b>: <?= $appointment->quantity; ?></b>
-                    </div>
-                    <div class="col-sm-2" style="text-align: right">
-                        <label>TERMINAL</label>      
-                        <b>: <?= $appointment->terminal0->terminal; ?></b>
-                    </div>
-                    <div class="col-sm-2" style="text-align: right">
-                        <label>BERTH NO:</label>      
-                        <b>: <?= $appointment->birth_no; ?></b>
-                    </div>
-                </div>
+               <?= AppointmentWidget::widget(['id' => $appointment->id]) ?>
 
                 <hr class="appoint_history" />
 

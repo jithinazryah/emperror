@@ -67,31 +67,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ?>
                                 <input type="hidden" name="app_id" value="<?= $appointment->id ?>">
                                 <input type="hidden" name="invoice_type" value="<?= $arr->invoice_type ?>">
-                                <div class="col-md-4 principp">
-                                    <?php
-                                    $principals = explode(',', $appointment->principal);
-                                    if (count($principals) > 1) {
-                                            ?>
-                                            <div>
-                                                <select name = "fda" id = "fda" class="form-control">
-                                                    <option selected = "selected">Select Principal</option>
-                                                    <?php
-                                                    foreach ($principals as $key => $value) {
-                                                            $data = Debtor::findOne(['id' => $value]);
-                                                            ?>
-                                                            <option value="<?= $value ?>"><?= $data->principal_name ?></option>
-                                                    <?php }
-                                                    ?>
-                                                </select>  
-                                            </div>
-                                    <?php }
-                                    else{
-                                            ?>
-                                    <input type="hidden" name="fda" value="<?= $appointment->principal ?>">
-                                    <?php
-                                    }
-                                    ?>
-                                </div>
                                 <?php
                         } else {
                                 ?>
@@ -111,34 +86,36 @@ $this->params['breadcrumbs'][] = $this->title;
                                         ?>
                                     </select> 
                                 </div>
-                                <div class="col-md-4 principp">
-                                    <?php
-                                    $principals = explode(',', $appointment->principal);
-                                    if (count($principals) > 1) {
-                                            ?>
-                                            <div>
-                                                <select name = "fda" id = "fda" class="form-control">
-                                                    <option selected = "selected">Select Principal</option>
-                                                    <?php
-                                                    foreach ($principals as $key => $value) {
-                                                            $data = Debtor::findOne(['id' => $value]);
-                                                            ?>
-                                                            <option value="<?= $value ?>"><?= $data->principal_name ?></option>
-                                                    <?php }
-                                                    ?>
-                                                </select>  
-                                            </div>
-                                    <?php }
-                                    else{
-                                            ?>
-                                    <input type="hidden" name="fda" value="<?= $appointment->principal ?>">
-                                    <?php
-                                    }
-                                    ?>
-                                </div>
+
                                 <?php
                         }
                         ?>
+                        <div class="col-md-4 principp">
+                            <?php
+                            $principals = CloseEstimate::find()->select('principal')->distinct()->where(['apponitment_id' => $appointment->id])->all();
+                            //$principals = explode(',', $appointment->principal);
+                            if (count($principals) > 1) {
+                                    ?>
+                                    <div>
+                                        <select name = "fda" id = "fda" class="form-control">
+                                            <option value="" selected = "selected">Select Principal</option>
+                                            <?php
+                                            foreach ($principals as $princippp) {
+                                                    $data = Debtor::findOne(['id' => $princippp->principal]);
+                                                    ?>
+                                                    <option value="<?= $princippp->principal ?>"><?= $data->principal_name ?></option>
+                                            <?php }
+                                            ?>
+                                        </select>  
+                                    </div>
+                            <?php
+                            } else {
+                                    ?>
+                                    <input type="hidden" name="fda" value="<?= $appointment->principal ?>">
+                                    <?php
+                            }
+                            ?>
+                        </div>
                         <div class="col-md-4">
                             <?= Html::submitButton('<i class="fa-print"></i><span>Generate Final DA</span>', ['class' => 'btn btn-secondary btn-icon btn-icon-standalone']) ?>
    <!--<input type="submit" name="b1" value="Submit">-->
@@ -273,8 +250,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <td></td>
                                     <td><?= $form->field($model, 'service_id')->dropDownList(ArrayHelper::map(Services::findAll(['status' => 1]), 'id', 'service'), ['prompt' => '-Service-'])->label(false); ?></td>
                                     <td><?= $form->field($model, 'supplier')->dropDownList(ArrayHelper::map(Contacts::find()->where(new Expression('FIND_IN_SET(:contact_type, contact_type)'))->addParams([':contact_type' => 4])->all(), 'id', 'name'), ['prompt' => '-Supplier-'])->label(false); ?></td>
-    <!--                                <td><?php // $form->field($model, 'supplier')->dropDownList(ArrayHelper::map(Contacts::findAll(['status' => 1]), 'id', 'name'), ['prompt' => '-Supplier-'])->label(false);                       ?></td>-->
-    <!--                                                                <td><?php // $form->field($model, 'currency')->dropDownList(ArrayHelper::map(Currency::findAll(['status' => 1]), 'id', 'currency_name'), ['prompt' => '-Currency-'])->label(false);                            ?></td>-->
+    <!--                                <td><?php // $form->field($model, 'supplier')->dropDownList(ArrayHelper::map(Contacts::findAll(['status' => 1]), 'id', 'name'), ['prompt' => '-Supplier-'])->label(false);                        ?></td>-->
+    <!--                                                                <td><?php // $form->field($model, 'currency')->dropDownList(ArrayHelper::map(Currency::findAll(['status' => 1]), 'id', 'currency_name'), ['prompt' => '-Currency-'])->label(false);                             ?></td>-->
                                     <td><?= $form->field($model, 'unit_rate')->textInput(['placeholder' => 'Unit Rate'])->label(false) ?></td>
                                     <td><?= $form->field($model, 'unit')->textInput(['placeholder' => 'Quantity'])->label(false) ?></td>
                                     <td><?= $form->field($model, 'epda')->textInput(['placeholder' => 'EPDA'])->label(false) ?></td>
@@ -300,7 +277,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         <div style="text-align: center;">
                             <h4 class="sub-heading">Uploaded Files</h4>
                             <br/>
+                            <?php
+                            if(!empty(Yii::$app->UploadFile->ListFile($appointment->id, Yii::$app->params['closePath']))){
+                            ?>
                             <span class="upload_file_list"><?= Yii::$app->UploadFile->ListFile($appointment->id, Yii::$app->params['closePath']); ?></span>
+                             <?php
+                            }
+                             ?>
                         </div>
                         <hr class="appoint_history" />
                         <div style="float: left;margin-left: 46%;">
@@ -433,7 +416,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             $('#close-estimate-invoice').change(function () {
                                 var invoice = $(this).val();
                                 if (invoice == 'all') {
-                                        $('.principp').show();
+                                    $('.principp').show();
+                                }
+                                else {
+                                    $('.principp').hide();
                                 }
                             });
 

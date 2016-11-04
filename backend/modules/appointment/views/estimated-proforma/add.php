@@ -221,7 +221,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <br/>
                             <?php
                             foreach ($estmate_reports as $estmate_report) { ?>
-                                    <span class="upload_file_list"><?php echo Html::a($estmate_report->date_time, ['/appointment/estimated-proforma/show-report'], ['onclick' => "window.open('show-report?id=$estmate_report->id', 'newwindow', 'width=750, height=500');return false;"]) . '&nbsp;&nbsp;<a href="remove-report?id=' . $estmate_report->id . '"><i class="fa fa-remove"></i></a>&nbsp;&nbsp;|&nbsp;&nbsp;'; ?></span>
+                                    <span class="upload_file_list"><?php echo Html::a($estmate_report->date_time, ['/appointment/estimated-proforma/show-report'], ['onclick' => "window.open('show-report?id=$estmate_report->id', 'newwindow', 'width=750, height=500');return false;"]) . '&nbsp;&nbsp;<a href="remove-report?id=' . $estmate_report->id . '"><i class="fa fa-remove"></i></a>'; ?></span>
                             <?php
                                     }
                             ?>
@@ -230,7 +230,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         <div style="text-align: center;">
                             <h4 class="sub-heading">Uploaded Files</h4>
                             <br/>
+                            <?php
+                            if(!empty(Yii::$app->UploadFile->ListFile($appointment->id, Yii::$app->params['estimatePath']))){
+                            ?>
                             <span class="upload_file_list"><?= Yii::$app->UploadFile->ListFile($appointment->id, Yii::$app->params['estimatePath']); ?></span>
+                             <?php
+                            }
+                             ?>
                         </div>
                         <hr class="appoint_history" />
                         <br/>
