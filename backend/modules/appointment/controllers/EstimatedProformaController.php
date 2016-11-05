@@ -106,7 +106,7 @@ class EstimatedProformaController extends Controller {
                                 return $this->redirect(['add', 'id' => $id]);
                         }
                 }
-                
+
                 return $this->render('add', [
                             'model' => $model,
                             'estimates' => $estimates,
@@ -280,42 +280,44 @@ class EstimatedProformaController extends Controller {
                 //$estimates = EstimatedProforma::findAll(['apponitment_id' => $app, 'principal' => $princip]);
                 // get your HTML raw content without any layouts or scripts
                 $appointment = Appointment::findOne($app);
+
                 //var_dump($appointment);exit;
-                return Yii::$app->session['epda'] = $this->renderPartial('report', [
-                    'appointment' => $appointment,
-                    'estimates' => $estimates,
-                    'princip' => $princip,
-                ]);
-                exit;
+                Yii::$app->session->set('epda', $this->renderPartial('report', [
+                            'appointment' => $appointment,
+                            //'estimates' => $estimates,
+                            'princip' => $princip,
+                ]));
+                
+                echo Yii::$app->session['epda'];exit;
 
                 // setup kartik\mpdf\Pdf component
-                $pdf = new Pdf([
-                    // set to use core fonts only
-                    //'mode' => Pdf::MODE_CORE,
-                    // A4 paper format
-                    'format' => Pdf::FORMAT_A4,
-                    // portrait orientation
-//                    'orientation' => Pdf::ORIENT_PORTRAIT,
-                    // stream to browser inline
-//                    'destination' => Pdf::DEST_BROWSER,
-                    // your html content input
-                    'content' => $content,
-                    // format content from your own css file if needed or use the
-                    // enhanced bootstrap css built by Krajee for mPDF formatting 
-                    'cssFile' => '@backend/web/css/pdf.css',
-                        // any css to be embedded if required
-                        //'cssInline' => '.kv-heading-1{font-size:18px}',
-                        // set mPDF properties on the fly
-                        //'options' => ['title' => 'Krajee Report Title'],
-                        // call mPDF methods on the fly
-                        /*                    'methods' => [
-                          'SetHeader' => ['Estimated proforma generated on ' . date("d/m/Y h:m:s")],
-                          'SetFooter' => ['|page {PAGENO}'],
-                          ] */
-                ]);
+                /*  $pdf = new Pdf([
+                  // set to use core fonts only
+                  //'mode' => Pdf::MODE_CORE,
+                  // A4 paper format
+                  'format' => Pdf::FORMAT_A4,
+                  // portrait orientation
+                  //                    'orientation' => Pdf::ORIENT_PORTRAIT,
+                  // stream to browser inline
+                  //                    'destination' => Pdf::DEST_BROWSER,
+                  // your html content input
+                  'content' => $content,
+                  // format content from your own css file if needed or use the
+                  // enhanced bootstrap css built by Krajee for mPDF formatting
+                  'cssFile' => '@backend/web/css/pdf.css',
+                  // any css to be embedded if required
+                  //'cssInline' => '.kv-heading-1{font-size:18px}',
+                  // set mPDF properties on the fly
+                  //'options' => ['title' => 'Krajee Report Title'],
+                  // call mPDF methods on the fly
+                  /*                    'methods' => [
+                  'SetHeader' => ['Estimated proforma generated on ' . date("d/m/Y h:m:s")],
+                  'SetFooter' => ['|page {PAGENO}'],
+                  ] */
+                /* ]);
 
-                // return the pdf output as per the destination setting
-                return $pdf->render();
+                  // return the pdf output as per the destination setting
+                  return $pdf->render(); */
         }
 
         public function actionRemove($path) {
@@ -336,9 +338,11 @@ class EstimatedProformaController extends Controller {
         }
 
         public function actionShowReport($id) {
-                $model_report = EstimateReport::find($id)->one();
-                echo $model_report->report;
-                exit;
+                $model_report = EstimateReport::findOne($id);
+                $model_report->report;
+                return $this->renderPartial('_old', [
+                            'model_report' => $model_report,
+                ]);
         }
 
         public function actionRemoveReport($id) {

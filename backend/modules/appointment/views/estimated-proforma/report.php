@@ -10,6 +10,7 @@ use common\models\ServiceCategorys;
 use common\models\Services;
 use common\models\Vessel;
 use common\models\EstimateReport;
+use common\models\Currency;
 ?>
 <!DOCTYPE html>
 
@@ -127,9 +128,9 @@ use common\models\EstimateReport;
                                     $last_report_saved = EstimateReport::find()->orderBy(['id' => SORT_DESC])->where(['appointment_id' => $appointment->id])->All();
                                     $c = count($last_report_saved);
                                     if ($c == 0) {
-                                            $ref_no = 'EMPRK-'  . $appointment->id . '/' . date('Y');
+                                            $ref_no = 'EMPRK-' . $appointment->id . '/' . date('Y');
                                     } else {
-                                            $ref_no = 'EMPRK-' . $appointment->id .$arr[$c] . '/' . date('Y');
+                                            $ref_no = 'EMPRK-' . $appointment->id . $arr[$c] . '/' . date('Y');
                                     }
                                     ?>
                                     <td><?php echo $ref_no; ?></td>
@@ -227,8 +228,12 @@ use common\models\EstimateReport;
                     <div class="grandtotal">
                         <table class="table">
                             <tr>
+                                <?php
+                                $currency = Currency::findOne(['id' => 1]);
+                                $usd = round($grandtotal * $currency->currency_value, 3);
+                                ?>
                                 <td style="width: 84%; text-align: center;"><b>Grand Total Estimate</b></td>
-                                <td style="width: 8%;font-weight: bold;">USD <?= Yii::$app->SetValues->NumberFormat(round($grandtotal * $appointment->USD, 3)) ?></td>
+                                <td style="width: 8%;font-weight: bold;">USD <?= Yii::$app->SetValues->NumberFormat($usd) ?></td>
                                 <td style="width: 8%;font-weight: bold;">AED <?= Yii::$app->SetValues->NumberFormat($grandtotal); ?></td>
                             </tr>
                         </table>

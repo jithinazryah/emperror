@@ -99,10 +99,6 @@ class AppointmentController extends Controller {
 //                        $model->stage = 1;
 //                        $model->sub_stages = 1;
                         $model->eta = $this->SingleDateFormat($model->eta);
-                        $currency = Currency::find()->all();
-                        foreach ($currency as $value) {
-                                $model->USD = $value->currency_value;
-                        }
                         $model->save();
                         $this->PortCall($model);
                         if (!empty(Yii::$app->request->post(check))) {

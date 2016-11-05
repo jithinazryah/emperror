@@ -51,80 +51,92 @@ $this->params['breadcrumbs'][] = $this->title;
 //                    echo Html::a('<i class="fa-print"></i><span>Generate Report</span>', ['close-estimate/report', 'id' => $appointment->id], ['class' => 'btn btn-secondary btn-icon btn-icon-standalone']);
                 ?>
                                 </div>-->
+                
+                
                 <div class="col-md-12" style="float: left;">
-                    <?php // Html::beginForm(['close-estimate/report'], 'post', ['target' => '_blank']) ?>
-                    <?= Html::beginForm(['close-estimate/report'], 'post', ['target' => 'print_popup', 'onSubmit' => "window.open('about:blank','print_popup','width=1200,height=600');"]) ?>
-                    <!--<form name="estimate" action="<?= Yii::$app->homeUrl ?>appointment/estimated-proforma/reports" method="post">-->
                     <?php
-//                    $arr = explode(',', $appointment->principal);
                     $arr = CloseEstimate::find()->select('invoice_type')->distinct()->where(['apponitment_id' => $appointment->id])->all();
-                    // echo count($arr);exit;
-                    if (count($arr) == 1) {
-                            ?>
-                            <div class="row">
-                                <?php
-                                $arr = CloseEstimate::find()->select('invoice_type')->distinct()->where(['apponitment_id' => $appointment->id])->one();
-                                ?>
-                                <input type="hidden" name="app_id" value="<?= $appointment->id ?>">
-                                <input type="hidden" name="invoice_type" value="<?= $arr->invoice_type ?>">
-                                <?php
-                        } else {
-                                ?>
-
-                                <input type="hidden" name="app_id" value="<?= $appointment->id ?>">
-                                <div class="col-md-4">
-                                    <select name = "invoice_type" id = "close-estimate-invoice" class="form-control">
-                                        <option selected = "selected">Select Invoice Type</option>
-                                        <option value="all">All</option>
-                                        <?php
-                                        foreach ($arr as $key => $value) {
-
-                                                $data = InvoiceType::findOne(['id' => $value->invoice_type]);
-                                                ?>
-                                                <option value="<?= $value->invoice_type ?>"><?= $data->invoice_type ?></option>
-                                        <?php }
-                                        ?>
-                                    </select> 
-                                </div>
-
-                                <?php
-                        }
-                        ?>
-                        <div class="col-md-4 principp">
-                            <?php
-                            $principals = CloseEstimate::find()->select('principal')->distinct()->where(['apponitment_id' => $appointment->id])->all();
-                            //$principals = explode(',', $appointment->principal);
-                            if (count($principals) > 1) {
-                                    ?>
-                                    <div>
-                                        <select name = "fda" id = "fda" class="form-control">
-                                            <option value="" selected = "selected">Select Principal</option>
-                                            <?php
-                                            foreach ($principals as $princippp) {
-                                                    $data = Debtor::findOne(['id' => $princippp->principal]);
-                                                    ?>
-                                                    <option value="<?= $princippp->principal ?>"><?= $data->principal_name ?></option>
-                                            <?php }
+                     //echo count($arr);exit;
+                    foreach ($arr as $value) {
+                         $invoice_type = $value->invoice_type;
+                    }
+                    if ($invoice_type != '') { ?>
+                    <?= Html::beginForm(['close-estimate/report'], 'post', ['target' => 'print_popup', 'onSubmit' => "window.open('about:blank','print_popup','width=1200,height=600');"]) ?>
+                    <?php
+                            if (count($arr) != 0) {
+                                    if (count($arr) == 1) {
+                                            //echo 'if';exit;
                                             ?>
-                                        </select>  
-                                    </div>
-                            <?php
-                            } else {
-                                    ?>
-                                    <input type="hidden" name="fda" value="<?= $appointment->principal ?>">
+                                            <div class="row">
+                                                <?php
+                                                $arr = CloseEstimate::find()->select('invoice_type')->distinct()->where(['apponitment_id' => $appointment->id])->one();
+                                                ?>
+                                                <input type="hidden" name="app_id" value="<?= $appointment->id ?>">
+                                                <input type="hidden" name="invoice_type" value="<?= $arr->invoice_type ?>">
+                                                <?php
+                                        } else {
+                                                echo 'else';
+                                                exit;
+                                                ?>
+
+                                                <input type="hidden" name="app_id" value="<?= $appointment->id ?>">
+                                                <div class="col-md-4">
+                                                    <select name = "invoice_type" id = "close-estimate-invoice" class="form-control">
+                                                        <option selected = "selected">Select Invoice Type</option>
+                                                        <option value="all">All</option>
+                                                        <?php
+                                                        foreach ($arr as $key => $value) {
+
+                                                                $data = InvoiceType::findOne(['id' => $value->invoice_type]);
+                                                                ?>
+                                                                <option value="<?= $value->invoice_type ?>"><?= $data->invoice_type ?></option>
+                                                        <?php }
+                                                        ?>
+                                                    </select> 
+                                                </div>
+
+                                                <?php
+                                        }
+                                }
+                                ?>
+                                <div class="col-md-4 principp">
                                     <?php
-                            }
-                            ?>
-                        </div>
-                        <div class="col-md-4">
-                            <?= Html::submitButton('<i class="fa-print"></i><span>Generate Final DA</span>', ['class' => 'btn btn-secondary btn-icon btn-icon-standalone']) ?>
-   <!--<input type="submit" name="b1" value="Submit">-->
-                            <?= Html::endForm() ?>
-                            <?php
+                                    $principals = CloseEstimate::find()->select('principal')->distinct()->where(['apponitment_id' => $appointment->id])->all();
+                                    //$principals = explode(',', $appointment->principal);
+                                    if (count($principals) > 1) {
+                                            ?>
+                                            <div>
+                                                <select name = "fda" id = "fda" class="form-control">
+                                                    <option value="" selected = "selected">Select Principal</option>
+                                                    <?php
+                                                    foreach ($principals as $princippp) {
+                                                            $data = Debtor::findOne(['id' => $princippp->principal]);
+                                                            ?>
+                                                            <option value="<?= $princippp->principal ?>"><?= $data->principal_name ?></option>
+                                                    <?php }
+                                                    ?>
+                                                </select>  
+                                            </div>
+                                            <?php
+                                    } else {
+                                            ?>
+                                            <input type="hidden" name="fda" value="<?= $appointment->principal ?>">
+                                            <?php
+                                    }
+                                    ?>
+                                </div>
+                                <div class="col-md-4">
+                                    <?= Html::submitButton('<i class="fa-print"></i><span>Generate Final DA</span>', ['class' => 'btn btn-secondary btn-icon btn-icon-standalone']) ?>
+           <!--<input type="submit" name="b1" value="Submit">-->
+                                    <?= Html::endForm() ?>
+                                    <?php
 //                    echo Html::a('<i class="fa-print"></i><span>Generate Report</span>', ['estimated-proforma/report', 'id' => $appointment->id], ['class' => 'btn btn-secondary btn-icon btn-icon-standalone']);
-                            ?> 
-                        </div>   
-                    </div>
+                                    ?> 
+                                </div>   
+                            </div>
+                            <?php
+                    }
+                    ?>
                 </div>
                 <?php
                 if (empty($estimates)) {
@@ -250,8 +262,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <td></td>
                                     <td><?= $form->field($model, 'service_id')->dropDownList(ArrayHelper::map(Services::findAll(['status' => 1]), 'id', 'service'), ['prompt' => '-Service-'])->label(false); ?></td>
                                     <td><?= $form->field($model, 'supplier')->dropDownList(ArrayHelper::map(Contacts::find()->where(new Expression('FIND_IN_SET(:contact_type, contact_type)'))->addParams([':contact_type' => 4])->all(), 'id', 'name'), ['prompt' => '-Supplier-'])->label(false); ?></td>
-    <!--                                <td><?php // $form->field($model, 'supplier')->dropDownList(ArrayHelper::map(Contacts::findAll(['status' => 1]), 'id', 'name'), ['prompt' => '-Supplier-'])->label(false);                        ?></td>-->
-    <!--                                                                <td><?php // $form->field($model, 'currency')->dropDownList(ArrayHelper::map(Currency::findAll(['status' => 1]), 'id', 'currency_name'), ['prompt' => '-Currency-'])->label(false);                             ?></td>-->
+    <!--                                <td><?php // $form->field($model, 'supplier')->dropDownList(ArrayHelper::map(Contacts::findAll(['status' => 1]), 'id', 'name'), ['prompt' => '-Supplier-'])->label(false);                           ?></td>-->
+    <!--                                                                <td><?php // $form->field($model, 'currency')->dropDownList(ArrayHelper::map(Currency::findAll(['status' => 1]), 'id', 'currency_name'), ['prompt' => '-Currency-'])->label(false);                                ?></td>-->
                                     <td><?= $form->field($model, 'unit_rate')->textInput(['placeholder' => 'Unit Rate'])->label(false) ?></td>
                                     <td><?= $form->field($model, 'unit')->textInput(['placeholder' => 'Quantity'])->label(false) ?></td>
                                     <td><?= $form->field($model, 'epda')->textInput(['placeholder' => 'EPDA'])->label(false) ?></td>
@@ -278,12 +290,12 @@ $this->params['breadcrumbs'][] = $this->title;
                             <h4 class="sub-heading">Uploaded Files</h4>
                             <br/>
                             <?php
-                            if(!empty(Yii::$app->UploadFile->ListFile($appointment->id, Yii::$app->params['closePath']))){
-                            ?>
-                            <span class="upload_file_list"><?= Yii::$app->UploadFile->ListFile($appointment->id, Yii::$app->params['closePath']); ?></span>
-                             <?php
+                            if (!empty(Yii::$app->UploadFile->ListFile($appointment->id, Yii::$app->params['closePath']))) {
+                                    ?>
+                                    <span class="upload_file_list"><?= Yii::$app->UploadFile->ListFile($appointment->id, Yii::$app->params['closePath']); ?></span>
+                                    <?php
                             }
-                             ?>
+                            ?>
                         </div>
                         <hr class="appoint_history" />
                         <div style="float: left;margin-left: 46%;">
@@ -397,7 +409,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
             </div>
-            <?php //Pjax::end();     ?> 
+            <?php //Pjax::end();      ?> 
         </div>
     </div>
     <style>

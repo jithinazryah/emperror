@@ -11,6 +11,7 @@ use common\models\Vessel;
 use common\models\CloseEstimate;
 use common\models\Services;
 use common\models\InvoiceType;
+use common\models\Currency;
 ?>
 <!DOCTYPE html>
 <!--
@@ -196,7 +197,8 @@ and open the template in the editor.
                                 <td style="width: 25%;font-weight: bold;">AED <?= Yii::$app->SetValues->NumberFormat($grandtotal); ?></td>
                             </tr>
                             <?php
-                            $usd = round($grandtotal * $appointment->USD, 3);
+                            $currency = Currency::findOne(['id' => 1]);
+                            $usd = round($grandtotal * $currency->currency_value, 3);
                             ?>
                             <tr>
                                 <td style="width: 75%;"></th>

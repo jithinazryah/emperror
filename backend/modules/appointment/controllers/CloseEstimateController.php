@@ -227,7 +227,7 @@ class CloseEstimateController extends Controller {
          */
 
         public function actionReport() {
-                $invoice_type = $_POST['invoice_type'];
+                echo $invoice_type = $_POST['invoice_type']; exit;
                 $app = $_POST['app_id'];
                 echo $principp = $_POST['fda']; exit;
                 if($principp != 'Select Principal'){
