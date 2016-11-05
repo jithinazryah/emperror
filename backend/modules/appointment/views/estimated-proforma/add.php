@@ -184,6 +184,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <td colspan=""></td>
                                     <td colspan=""></td>
                                     <td colspan=""></td>
+                                    <td colspan=""></td>
                                 </tr>
                                 <tr class="formm">
                                     <?php $form = ActiveForm::begin(); ?>
@@ -199,7 +200,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <td><?= $form->field($model, 'principal')->dropDownList(ArrayHelper::map(Debtor::findAll(['status' => 1, 'id' => explode(',', $appointment->principal)]), 'id', 'principal_name'), ['prompt' => '-Principal-'])->label(false); ?></td>
                                     <td><?= $form->field($model, 'rate_to_category')->textInput(['placeholder' => 'Rate to Category'])->label(false) ?></td>
                                     <td><?= $form->field($model, 'comments')->textInput(['placeholder' => 'Comments'])->label(false) ?></td>
-                                    <td><?php // $form->field($model, 'images[]')->fileInput(['multiple' => true])->label(false)                 ?></td>
+                                    <!--<td><?php // $form->field($model, 'images[]')->fileInput(['multiple' => true])->label(false)                 ?></td>-->
                                     <td><?= Html::submitButton($model->isNewRecord ? 'Add' : 'Update', ['class' => 'btn btn-success']) ?>
                                     </td>
                                     <?php ActiveForm::end(); ?>
