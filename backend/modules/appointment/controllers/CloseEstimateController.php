@@ -227,13 +227,17 @@ class CloseEstimateController extends Controller {
          */
 
         public function actionReport() {
-                echo $invoice_type = $_POST['invoice_type']; exit;
+                $invoice_type = $_POST['invoice_type'];
                 $app = $_POST['app_id'];
-                echo $principp = $_POST['fda']; exit;
-                if($principp != 'Select Principal'){
-                       $princip = CloseEstimate::findOne(['invoice_type' => $invoice_type, 'apponitment_id' => $app, 'principal' => $principp]);
-                }else{
-                        $princip = CloseEstimate::findOne(['invoice_type' => $invoice_type, 'apponitment_id' => $app]);
+                $principp = $_POST['fda'];
+                if ($invoice_type == 'all') {
+                        $princip = CloseEstimate::findAll(['principal' => $principp, 'apponitment_id' => $app]);
+                } else {
+                        if ($principp != '') {
+                                $princip = CloseEstimate::findOne(['invoice_type' => $invoice_type, 'apponitment_id' => $app, 'principal' => $principp]);
+                        } else {
+                                $princip = CloseEstimate::findOne(['invoice_type' => $invoice_type, 'apponitment_id' => $app]);
+                        }
                 }
                 // get your HTML raw content without any layouts or scripts
                 $appointment = Appointment::findOne($app);
@@ -244,6 +248,7 @@ class CloseEstimateController extends Controller {
             'invoice_type' => $invoice_type,
             'princip' => $princip,
             'ports' => $ports,
+            'principp' => $principp,
                 ]);
                 exit;
 

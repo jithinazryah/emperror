@@ -236,8 +236,12 @@ use common\models\Currency;
                                 <td style="width: 8%;font-weight: bold;">USD <?= Yii::$app->SetValues->NumberFormat($usd) ?></td>
                                 <td style="width: 8%;font-weight: bold;">AED <?= Yii::$app->SetValues->NumberFormat($grandtotal); ?></td>
                             </tr>
+                            <tr>
+                                <td colspan="2"style="width: 92%; text-align: center;"></td>
+                                <td style="width: 8%;font-weight: bold;background-color: #ffff00;font-size: 6px ! important;">E & OE</td>
+                            </tr>
                         </table>
-                        <button style="float:right;background-color: yellow;">E & OE</button>
+                        
                     </div>
                     <br/>
                     <div class="content">
