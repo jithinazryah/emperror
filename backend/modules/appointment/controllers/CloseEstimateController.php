@@ -16,6 +16,9 @@ use common\models\EstimatedProforma;
 use kartik\mpdf\Pdf;
 use yii\web\UploadedFile;
 use yii\helpers\FileHelper;
+use common\models\SubServices;
+use common\models\CloseEstimateSubService;
+
 
 /**
  * CloseEstimateController implements the CRUD actions for CloseEstimate model.
@@ -134,8 +137,33 @@ class CloseEstimateController extends Controller {
                         $model->fda = $estimate->epda;
                         $model->DOC = date('Y-m-d');
                         $model->save();
+                        //echo $model->id;exit;
+                        $close_estimate_sub_services = CloseEstimateSubService::findAll(['close_estimate_id' => $model->id]);
+                        if (empty($close_estimate_sub_services)) {
+                                $estimate_sub_services = SubServices::findAll(['estid' => $estimate->id]);
+                                if (!empty($estimate_sub_services)) {
+                                        $this->AddSubService($estimate_sub_services,$model->id,$id);
+                                }
+                        }
                 }
                 return $this->redirect(Yii::$app->request->referrer);
+        }
+
+        public function AddSubService($estimate_sub_services,$id,$appointment_id){
+                foreach ($estimate_sub_services as $sub_service) {
+                        $model = new CloseEstimateSubService();
+                        $model->appointment_id = $appointment_id;
+                        $model->close_estimate_id = $id;
+                        $model->service_id = $sub_service->service_id;
+                        $model->sub_service = $sub_service->id;
+                        $model->unit = $sub_service->unit;
+                        $model->unit_price = $sub_service->unit_price;
+                        $model->total = $sub_service->total;
+                        $model->comments = $sub_service->comments;
+                        $model->status = $value->status;
+                        $model->save(false);
+                }
+                 return true;
         }
 
         public function actionDeleteCloseEstimate($id) {

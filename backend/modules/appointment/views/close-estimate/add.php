@@ -250,6 +250,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             <td>
                                                 <?= Html::a('<i class="fa fa-pencil"></i>', ['/appointment/close-estimate/add', 'id' => $id, 'prfrma_id' => $estimate->id], ['class' => 'btn btn-icon btn-primary']) ?>
                                                 <?= Html::a('<i class="fa-remove"></i>', ['/appointment/close-estimate/delete-close-estimate', 'id' => $estimate->id], ['class' => 'btn btn-icon btn-red', 'data-confirm' => 'Are you sure you want to delete this item?']) ?>
+                                                <?= Html::a('<i class="fa fa-database"></i>', ['/appointment/close-estimate-sub-service/add', 'id' => $estimate->id], ['class' => 'btn btn-success', 'target' => '_blank']) ?>
                                             </td>
                                             <?php
                                             $epdatotal += $estimate->epda;
