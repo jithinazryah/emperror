@@ -54,6 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
                 <div class="col-md-12" style="float: left;">
+                    <div class="row">
                     <?php
                     $arr = CloseEstimate::find()->select('invoice_type')->distinct()->where(['apponitment_id' => $appointment->id])->all();
                     //echo count($arr);exit;
@@ -69,7 +70,6 @@ $this->params['breadcrumbs'][] = $this->title;
                     //if (count($arr) != 0) {
                     if (count($arr) == 1) {
                             ?>
-                            <div class="row">
                                 <?php
                                 $arr = CloseEstimate::find()->select('invoice_type')->distinct()->where(['apponitment_id' => $appointment->id])->one();
                                 ?>
