@@ -71,8 +71,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                 $arr = CloseEstimate::find()->select('invoice_type')->distinct()->where(['apponitment_id' => $appointment->id])->one();
                                 ?>
                                 <input type="hidden" name="app_id" value="<?= $appointment->id ?>">
-                                <?php//                                                ?>
-                                <input type="hidden" name="invoice_type" value="//<?php // $arr->invoice_type ?>">
+                                <?php //                                                ?>
+                                <input type="hidden" name="invoice_type" value="//<?php // $arr->invoice_type        ?>">
                                 <?php
                                 ?>
 
@@ -193,10 +193,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <th data-priority="6">EPDA VALUE</th>
                                     <th data-priority="6">FDA VALUE</th>
                                     <th data-priority="6">PAYMENT TYPE</th>
-                                    <th data-priority="6">TOTAL</th>
+                                    <!--<th data-priority="6">TOTAL</th>-->
                                     <th data-priority="6">INVOICE TYPE</th>
                                     <th data-priority="6">PRINCIPAL</th>
-                                    <th data-priority="6">COMMENTS</th>
+                                    <th data-priority="6">COMMENTS TO EPDA</th>
+                                    <th data-priority="6">COMMENTS TO FDA</th>
                                     <th data-priority="1">ACTIONS</th>
                                 </tr>
                             </thead>
@@ -215,11 +216,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                             <td><span class="co-name"><?= $estimate->service->service ?></span></td>
                                             <td><?= $estimate->supplier0->name ?></td>
             <!--                                                                <td><? $estimate->currency0->currency_symbol ?></td>-->
-                                            <td><?= $estimate->unit_rate; ?></td>
+                                            <td><?= Yii::$app->SetValues->NumberFormat($estimate->unit_rate); ?></td>
                                             <td><?= $estimate->unit; ?></td>
             <!--                                                                <td><? $estimate->roe; ?></td>-->
-                                            <td><?= $estimate->epda; ?></td>
-                                            <td><?= $estimate->fda; ?></td>
+                                            <td><?= Yii::$app->SetValues->NumberFormat($estimate->epda); ?></td>
+                                            <td><?= Yii::$app->SetValues->NumberFormat($estimate->fda); ?></td>
                                             <?php
                                             if ($estimate->payment_type == 1) {
                                                     $payment_type = 'Manual';
@@ -230,10 +231,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                             }
                                             ?>
                                             <td><?= $payment_type; ?></td>
-                                            <td><?= $estimate->total; ?></td>
+                                            <!--<td><?php // $estimate->total;        ?></td>-->
                                             <td><?= $estimate->invoice->invoice_type ?></td>
                                             <td><?= $estimate->principal0->principal_id; ?></td>
                                             <td><?= $estimate->comments; ?></td>
+                                            <td><?= $estimate->comment_to_fda; ?></td>
                                             <td>
                                                 <?= Html::a('<i class="fa fa-pencil"></i>', ['/appointment/close-estimate/add', 'id' => $id, 'prfrma_id' => $estimate->id], ['class' => 'btn btn-icon btn-primary']) ?>
                                                 <?= Html::a('<i class="fa-remove"></i>', ['/appointment/close-estimate/delete-close-estimate', 'id' => $estimate->id], ['class' => 'btn btn-icon btn-red', 'data-confirm' => 'Are you sure you want to delete this item?']) ?>
@@ -252,10 +254,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <tr>
                                     <td></td>
                                     <td colspan="4"> <b>GRAND TOTAL</b></td>
-                                    <td style="font-weight: bold;"><?php echo $epdatotal . '/-'; ?></td>
-                                    <td style="font-weight: bold;"><?php echo $fdatotal . '/-'; ?></td>
+                                    <td style="font-weight: bold;"><?php echo Yii::$app->SetValues->NumberFormat($epdatotal) . '/-'; ?></td>
+                                    <td style="font-weight: bold;"><?php echo Yii::$app->SetValues->NumberFormat($fdatotal) . '/-'; ?>
                                     <td></td>
-                                    <td style="font-weight: bold;"><?php echo $grandtotal . '/-'; ?></td>
+                                    <!--<td style="font-weight: bold;"><?php //echo $grandtotal . '/-';        ?></td>-->
+                                    <td colspan=""></td>
+                                    <td colspan=""></td>
+                                    <td colspan=""></td>
                                     <td colspan=""></td>
                                     <td colspan=""></td>
                                 </tr>
@@ -264,17 +269,39 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <td></td>
                                     <td><?= $form->field($model, 'service_id')->dropDownList(ArrayHelper::map(Services::findAll(['status' => 1]), 'id', 'service'), ['prompt' => '-Service-'])->label(false); ?></td>
                                     <td><?= $form->field($model, 'supplier')->dropDownList(ArrayHelper::map(Contacts::find()->where(new Expression('FIND_IN_SET(:contact_type, contact_type)'))->addParams([':contact_type' => 4])->all(), 'id', 'name'), ['prompt' => '-Supplier-'])->label(false); ?></td>
-    <!--                                <td><?php // $form->field($model, 'supplier')->dropDownList(ArrayHelper::map(Contacts::findAll(['status' => 1]), 'id', 'name'), ['prompt' => '-Supplier-'])->label(false);                                    ?></td>-->
-    <!--                                                                <td><?php // $form->field($model, 'currency')->dropDownList(ArrayHelper::map(Currency::findAll(['status' => 1]), 'id', 'currency_name'), ['prompt' => '-Currency-'])->label(false);                                         ?></td>-->
+    <!--                                <td><?php // $form->field($model, 'supplier')->dropDownList(ArrayHelper::map(Contacts::findAll(['status' => 1]), 'id', 'name'), ['prompt' => '-Supplier-'])->label(false);                                           ?></td>-->
+    <!--                                                                <td><?php // $form->field($model, 'currency')->dropDownList(ArrayHelper::map(Currency::findAll(['status' => 1]), 'id', 'currency_name'), ['prompt' => '-Currency-'])->label(false);                                                ?></td>-->
                                     <td><?= $form->field($model, 'unit_rate')->textInput(['placeholder' => 'Unit Rate'])->label(false) ?></td>
                                     <td><?= $form->field($model, 'unit')->textInput(['placeholder' => 'Quantity'])->label(false) ?></td>
                                     <td><?= $form->field($model, 'epda')->textInput(['placeholder' => 'EPDA'])->label(false) ?></td>
                                     <td><?= $form->field($model, 'fda')->textInput(['placeholder' => 'FDA'])->label(false) ?></td>
                                     <td><?= $form->field($model, 'payment_type')->dropDownList(['1' => 'Manual', '2' => 'Check'], ['prompt' => '-Payment Type-'])->label(false) ?></td>
-                                    <td><?= $form->field($model, 'total')->textInput(['placeholder' => 'TOTAL'])->label(false) ?></td>
+                                    <!--<td><?php // $form->field($model, 'total')->textInput(['placeholder' => 'TOTAL'])->label(false)        ?></td>-->
                                     <td><?= $form->field($model, 'invoice_type')->dropDownList(ArrayHelper::map(InvoiceType::findAll(['status' => 1]), 'id', 'invoice_type'), ['prompt' => '-Invoice Type-'])->label(false); ?></td>
-                                    <td><?= $form->field($model, 'principal')->dropDownList(ArrayHelper::map(Debtor::findAll(['status' => 1, 'id' => explode(',', $appointment->principal)]), 'id', 'principal_name'), ['prompt' => '-Principal-'])->label(false); ?></td>
-                                    <td><?= $form->field($model, 'comments')->textInput(['placeholder' => 'Comments'])->label(false) ?></td>
+                                    <?php
+                                    $arr1 = explode(',', $appointment->principal);
+                                    if (count($arr1) == 1) {
+                                            foreach ($arr1 as $value) {
+                                                    ?>
+                                                    <td><div class = "form-group field-closeestimate-principal">
+
+                                                            <select id = "closeestimate-principal" class = "form-control" name = "CloseEstimate[principal]">
+                                                                <option value = "<?=$value ?>"><?= $appointment->getDebtorName($value); ?></option>
+                                                            </select>
+
+                                                            <div class = "help-block"></div>
+                                                        </div>
+                                                    </td>
+                                                    <?php
+                                            }
+                                    } else {
+                                            ?>
+                                            <td><?= $form->field($model, 'principal')->dropDownList(ArrayHelper::map(Debtor::findAll(['status' => 1, 'id' => explode(',', $appointment->principal)]), 'id', 'principal_name'), ['prompt' => '-Principal-'])->label(false); ?></td>
+                                            <?php
+                                    }
+                                    ?>
+                                    <td><?= $form->field($model, 'comments')->textInput(['placeholder' => 'EPDA Comments'])->label(false) ?></td>
+                                    <td><?= $form->field($model, 'comment_to_fda')->textInput(['placeholder' => 'FDA Comments'])->label(false) ?></td>
                                     <td><?= Html::submitButton($model->isNewRecord ? 'Add' : 'Update', ['class' => 'btn btn-success']) ?>
                                     </td>
                                     <?php ActiveForm::end(); ?>
@@ -397,11 +424,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             var rate = $("#closeestimate-unit_rate").val();
                             var unit = $("#closeestimate-unit").val();
                             if (rate != '' && unit != '') {
-                                $("#closeestimate-epda").val(rate * unit);
+                                $("#closeestimate-fda").val(rate * unit);
                             }
 
                         }
-                        $("#closeestimate-epda").prop("disabled", true);
+                        $("#closeestimate-fda").prop("disabled", true);
                 </script>
 
 
@@ -411,7 +438,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
             </div>
-            <?php //Pjax::end();          ?> 
+            <?php //Pjax::end();            ?> 
         </div>
     </div>
     <style>

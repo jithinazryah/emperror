@@ -477,7 +477,12 @@ class PortCallDataController extends Controller {
 
         public function SavePortCargoDetails($model_port_cargo_details, $id) {
                 $data = PortCallData::findOne(['appointment_id' => $id]);
+                $appointment = Appointment::findOne(['id' => $id]);
                 Yii::$app->SetValues->Attributes($model_port_cargo_details);
+                if(!empty($model_port_cargo_details->loaded_quantity)){
+                       $appointment->quantity = $model_port_cargo_details->loaded_quantity;
+                       $appointment->save();
+                }
                 $model_port_cargo_details->appointment_id = $id;
                 $model_port_cargo_details->port_call_id = $data->id;
                 $model_port_cargo_details->save();

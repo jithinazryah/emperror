@@ -161,7 +161,7 @@ and open the template in the editor.
                                         <td style="width: 10%;"><?= $i ?></td>
                                         <td style="width: 40%;"><?php echo Services::findOne(['id' => $close_estimate->service_id])->service; ?></td>
                                         <td style="width: 25%;"><?php echo InvoiceType::findOne(['id' => $close_estimate->invoice_type])->invoice_type; ?></td>
-                                        <td style="width: 25%;"><?= $close_estimate->fda ?></td>
+                                        <td style="width: 25%;"><?= Yii::$app->SetValues->NumberFormat($close_estimate->fda); ?></td>
                                         <?php
                                         $grandtotal += $close_estimate->fda;
                                         ?>

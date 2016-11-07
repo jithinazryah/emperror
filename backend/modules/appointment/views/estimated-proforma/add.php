@@ -154,14 +154,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                             <td><span class="co-name"><?= $estimate->service->service ?></span></td>
                                             <td><?= $estimate->supplier0->name ?></td>
             <!--                                                                <td><? $estimate->currency0->currency_symbol ?></td>-->
-                                            <td><?= $estimate->unit_rate; ?></td>
+                                            <td><?php echo Yii::$app->SetValues->NumberFormat($estimate->unit_rate) . '/-'; ?></td></td>
                                             <td><?= $estimate->unit; ?></td>
             <!--                                                                <td><? $estimate->roe; ?></td>-->
-                                            <td><?= $estimate->epda; ?></td>
+                                            <td><?php echo Yii::$app->SetValues->NumberFormat($estimate->epda) . '/-'; ?></td></td>
                                             <td><?= $estimate->principal0->principal_id; ?></td>
                                             <td><?= $estimate->rate_to_category; ?></td>
                                             <td><?= $estimate->comments; ?></td>
-                                            <!--<td><?php // $estimate->images;                 ?></td>-->
+                                            <!--<td><?php // $estimate->images;                       ?></td>-->
                                             <td>
                                                 <?= Html::a('<i class="fa fa-pencil"></i>', ['/appointment/estimated-proforma/add', 'id' => $id, 'prfrma_id' => $estimate->id], ['class' => 'btn btn-icon btn-primary', 'tittle' => 'Edit']) ?>
                                                 <?= Html::a('<i class="fa fa-remove"></i>', ['/appointment/estimated-proforma/delete-performa', 'id' => $estimate->id], ['class' => 'btn btn-icon btn-red', 'tittle' => 'Edit', 'data-confirm' => 'Are you sure you want to delete this item?']) ?>
@@ -180,7 +180,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <tr>
                                     <td></td>
                                     <td colspan="4"> <b>EPDA TOTAL</b></td>
-                                    <td style="font-weight: bold;"><?php echo $epdatotal . '/-'; ?></td>
+                                    <td style="font-weight: bold;"><?php echo Yii::$app->SetValues->NumberFormat($epdatotal) . '/-'; ?></td>
                                     <td colspan=""></td>
                                     <td colspan=""></td>
                                     <td colspan=""></td>
@@ -191,16 +191,35 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <td></td>
                                     <td><?= $form->field($model, 'service_id')->dropDownList(ArrayHelper::map(Services::findAll(['status' => 1]), 'id', 'service'), ['prompt' => '-Service-'])->label(false); ?></td>
                                     <td><?= $form->field($model, 'supplier')->dropDownList(ArrayHelper::map(Contacts::findAll(['status' => 1]), 'id', 'name'), ['prompt' => '-Supplier-'])->label(false); ?></td>
-                                   <!--<td><?php //$form->field($model, 'currency')->dropDownList(ArrayHelper::map(Currency::findAll(['status' => 1]), 'id', 'currency_name'), ['prompt' => '-Currency-'])->label(false);                                                   ?></td>-->
+                                   <!--<td><?php //$form->field($model, 'currency')->dropDownList(ArrayHelper::map(Currency::findAll(['status' => 1]), 'id', 'currency_name'), ['prompt' => '-Currency-'])->label(false);                                                         ?></td>-->
                                     <td><?= $form->field($model, 'unit_rate')->textInput(['placeholder' => 'Unit Rate'])->label(false) ?></td>
                                     <td><?= $form->field($model, 'unit')->textInput(['placeholder' => 'Quantity'])->label(false) ?></td>
-                                    <!--<td><?php //$form->field($model, 'roe')->textInput(['placeholder' => 'ROE'])->label(false)                                                   ?></td>-->
+                                    <!--<td><?php //$form->field($model, 'roe')->textInput(['placeholder' => 'ROE'])->label(false)                                                         ?></td>-->
                                     <td><?= $form->field($model, 'epda')->textInput(['placeholder' => 'EPDA', 'disabled' => true])->label(false) ?></td>
+                                    <?php
+                                    $arr1 = explode(',', $appointment->principal);
+                                    if (count($arr1) == 1) {
+                                            foreach ($arr1 as $value) {
+                                                    ?>
+                                                    <td><div class="form-group field-estimatedproforma-principal">
 
-                                    <td><?= $form->field($model, 'principal')->dropDownList(ArrayHelper::map(Debtor::findAll(['status' => 1, 'id' => explode(',', $appointment->principal)]), 'id', 'principal_name'), ['prompt' => '-Principal-'])->label(false); ?></td>
+                                                            <select id="estimatedproforma-principal" class="form-control" name="EstimatedProforma[principal]">
+                                                                <option value="<?=$value ?>"><?= $appointment->getDebtorName($value); ?></option>
+                                                            </select>
+
+                                                            <div class="help-block"></div>
+                                                        </div></td>
+                                                    <?php
+                                            }
+                                    } else {
+                                            ?>
+                                            <td><?= $form->field($model, 'principal')->dropDownList(ArrayHelper::map(Debtor::findAll(['status' => 1, 'id' => explode(',', $appointment->principal)]), 'id', 'principal_name'), ['prompt' => '-Principal-'])->label(false); ?></td>
+                                            <?php
+                                    }
+                                    ?>
                                     <td><?= $form->field($model, 'rate_to_category')->textInput(['placeholder' => 'Rate to Category'])->label(false) ?></td>
                                     <td><?= $form->field($model, 'comments')->textInput(['placeholder' => 'Comments'])->label(false) ?></td>
-                                    <!--<td><?php // $form->field($model, 'images[]')->fileInput(['multiple' => true])->label(false)                 ?></td>-->
+                                    <!--<td><?php // $form->field($model, 'images[]')->fileInput(['multiple' => true])->label(false)                       ?></td>-->
                                     <td><?= Html::submitButton($model->isNewRecord ? 'Add' : 'Update', ['class' => 'btn btn-success']) ?>
                                     </td>
                                     <?php ActiveForm::end(); ?>
@@ -220,11 +239,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             ?>
                             <h4 class="sub-heading">Previously Generated EPDA'S</h4>
                             <br/>
-                            <?php
-                            foreach ($estmate_reports as $estmate_report) { ?>
+                            <?php foreach ($estmate_reports as $estmate_report) { ?>
                                     <span class="upload_file_list"><?php echo Html::a($estmate_report->date_time, ['/appointment/estimated-proforma/show-report'], ['onclick' => "window.open('show-report?id=$estmate_report->id', 'newwindow', 'width=750, height=500');return false;"]) . '&nbsp;&nbsp;<a href="remove-report?id=' . $estmate_report->id . '"><i class="fa fa-remove"></i></a>'; ?></span>
-                            <?php
-                                    }
+                                    <?php
+                            }
                             ?>
                         </div>
                         <hr class="appoint_history" />
@@ -232,17 +250,17 @@ $this->params['breadcrumbs'][] = $this->title;
                             <h4 class="sub-heading">Uploaded Files</h4>
                             <br/>
                             <?php
-                            if(!empty(Yii::$app->UploadFile->ListFile($appointment->id, Yii::$app->params['estimatePath']))){
-                            ?>
-                            <span class="upload_file_list"><?= Yii::$app->UploadFile->ListFile($appointment->id, Yii::$app->params['estimatePath']); ?></span>
-                             <?php
+                            if (!empty(Yii::$app->UploadFile->ListFile($appointment->id, Yii::$app->params['estimatePath']))) {
+                                    ?>
+                                    <span class="upload_file_list"><?= Yii::$app->UploadFile->ListFile($appointment->id, Yii::$app->params['estimatePath']); ?></span>
+                                    <?php
                             }
-                             ?>
+                            ?>
                         </div>
                         <hr class="appoint_history" />
                         <br/>
                         <div style="float: left; margin-left: 46%;">
-                            <?php // Yii::$app->UploadFile->ListFile($appointment->id, Yii::$app->params['estimatePath']); ?>
+                            <?php // Yii::$app->UploadFile->ListFile($appointment->id, Yii::$app->params['estimatePath']);  ?>
                             <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data'], 'action' => Yii::$app->homeUrl . 'appointment/estimated-proforma/uploads', 'method' => 'post']) ?>
                             <?php
                             $model_upload->appointment_id = $appointment->id;
@@ -349,7 +367,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
 
             </div>
-            <?php //Pjax::end();     ?> 
+            <?php //Pjax::end();      ?> 
         </div>
 
     </div>
@@ -408,6 +426,6 @@ $this->params['breadcrumbs'][] = $this->title;
             font-size: 18px;
             font-weight: bold;
         }
-        
+
     </style>
 </div>

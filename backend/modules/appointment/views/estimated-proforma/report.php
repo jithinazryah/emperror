@@ -187,8 +187,8 @@ use common\models\Currency;
                                                                         <td style="width: 30%;"><?= $subcategory->rate_to_category ?></td>
                                                                         <td style="width: 8%;"><?= $subcategory->unit ?></td>
                                                                         <td style="width: 16%;"><?= $subcategory->comments ?></td>
-                                                                        <td style="width: 8%;"><?= $subcategory->unit_price ?></td>
-                                                                        <td style="width: 8%;font-weight: bold;"><?= $subcategory->total ?></td>
+                                                                        <td style="width: 8%;"><?= Yii::$app->SetValues->NumberFormat($subcategory->unit_price) ?>
+                                                                        <td style="width: 8%;font-weight: bold;"><?= Yii::$app->SetValues->NumberFormat($subcategory->total) ?></td>
                                                                         <?php
                                                                         $subtotal += $subcategory->total;
                                                                         ?>
@@ -203,8 +203,8 @@ use common\models\Currency;
                                                                 <td style="width: 30%;"><?= $estimate->rate_to_category ?></td>
                                                                 <td style="width: 8%;"><?= $estimate->unit ?></td>
                                                                 <td style="width: 16%;"><?= $estimate->comments ?></td>
-                                                                <td style="width: 8%;"><?= $estimate->unit_rate ?></td>
-                                                                <td style="width: 8%;font-weight: bold;"><?= $estimate->epda ?></td>
+                                                                <td style="width: 8%;"><?= Yii::$app->SetValues->NumberFormat($estimate->unit_rate) ?></td>
+                                                                <td style="width: 8%;font-weight: bold;"><?= Yii::$app->SetValues->NumberFormat($estimate->epda) ?></td>
                                                                 <?php
                                                                 $subtotal += $estimate->epda;
                                                                 ?>

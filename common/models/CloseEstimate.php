@@ -46,7 +46,7 @@ class CloseEstimate extends \yii\db\ActiveRecord
         return [
             [['apponitment_id', 'service_id', 'CB', 'UB'], 'required'],
             [['apponitment_id', 'service_id', 'supplier', 'currency', 'total', 'invoice_type', 'status', 'CB', 'UB'], 'integer'],
-            [['comments', 'principal'], 'string'],
+            [['comments', 'principal','comment_to_fda'], 'string'],
             [['DOC', 'DOU', 'epda', 'fda'], 'safe'],
             [['unit_rate', 'unit'], 'string', 'max' => 50],
             [['roe', 'payment_type'], 'string', 'max' => 15],
@@ -74,6 +74,7 @@ class CloseEstimate extends \yii\db\ActiveRecord
             'invoice_type' => 'Invoice Type',
             'principal' => 'Principal',
             'comments' => 'Comments',
+            'comment_to_fda' => 'Comment To FDA',
             'status' => 'Status',
             'CB' => 'Cb',
             'UB' => 'Ub',

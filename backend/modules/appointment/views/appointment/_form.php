@@ -297,6 +297,22 @@ use yii\db\Expression;
                 // Adding Custom Scrollbar
                 $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
             });
+            $("#appointment-tug").select2({
+                //placeholder: 'Select your country...',
+                allowClear: true
+            }).on('select2-open', function ()
+            {
+                // Adding Custom Scrollbar
+                $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+            });
+            $("#appointment-barge").select2({
+                //placeholder: 'Select your country...',
+                allowClear: true
+            }).on('select2-open', function ()
+            {
+                // Adding Custom Scrollbar
+                $(this).data('select2').results.addClass('overflow-hidden').perfectScrollbar();
+            });
 
         });</script>
 
