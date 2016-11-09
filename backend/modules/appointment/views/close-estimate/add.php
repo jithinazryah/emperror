@@ -72,7 +72,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ?>
                                 <input type="hidden" name="app_id" value="<?= $appointment->id ?>">
                                 <?php //                                                ?>
-                                <input type="hidden" name="invoice_type" value="//<?php // $arr->invoice_type                           ?>">
+                                <input type="hidden" name="invoice_type" value="//<?php // $arr->invoice_type                               ?>">
                                 <?php
                                 ?>
 
@@ -265,7 +265,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                     ?>
                                                 </span>
                                             </td>
-                                            <!--<td><?php // $estimate->total;                          ?></td>-->
+                                            <!--<td><?php // $estimate->total;                              ?></td>-->
                                             <td><span class="edit_dropdown" drop_id="closeestimate-invoice_type" id="<?= $estimate->id ?>-invoice_type" val="<?= $estimate->invoice_type ?>">
                                                     <?php
                                                     if ($estimate->invoice_type == '') {
@@ -337,7 +337,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <td style="font-weight: bold;"><?php echo Yii::$app->SetValues->NumberFormat($epdatotal) . '/-'; ?></td>
                                     <td style="font-weight: bold;"><?php echo Yii::$app->SetValues->NumberFormat($fdatotal) . '/-'; ?>
                                     <td></td>
-                                    <!--<td style="font-weight: bold;"><?php //echo $grandtotal . '/-';                           ?></td>-->
+                                    <!--<td style="font-weight: bold;"><?php //echo $grandtotal . '/-';                               ?></td>-->
                                     <td colspan=""></td>
                                     <td colspan=""></td>
                                     <td colspan=""></td>
@@ -349,14 +349,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <td></td>
                                     <td><?= $form->field($model, 'service_id')->dropDownList(ArrayHelper::map(Services::findAll(['status' => 1]), 'id', 'service'), ['prompt' => '-Service-'])->label(false); ?></td>
                                     <td><?= $form->field($model, 'supplier')->dropDownList(ArrayHelper::map(Contacts::find()->where(new Expression('FIND_IN_SET(:contact_type, contact_type)'))->addParams([':contact_type' => 4])->all(), 'id', 'name'), ['prompt' => '-Supplier-'])->label(false); ?></td>
-    <!--                                <td><?php // $form->field($model, 'supplier')->dropDownList(ArrayHelper::map(Contacts::findAll(['status' => 1]), 'id', 'name'), ['prompt' => '-Supplier-'])->label(false);                                                              ?></td>-->
-    <!--                                                                <td><?php // $form->field($model, 'currency')->dropDownList(ArrayHelper::map(Currency::findAll(['status' => 1]), 'id', 'currency_name'), ['prompt' => '-Currency-'])->label(false);                                                                   ?></td>-->
+    <!--                                <td><?php // $form->field($model, 'supplier')->dropDownList(ArrayHelper::map(Contacts::findAll(['status' => 1]), 'id', 'name'), ['prompt' => '-Supplier-'])->label(false);                                                                  ?></td>-->
+    <!--                                                                <td><?php // $form->field($model, 'currency')->dropDownList(ArrayHelper::map(Currency::findAll(['status' => 1]), 'id', 'currency_name'), ['prompt' => '-Currency-'])->label(false);                                                                       ?></td>-->
                                     <td><?= $form->field($model, 'unit_rate')->textInput(['placeholder' => 'Unit Rate'])->label(false) ?></td>
                                     <td><?= $form->field($model, 'unit')->textInput(['placeholder' => 'Quantity'])->label(false) ?></td>
                                     <td><?= $form->field($model, 'epda')->textInput(['placeholder' => 'EPDA'])->label(false) ?></td>
                                     <td><?= $form->field($model, 'fda')->textInput(['placeholder' => 'FDA'])->label(false) ?></td>
                                     <td><?= $form->field($model, 'payment_type')->dropDownList(['1' => 'Manual', '2' => 'Check'], ['prompt' => '-Payment Type-'])->label(false) ?></td>
-                                    <!--<td><?php // $form->field($model, 'total')->textInput(['placeholder' => 'TOTAL'])->label(false)                           ?></td>-->
+                                    <!--<td><?php // $form->field($model, 'total')->textInput(['placeholder' => 'TOTAL'])->label(false)                               ?></td>-->
                                     <td><?= $form->field($model, 'invoice_type')->dropDownList(ArrayHelper::map(InvoiceType::findAll(['status' => 1]), 'id', 'invoice_type'), ['prompt' => '-Invoice Type-'])->label(false); ?></td>
                                     <?php
                                     $arr1 = explode(',', $appointment->principal);
@@ -521,6 +521,28 @@ $this->params['breadcrumbs'][] = $this->title;
             <?php //Pjax::end();               ?> 
         </div>
     </div>
+</div>
+<div class="modal fade" id="add-sub">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4 class="modal-title">Dynamic Content</h4>
+            </div>
+
+            <div class="modal-body">
+
+                Content is loading...
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-info">Save changes</button>
+            </div>
+        </div>
+    </div>
     <style>
         .filter{
             background-color: #b9c7a7;
@@ -546,85 +568,90 @@ $this->params['breadcrumbs'][] = $this->title;
                                     $('.principp').hide();
                                 }
                             });
-
-                            /*  
-                             * Double click enter function
-                             * */
-
-                            $('.edit_text').on('dblclick', function () {
-                                var val = $(this).attr('val');
-                                var idd = this.id;
-                                var res_data = idd.split("-");
-                                if (res_data[1] == 'comments' || res_data[1] == 'comment_to_fda') {
-                                    $(this).html('<textarea class="' + idd + '" value="' + val + '">' + val + '</textarea>');
-
-                                } else {
-                                    $(this).html('<input class="' + idd + '" type="text" value="' + val + '"/>');
-
-                                }
-
-                                $('.' + idd).focus();
-                            });
-                            $('.edit_text').on('focusout', 'input,textarea', function () {
-                                var thiss = $(this).parent('.edit_text');
-                                var data_id = thiss.attr('id');
-                                var update = thiss.attr('update');
-                                var res_id = data_id.split("-");
-                                if (typeof update !== typeof undefined && update !== false) {
-                                               var update_result = update.split(",");
-                                               var unit = $('#' + update_result[1]).html();
-                                        }
-                                
-                                var res_val = $(this).val();
-                                
-                                $.ajax({
-                                    type: 'POST',
-                                    cache: false,
-                                    data: {id: res_id[0], name: res_id[1], valuee: res_val},
-                                    url: '<?= Yii::$app->homeUrl; ?>/appointment/close-estimate/edit-estimate',
-                                    success: function (data) {
-                                        thiss.html(res_val);
-                                        if (typeof update !== typeof undefined && update !== false) {
-                                                $('#' + update).html(res_val * unit);
-                                        }
-                                        
-                                    }
-                                });
-
-                            });
-
-                            /*  
-                             * Double click Dropdown
-                             * */
-
-                            $('.edit_dropdown').on('dblclick', function () {
-                                var val = $(this).attr('val');
-                                var drop_id = $(this).attr('drop_id');
-                                var idd = this.id;
-                                var option = $('#' + drop_id).html();
-                                $(this).html('<select class="' + drop_id + '" value="' + val + '">' + option + '</select>');
-                                $('.' + drop_id + ' option[value="' + val + '"]').attr("selected", "selected");
-                                $('.' + drop_id).focus();
-
-                            });
-                            $('.edit_dropdown').on('focusout', 'select', function () {
-                                var thiss = $(this).parent('.edit_dropdown');
-                                var data_id = thiss.attr('id');
-                                var res_id = data_id.split("-");
-                                var res_val = $(this).val();
-                                $.ajax({
-                                    type: 'POST',
-                                    cache: false,
-                                    data: {id: res_id[0], name: res_id[1], valuee: res_val},
-                                    url: '<?= Yii::$app->homeUrl; ?>/appointment/close-estimate/edit-estimate-service',
-                                    success: function (data) {
-                                        thiss.html(data);
-                                    }
-                                });
-
-                            });
-
-
                         });
+    </script>
+    <script>
+            $("document").ready(function () {
+
+
+                /*  
+                 * Double click enter function
+                 * */
+
+                $('.edit_text').on('dblclick', function () {
+                    var val = $(this).attr('val');
+                    var idd = this.id;
+                    var res_data = idd.split("-");
+                    if (res_data[1] == 'comments' || res_data[1] == 'comment_to_fda') {
+                        $(this).html('<textarea class="' + idd + '" value="' + val + '">' + val + '</textarea>');
+
+                    } else {
+                        $(this).html('<input class="' + idd + '" type="text" value="' + val + '"/>');
+
+                    }
+
+                    $('.' + idd).focus();
+                });
+                $('.edit_text').on('focusout', 'input,textarea', function () {
+                    var thiss = $(this).parent('.edit_text');
+                    var data_id = thiss.attr('id');
+                    var update = thiss.attr('update');
+                    var res_id = data_id.split("-");
+                    if (typeof update !== typeof undefined && update !== false) {
+                        var update_result = update.split(",");
+                        var unit = $('#' + update_result[1]).html();
+                    }
+
+                    var res_val = $(this).val();
+
+                    $.ajax({
+                        type: 'POST',
+                        cache: false,
+                        data: {id: res_id[0], name: res_id[1], valuee: res_val},
+                        url: '<?= Yii::$app->homeUrl; ?>/appointment/close-estimate/edit-estimate',
+                        success: function (data) {
+                            thiss.html(res_val);
+                            if (typeof update !== typeof undefined && update !== false) {
+                                $('#' + update).html(res_val * unit);
+                            }
+
+                        }
+                    });
+
+                });
+
+                /*  
+                 * Double click Dropdown
+                 * */
+
+                $('.edit_dropdown').on('dblclick', function () {
+                    var val = $(this).attr('val');
+                    var drop_id = $(this).attr('drop_id');
+                    var idd = this.id;
+                    var option = $('#' + drop_id).html();
+                    $(this).html('<select class="' + drop_id + '" value="' + val + '">' + option + '</select>');
+                    $('.' + drop_id + ' option[value="' + val + '"]').attr("selected", "selected");
+                    $('.' + drop_id).focus();
+
+                });
+                $('.edit_dropdown').on('focusout', 'select', function () {
+                    var thiss = $(this).parent('.edit_dropdown');
+                    var data_id = thiss.attr('id');
+                    var res_id = data_id.split("-");
+                    var res_val = $(this).val();
+                    $.ajax({
+                        type: 'POST',
+                        cache: false,
+                        data: {id: res_id[0], name: res_id[1], valuee: res_val},
+                        url: '<?= Yii::$app->homeUrl; ?>/appointment/close-estimate/edit-estimate-service',
+                        success: function (data) {
+                            thiss.html(data);
+                        }
+                    });
+
+                });
+
+
+            });
     </script>
 </div>
