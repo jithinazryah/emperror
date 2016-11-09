@@ -517,11 +517,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                 var data_id = thiss.attr('id');
                                 var update = thiss.attr('update');
                                 var res_id = data_id.split("-");
+                                var res_val = $(this).val();
                                 if (typeof update !== typeof undefined && update !== false) {
                                     var update_result = update.split(",");
                                     var unit = $('#' + update_result[1]).html();
+                                    unit = unit.split(',').join('');
+                                    res_val = res_val.split(',').join('');
                                 }
-                                var res_val = $(this).val();
                                 $.ajax({
                                     type: 'POST',
                                     cache: false,

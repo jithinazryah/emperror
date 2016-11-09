@@ -72,7 +72,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ?>
                                 <input type="hidden" name="app_id" value="<?= $appointment->id ?>">
                                 <?php //                                                ?>
-                                <input type="hidden" name="invoice_type" value="//<?php // $arr->invoice_type                               ?>">
+                                <input type="hidden" name="invoice_type" value="//<?php // $arr->invoice_type                                ?>">
                                 <?php
                                 ?>
 
@@ -265,7 +265,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                     ?>
                                                 </span>
                                             </td>
-                                            <!--<td><?php // $estimate->total;                              ?></td>-->
+                                            <!--<td><?php // $estimate->total;                               ?></td>-->
                                             <td><span class="edit_dropdown" drop_id="closeestimate-invoice_type" id="<?= $estimate->id ?>-invoice_type" val="<?= $estimate->invoice_type ?>">
                                                     <?php
                                                     if ($estimate->invoice_type == '') {
@@ -337,7 +337,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <td style="font-weight: bold;"><?php echo Yii::$app->SetValues->NumberFormat($epdatotal) . '/-'; ?></td>
                                     <td style="font-weight: bold;"><?php echo Yii::$app->SetValues->NumberFormat($fdatotal) . '/-'; ?>
                                     <td></td>
-                                    <!--<td style="font-weight: bold;"><?php //echo $grandtotal . '/-';                               ?></td>-->
+                                    <!--<td style="font-weight: bold;"><?php //echo $grandtotal . '/-';                                ?></td>-->
                                     <td colspan=""></td>
                                     <td colspan=""></td>
                                     <td colspan=""></td>
@@ -349,14 +349,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <td></td>
                                     <td><?= $form->field($model, 'service_id')->dropDownList(ArrayHelper::map(Services::findAll(['status' => 1]), 'id', 'service'), ['prompt' => '-Service-'])->label(false); ?></td>
                                     <td><?= $form->field($model, 'supplier')->dropDownList(ArrayHelper::map(Contacts::find()->where(new Expression('FIND_IN_SET(:contact_type, contact_type)'))->addParams([':contact_type' => 4])->all(), 'id', 'name'), ['prompt' => '-Supplier-'])->label(false); ?></td>
-    <!--                                <td><?php // $form->field($model, 'supplier')->dropDownList(ArrayHelper::map(Contacts::findAll(['status' => 1]), 'id', 'name'), ['prompt' => '-Supplier-'])->label(false);                                                                  ?></td>-->
-    <!--                                                                <td><?php // $form->field($model, 'currency')->dropDownList(ArrayHelper::map(Currency::findAll(['status' => 1]), 'id', 'currency_name'), ['prompt' => '-Currency-'])->label(false);                                                                       ?></td>-->
+    <!--                                <td><?php // $form->field($model, 'supplier')->dropDownList(ArrayHelper::map(Contacts::findAll(['status' => 1]), 'id', 'name'), ['prompt' => '-Supplier-'])->label(false);                                                                   ?></td>-->
+    <!--                                                                <td><?php // $form->field($model, 'currency')->dropDownList(ArrayHelper::map(Currency::findAll(['status' => 1]), 'id', 'currency_name'), ['prompt' => '-Currency-'])->label(false);                                                                        ?></td>-->
                                     <td><?= $form->field($model, 'unit_rate')->textInput(['placeholder' => 'Unit Rate'])->label(false) ?></td>
                                     <td><?= $form->field($model, 'unit')->textInput(['placeholder' => 'Quantity'])->label(false) ?></td>
                                     <td><?= $form->field($model, 'epda')->textInput(['placeholder' => 'EPDA'])->label(false) ?></td>
                                     <td><?= $form->field($model, 'fda')->textInput(['placeholder' => 'FDA'])->label(false) ?></td>
                                     <td><?= $form->field($model, 'payment_type')->dropDownList(['1' => 'Manual', '2' => 'Check'], ['prompt' => '-Payment Type-'])->label(false) ?></td>
-                                    <!--<td><?php // $form->field($model, 'total')->textInput(['placeholder' => 'TOTAL'])->label(false)                               ?></td>-->
+                                    <!--<td><?php // $form->field($model, 'total')->textInput(['placeholder' => 'TOTAL'])->label(false)                                ?></td>-->
                                     <td><?= $form->field($model, 'invoice_type')->dropDownList(ArrayHelper::map(InvoiceType::findAll(['status' => 1]), 'id', 'invoice_type'), ['prompt' => '-Invoice Type-'])->label(false); ?></td>
                                     <?php
                                     $arr1 = explode(',', $appointment->principal);
@@ -597,13 +597,13 @@ $this->params['breadcrumbs'][] = $this->title;
                     var data_id = thiss.attr('id');
                     var update = thiss.attr('update');
                     var res_id = data_id.split("-");
+                    var res_val = $(this).val();
                     if (typeof update !== typeof undefined && update !== false) {
                         var update_result = update.split(",");
                         var unit = $('#' + update_result[1]).html();
+                        unit = unit.split(',').join('');
+                        res_val = res_val.split(',').join('');
                     }
-
-                    var res_val = $(this).val();
-
                     $.ajax({
                         type: 'POST',
                         cache: false,
