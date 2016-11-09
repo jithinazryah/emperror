@@ -23,6 +23,14 @@ use common\models\ImigrationClearance;
  * AppointmentController implements the CRUD actions for Appointment model.
  */
 class AppointmentController extends Controller {
+        
+        public function init() {
+                if (Yii::$app->user->isGuest)
+                        $this->redirect(['/site/index']);
+
+                if (Yii::$app->session['post']['admin'] != 1)
+                        $this->redirect(['/site/home']);
+        }
 
         /**
          * @inheritdoc

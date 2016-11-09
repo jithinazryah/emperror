@@ -26,6 +26,13 @@ use yii\helpers\FileHelper;
  */
 class PortCallDataController extends Controller {
 
+        public function init() {
+                if (Yii::$app->user->isGuest)
+                        $this->redirect(['/site/index']);
+
+                if (Yii::$app->session['post']['admin'] != 1)
+                        $this->redirect(['/site/home']);
+        }
         /**
          * @inheritdoc
          */
