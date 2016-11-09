@@ -110,4 +110,12 @@ class CloseEstimate extends \yii\db\ActiveRecord
                 $data = Debtor::findOne(['id' => $principal]);
                 return $data->principal_id;
         }
+        public function getInvoiceAddress($principal) {
+                $data = Debtor::findOne(['id' => $principal]);
+                return $data->invoicing_address;
+        }
+        public function getClintCode($principal) {
+                $data = Debtor::findOne(['id' => $principal]);
+                return $data->principal_id;
+        }
 }

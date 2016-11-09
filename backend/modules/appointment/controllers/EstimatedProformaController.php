@@ -10,6 +10,7 @@ use common\models\MasterSubService;
 use common\models\EstimatedProformaSearch;
 use common\models\AppointmentSearch;
 use common\models\EstimateReport;
+use common\models\Debtor;
 use common\models\UploadFile;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -23,6 +24,14 @@ use yii\helpers\FileHelper;
  * EstimatedProformaController implements the CRUD actions for EstimatedProforma model.
  */
 class EstimatedProformaController extends Controller {
+
+        public function init() {
+                if (Yii::$app->user->isGuest)
+                        $this->redirect(['/site/index']);
+
+                if (Yii::$app->session['post']['admin'] != 1)
+                        $this->redirect(['/site/home']);
+        }
 
         /**
          * @inheritdoc
@@ -287,8 +296,9 @@ class EstimatedProformaController extends Controller {
                             //'estimates' => $estimates,
                             'princip' => $princip,
                 ]));
-                
-                echo Yii::$app->session['epda'];exit;
+
+                echo Yii::$app->session['epda'];
+                exit;
 
                 // setup kartik\mpdf\Pdf component
                 /*  $pdf = new Pdf([
@@ -348,6 +358,49 @@ class EstimatedProformaController extends Controller {
         public function actionRemoveReport($id) {
                 EstimateReport::findOne($id)->delete();
                 return $this->redirect(Yii::$app->request->referrer);
+        }
+
+        public function actionEditEstimate() {
+                if (Yii::$app->request->isAjax) {
+                        $id = $_POST['id'];
+                        $name = $_POST['name'];
+                        $value = $_POST['valuee'];
+                        $estimate = EstimatedProforma::find()->where(['id' => $id])->one();
+                        if ($name == 'unit' || $name == 'unit_rate') {
+                                if ($name == 'unit') {
+                                        $estimate->epda = $estimate->unit_rate * $value;
+                                } else {
+                                        $estimate->epda = $estimate->unit * $value;
+                                }
+                        }
+                        if ($value != '') {
+                                $estimate->$name = $value;
+                                if ($estimate->save()) {
+                                        return 1;
+                                } else {
+                                        return 2;
+                                }
+                        }
+                }
+        }
+
+        public function actionEditEstimateService() {
+                if (Yii::$app->request->isAjax) {
+                        $id = $_POST['id'];
+                        $name = $_POST['name'];
+                        $value = $_POST['valuee'];
+                        $estimate = EstimatedProforma::find()->where(['id' => $id])->one();
+                        if ($value != '') {
+                                $estimate->$name = $value;
+                                if ($estimate->save()) {
+                                        if ($name == 'principal') {
+                                                $principals = Debtor::find()->where(['id' => $value])->one();
+                                                $options = "<option value='" . $principals->id . "'>" . $principals->principal_id . "</option>";
+                                        }
+                                        echo $options;
+                                }
+                        }
+                }
         }
 
 }

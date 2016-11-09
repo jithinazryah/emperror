@@ -75,8 +75,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                         <td><?= $sub->total; ?></td>
                                         <td><?= $sub->comments; ?></td>
                                         <td>
-                                            <?= Html::a('Edit', ['/appointment/sub-services/add', 'id' => $sub->estid, 'sub_id' => $sub->id], ['class' => 'btn btn-primary']) ?>
-                                            <?= Html::a('Delete', ['/appointment/sub-services/delete-sub', 'id' => $sub->id], ['class' => 'btn btn-red']) ?>
+                                            <?= Html::a('<i class="fa fa-pencil"></i>', ['/appointment/sub-services/add', 'id' => $sub->estid, 'sub_id' => $sub->id], ['class' => '']) ?>
+                                            <?= Html::a('<i class="fa fa-remove"></i>', ['/appointment/sub-services/delete-sub', 'id' => $sub->id], ['class' => '']) ?>
                                         </td>
                                         <?php
                                         $subtotal += $subcate->total;

@@ -71,13 +71,17 @@ class SetValues extends Component {
                 $s = explode('.', $grandtotal);
                 $amount = $s[0];
                 $decimal = $s[1];
-                $total = $english_format_number = number_format($amount);
+               if($amount != ''){
+                 $total = $english_format_number = number_format($amount);
                 if ($decimal != 0) {
                         $grandtotal = $total . '.' . $decimal;
                 } else {
                         $grandtotal = $total. '.00';
                 }
                 return $grandtotal;
+               }else{
+                       return;
+               }
         }
 
 }

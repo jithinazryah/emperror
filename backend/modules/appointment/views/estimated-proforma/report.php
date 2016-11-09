@@ -20,6 +20,7 @@ use common\models\Currency;
 
         @media print {
             thead {display: table-header-group;}
+            /*tfoot {position: absolute;bottom: 0px;}*/
             .main-tabl{width: 100%}
         }
         @media screen{
@@ -360,9 +361,9 @@ use common\models\Currency;
                     </div>
                 </td>
             </tr>
-            <tr>
-                <td>
-                    <div class="footer">
+            <tr> 
+                <td style="width:100%">
+                    <div class="footer" style="display: block; position:absolute; bottom: 0;">
                         <span>
                             <p>
                                 Emperor Shipping Lines LLC, P.O.Box-328231, Saqr Port, Al Shaam, Ras Al Khaimah, UAE
@@ -374,9 +375,9 @@ use common\models\Currency;
                                 www.emperor.ae
                             </p>
                         </span>
-                    </div>
-                </td>
-            </tr>
+                    </div> 
+                </td> 
+            </tr> 
         </tbody>
     </table>
 </div>

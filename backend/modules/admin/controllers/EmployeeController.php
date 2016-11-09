@@ -14,6 +14,15 @@ use yii\web\UploadedFile;
  * EmployeeController implements the CRUD actions for Employee model.
  */
 class EmployeeController extends Controller {
+        
+        public function init(){
+                if(Yii::$app->user->isGuest)
+                        $this->redirect(['/site/index']);
+                
+                if(Yii::$app->session['post']['admin'] != 1)
+                        $this->redirect(['/site/home']);
+                        
+        }
 
         /**
          * @inheritdoc

@@ -72,7 +72,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 ?>
                                 <input type="hidden" name="app_id" value="<?= $appointment->id ?>">
                                 <?php //                                                ?>
-                                <input type="hidden" name="invoice_type" value="//<?php // $arr->invoice_type        ?>">
+                                <input type="hidden" name="invoice_type" value="//<?php // $arr->invoice_type                           ?>">
                                 <?php
                                 ?>
 
@@ -213,14 +213,39 @@ $this->params['breadcrumbs'][] = $this->title;
                                         ?>
                                         <tr>
                                             <td><?= $i; ?></td>
-                                            <td><span class="co-name"><?= $estimate->service->service ?></span></td>
-                                            <td><?= $estimate->supplier0->name ?></td>
-            <!--                                                                <td><? $estimate->currency0->currency_symbol ?></td>-->
-                                            <td><?= Yii::$app->SetValues->NumberFormat($estimate->unit_rate); ?></td>
-                                            <td><?= $estimate->unit; ?></td>
-            <!--                                                                <td><? $estimate->roe; ?></td>-->
-                                            <td><?= Yii::$app->SetValues->NumberFormat($estimate->epda); ?></td>
-                                            <td><?= Yii::$app->SetValues->NumberFormat($estimate->fda); ?></td>
+                                            <td><span class="" drop_id="closeestimate-service_id" id="<?= $estimate->id ?>-service_id" val="<?= $estimate->service_id ?>"><?= $estimate->service->service ?></span></td>
+                                            <td><span class="" drop_id="closeestimate-supplier" id="<?= $estimate->id ?>-supplier" val="<?= $estimate->supplier ?>"><?= $estimate->supplier0->name ?></span></td>
+                                            <td><span class="edit_text" id="<?= $estimate->id ?>-unit_rate"  update="<?= $estimate->id ?>-fda,<?= $estimate->id ?>-unit" val="<?= $estimate->unit_rate ?>">
+                                                    <?php
+                                                    if ($estimate->unit_rate == '') {
+                                                            echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+                                                    } else {
+                                                            echo Yii::$app->SetValues->NumberFormat($estimate->unit_rate);
+                                                    }
+                                                    ?>
+                                                </span>
+                                            </td>
+                                            <td><span class="edit_text" id="<?= $estimate->id ?>-unit" update="<?= $estimate->id ?>-fda,<?= $estimate->id ?>-unit_rate" val="<?= $estimate->unit ?>">
+                                                    <?php
+                                                    if ($estimate->unit == '') {
+                                                            echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+                                                    } else {
+                                                            echo Yii::$app->SetValues->NumberFormat($estimate->unit);
+                                                    }
+                                                    ?>
+                                                </span>
+                                            </td>
+                                            <td><span class="" id="<?= $estimate->id ?>-epda" val="<?= $estimate->epda ?>"><?= Yii::$app->SetValues->NumberFormat($estimate->epda); ?></span></td>
+                                            <td><span class="edit_text" id="<?= $estimate->id ?>-fda" val="<?= $estimate->fda ?>">
+                                                    <?php
+                                                    if ($estimate->fda == '') {
+                                                            echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+                                                    } else {
+                                                            echo Yii::$app->SetValues->NumberFormat($estimate->fda);
+                                                    }
+                                                    ?>
+                                                </span>
+                                            </td>
                                             <?php
                                             if ($estimate->payment_type == 1) {
                                                     $payment_type = 'Manual';
@@ -230,16 +255,71 @@ $this->params['breadcrumbs'][] = $this->title;
                                                     $payment_type = '';
                                             }
                                             ?>
-                                            <td><?= $payment_type; ?></td>
-                                            <!--<td><?php // $estimate->total;        ?></td>-->
-                                            <td><?= $estimate->invoice->invoice_type ?></td>
-                                            <td><?= $estimate->principal0->principal_id; ?></td>
-                                            <td><?= $estimate->comments; ?></td>
-                                            <td><?= $estimate->comment_to_fda; ?></td>
+                                            <td><span class="edit_dropdown"  drop_id="closeestimate-payment_type" id="<?= $estimate->id ?>-payment_type" val="<?= $estimate->payment_type ?>">
+                                                    <?php
+                                                    if ($estimate->payment_type == '') {
+                                                            echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+                                                    } else {
+                                                            echo $payment_type;
+                                                    }
+                                                    ?>
+                                                </span>
+                                            </td>
+                                            <!--<td><?php // $estimate->total;                          ?></td>-->
+                                            <td><span class="edit_dropdown" drop_id="closeestimate-invoice_type" id="<?= $estimate->id ?>-invoice_type" val="<?= $estimate->invoice_type ?>">
+                                                    <?php
+                                                    if ($estimate->invoice_type == '') {
+                                                            echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+                                                    } else {
+                                                            echo $estimate->invoice->invoice_type;
+                                                    }
+                                                    ?>
+                                                </span>
+                                            </td>
+                                            <td><span class="edit_dropdown" drop_id="closeestimate-principal" id="<?= $estimate->id ?>-principal" val="<?= $estimate->principal ?>">
+                                                    <?php
+                                                    if ($estimate->principal == '') {
+                                                            echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+                                                    } else {
+                                                            echo $estimate->principal0->principal_id;
+                                                    }
+                                                    ?>
+                                                </span>
+                                            </td>
+                                            <td><span class="edit_text" id="<?= $estimate->id ?>-comments" val="<?= $estimate->comments ?>">
+                                                    <?php
+                                                    if ($estimate->comments == '') {
+                                                            echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+                                                    } else {
+                                                            if (strlen($estimate->comments) > 15) {
+                                                                    echo substr($estimate->comments, 0, 15) . '...';
+                                                            } else {
+                                                                    echo $estimate->comments;
+                                                            }
+                                                    }
+                                                    ?>
+
+                                                </span></td>
+                                            <td><span class="edit_text" id="<?= $estimate->id ?>-comment_to_fda" val="<?= $estimate->comment_to_fda ?>">
+
+                                                    <?php
+                                                    if ($estimate->comment_to_fda == '') {
+                                                            echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+                                                    } else {
+                                                            if (strlen($estimate->comment_to_fda) > 15) {
+                                                                    echo substr($estimate->comment_to_fda, 0, 15) . '...';
+                                                            } else {
+                                                                    echo $estimate->comment_to_fda;
+                                                            }
+                                                    }
+                                                    ?>
+
+                                                </span></td>
                                             <td>
-                                                <?= Html::a('<i class="fa fa-pencil"></i>', ['/appointment/close-estimate/add', 'id' => $id, 'prfrma_id' => $estimate->id], ['class' => 'btn btn-icon btn-primary']) ?>
-                                                <?= Html::a('<i class="fa-remove"></i>', ['/appointment/close-estimate/delete-close-estimate', 'id' => $estimate->id], ['class' => 'btn btn-icon btn-red', 'data-confirm' => 'Are you sure you want to delete this item?']) ?>
-                                                <?= Html::a('<i class="fa fa-database"></i>', ['/appointment/close-estimate-sub-service/add', 'id' => $estimate->id], ['class' => 'btn btn-success', 'target' => '_blank']) ?>
+                                                <?= Html::a('<i class="fa fa-pencil"></i>', ['/appointment/close-estimate/add', 'id' => $id, 'prfrma_id' => $estimate->id], ['class' => '']) ?>
+                                                <?= Html::a('<i class="fa-remove"></i>', ['/appointment/close-estimate/delete-close-estimate', 'id' => $estimate->id], ['class' => '', 'data-confirm' => 'Are you sure you want to delete this item?']) ?>
+                                                <?= Html::a('<i class="fa fa-database"></i>', ['/appointment/close-estimate-sub-service/add', 'id' => $estimate->id], ['class' => '', 'target' => '_blank']) ?>
+                                                <?= Html::a('<i class="fa-print"></i>', ['close-estimate/fda-report'], ['class' => '', 'onclick' => "window.open('fda-report?id=$estimate->apponitment_id & estid=$estimate->id', 'newwindow', 'width=1200, height=500');return false;"]) ?>
                                             </td>
                                             <?php
                                             $epdatotal += $estimate->epda;
@@ -257,7 +337,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <td style="font-weight: bold;"><?php echo Yii::$app->SetValues->NumberFormat($epdatotal) . '/-'; ?></td>
                                     <td style="font-weight: bold;"><?php echo Yii::$app->SetValues->NumberFormat($fdatotal) . '/-'; ?>
                                     <td></td>
-                                    <!--<td style="font-weight: bold;"><?php //echo $grandtotal . '/-';        ?></td>-->
+                                    <!--<td style="font-weight: bold;"><?php //echo $grandtotal . '/-';                           ?></td>-->
                                     <td colspan=""></td>
                                     <td colspan=""></td>
                                     <td colspan=""></td>
@@ -269,14 +349,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <td></td>
                                     <td><?= $form->field($model, 'service_id')->dropDownList(ArrayHelper::map(Services::findAll(['status' => 1]), 'id', 'service'), ['prompt' => '-Service-'])->label(false); ?></td>
                                     <td><?= $form->field($model, 'supplier')->dropDownList(ArrayHelper::map(Contacts::find()->where(new Expression('FIND_IN_SET(:contact_type, contact_type)'))->addParams([':contact_type' => 4])->all(), 'id', 'name'), ['prompt' => '-Supplier-'])->label(false); ?></td>
-    <!--                                <td><?php // $form->field($model, 'supplier')->dropDownList(ArrayHelper::map(Contacts::findAll(['status' => 1]), 'id', 'name'), ['prompt' => '-Supplier-'])->label(false);                                           ?></td>-->
-    <!--                                                                <td><?php // $form->field($model, 'currency')->dropDownList(ArrayHelper::map(Currency::findAll(['status' => 1]), 'id', 'currency_name'), ['prompt' => '-Currency-'])->label(false);                                                ?></td>-->
+    <!--                                <td><?php // $form->field($model, 'supplier')->dropDownList(ArrayHelper::map(Contacts::findAll(['status' => 1]), 'id', 'name'), ['prompt' => '-Supplier-'])->label(false);                                                              ?></td>-->
+    <!--                                                                <td><?php // $form->field($model, 'currency')->dropDownList(ArrayHelper::map(Currency::findAll(['status' => 1]), 'id', 'currency_name'), ['prompt' => '-Currency-'])->label(false);                                                                   ?></td>-->
                                     <td><?= $form->field($model, 'unit_rate')->textInput(['placeholder' => 'Unit Rate'])->label(false) ?></td>
                                     <td><?= $form->field($model, 'unit')->textInput(['placeholder' => 'Quantity'])->label(false) ?></td>
                                     <td><?= $form->field($model, 'epda')->textInput(['placeholder' => 'EPDA'])->label(false) ?></td>
                                     <td><?= $form->field($model, 'fda')->textInput(['placeholder' => 'FDA'])->label(false) ?></td>
                                     <td><?= $form->field($model, 'payment_type')->dropDownList(['1' => 'Manual', '2' => 'Check'], ['prompt' => '-Payment Type-'])->label(false) ?></td>
-                                    <!--<td><?php // $form->field($model, 'total')->textInput(['placeholder' => 'TOTAL'])->label(false)        ?></td>-->
+                                    <!--<td><?php // $form->field($model, 'total')->textInput(['placeholder' => 'TOTAL'])->label(false)                           ?></td>-->
                                     <td><?= $form->field($model, 'invoice_type')->dropDownList(ArrayHelper::map(InvoiceType::findAll(['status' => 1]), 'id', 'invoice_type'), ['prompt' => '-Invoice Type-'])->label(false); ?></td>
                                     <?php
                                     $arr1 = explode(',', $appointment->principal);
@@ -286,7 +366,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                     <td><div class = "form-group field-closeestimate-principal">
 
                                                             <select id = "closeestimate-principal" class = "form-control" name = "CloseEstimate[principal]">
-                                                                <option value = "<?=$value ?>"><?= $appointment->getDebtorName($value); ?></option>
+                                                                <option value = "<?= $value ?>"><?= $appointment->getDebtorName($value); ?></option>
                                                             </select>
 
                                                             <div class = "help-block"></div>
@@ -438,7 +518,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
             </div>
-            <?php //Pjax::end();            ?> 
+            <?php //Pjax::end();               ?> 
         </div>
     </div>
     <style>
@@ -451,6 +531,9 @@ $this->params['breadcrumbs'][] = $this->title;
         .principp{
             display:none;
         }
+        /*        .edit-input {
+                    display:none;
+                }*/
     </style>
     <script>
                         $("document").ready(function () {
@@ -463,6 +546,84 @@ $this->params['breadcrumbs'][] = $this->title;
                                     $('.principp').hide();
                                 }
                             });
+
+                            /*  
+                             * Double click enter function
+                             * */
+
+                            $('.edit_text').on('dblclick', function () {
+                                var val = $(this).attr('val');
+                                var idd = this.id;
+                                var res_data = idd.split("-");
+                                if (res_data[1] == 'comments' || res_data[1] == 'comment_to_fda') {
+                                    $(this).html('<textarea class="' + idd + '" value="' + val + '">' + val + '</textarea>');
+
+                                } else {
+                                    $(this).html('<input class="' + idd + '" type="text" value="' + val + '"/>');
+
+                                }
+
+                                $('.' + idd).focus();
+                            });
+                            $('.edit_text').on('focusout', 'input,textarea', function () {
+                                var thiss = $(this).parent('.edit_text');
+                                var data_id = thiss.attr('id');
+                                var update = thiss.attr('update');
+                                var res_id = data_id.split("-");
+                                if (typeof update !== typeof undefined && update !== false) {
+                                               var update_result = update.split(",");
+                                               var unit = $('#' + update_result[1]).html();
+                                        }
+                                
+                                var res_val = $(this).val();
+                                
+                                $.ajax({
+                                    type: 'POST',
+                                    cache: false,
+                                    data: {id: res_id[0], name: res_id[1], valuee: res_val},
+                                    url: '<?= Yii::$app->homeUrl; ?>/appointment/close-estimate/edit-estimate',
+                                    success: function (data) {
+                                        thiss.html(res_val);
+                                        if (typeof update !== typeof undefined && update !== false) {
+                                                $('#' + update).html(res_val * unit);
+                                        }
+                                        
+                                    }
+                                });
+
+                            });
+
+                            /*  
+                             * Double click Dropdown
+                             * */
+
+                            $('.edit_dropdown').on('dblclick', function () {
+                                var val = $(this).attr('val');
+                                var drop_id = $(this).attr('drop_id');
+                                var idd = this.id;
+                                var option = $('#' + drop_id).html();
+                                $(this).html('<select class="' + drop_id + '" value="' + val + '">' + option + '</select>');
+                                $('.' + drop_id + ' option[value="' + val + '"]').attr("selected", "selected");
+                                $('.' + drop_id).focus();
+
+                            });
+                            $('.edit_dropdown').on('focusout', 'select', function () {
+                                var thiss = $(this).parent('.edit_dropdown');
+                                var data_id = thiss.attr('id');
+                                var res_id = data_id.split("-");
+                                var res_val = $(this).val();
+                                $.ajax({
+                                    type: 'POST',
+                                    cache: false,
+                                    data: {id: res_id[0], name: res_id[1], valuee: res_val},
+                                    url: '<?= Yii::$app->homeUrl; ?>/appointment/close-estimate/edit-estimate-service',
+                                    success: function (data) {
+                                        thiss.html(data);
+                                    }
+                                });
+
+                            });
+
 
                         });
     </script>

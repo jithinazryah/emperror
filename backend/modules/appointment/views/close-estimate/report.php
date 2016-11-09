@@ -30,6 +30,8 @@ and open the template in the editor.
 
         @media print {
             thead {display: table-header-group;}
+            /*            tfoot {position:absolute;
+                               bottom:0;}*/
             .main-tabl{width: 100%}
         }
         @media screen{
@@ -40,6 +42,11 @@ and open the template in the editor.
         .print{
             margin-top: 18px;
             margin-left: 434px;
+        }
+        footer {
+            width: 100%;
+            position: absolute;
+            bottom: 0px;
         }
     </style>
     <!--    </head>
@@ -131,13 +138,13 @@ and open the template in the editor.
             <tr>
                 <td>
                     <?php
-                    if ($invoice_type != 'all'){
-                    if ($princip->principal != '') {
-                            $close_estimates = CloseEstimate::findAll(['apponitment_id' => $appointment->id, 'invoice_type' => $princip->invoice_type, 'principal' => $princip->principal]);
+                    if ($invoice_type != 'all') {
+                            if ($princip->principal != '') {
+                                    $close_estimates = CloseEstimate::findAll(['apponitment_id' => $appointment->id, 'invoice_type' => $princip->invoice_type, 'principal' => $princip->principal]);
+                            } else {
+                                    $close_estimates = CloseEstimate::findAll(['apponitment_id' => $appointment->id, 'invoice_type' => $princip->invoice_type]);
+                            }
                     } else {
-                            $close_estimates = CloseEstimate::findAll(['apponitment_id' => $appointment->id, 'invoice_type' => $princip->invoice_type]);
-                    }
-                    }else{
                             $close_estimates = CloseEstimate::findAll(['apponitment_id' => $appointment->id, 'principal' => $principp]);
                     }
                     ?>
@@ -216,8 +223,8 @@ and open the template in the editor.
                 <td>
                     <div class="bank">
                         <p>Amount chargeable (in words)</p>
-                        <h6>UAE Dirhams <?php echo ucfirst(Yii::$app->NumToWord->ConvertNumberToWords($grandtotal)) . ' Only'; ?> </h6>
-                        <h6>USD <?php echo ucfirst(Yii::$app->NumToWord->ConvertNumberToWords($usd)) . ' Only'; ?> </h6>
+                        <h6>UAE Dirhams <?php echo ucwords(Yii::$app->NumToWord->ConvertNumberToWords($grandtotal)) . ' Only'; ?> </h6>
+                        <h6>USD <?php echo ucwords(Yii::$app->NumToWord->ConvertNumberToWords($usd)) . ' Only'; ?> </h6>
                         <h6>Company's Bank Details:</h6>
                         <div class="bank-left">
                             <table class="tbl3">
@@ -287,9 +294,12 @@ and open the template in the editor.
                     </div>
                 </td>
             </tr>
-            <tr>
-                <td>
-                    <div class="footer">
+
+        </tbody>
+        <tfoot>
+            <tr> 
+                <td style="width:100%">
+                    <div class="">
                         <span>
                             <p>
                                 Emperor Shipping Lines LLC, P.O.Box-328231, Saqr Port, Al Shaam, Ras Al Khaimah, UAE
@@ -301,11 +311,11 @@ and open the template in the editor.
                                 www.emperor.ae
                             </p>
                         </span>
-                    </div>
-                </td>
-            </tr>
+                    </div> 
+                </td> 
+            </tr> 
+        </tfoot>
 
-        </tbody>
     </table>
 </div>
 <script>

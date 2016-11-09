@@ -93,6 +93,11 @@ h6{
     display: inline-block;
     width: 100%;
 }
+.footer{
+    font-size: 12.5px;
+    display: inline-block;
+    width: 100%;
+}
 .header table{
     margin-top: 12px;
 }

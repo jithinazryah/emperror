@@ -151,21 +151,83 @@ $this->params['breadcrumbs'][] = $this->title;
                                         ?>
                                         <tr>
                                             <td><?= $i; ?></td>
-                                            <td><span class="co-name"><?= $estimate->service->service ?></span></td>
-                                            <td><?= $estimate->supplier0->name ?></td>
-            <!--                                                                <td><? $estimate->currency0->currency_symbol ?></td>-->
-                                            <td><?php echo Yii::$app->SetValues->NumberFormat($estimate->unit_rate) . '/-'; ?></td></td>
-                                            <td><?= $estimate->unit; ?></td>
-            <!--                                                                <td><? $estimate->roe; ?></td>-->
-                                            <td><?php echo Yii::$app->SetValues->NumberFormat($estimate->epda) . '/-'; ?></td></td>
-                                            <td><?= $estimate->principal0->principal_id; ?></td>
-                                            <td><?= $estimate->rate_to_category; ?></td>
-                                            <td><?= $estimate->comments; ?></td>
-                                            <!--<td><?php // $estimate->images;                       ?></td>-->
+                                            <td><span class="" drop_id="estimatedproforma-service_id" id="<?= $estimate->id ?>-service_id" val="<?= $estimate->service_id ?>"><?= $estimate->service->service ?></span></td>
+                                            <td><span class="" drop_id="estimatedproforma-supplier" id="<?= $estimate->id ?>-supplier" val="<?= $estimate->supplier ?>"><?= $estimate->supplier0->name ?></span></td>
+                                            <td><span class="edit_text" id="<?= $estimate->id ?>-unit_rate"  update="<?= $estimate->id ?>-epda,<?= $estimate->id ?>-unit" val="<?= $estimate->unit_rate ?>">
+                                                    <?php
+                                                    if ($estimate->unit_rate == '') {
+                                                            echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+                                                    } else {
+                                                            echo Yii::$app->SetValues->NumberFormat($estimate->unit_rate);
+                                                    }
+                                                    ?>
+                                                </span>
+                                            </td>
+                                            <td><span class="edit_text" id="<?= $estimate->id ?>-unit" update="<?= $estimate->id ?>-epda,<?= $estimate->id ?>-unit_rate" val="<?= $estimate->unit ?>">
+                                                    <?php
+                                                    if ($estimate->unit == '') {
+                                                            echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+                                                    } else {
+                                                            echo Yii::$app->SetValues->NumberFormat($estimate->unit);
+                                                    }
+                                                    ?>
+                                                </span>
+                                            </td>
+                                            <td><span class="edit_text" id="<?= $estimate->id ?>-epda" val="<?= $estimate->epda ?>">
+                                                    <?php
+                                                    if ($estimate->epda == '') {
+                                                            echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+                                                    } else {
+                                                            echo Yii::$app->SetValues->NumberFormat($estimate->epda);
+                                                    }
+                                                    ?>
+                                                </span>
+                                            </td>
+                                            <td><span class="edit_dropdown" drop_id="estimatedproforma-principal" id="<?= $estimate->id ?>-principal" val="<?= $estimate->principal ?>">
+                                                    <?php
+                                                    if ($estimate->principal == '') {
+                                                            echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+                                                    } else {
+                                                            echo $estimate->principal0->principal_id;
+                                                    }
+                                                    ?>
+                                                </span>
+                                            </td>
+                                            <td><span class="edit_text" id="<?= $estimate->id ?>-rate_to_category" val="<?= $estimate->rate_to_category ?>">
+                                                    <?php
+                                                    if ($estimate->rate_to_category == '') {
+                                                            echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+                                                    } else {
+                                                            if (strlen($estimate->rate_to_category) > 15) {
+                                                                    echo substr($estimate->rate_to_category, 0, 15) . '...';
+                                                            } else {
+                                                                    echo $estimate->rate_to_category;
+                                                            }
+                                                    }
+                                                    ?>
+
+                                                </span>
+                                            </td>
+                                            <td><span class="edit_text" id="<?= $estimate->id ?>-comments" val="<?= $estimate->comments ?>">
+                                                    <?php
+                                                    if ($estimate->comments == '') {
+                                                            echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+                                                    } else {
+                                                            if (strlen($estimate->comments) > 15) {
+                                                                    echo substr($estimate->comments, 0, 15) . '...';
+                                                            } else {
+                                                                    echo $estimate->comments;
+                                                            }
+                                                    }
+                                                    ?>
+
+                                                </span>
+                                            </td>
+                                            <!--<td><?php // $estimate->images;                           ?></td>-->
                                             <td>
-                                                <?= Html::a('<i class="fa fa-pencil"></i>', ['/appointment/estimated-proforma/add', 'id' => $id, 'prfrma_id' => $estimate->id], ['class' => 'btn btn-icon btn-primary', 'tittle' => 'Edit']) ?>
-                                                <?= Html::a('<i class="fa fa-remove"></i>', ['/appointment/estimated-proforma/delete-performa', 'id' => $estimate->id], ['class' => 'btn btn-icon btn-red', 'tittle' => 'Edit', 'data-confirm' => 'Are you sure you want to delete this item?']) ?>
-                                                <?= Html::a('<i class="fa fa-database"></i>', ['/appointment/sub-services/add', 'id' => $estimate->id], ['class' => 'btn btn-success', 'target' => '_blank']) ?>
+                                                <?= Html::a('<i class="fa fa-pencil"></i>', ['/appointment/estimated-proforma/add', 'id' => $id, 'prfrma_id' => $estimate->id], ['class' => '', 'tittle' => 'Edit']) ?>
+                                                <?= Html::a('<i class="fa fa-remove"></i>', ['/appointment/estimated-proforma/delete-performa', 'id' => $estimate->id], ['class' => '', 'tittle' => 'Edit', 'data-confirm' => 'Are you sure you want to delete this item?']) ?>
+                                                <?= Html::a('<i class="fa fa-database"></i>', ['/appointment/sub-services/add', 'id' => $estimate->id], ['class' => '', 'target' => '_blank']) ?>
         <!--                                            <a href="javascript:;" onclick="showAjaxModal(<?= $estimate->id ?>);" class="btn btn-success">Sub</a>-->
                                                 <?php //Html::a('Sub', [''], ['class' => 'btn btn-success', "onclick" => "showAjaxModal(".$estimate->id.");"])   ?>
                                             </td>
@@ -191,10 +253,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <td></td>
                                     <td><?= $form->field($model, 'service_id')->dropDownList(ArrayHelper::map(Services::findAll(['status' => 1]), 'id', 'service'), ['prompt' => '-Service-'])->label(false); ?></td>
                                     <td><?= $form->field($model, 'supplier')->dropDownList(ArrayHelper::map(Contacts::findAll(['status' => 1]), 'id', 'name'), ['prompt' => '-Supplier-'])->label(false); ?></td>
-                                   <!--<td><?php //$form->field($model, 'currency')->dropDownList(ArrayHelper::map(Currency::findAll(['status' => 1]), 'id', 'currency_name'), ['prompt' => '-Currency-'])->label(false);                                                         ?></td>-->
+                                   <!--<td><?php //$form->field($model, 'currency')->dropDownList(ArrayHelper::map(Currency::findAll(['status' => 1]), 'id', 'currency_name'), ['prompt' => '-Currency-'])->label(false);                                                             ?></td>-->
                                     <td><?= $form->field($model, 'unit_rate')->textInput(['placeholder' => 'Unit Rate'])->label(false) ?></td>
                                     <td><?= $form->field($model, 'unit')->textInput(['placeholder' => 'Quantity'])->label(false) ?></td>
-                                    <!--<td><?php //$form->field($model, 'roe')->textInput(['placeholder' => 'ROE'])->label(false)                                                         ?></td>-->
+                                    <!--<td><?php //$form->field($model, 'roe')->textInput(['placeholder' => 'ROE'])->label(false)                                                             ?></td>-->
                                     <td><?= $form->field($model, 'epda')->textInput(['placeholder' => 'EPDA', 'disabled' => true])->label(false) ?></td>
                                     <?php
                                     $arr1 = explode(',', $appointment->principal);
@@ -204,7 +266,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                     <td><div class="form-group field-estimatedproforma-principal">
 
                                                             <select id="estimatedproforma-principal" class="form-control" name="EstimatedProforma[principal]">
-                                                                <option value="<?=$value ?>"><?= $appointment->getDebtorName($value); ?></option>
+                                                                <option value="<?= $value ?>"><?= $appointment->getDebtorName($value); ?></option>
                                                             </select>
 
                                                             <div class="help-block"></div>
@@ -219,7 +281,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ?>
                                     <td><?= $form->field($model, 'rate_to_category')->textInput(['placeholder' => 'Rate to Category'])->label(false) ?></td>
                                     <td><?= $form->field($model, 'comments')->textInput(['placeholder' => 'Comments'])->label(false) ?></td>
-                                    <!--<td><?php // $form->field($model, 'images[]')->fileInput(['multiple' => true])->label(false)                       ?></td>-->
+                                    <!--<td><?php // $form->field($model, 'images[]')->fileInput(['multiple' => true])->label(false)                           ?></td>-->
                                     <td><?= Html::submitButton($model->isNewRecord ? 'Add' : 'Update', ['class' => 'btn btn-success']) ?>
                                     </td>
                                     <?php ActiveForm::end(); ?>
@@ -428,4 +490,86 @@ $this->params['breadcrumbs'][] = $this->title;
         }
 
     </style>
+    <script>
+                        $("document").ready(function () {
+
+                            /*  
+                             * Double click enter function
+                             * */
+
+                            $('.edit_text').on('dblclick', function () {
+                                   
+                                var val = $(this).attr('val');
+                                var idd = this.id;
+                                var res_data = idd.split("-");
+                                if (res_data[1] == 'comments' || res_data[1] == 'rate_to_category') {
+                                    $(this).html('<textarea class="' + idd + '" value="' + val + '">' + val + '</textarea>');
+
+                                } else {
+                                    $(this).html('<input class="' + idd + '" type="text" value="' + val + '"/>');
+
+                                }
+
+                                $('.' + idd).focus();
+                            });
+                            $('.edit_text').on('focusout', 'input,textarea', function () {
+                                var thiss = $(this).parent('.edit_text');
+                                var data_id = thiss.attr('id');
+                                var update = thiss.attr('update');
+                                var res_id = data_id.split("-");
+                                if (typeof update !== typeof undefined && update !== false) {
+                                    var update_result = update.split(",");
+                                    var unit = $('#' + update_result[1]).html();
+                                }
+                                var res_val = $(this).val();
+                                $.ajax({
+                                    type: 'POST',
+                                    cache: false,
+                                    data: {id: res_id[0], name: res_id[1], valuee: res_val},
+                                    url: '<?= Yii::$app->homeUrl; ?>/appointment/estimated-proforma/edit-estimate',
+                                    success: function (data) {
+                                        thiss.html(res_val);
+                                        if (typeof update !== typeof undefined && update !== false) {
+                                            $('#' + update).html(res_val * unit);
+                                        }
+
+                                    }
+                                });
+
+                            });
+
+                            /*  
+                             * Double click Dropdown
+                             * */
+
+                            $('.edit_dropdown').on('dblclick', function () {
+                                var val = $(this).attr('val');
+                                var drop_id = $(this).attr('drop_id');
+                                var idd = this.id;
+                                var option = $('#' + drop_id).html();
+                                $(this).html('<select class="' + drop_id + '" value="' + val + '">' + option + '</select>');
+                                $('.' + drop_id + ' option[value="' + val + '"]').attr("selected", "selected");
+                                $('.' + drop_id).focus();
+
+                            });
+                            $('.edit_dropdown').on('focusout', 'select', function () {
+                                var thiss = $(this).parent('.edit_dropdown');
+                                var data_id = thiss.attr('id');
+                                var res_id = data_id.split("-");
+                                var res_val = $(this).val();
+                                $.ajax({
+                                    type: 'POST',
+                                    cache: false,
+                                    data: {id: res_id[0], name: res_id[1], valuee: res_val},
+                                    url: '<?= Yii::$app->homeUrl; ?>/appointment/estimated-proforma/edit-estimate-service',
+                                    success: function (data) {
+                                        thiss.html(data);
+                                    }
+                                });
+
+                            });
+
+
+                        });
+    </script>
 </div>
