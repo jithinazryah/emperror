@@ -22,7 +22,7 @@ class NumToWord extends Component {
          * default Upload image function
          */
 
-        public function ConvertNumberToWords($number) {
+        public function ConvertNumberToWords($number,$currency='AED') {
                 $hyphen = ' ';
                 $conjunction = ' and ';
                 $separator = ' ';
@@ -133,7 +133,12 @@ class NumToWord extends Component {
                         foreach (str_split((string) $fraction) as $number) {
                                 $words[] = $dictionary[$number];
                         }
-                        $string .= $this->ConvertNumberToWords($fraction) . " Paise";
+                        if($currency == 'AED'){
+                                $string .= $this->ConvertNumberToWords($fraction) . " Fils";
+                        }else{
+                                $string .= $this->ConvertNumberToWords($fraction) . " Cent";
+                        }
+                        
                 }
 
                 return $string;

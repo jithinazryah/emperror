@@ -153,7 +153,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             <td><?= $i; ?></td>
                                             <td><span class="" drop_id="estimatedproforma-service_id" id="<?= $estimate->id ?>-service_id" val="<?= $estimate->service_id ?>"><?= $estimate->service->service ?></span></td>
                                             <td><span class="" drop_id="estimatedproforma-supplier" id="<?= $estimate->id ?>-supplier" val="<?= $estimate->supplier ?>"><?= $estimate->supplier0->name ?></span></td>
-                                            <td><span class="edit_text" id="<?= $estimate->id ?>-unit_rate"  update="<?= $estimate->id ?>-epda,<?= $estimate->id ?>-unit" val="<?= $estimate->unit_rate ?>">
+                                            <td><span class="edit_text" id="<?= $estimate->id ?>-unit_rate"  val="<?= $estimate->unit_rate ?>">
                                                     <?php
                                                     if ($estimate->unit_rate == '') {
                                                             echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
@@ -163,7 +163,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                     ?>
                                                 </span>
                                             </td>
-                                            <td><span class="edit_text" id="<?= $estimate->id ?>-unit" update="<?= $estimate->id ?>-epda,<?= $estimate->id ?>-unit_rate" val="<?= $estimate->unit ?>">
+                                            <td><span class="edit_text" id="<?= $estimate->id ?>-unit" val="<?= $estimate->unit ?>">
                                                     <?php
                                                     if ($estimate->unit == '') {
                                                             echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
@@ -266,7 +266,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                     <td><div class="form-group field-estimatedproforma-principal">
 
                                                             <select id="estimatedproforma-principal" class="form-control" name="EstimatedProforma[principal]">
-                                                                <option value="<?= $value ?>"><?= $appointment->getDebtorName($value); ?></option>
+                                                                <option value="<?= $value ?>"><?= $appointment->getClintCode($value); ?></option>
                                                             </select>
 
                                                             <div class="help-block"></div>
@@ -275,7 +275,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             }
                                     } else {
                                             ?>
-                                            <td><?= $form->field($model, 'principal')->dropDownList(ArrayHelper::map(Debtor::findAll(['status' => 1, 'id' => explode(',', $appointment->principal)]), 'id', 'principal_name'), ['prompt' => '-Principal-'])->label(false); ?></td>
+                                            <td><?= $form->field($model, 'principal')->dropDownList(ArrayHelper::map(Debtor::findAll(['status' => 1, 'id' => explode(',', $appointment->principal)]), 'id', 'principal_id'), ['prompt' => '-Principal-'])->label(false); ?></td>
                                             <?php
                                     }
                                     ?>
@@ -518,12 +518,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                 var update = thiss.attr('update');
                                 var res_id = data_id.split("-");
                                 var res_val = $(this).val();
-                                if (typeof update !== typeof undefined && update !== false) {
-                                    var update_result = update.split(",");
-                                    var unit = $('#' + update_result[1]).html();
-                                    unit = unit.split(',').join('');
-                                    res_val = res_val.split(',').join('');
-                                }
                                 $.ajax({
                                     type: 'POST',
                                     cache: false,
@@ -531,10 +525,6 @@ $this->params['breadcrumbs'][] = $this->title;
                                     url: '<?= Yii::$app->homeUrl; ?>/appointment/estimated-proforma/edit-estimate',
                                     success: function (data) {
                                         thiss.html(res_val);
-                                        if (typeof update !== typeof undefined && update !== false) {
-                                            $('#' + update).html(res_val * unit);
-                                        }
-
                                     }
                                 });
 

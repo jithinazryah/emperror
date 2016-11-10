@@ -40,7 +40,7 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
             <?php //Pjax::begin();    ?> 
             <div class="panel-body">
-               <?= AppointmentWidget::widget(['id' => $appointment->id]) ?>
+                <?= AppointmentWidget::widget(['id' => $appointment->id]) ?>
 
                 <hr class="appoint_history" />
 
@@ -69,11 +69,66 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <tr>
                                         <td><?= $i; ?></td>
                                         <td><?= $sub->sub->sub_service; ?></td>
-                                        <td><?= $sub->rate_to_category; ?></td>
-                                        <td><?= $sub->unit; ?></td>
-                                        <td><?= $sub->unit_price; ?></td>
-                                        <td><?= $sub->total; ?></td>
-                                        <td><?= $sub->comments; ?></td>
+                                        <td><span class="edit_text" id="<?= $sub->id ?>-rate_to_category" val="<?= $sub->rate_to_category ?>">
+                                                <?php
+                                                if ($sub->rate_to_category == '') {
+                                                        echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+                                                } else {
+                                                        if (strlen($sub->rate_to_category) > 15) {
+                                                                echo substr($sub->rate_to_category, 0, 15) . '...';
+                                                        } else {
+                                                                echo $sub->rate_to_category;
+                                                        }
+                                                }
+                                                ?>
+
+                                            </span>
+                                        </td>
+                                        <td><span class="edit_text" id="<?= $sub->id ?>-unit" val="<?= $sub->unit ?>">
+                                                <?php
+                                                if ($sub->unit == '') {
+                                                        echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+                                                } else {
+                                                        echo Yii::$app->SetValues->NumberFormat($sub->unit);
+                                                }
+                                                ?>
+                                            </span>
+                                        </td>
+                                        <td><span class="edit_text" id="<?= $sub->id ?>-unit_price" val="<?= $sub->unit_price ?>">
+                                                <?php
+                                                if ($sub->unit_price == '') {
+                                                        echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+                                                } else {
+                                                        echo Yii::$app->SetValues->NumberFormat($sub->unit_price);
+                                                }
+                                                ?>
+                                            </span>
+                                        </td>
+                                        <td><span class="edit_text" id="<?= $sub->id ?>-total" val="<?= $sub->total ?>">
+                                                <?php
+                                                if ($sub->total == '') {
+                                                        echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+                                                } else {
+                                                        echo Yii::$app->SetValues->NumberFormat($sub->total);
+                                                }
+                                                ?>
+                                            </span>
+                                        </td>
+                                        <td><span class="edit_text" id="<?= $sub->id ?>-comments" val="<?= $sub->comments ?>">
+                                                <?php
+                                                if ($sub->comments == '') {
+                                                        echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+                                                } else {
+                                                        if (strlen($sub->comments) > 15) {
+                                                                echo substr($sub->comments, 0, 15) . '...';
+                                                        } else {
+                                                                echo $sub->comments;
+                                                        }
+                                                }
+                                                ?>
+
+                                            </span>
+                                        </td>
                                         <td>
                                             <?= Html::a('<i class="fa fa-pencil"></i>', ['/appointment/sub-services/add', 'id' => $sub->estid, 'sub_id' => $sub->id], ['class' => '']) ?>
                                             <?= Html::a('<i class="fa fa-remove"></i>', ['/appointment/sub-services/delete-sub', 'id' => $sub->id], ['class' => '']) ?>
@@ -88,14 +143,14 @@ $this->params['breadcrumbs'][] = $this->title;
                             <tr class="filter">
                                 <?php $form = ActiveForm::begin(); ?>
                                 <td></td>
-<!--                                <td><?php // $form->field($model, 'service_id')->dropDownList(ArrayHelper::map(Services::findAll(['status' => 1]), 'id', 'service'), ['prompt' => '-Service-'])->label(false);     ?></td>-->
+<!--                                <td><?php // $form->field($model, 'service_id')->dropDownList(ArrayHelper::map(Services::findAll(['status' => 1]), 'id', 'service'), ['prompt' => '-Service-'])->label(false);           ?></td>-->
                                 <td><?= $form->field($model, 'sub_service')->dropDownList(ArrayHelper::map(MasterSubService::findAll(['status' => 1]), 'id', 'sub_service'), ['prompt' => '- Sub Service-'])->label(false); ?></td>
-<!--                                <td><?php // $form->field($model, 'supplier')->dropDownList(ArrayHelper::map(Contacts::findAll(['status' => 1]), 'id', 'name'), ['prompt' => '-Supplier-'])->label(false);            ?></td>
-                               <td><?php //$form->field($model, 'currency')->dropDownList(ArrayHelper::map(Currency::findAll(['status' => 1]), 'id', 'currency_name'), ['prompt' => '-Currency-'])->label(false);                         ?></td>-->
+<!--                                <td><?php // $form->field($model, 'supplier')->dropDownList(ArrayHelper::map(Contacts::findAll(['status' => 1]), 'id', 'name'), ['prompt' => '-Supplier-'])->label(false);                  ?></td>
+                               <td><?php //$form->field($model, 'currency')->dropDownList(ArrayHelper::map(Currency::findAll(['status' => 1]), 'id', 'currency_name'), ['prompt' => '-Currency-'])->label(false);                               ?></td>-->
                                 <td><?= $form->field($model, 'rate_to_category')->textInput(['placeholder' => 'Rate To Category'])->label(false) ?></td>
                                 <td><?= $form->field($model, 'unit')->textInput(['placeholder' => 'Unit'])->label(false) ?></td>
                                 <td><?= $form->field($model, 'unit_price')->textInput(['placeholder' => 'Unit Price'])->label(false) ?></td>
-<!--                                <td><?php //$form->field($model, 'roe')->textInput(['placeholder' => 'ROE'])->label(false)                         ?></td>-->
+<!--                                <td><?php //$form->field($model, 'roe')->textInput(['placeholder' => 'ROE'])->label(false)                               ?></td>-->
                                 <td><?= $form->field($model, 'total')->textInput(['placeholder' => 'Total', 'disabled' => true])->label(false) ?></td>
                                 <td><?= $form->field($model, 'comments')->textInput(['placeholder' => 'Comments'])->label(false) ?></td>
                                 <td><?= Html::submitButton($model->isNewRecord ? 'Add' : 'Update', ['class' => 'btn btn-success']) ?>
@@ -226,4 +281,45 @@ $this->params['breadcrumbs'][] = $this->title;
             background-color: #b9c7a7;
         }
     </style>
+    <script>
+            $("document").ready(function () {
+
+                /*  
+                 * Double click enter function
+                 * */
+
+                $('.edit_text').on('dblclick', function () {
+
+                    var val = $(this).attr('val');
+                    var idd = this.id;
+                    var res_data = idd.split("-");
+                    if (res_data[1] == 'comments' || res_data[1] == 'rate_to_category') {
+                        $(this).html('<textarea class="' + idd + '" value="' + val + '">' + val + '</textarea>');
+
+                    } else {
+                        $(this).html('<input class="' + idd + '" type="text" value="' + val + '"/>');
+
+                    }
+
+                    $('.' + idd).focus();
+                });
+                $('.edit_text').on('focusout', 'input,textarea', function () {
+                    var thiss = $(this).parent('.edit_text');
+                    var data_id = thiss.attr('id');
+                    var update = thiss.attr('update');
+                    var res_id = data_id.split("-");
+                    var res_val = $(this).val();
+                    $.ajax({
+                        type: 'POST',
+                        cache: false,
+                        data: {id: res_id[0], name: res_id[1], valuee: res_val},
+                        url: '<?= Yii::$app->homeUrl; ?>/appointment/sub-services/edit-estimate-sub',
+                        success: function (data) {
+                            thiss.html(res_val);
+                        }
+                    });
+
+                });
+            });
+    </script>
 </div>

@@ -195,5 +195,29 @@ class SubServicesController extends Controller {
                         throw new NotFoundHttpException('The requested page does not exist.');
                 }
         }
+        
+        public function actionEditEstimateSub() {
+                if (Yii::$app->request->isAjax) {
+                        $id = $_POST['id'];
+                        $name = $_POST['name'];
+                        $value = $_POST['valuee'];
+                        $sub_service = SubServices::find()->where(['id' => $id])->one();
+                        if ($name == 'unit' || $name == 'unit_price') {
+                                if ($name == 'unit') {
+                                        $sub_service->total = $sub_service->unit_price * $value;
+                                } else {
+                                        $sub_service->total = $sub_service->unit * $value;
+                                }
+                        }
+                        if ($value != '') {
+                                $sub_service->$name = $value;
+                                if ($sub_service->save()) {
+                                        return 1;
+                                } else {
+                                        return 2;
+                                }
+                        }
+                }
+        }
 
 }

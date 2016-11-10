@@ -15,6 +15,8 @@ use yii\widgets\ActiveForm;
         <?= $form->field($model, 'principal_name')->textInput(['maxlength' => true]) ?>
     
         <?= $form->field($model, 'principal_id')->textInput(['maxlength' => true]) ?>
+    
+        <?= $form->field($model, 'principal_ref_no')->textInput(['maxlength' => true]) ?>
 
         <?= $form->field($model, 'address')->textarea(['rows' => 6]) ?>
 

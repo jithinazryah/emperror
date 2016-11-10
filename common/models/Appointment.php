@@ -138,6 +138,11 @@ class Appointment extends \yii\db\ActiveRecord {
                 $data = Debtor::findOne(['id' => $principal]);
                 return $data->principal_id;
         }
+        
+        public function getClintRef($principal) {
+                $data = Debtor::findOne(['id' => $principal]);
+                return $data->principal_ref_no;
+        }
 
         public function getStages0() {
                 return $this->hasOne(Stages::className(), ['id' => 'stage']);

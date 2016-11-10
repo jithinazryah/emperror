@@ -12,6 +12,7 @@ use common\models\CloseEstimate;
 use common\models\Services;
 use common\models\InvoiceType;
 use common\models\Currency;
+use common\models\EstimateReport;
 ?>
 <!DOCTYPE html>
 <!--
@@ -88,7 +89,17 @@ and open the template in the editor.
                                 <td style="width: 25%;">Invoice Date : <?php echo date('d-M-y'); ?></td>
                             </tr>
                             <tr>
-                                <td style="width: 25%;">EPDA Ref :</td>
+                                <?php
+                                $arr = ['1' => 'A', '2' => 'B', '3' => 'C', '4' => 'D', '5' => 'E', '6' => 'F', '7' => 'G', '8' => 'H', '9' => 'I', '10' => 'J', '11' => 'K', '12' => 'L'];
+                                $last_report_saved = EstimateReport::find()->orderBy(['id' => SORT_DESC])->where(['appointment_id' => $appointment->id])->All();
+                                $c = count($last_report_saved);
+                                if ($c == 0) {
+                                        $ref_no = 'EMPRK-' . $appointment->id . '/' . date('Y');
+                                } else {
+                                        $ref_no = 'EMPRK-' . $appointment->id . $arr[$c] . '/' . date('Y');
+                                }
+                                ?>
+                                <td style="width: 25%;">EPDA Ref :<?php echo $ref_no; ?></td>
                                 <td style="width: 25%;">Customer Code :
                                     <?php
                                     if ($princip->principal != '') {
@@ -125,7 +136,15 @@ and open the template in the editor.
                             </tr>
                             <tr>
                                 <td style="width: 25%;">Port of Call :<?= $appointment->portOfCall->port_name ?> </td>
-                                <td style="width: 25%;"></td>
+                                <td style="width: 25%;">Client Ref :
+                                    <?php
+                                    if ($princip->principal != '') {
+                                            echo $appointment->getClintRef($princip->principal);
+                                    } else {
+                                            echo $appointment->getClintRef($appointment->principal);
+                                    }
+                                    ?>
+                                </td>
                             </tr>
                             <tr>
                                 <td style="width: 25%;">Arrival Date :<?= Yii::$app->SetValues->DateFormate($ports->eosp); ?></td>
@@ -224,7 +243,7 @@ and open the template in the editor.
                     <div class="bank">
                         <p>Amount chargeable (in words)</p>
                         <h6>UAE Dirhams <?php echo ucwords(Yii::$app->NumToWord->ConvertNumberToWords($grandtotal)) . ' Only'; ?> </h6>
-                        <h6>USD <?php echo ucwords(Yii::$app->NumToWord->ConvertNumberToWords($usd)) . ' Only'; ?> </h6>
+                        <h6>USD <?php echo ucwords(Yii::$app->NumToWord->ConvertNumberToWords($usd,'USD')) . ' Only'; ?> </h6>
                         <h6>Company's Bank Details:</h6>
                         <div class="bank-left">
                             <table class="tbl3">
@@ -294,12 +313,9 @@ and open the template in the editor.
                     </div>
                 </td>
             </tr>
-
-        </tbody>
-        <tfoot>
             <tr> 
                 <td style="width:100%">
-                    <div class="">
+                    <div class="footer">
                         <span>
                             <p>
                                 Emperor Shipping Lines LLC, P.O.Box-328231, Saqr Port, Al Shaam, Ras Al Khaimah, UAE
@@ -314,8 +330,7 @@ and open the template in the editor.
                     </div> 
                 </td> 
             </tr> 
-        </tfoot>
-
+        </tbody>
     </table>
 </div>
 <script>

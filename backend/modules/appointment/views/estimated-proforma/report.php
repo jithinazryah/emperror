@@ -36,7 +36,7 @@ use common\models\Currency;
         }
         .print{
             margin-top: 18px;
-            margin-left: 532px;
+            margin-left: 375px;
         }
         .save{
             margin-top: 18px;
@@ -63,7 +63,7 @@ use common\models\Currency;
         <tbody>
             <tr>
                 <td>
-                    <div class="heading-top"> 
+                    <div class="heading-top" style="margin-bottom: 26px;"> 
                         <div class="main-left">
                             <table class="tb2">
                                 <tr>
@@ -80,13 +80,17 @@ use common\models\Currency;
                                 </tr>
                                 <tr>
                                     <td>Client Code </td> <td style="width: 50px;text-align: center">:</td>
-                                    <td style="max-width: 200px"><?= $appointment->getClintCode($appointment->principal); ?></td>
+                                    <td style="max-width: 200px"><?= $appointment->getClintCode($princip); ?></td>
+                                </tr>
+                                <tr>
+                                    <td>Client Ref </td> <td style="width: 50px;text-align: center">:</td>
+                                    <td style="max-width: 200px"><?= $appointment->getClintRef($princip); ?></td>
                                 </tr>
                             </table>
                         </div>
                     </div>
                     <br/>
-                    <div class="heading">ESTIMATED PORT COST</div>
+                    <div class="heading" style="margin-bottom: 8px;">ESTIMATED PORT COST</div>
                     <div class="topcontent">
                         <div class="topcontent-left">
                             <table class="">
@@ -363,7 +367,7 @@ use common\models\Currency;
             </tr>
             <tr> 
                 <td style="width:100%">
-                    <div class="footer" style="display: block; position:absolute; bottom: 0;">
+                    <div class="footer">
                         <span>
                             <p>
                                 Emperor Shipping Lines LLC, P.O.Box-328231, Saqr Port, Al Shaam, Ras Al Khaimah, UAE

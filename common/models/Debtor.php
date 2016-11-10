@@ -42,7 +42,7 @@ class Debtor extends \yii\db\ActiveRecord
             [['address', 'invoicing_address', 'da_dispatch_addresss_1', 'da_dispatch_addresss_2'], 'string'],
             [['status', 'CB', 'UB'], 'integer'],
             [['DOC', 'DOU'], 'safe'],
-            [['principal_name', 'principal_id'], 'string', 'max' => 100],
+            [['principal_name', 'principal_id','principal_ref_no'], 'string', 'max' => 100],
             [['mobile', 'tele_phone', 'fax'], 'string', 'max' => 15],
         ];
     }
@@ -56,6 +56,7 @@ class Debtor extends \yii\db\ActiveRecord
             'id' => 'ID',
             'principal_name' => 'Principal Name',
             'principal_id' => 'Principal ID',
+            'principal_ref_no' => 'Principal Reference No',
             'address' => 'Address',
             'mobile' => 'Mobile',
             'tele_phone' => 'Tele Phone',

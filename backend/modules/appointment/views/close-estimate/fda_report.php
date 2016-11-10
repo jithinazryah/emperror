@@ -32,7 +32,7 @@ and open the template in the editor.
 
         @media print {
             thead {display: table-header-group;}
-            tfoot {display: block; position:absolute; bottom: 0;}
+            /*tfoot {display: block; position:absolute; bottom: 0;}*/
             .main-tabl{width: 100%}
         }
         @media screen{
@@ -69,111 +69,161 @@ and open the template in the editor.
             <tr>
                 <td>
                     <div class="heading">INVOICE</div>
-                    <div class="closeestimate-content">
-                        <table class="table tbl">
-                            <tr>
-                                <td rowspan="5" style="width: 50%; font-weight: bold;">
-                                    <p>
+                    <br/>
+                    <div class="close-estimate-heading-top" style="margin-bottom:78px;"> 
+                        <div class="main-left">
+                            <table class="tb2">
+                                <tr>
+                                    <td style="max-width: 405px">
                                         <?php
                                         echo $close_estimate->getInvoiceAddress($close_estimate->principal);
                                         ?>
-                                    </p>
-                                </td>
-                                <td style="width: 25%;">Date</td>
-                                <td style="width: 25%;"><?php echo date('d-M-y'); ?></td>
-                            </tr>
-                            <tr>
-                                <td style="width: 25%;">Invoice No</td>
-                                <td style="width: 25%;"></td>
-                            </tr>
-                            <tr>
-                                <td style="width: 25%;">Customer Code</td>
-                                <td style="width: 25%;"><?php
-                                    echo $close_estimate->getClintCode($close_estimate->principal);
-                                    ?>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="width: 25%;">Operational Ref</td>
-                                <td style="width: 25%;"><?= $appointment->appointment_no ?></td>
-                            </tr>
-                            <tr>
-                                <td style="width: 25%;">EPDA Ref</td>
-                                <?php
-                                $arr = ['1' => 'A', '2' => 'B', '3' => 'C', '4' => 'D', '5' => 'E', '6' => 'F', '7' => 'G', '8' => 'H', '9' => 'I', '10' => 'J', '11' => 'K', '12' => 'L'];
-                                $last_report_saved = EstimateReport::find()->orderBy(['id' => SORT_DESC])->where(['appointment_id' => $appointment->id])->All();
-                                $c = count($last_report_saved);
-                                if ($c == 0) {
-                                        $ref_no = 'EMPRK-' . $appointment->id . '/' . date('Y');
-                                } else {
-                                        $ref_no = 'EMPRK-' . $appointment->id . $arr[$c] . '/' . date('Y');
-                                }
-                                ?>
-                                <td style="width: 25%;"><?php echo $ref_no; ?></td>
-                            </tr>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="main-right">
+                            <table class="tb2">
+                                <tr>
+                                    <td>Date </td> <td style="width: 50px;text-align: center">:</td>
+                                    <td style="max-width: 200px"><?= date("d-M-Y") ?></td>
+                                </tr>
+                                <tr>
+                                    <td>Invoice No </td> <td style="width: 50px;text-align: center">:</td>
+                                    <td style="max-width: 200px">
 
-                        </table>
-                    </div>
-                    <br/>
-                    <div class="">
-                        <table>
-                            <tr>
-                                <td style="width: 25%;font-size: 11px;">Vessel</td>
-                                <td colspan="3" style="width: 75%;font-size: 11px;">:<?php
-                                    if ($appointment->vessel_type == 1) {
-                                            echo 'T - ' . Vessel::findOne($appointment->tug)->vessel_name . ' / B - ' . Vessel::findOne($appointment->barge)->vessel_name;
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Customer Code </td> <td style="width: 50px;text-align: center">:</td>
+                                    <td style="max-width: 200px">
+                                        <?php
+                                        echo $close_estimate->getClintCode($close_estimate->principal);
+                                        ?>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Operational Ref</td> <td style="width: 50px;text-align: center">:</td>
+                                    <td style="max-width: 200px"><?= $appointment->appointment_no ?></td>
+                                </tr>
+                                <tr>
+                                    <td>EPDA Ref </td> <td style="width: 50px;text-align: center">:</td>
+                                    <?php
+                                    $arr = ['1' => 'A', '2' => 'B', '3' => 'C', '4' => 'D', '5' => 'E', '6' => 'F', '7' => 'G', '8' => 'H', '9' => 'I', '10' => 'J', '11' => 'K', '12' => 'L'];
+                                    $last_report_saved = EstimateReport::find()->orderBy(['id' => SORT_DESC])->where(['appointment_id' => $appointment->id])->All();
+                                    $c = count($last_report_saved);
+                                    if ($c == 0) {
+                                            $ref_no = 'EMPRK-' . $appointment->id . '/' . date('Y');
                                     } else {
-                                            echo Vessel::findOne($appointment->vessel)->vessel_name;
+                                            $ref_no = 'EMPRK-' . $appointment->id . $arr[$c] . '/' . date('Y');
                                     }
                                     ?>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="width: 25%;font-size: 11px;">Port</td>
-                                <td colspan="3" style="width: 75%;font-size: 11px;">:<?= Ports::findOne($appointment->port_of_call)->port_name; ?></td>
-                            </tr>
-                            <tr>
-                                <td style="width: 25%;font-size: 11px;"></td>
-                                <td colspan="3" style="width: 75%;font-size: 11px;"></td>
-                            </tr>
-                            <tr>
-                                <td style="width: 25%;font-size: 11px;">Arrival Date</td>
-                                <td style="width: 25%;font-size: 11px;">:<?= Yii::$app->SetValues->DateFormate($ports->eosp); ?></td>
-                                <td style="width: 25%;font-size: 11px;">Sailing Date</td>
-                                <td style="width: 25%;font-size: 11px;">:<?= Yii::$app->SetValues->DateFormate($ports->cast_off); ?></td>
-                            </tr>
-                        </table>
+                                    <td style="max-width: 200px"><?php echo $ref_no; ?></td>
+                                </tr>
+                            </table>
+                        </div>
                     </div>
                     <br/>
+                    <div class="close-estimate-vessel" style="margin-bottom: 32px;"> 
+                        <div class="main-left">
+                            <table class="tb2">
+                                <tr>
+                                    <td>Vessel </td> <td style="width: 50px;">:</td>
+                                    <td style="max-width: 405px">
+                                        <?php
+                                        if ($appointment->vessel_type == 1) {
+                                                echo 'T - ' . Vessel::findOne($appointment->tug)->vessel_name . ' / B - ' . Vessel::findOne($appointment->barge)->vessel_name;
+                                        } else {
+                                                echo Vessel::findOne($appointment->vessel)->vessel_name;
+                                        }
+                                        ?>
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Port </td> <td style="width: 50px;">:</td>
+                                    <td style="max-width: 405px">
+                                        <?= Ports::findOne($appointment->port_of_call)->port_name; ?>
+                                    </td>
+                                </tr>
+
+                            </table>
+                        </div>
+                        <div class="main-right">
+                            <table class="tb2">
+                                <tr>
+                                    <td></td> <td style="width: 50px;text-align: center"></td>
+                                    <td style="max-width: 200px"></td>
+                                </tr>
+                                <tr>
+                                    <td></td> <td style="width: 50px;text-align: center"></td>
+                                    <td style="max-width: 200px">
+
+                                    </td>
+                                </tr>
+
+                            </table>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="close-estimate-attival-sailing" style="margin-bottom: 10px;"> 
+                        <div class="main-left">
+                            <table class="tb2">
+                                <tr>
+                                    <td>Arrival Date </td> <td style="width: 50px;">:</td>
+                                    <td style="max-width: 405px">
+                                        <?= Yii::$app->SetValues->DateFormate($ports->eosp); ?>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                        <div class="main-right">
+                            <table class="tb2">
+                                <tr>
+                                    <td>Sailing Date </td> <td style="width: 50px;text-align: center">:</td>
+                                    <td style="max-width: 200px"><?= Yii::$app->SetValues->DateFormate($ports->cast_off); ?></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <br/>
+                    <hr style="border:1px solid black;"/>
                 </td>
             </tr>
+
             <tr>
                 <td>
-                    <div class="">
-                        <table class="table tbl">
+                    <div class=""style="margin-bottom: 10px;margin-top: 26px;">
+                        <table style="width:100%">
                             <tr>
-                                <th style="width: 10%;">Sl No.</th>
-                                <th style="width: 60%;">Particulars
+                                <th style="width: 10%;font-size: 10px;">Sl No.</th>
+                                <th style="width: 60%;font-size: 10px;">Particulars
                                 </th>
-                                <th style="width: 30%;">Amount</th>
+                                <th style="width: 30%;font-size: 10px;">Amount</th>
                             </tr>
+                            <tr></tr>
+                            <tr></tr>
+                            <tr></tr>
+                            <tr></tr>
+                            <tr></tr>
+                            <tr></tr>
                             <tr>
-                                <td style="width: 10%;">1</td>
-                                <td style="width: 60%;font-size:11px;"><?php echo Services::findOne(['id' => $close_estimate->service_id])->service; ?>
+                                <td style="width: 10%;text-align: center;font-size: 9px;">1</td>
+                                <td style="width: 60%;font-size:11px;text-align: center;font-size: 9px;"><?php echo Services::findOne(['id' => $close_estimate->service_id])->service; ?>
                                     <br/>
-                                    <p style="font-style:italic;font-weight: bold;"><?= $close_estimate->comment_to_fda ?></p>
+                                    <p style="font-style:italic;font-weight: bold;text-align: center;"><?= $close_estimate->comment_to_fda ?></p>
                                 </td>
-                                <td style="width: 30%;font-weight: bold;"><?= Yii::$app->SetValues->NumberFormat($close_estimate->fda); ?></td>
+                                <td style="width: 30%;font-weight: bold;text-align: center;font-size: 9px;"><?= Yii::$app->SetValues->NumberFormat($close_estimate->fda); ?></td>
                             </tr>
                             <tr>
                                 <td style="width: 10%;"></td>
-                                <td style="width: 60%;text-align:right;font-weight: bold;">
+                                <td style="width: 60%;text-align:center;font-weight: bold;">
                                     <br/>
-                                    <p style="font-size:13px;">TOTAL</p>
+                                    <p style="font-size:10px;">TOTAL</p>
                                     <br/>
                                 </td>
-                                <td style="width: 30%;font-weight: bold;font-size:11px;"><p style="text-align:right;">AED <?= Yii::$app->SetValues->NumberFormat($close_estimate->fda); ?></p>
-                                    <p style="text-align:right;">E & OE</p>
+                                <td style="width: 30%;font-weight: bold;font-size:8px;"><p style="text-align:center;">AED <?= Yii::$app->SetValues->NumberFormat($close_estimate->fda); ?></p>
+                                    <p style="text-align:center;">E & OE</p>
                                 </td>
                             </tr>
 
@@ -183,11 +233,19 @@ and open the template in the editor.
             </tr>
             <tr>
                 <td>
-                    <div class="amount-words">
-                        <table>
+                    <div class="amount-words" style="margin-bottom: 9px;">
+                        <table style="width:100%;">
+                            <?php
+                            $currency = Currency::findOne(['id' => 1]);
+                            $usd = round($close_estimate->fda * $currency->currency_value, 3);
+                            ?>
                             <tr>
-                                <td style="width: 25%;font-size:10px;font-weight: bold;">Amount in Words</td>
-                                <td style="width: 75%;font-size:10px;font-weight: bold;">AED <?php echo ucwords(Yii::$app->NumToWord->ConvertNumberToWords($close_estimate->fda)) . ' Only'; ?></td>
+                                <td style="width: 15%;font-size:9px;font-weight: bold;">Amount in Words</td>
+                                <td style="width: 85%;font-size:9px;font-weight: bold;">AED  <?php echo ucwords(Yii::$app->NumToWord->ConvertNumberToWords($close_estimate->fda)) . ' Only'; ?></td>
+                            </tr>
+                            <tr>
+                                <td style="width: 15%;font-size:9px;font-weight: bold;"></td>
+                                <td style="width: 85%;font-size:9px;font-weight: bold;">USD  <?php echo ucwords(Yii::$app->NumToWord->ConvertNumberToWords($usd,'USD')) . ' Only'; ?></td>
                             </tr>
                         </table>
                     </div>
@@ -202,16 +260,14 @@ and open the template in the editor.
                             <p>This is computer generated invoice</p>
                         </div>
                         <div class="close-right">
-                            <div style="border: 1px solid black;">
-                                <h6>for EMPEROR SHIPPING LINES LLC</h6>
+                            <div>
+                                <h6 style="font-size: 10px;padding-left: 150px;">for EMPEROR SHIPPING LINES LLC</h6>
                                 <p class="signature">Authorised Signatory</p>
                             </div>
                         </div>
                     </div>
                 </td>
             </tr>
-        </tbody>
-        <tfoot> 
             <tr> 
                 <td style="width:100%">
                     <div class="footer">
@@ -229,8 +285,7 @@ and open the template in the editor.
                     </div> 
                 </td> 
             </tr> 
-
-        </tfoot>
+        </tbody>
     </table>
 </div>
 <script>

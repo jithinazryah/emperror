@@ -266,7 +266,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                     <td><?= $i; ?></td>
                                                     <th><span class="co-name"><?= $estimate->service->service ?></span></th>
                                                     <td><?= $estimate->supplier0->name ?></td>
-        <!--                                                <td><?php // $estimate->currency0->currency_symbol                                                 ?></td>-->
+        <!--                                                <td><?php // $estimate->currency0->currency_symbol                                                        ?></td>-->
                                                     <td><?= $estimate->unit_rate; ?></td>
                                                     <td><?= $estimate->unit; ?></td>
                                                     <td><?= $estimate->roe; ?></td>
@@ -782,7 +782,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                             ?>
                                             <input type="hidden" name="app_id" value="<?= $appointment->id ?>">
                                             <?php //                                                ?>
-                                            <input type="hidden" name="invoice_type" value="//<?php // $arr->invoice_type   ?>">
+                                            <input type="hidden" name="invoice_type" value="//<?php // $arr->invoice_type          ?>">
                                             <?php
                                             ?>
 
@@ -812,38 +812,40 @@ $this->params['breadcrumbs'][] = $this->title;
                                             ?>
                                         </select> 
                                     </div>
-                                    <div class="col-md-4 principp">
-                                        <?php
-                                        $principals = CloseEstimate::find()->select('principal')->distinct()->where(['apponitment_id' => $appointment->id])->all();
-                                        if (count($principals) > 1) {
-                                                ?>
-                                                <div>
-                                                    <select name = "fda" id = "fda" class="form-control">
-                                                        <option value="" selected = "selected">Select Principal</option>
-                                                        <?php
-                                                        foreach ($principals as $princippp) {
-                                                                $data = Debtor::findOne(['id' => $princippp->principal]);
-                                                                ?>
-                                                                <option value="<?= $princippp->principal ?>"><?= $data->principal_name ?></option>
-                                                        <?php }
-                                                        ?>
-                                                    </select>  
-                                                </div>
-                                                <?php
-                                        } else {
-                                                foreach ($principals as $princippp) {
-                                                        ?>
-                                                        <input type="hidden" name="fda" value="<?= $princippp->principal ?>">
-                                                        <?php
-                                                }
-                                        }
-                                        ?>
-                                    </div>
+                                    <?php
+                                    $principals = CloseEstimate::find()->select('principal')->distinct()->where(['apponitment_id' => $appointment->id])->all();
+                                    if (count($principals) > 1) {
+                                            ?>
+                                            <div class="col-md-4 principp">
+
+                                                <select name = "fda" id = "fda" class="form-control">
+                                                    <option value="" selected = "selected">Select Principal</option>
+                                                    <?php
+                                                    foreach ($principals as $princippp) {
+                                                            if ($princippp->principal != '') {
+                                                                    $data = Debtor::findOne(['id' => $princippp->principal]);
+                                                                    ?>
+                                                                    <option value="<?= $princippp->principal ?>"><?= $data->principal_name ?></option>
+                                                                    <?php
+                                                            }
+                                                    }
+                                                    ?>
+                                                </select>  
+                                            </div>
+                                            <?php
+                                    } else {
+                                            foreach ($principals as $princippp) {
+                                                    ?>
+                                                    <input type="hidden" name="fda" value="<?= $princippp->principal ?>">
+
+                                                    <?php
+                                            }
+                                    }
+                                    ?>
                                     <div class="col-md-4">
                                         <?= Html::submitButton('<i class="fa-print"></i><span>Generate Final DA</span>', ['class' => 'btn btn-secondary btn-icon btn-icon-standalone']) ?>
                                         <?= Html::endForm() ?>
-                                        <?php
-                                        ?> 
+                                        <?php ?> 
                                     </div>   
                                 </div>
                             </div>
