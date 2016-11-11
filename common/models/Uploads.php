@@ -35,9 +35,10 @@ class Uploads extends \yii\db\ActiveRecord
         return [
             [['comment'], 'string'],
             [['status', 'CB', 'UB'], 'integer'],
-            [['CB', 'UB', 'DOC'], 'required'],
-            [['DOC', 'DOU'], 'safe'],
+            [['CB', 'UB','DOC', 'DOU'], 'safe'],
             [['form_name', 'upload_file'], 'string', 'max' => 200],
+            [['upload_file'], 'file', 'skipOnEmpty' => TRUE, 'extensions' => 'pdf,txt,doc,docx,xls,xlsx,msg, jpg, jpeg, png,', 'on' => 'create'],
+            [['upload_file'], 'file', 'skipOnEmpty' => FALSE, 'extensions' => 'pdf,txt,doc,docx,xls,xlsx,msg, jpg, jpeg, png,', 'on' => 'update'],
         ];
     }
 
