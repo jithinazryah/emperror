@@ -187,7 +187,7 @@ and open the template in the editor.
                         </div>
                     </div>
                     <br/>
-                    <hr style="border:1px solid black;"/>
+                    <hr/>
                 </td>
             </tr>
 
@@ -222,7 +222,12 @@ and open the template in the editor.
                                     <p style="font-size:10px;">TOTAL</p>
                                     <br/>
                                 </td>
-                                <td style="width: 30%;font-weight: bold;font-size:8px;"><p style="text-align:center;">AED <?= Yii::$app->SetValues->NumberFormat($close_estimate->fda); ?></p>
+                                <?php
+                                $currency = Currency::findOne(['id' => 1]);
+                                $usd = round($close_estimate->fda * $currency->currency_value, 2);
+                                ?>
+                                <td style="width: 30%;font-weight: bold;font-size:8px;"><p style="text-align:center;">AED <?= Yii::$app->SetValues->NumberFormat(round($close_estimate->fda,2)); ?></p>
+                                    <p style="text-align:center;">USD <?= Yii::$app->SetValues->NumberFormat($usd); ?></p>
                                     <p style="text-align:center;">E & OE</p>
                                 </td>
                             </tr>
@@ -235,17 +240,13 @@ and open the template in the editor.
                 <td>
                     <div class="amount-words" style="margin-bottom: 9px;">
                         <table style="width:100%;">
-                            <?php
-                            $currency = Currency::findOne(['id' => 1]);
-                            $usd = round($close_estimate->fda * $currency->currency_value, 3);
-                            ?>
                             <tr>
                                 <td style="width: 15%;font-size:9px;font-weight: bold;">Amount in Words</td>
-                                <td style="width: 85%;font-size:9px;font-weight: bold;">AED  <?php echo ucwords(Yii::$app->NumToWord->ConvertNumberToWords($close_estimate->fda)) . ' Only'; ?></td>
+                                <td style="width: 85%;font-size:9px;font-weight: bold;">AED  <?php echo ucwords(Yii::$app->NumToWord->ConvertNumberToWords(round($close_estimate->fda,2))) . ' Only'; ?></td>
                             </tr>
                             <tr>
                                 <td style="width: 15%;font-size:9px;font-weight: bold;"></td>
-                                <td style="width: 85%;font-size:9px;font-weight: bold;">USD  <?php echo ucwords(Yii::$app->NumToWord->ConvertNumberToWords($usd,'USD')) . ' Only'; ?></td>
+                                <td style="width: 85%;font-size:9px;font-weight: bold;">USD  <?php echo ucwords(Yii::$app->NumToWord->ConvertNumberToWords($usd, 'USD')) . ' Only'; ?></td>
                             </tr>
                         </table>
                     </div>

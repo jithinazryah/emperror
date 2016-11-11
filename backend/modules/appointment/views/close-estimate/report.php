@@ -224,7 +224,7 @@ and open the template in the editor.
                             <tr>
                                 <td style="width: 10%;"></td>
                                 <td  colspan="2"style="width: 65%;text-align:right;font-weight: bold;">Total</td>
-                                <td style="width: 25%;font-weight: bold;">AED <?= Yii::$app->SetValues->NumberFormat($grandtotal); ?></td>
+                                <td style="width: 25%;font-weight: bold;">AED <?= Yii::$app->SetValues->NumberFormat(round($grandtotal,2)); ?></td>
                             </tr>
                         </table>
                     </div>
@@ -250,11 +250,11 @@ and open the template in the editor.
                         <table class="table tbl">
                             <tr>
                                 <td style="width: 75%;">Total Due in our favour </td>
-                                <td style="width: 25%;font-weight: bold;">AED <?= Yii::$app->SetValues->NumberFormat($grandtotal); ?></td>
+                                <td style="width: 25%;font-weight: bold;">AED <?= Yii::$app->SetValues->NumberFormat(round($grandtotal,2)); ?></td>
                             </tr>
                             <?php
                             $currency = Currency::findOne(['id' => 1]);
-                            $usd = round($grandtotal * $currency->currency_value, 3);
+                            $usd = round($grandtotal * $currency->currency_value, 2);
                             ?>
                             <tr>
                                 <td style="width: 75%;"></th>
@@ -268,7 +268,7 @@ and open the template in the editor.
                 <td>
                     <div class="bank">
                         <p>Amount chargeable (in words)</p>
-                        <h6>UAE Dirhams <?php echo ucwords(Yii::$app->NumToWord->ConvertNumberToWords($grandtotal)) . ' Only'; ?> </h6>
+                        <h6>UAE Dirhams <?php echo ucwords(Yii::$app->NumToWord->ConvertNumberToWords(round($grandtotal,2))) . ' Only'; ?> </h6>
                         <h6>USD <?php echo ucwords(Yii::$app->NumToWord->ConvertNumberToWords($usd, 'USD')) . ' Only'; ?> </h6>
                         <h6>Company's Bank Details:</h6>
                         <div class="bank-left">
