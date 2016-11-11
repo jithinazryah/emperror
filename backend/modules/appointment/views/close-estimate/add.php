@@ -194,7 +194,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <th data-priority="1">SERVICES</th>
                                     <th data-priority="3">SUPPLIER</th>
     <!--                                                                <th data-priority="3">CURRENCY</th>-->
-                                    <!--<th data-priority="1">RATE /QTY</th>-->
+                                    <th data-priority="1">RATE /QTY</th>
                                     <th data-priority="3">QTY</th>
     <!--                                                                <th data-priority="6">ROE</th>-->
                                     <th data-priority="6">EPDA VALUE</th>
@@ -222,16 +222,16 @@ $this->params['breadcrumbs'][] = $this->title;
                                             <td><?= $i; ?></td>
                                             <td><span class="" drop_id="closeestimate-service_id" id="<?= $estimate->id ?>-service_id" val="<?= $estimate->service_id ?>"><?= $estimate->service->service ?></span></td>
                                             <td><span class="" drop_id="closeestimate-supplier" id="<?= $estimate->id ?>-supplier" val="<?= $estimate->supplier ?>"><?= $estimate->supplier0->name ?></span></td>
-<!--                                            <td><span class="edit_text" id="<?php// $estimate->id ?>-unit_rate"  val="<?php// $estimate->unit_rate ?>">
+                                            <td><span class="" id="<?= $estimate->id ?>-unit_rate"  val="<?= $estimate->unit_rate ?>">
                                                     <?php
-//                                                    if ($estimate->unit_rate == '') {
-//                                                            echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-//                                                    } else {
-//                                                            echo Yii::$app->SetValues->NumberFormat($estimate->unit_rate);
-//                                                    }
+                                                    if ($estimate->unit_rate == '') {
+                                                            echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+                                                    } else {
+                                                            echo Yii::$app->SetValues->NumberFormat($estimate->unit_rate);
+                                                    }
                                                     ?>
                                                 </span>
-                                            </td>-->
+                                            </td>
                                             <td><span class="" id="<?= $estimate->id ?>-unit" val="<?= $estimate->unit ?>">
                                                     <?php
                                                     if ($estimate->unit == '') {

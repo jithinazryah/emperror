@@ -132,8 +132,34 @@ and open the template in the editor.
                                     }
                                     ?>
                                 </td>
-                                <td style="width: 25%;">Ops Reference :<?= $appointment->appointment_no ?> </td>
+                                <?php
+                                $principal_datas = CloseEstimate::find()->select('principal')->distinct()->where(['apponitment_id' => $appointment->id])->all();
+                                foreach ($principal_datas as $principal_data) {
+                                        if ($principal_data->principal != '') {
+                                                $data_principal .= $principal_data->principal.',';
+                                        }
+                                }
+                                ?>
+                                <td style="width: 25%;">Ops Reference :<?php echo $appointment->appointment_no . oopsNo(rtrim($data_principal, ","), $principp); ?> </td>
                             </tr>
+                            <?php
+
+                            function oopsNo($data_principal, $principp) {
+                                    $arr = ['0' => '', '1' => 'A', '2' => 'B', '3' => 'C', '4' => 'D', '5' => 'E', '6' => 'F', '7' => 'G', '8' => 'H', '9' => 'I', '10' => 'J', '11' => 'K', '12' => 'L'];
+                                    $data = explode(',', $data_principal);
+                                    $j = 0;
+                                    foreach ($data as $value) {
+                                            if ($value == $principp) {
+                                                    foreach ($arr as $key => $value) {
+                                                            if ($key == $j) {
+                                                                    return $value;
+                                                            }
+                                                    }
+                                            }
+                                            $j++;
+                                    }
+                            }
+                            ?>
                             <tr>
                                 <td style="width: 25%;">Port of Call :<?= $appointment->portOfCall->port_name ?> </td>
                                 <td style="width: 25%;">Client Ref :
@@ -243,7 +269,7 @@ and open the template in the editor.
                     <div class="bank">
                         <p>Amount chargeable (in words)</p>
                         <h6>UAE Dirhams <?php echo ucwords(Yii::$app->NumToWord->ConvertNumberToWords($grandtotal)) . ' Only'; ?> </h6>
-                        <h6>USD <?php echo ucwords(Yii::$app->NumToWord->ConvertNumberToWords($usd,'USD')) . ' Only'; ?> </h6>
+                        <h6>USD <?php echo ucwords(Yii::$app->NumToWord->ConvertNumberToWords($usd, 'USD')) . ' Only'; ?> </h6>
                         <h6>Company's Bank Details:</h6>
                         <div class="bank-left">
                             <table class="tbl3">
