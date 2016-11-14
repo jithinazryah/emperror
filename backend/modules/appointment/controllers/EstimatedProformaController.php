@@ -284,6 +284,9 @@ class EstimatedProformaController extends Controller {
 
         public function actionReports() {
                 $princip = $_POST['principal'];
+//                if($princip == 'Select Principal'){
+//                        return;
+//                }
                 $app = $_POST['app_id'];
                 //$estimates = EstimatedProforma::findAll(['apponitment_id' => $app, 'principal' => $princip]);
                 // get your HTML raw content without any layouts or scripts

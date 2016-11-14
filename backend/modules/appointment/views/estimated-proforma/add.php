@@ -49,9 +49,24 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?= Yii::$app->session->getFlash('error'); ?>
                     <?php // endif; ?>
                 </div>
+                <script>
+                        $(document).ready(function () {
+                            $('#epda-form').submit(function (e) {
+                                var val = $('#epda_princi').val();
+                                if (val != '') {
+                                    window.open('about:blank', 'print_popup', 'width=1000,height=500');
+                                } else {
+                                    alert('please choose a Principal');
+                                    e.preventDefault();
+                                    return false;
+                                }
+
+                            });
+                        });
+                </script>
                 <div style="float: left;">
 
-                    <?= Html::beginForm(['estimated-proforma/reports'], 'post', ['target' => 'print_popup', 'onSubmit' => "window.open('about:blank','print_popup','width=1000,height=500');"]) ?>
+                    <?= Html::beginForm(['estimated-proforma/reports'], 'post', ['target' => 'print_popup', 'id' => "epda-form"]) ?>
 <!--<form name="estimate" action="<?= Yii::$app->homeUrl ?>appointment/estimated-proforma/reports" method="post">-->
                     <?php
                     $arr = explode(',', $appointment->principal);
@@ -67,8 +82,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
                                     <input type="hidden" name="app_id" value="<?= $appointment->id ?>">
 
-                                    <select name = "principal" id = "" class="form-control">
-                                        <option selected = "selected">Select Principal</option>
+                                    <select name = "principal" id = "epda_princi" class="form-control">
+                                        <option value="">Select Principal</option>
                                         <?php
                                         foreach ($arr as $key => $value) {
                                                 $data = Debtor::findOne(['id' => $value]);
@@ -223,7 +238,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                                                 </span>
                                             </td>
-                                            <!--<td><?php // $estimate->images;                           ?></td>-->
+                                            <!--<td><?php // $estimate->images;                                         ?></td>-->
                                             <td>
                                                 <?= Html::a('<i class="fa fa-pencil"></i>', ['/appointment/estimated-proforma/add', 'id' => $id, 'prfrma_id' => $estimate->id], ['class' => '', 'tittle' => 'Edit']) ?>
                                                 <?= Html::a('<i class="fa fa-remove"></i>', ['/appointment/estimated-proforma/delete-performa', 'id' => $estimate->id], ['class' => '', 'tittle' => 'Edit', 'data-confirm' => 'Are you sure you want to delete this item?']) ?>
@@ -253,10 +268,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                     <td></td>
                                     <td><?= $form->field($model, 'service_id')->dropDownList(ArrayHelper::map(Services::findAll(['status' => 1]), 'id', 'service'), ['prompt' => '-Service-'])->label(false); ?></td>
                                     <td><?= $form->field($model, 'supplier')->dropDownList(ArrayHelper::map(Contacts::findAll(['status' => 1]), 'id', 'name'), ['prompt' => '-Supplier-'])->label(false); ?></td>
-                                   <!--<td><?php //$form->field($model, 'currency')->dropDownList(ArrayHelper::map(Currency::findAll(['status' => 1]), 'id', 'currency_name'), ['prompt' => '-Currency-'])->label(false);                                                             ?></td>-->
+                                   <!--<td><?php //$form->field($model, 'currency')->dropDownList(ArrayHelper::map(Currency::findAll(['status' => 1]), 'id', 'currency_name'), ['prompt' => '-Currency-'])->label(false);                                                                           ?></td>-->
                                     <td><?= $form->field($model, 'unit_rate')->textInput(['placeholder' => 'Unit Rate'])->label(false) ?></td>
                                     <td><?= $form->field($model, 'unit')->textInput(['placeholder' => 'Quantity'])->label(false) ?></td>
-                                    <!--<td><?php //$form->field($model, 'roe')->textInput(['placeholder' => 'ROE'])->label(false)                                                             ?></td>-->
+                                    <!--<td><?php //$form->field($model, 'roe')->textInput(['placeholder' => 'ROE'])->label(false)                                                                           ?></td>-->
                                     <td><?= $form->field($model, 'epda')->textInput(['placeholder' => 'EPDA', 'disabled' => true])->label(false) ?></td>
                                     <?php
                                     $arr1 = explode(',', $appointment->principal);
@@ -281,7 +296,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                     ?>
                                     <td><?= $form->field($model, 'rate_to_category')->textInput(['placeholder' => 'Rate to Category'])->label(false) ?></td>
                                     <td><?= $form->field($model, 'comments')->textInput(['placeholder' => 'Comments'])->label(false) ?></td>
-                                    <!--<td><?php // $form->field($model, 'images[]')->fileInput(['multiple' => true])->label(false)                           ?></td>-->
+                                    <!--<td><?php // $form->field($model, 'images[]')->fileInput(['multiple' => true])->label(false)                                         ?></td>-->
                                     <td><?= Html::submitButton($model->isNewRecord ? 'Add' : 'Update', ['class' => 'btn btn-success']) ?>
                                     </td>
                                     <?php ActiveForm::end(); ?>
@@ -294,34 +309,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                         </table>
                         <br/>
-                        <hr class="appoint_history" />
-                        <div style="text-align: center;">
-                            <?php
-                            $estmate_reports = EstimateReport::findAll(['appointment_id' => $appointment->id]);
-                            ?>
-                            <h4 class="sub-heading">Previously Generated EPDA'S</h4>
-                            <br/>
-                            <?php foreach ($estmate_reports as $estmate_report) { ?>
-                                    <span class="upload_file_list"><?php echo Html::a($estmate_report->date_time, ['/appointment/estimated-proforma/show-report'], ['onclick' => "window.open('show-report?id=$estmate_report->id', 'newwindow', 'width=750, height=500');return false;"]) . '&nbsp;&nbsp;<a href="remove-report?id=' . $estmate_report->id . '"><i class="fa fa-remove"></i></a>'; ?></span>
-                                    <?php
-                            }
-                            ?>
-                        </div>
-                        <hr class="appoint_history" />
-                        <div style="text-align: center;">
-                            <h4 class="sub-heading">Uploaded Files</h4>
-                            <br/>
-                            <?php
-                            if (!empty(Yii::$app->UploadFile->ListFile($appointment->id, Yii::$app->params['estimatePath']))) {
-                                    ?>
-                                    <span class="upload_file_list"><?= Yii::$app->UploadFile->ListFile($appointment->id, Yii::$app->params['estimatePath']); ?></span>
-                                    <?php
-                            }
-                            ?>
-                        </div>
-                        <hr class="appoint_history" />
-                        <br/>
-                        <div style="float: left; margin-left: 46%;">
+                        <div style="margin-left: 46%;">
                             <?php // Yii::$app->UploadFile->ListFile($appointment->id, Yii::$app->params['estimatePath']);  ?>
                             <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data'], 'action' => Yii::$app->homeUrl . 'appointment/estimated-proforma/uploads', 'method' => 'post']) ?>
                             <?php
@@ -337,6 +325,53 @@ $this->params['breadcrumbs'][] = $this->title;
 
                             <?php ActiveForm::end() ?>  
                         </div>
+                        <br/>
+                        <hr class="appoint_history" />
+                        <div class="display-uploads" style="margin-bottom: 25px;">
+                            <div class="row" style="display:inline-block">
+                                <div class="col-md-4" style="float:left;text-align: center;">
+                                    <table>
+                                        <tr>
+                                            <td style="border: 1px solid black;"><h4 class="sub-heading">Previously Generated EPDA'S</h4></td>
+                                        </tr>
+                                        <?php
+                                        $estmate_reports = EstimateReport::findAll(['appointment_id' => $appointment->id]);
+                                        ?>
+                                        <?php foreach ($estmate_reports as $estmate_report) { ?>
+                                                <tr>
+                                                    <td style="border: 1px solid black;padding: 10px;">
+                                                        <?php echo Html::a($estmate_report->date_time, ['/appointment/estimated-proforma/show-report'], ['onclick' => "window.open('show-report?id=$estmate_report->id', 'newwindow', 'width=750, height=500');return false;"]) . '&nbsp;&nbsp;<a href="remove-report?id=' . $estmate_report->id . '"><i class="fa fa-remove"></i></a>'; ?>
+                                                    </td>
+                                                </tr>
+                                                <?php
+                                        }
+                                        ?>
+
+                                    </table>
+                                </div>
+                                <div class="col-md-8" style="float:left;text-align: center;">
+                                    <table>
+                                        <tr>
+                                            <td style="border: 1px solid black;"><h4 class="sub-heading">Uploaded Files</h4></td>
+                                        </tr>
+                                        <?php
+                                        if (!empty(Yii::$app->UploadFile->ListFile($appointment->id, Yii::$app->params['estimatePath']))) {
+                                                ?>
+                                                <tr>
+                                                    <td style="border: 1px solid black;padding: 10px;">
+                                                        <?= Yii::$app->UploadFile->ListFile($appointment->id, Yii::$app->params['estimatePath']); ?>
+                                                    </td>
+                                                </tr>
+                                                <?php
+                                        }
+                                        ?>
+
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+
                     </div>
                 </div>
                 <script>
@@ -491,77 +526,77 @@ $this->params['breadcrumbs'][] = $this->title;
 
     </style>
     <script>
-                        $("document").ready(function () {
+            $("document").ready(function () {
 
-                            /*  
-                             * Double click enter function
-                             * */
+                /*  
+                 * Double click enter function
+                 * */
 
-                            $('.edit_text').on('dblclick', function () {
-                                   
-                                var val = $(this).attr('val');
-                                var idd = this.id;
-                                var res_data = idd.split("-");
-                                if (res_data[1] == 'comments' || res_data[1] == 'rate_to_category') {
-                                    $(this).html('<textarea class="' + idd + '" value="' + val + '">' + val + '</textarea>');
+                $('.edit_text').on('dblclick', function () {
 
-                                } else {
-                                    $(this).html('<input class="' + idd + '" type="text" value="' + val + '"/>');
+                    var val = $(this).attr('val');
+                    var idd = this.id;
+                    var res_data = idd.split("-");
+                    if (res_data[1] == 'comments' || res_data[1] == 'rate_to_category') {
+                        $(this).html('<textarea class="' + idd + '" value="' + val + '">' + val + '</textarea>');
 
-                                }
+                    } else {
+                        $(this).html('<input class="' + idd + '" type="text" value="' + val + '"/>');
 
-                                $('.' + idd).focus();
-                            });
-                            $('.edit_text').on('focusout', 'input,textarea', function () {
-                                var thiss = $(this).parent('.edit_text');
-                                var data_id = thiss.attr('id');
-                                var update = thiss.attr('update');
-                                var res_id = data_id.split("-");
-                                var res_val = $(this).val();
-                                $.ajax({
-                                    type: 'POST',
-                                    cache: false,
-                                    data: {id: res_id[0], name: res_id[1], valuee: res_val},
-                                    url: '<?= Yii::$app->homeUrl; ?>/appointment/estimated-proforma/edit-estimate',
-                                    success: function (data) {
-                                        thiss.html(res_val);
-                                    }
-                                });
+                    }
 
-                            });
+                    $('.' + idd).focus();
+                });
+                $('.edit_text').on('focusout', 'input,textarea', function () {
+                    var thiss = $(this).parent('.edit_text');
+                    var data_id = thiss.attr('id');
+                    var update = thiss.attr('update');
+                    var res_id = data_id.split("-");
+                    var res_val = $(this).val();
+                    $.ajax({
+                        type: 'POST',
+                        cache: false,
+                        data: {id: res_id[0], name: res_id[1], valuee: res_val},
+                        url: '<?= Yii::$app->homeUrl; ?>/appointment/estimated-proforma/edit-estimate',
+                        success: function (data) {
+                            thiss.html(res_val);
+                        }
+                    });
 
-                            /*  
-                             * Double click Dropdown
-                             * */
+                });
 
-                            $('.edit_dropdown').on('dblclick', function () {
-                                var val = $(this).attr('val');
-                                var drop_id = $(this).attr('drop_id');
-                                var idd = this.id;
-                                var option = $('#' + drop_id).html();
-                                $(this).html('<select class="' + drop_id + '" value="' + val + '">' + option + '</select>');
-                                $('.' + drop_id + ' option[value="' + val + '"]').attr("selected", "selected");
-                                $('.' + drop_id).focus();
+                /*  
+                 * Double click Dropdown
+                 * */
 
-                            });
-                            $('.edit_dropdown').on('focusout', 'select', function () {
-                                var thiss = $(this).parent('.edit_dropdown');
-                                var data_id = thiss.attr('id');
-                                var res_id = data_id.split("-");
-                                var res_val = $(this).val();
-                                $.ajax({
-                                    type: 'POST',
-                                    cache: false,
-                                    data: {id: res_id[0], name: res_id[1], valuee: res_val},
-                                    url: '<?= Yii::$app->homeUrl; ?>/appointment/estimated-proforma/edit-estimate-service',
-                                    success: function (data) {
-                                        thiss.html(data);
-                                    }
-                                });
+                $('.edit_dropdown').on('dblclick', function () {
+                    var val = $(this).attr('val');
+                    var drop_id = $(this).attr('drop_id');
+                    var idd = this.id;
+                    var option = $('#' + drop_id).html();
+                    $(this).html('<select class="' + drop_id + '" value="' + val + '">' + option + '</select>');
+                    $('.' + drop_id + ' option[value="' + val + '"]').attr("selected", "selected");
+                    $('.' + drop_id).focus();
 
-                            });
+                });
+                $('.edit_dropdown').on('focusout', 'select', function () {
+                    var thiss = $(this).parent('.edit_dropdown');
+                    var data_id = thiss.attr('id');
+                    var res_id = data_id.split("-");
+                    var res_val = $(this).val();
+                    $.ajax({
+                        type: 'POST',
+                        cache: false,
+                        data: {id: res_id[0], name: res_id[1], valuee: res_val},
+                        url: '<?= Yii::$app->homeUrl; ?>/appointment/estimated-proforma/edit-estimate-service',
+                        success: function (data) {
+                            thiss.html(data);
+                        }
+                    });
+
+                });
 
 
-                        });
+            });
     </script>
 </div>

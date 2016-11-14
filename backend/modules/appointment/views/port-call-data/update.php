@@ -159,19 +159,6 @@ $this->params['breadcrumbs'][] = 'Update';
                     </div>
                     <br/>
                     <hr class="appoint_history" />
-                    <div style="text-align: center;">
-                        <h4 class="sub-heading">Uploaded Files</h4>
-                        <br/>
-                        <?php
-                        if (!empty(Yii::$app->UploadFile->ListFile($model_appointment->id, Yii::$app->params['datPath']))) {
-                                ?>
-                                <span class="upload_file_list"><?= Yii::$app->UploadFile->ListFile($model_appointment->id, Yii::$app->params['closePath']); ?></span>
-                                <?php
-                        }
-                        ?>
-                    </div>
-                    <hr class="appoint_history" />
-                    <br/>
                     <div class="panel-body" style="margin-left:46%;">
                         <?php // Yii::$app->UploadFile->ListFile($model_appointment->id, Yii::$app->params['datPath']); ?>
                         <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data'], 'action' => Yii::$app->homeUrl . 'appointment/port-call-data/uploads', 'method' => 'post']) ?>
@@ -188,6 +175,32 @@ $this->params['breadcrumbs'][] = 'Update';
 
                         <?php ActiveForm::end() ?>  
                     </div>
+                    <br/>
+                    <hr class="appoint_history" />
+                    <div class="display-uploads">
+                        <div class="row" style="display:inline-block">
+                            <table>
+                                <tr>
+                                    <td style="border: 1px solid black;"><h4 class="sub-heading">Uploaded Files</h4></td>
+                                </tr>
+                                <?php
+                                if (!empty(Yii::$app->UploadFile->ListFile($model_appointment->id, Yii::$app->params['datPath']))) {
+                                        ?>
+                                        <tr>
+                                            <td style="border: 1px solid black;padding: 10px;">
+                                                <?= Yii::$app->UploadFile->ListFile($model_appointment->id, Yii::$app->params['closePath']); ?>
+                                            </td>
+                                        </tr>
+                                        <?php
+                                }
+                                ?>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
                 </div>
             </div>
             <div style="float:right;padding-top: 5px;">
@@ -221,6 +234,12 @@ $this->params['breadcrumbs'][] = 'Update';
             padding-bottom: 5px;
             font-size: 18px;
             font-weight: bold;
+        }
+        .display-uploads{
+            margin-bottom: 25px;
+            text-align: center;
+            margin-left: 175px;
+            margin-right: 100px;
         }
 
     </style>
