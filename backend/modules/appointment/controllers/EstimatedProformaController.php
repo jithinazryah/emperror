@@ -129,7 +129,6 @@ class EstimatedProformaController extends Controller {
                 $model_upload = new UploadFile();
                 if ($model_upload->load(Yii::$app->request->post())) {
                         $files = UploadedFile::getInstances($model_upload, 'filee');
-
                         if (Yii::$app->UploadFile->Upload($files, $model_upload)) {
 
                                 return $this->redirect(Yii::$app->request->referrer);
