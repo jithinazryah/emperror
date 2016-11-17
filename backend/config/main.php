@@ -14,14 +14,14 @@ return [
         'gii' => [
             'class' => 'yii\gii\Module',
             'allowedIPs' => ['127.0.0.1', '::1', '192.168.0.*', '192.168.178.20'], // adjust this to your needs
-            'generators' => [ //here
-            'crud' => [ // generator name
-                'class' => 'yii\gii\generators\crud\Generator', // generator class
-                'templates' => [ //setting for out templates
-                    'custom' => '@common/myTemplates/crud/custom', // template name => path to template
+            'generators' => [//here
+                'crud' => [// generator name
+                    'class' => 'yii\gii\generators\crud\Generator', // generator class
+                    'templates' => [//setting for out templates
+                        'custom' => '@common/myTemplates/crud/custom', // template name => path to template
+                    ]
                 ]
-            ]
-        ],
+            ],
         ],
         'admin' => [
             'class' => 'backend\modules\admin\Admin',
@@ -32,7 +32,9 @@ return [
         'appointment' => [
             'class' => 'backend\modules\appointment\Appointment',
         ],
-       
+        'funding' => [
+            'class' => 'backend\modules\funding\Module',
+        ],
     ],
     'components' => [
         'request' => [
@@ -41,7 +43,7 @@ return [
         'user' => [
             'identityClass' => 'common\models\Employee',
             'enableAutoLogin' => true,
-            'loginUrl' => [ 'site/index'],
+            'loginUrl' => ['site/index'],
             'identityCookie' => ['name' => '_identity-backend', 'httpOnly' => true],
         ],
         'session' => [
@@ -51,7 +53,7 @@ return [
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
             'targets' => [
-                [
+                    [
                     'class' => 'yii\log\FileTarget',
                     'levels' => ['error', 'warning'],
                 ],
@@ -64,7 +66,6 @@ return [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
-                
             ],
         ],
         'assetManager' => [
