@@ -64,7 +64,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                                 ?>
                                                                 <tr>
                                                                         <td><?= $i; ?></td>
-                                                                        <!--<td><?php // $funding->appointment_id;                         ?></td>-->
+                                                                        <!--<td><?php // $funding->appointment_id;                          ?></td>-->
                                                                         <td><?= $funding->principal0->principal_id; ?></td>
                                                                         <?php
                                                                         if ($funding->type == 1) {
