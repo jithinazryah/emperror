@@ -24,6 +24,7 @@ class SubServicesController extends Controller {
                 if (Yii::$app->session['post']['admin'] != 1)
                         $this->redirect(['/site/home']);
         }
+
         /**
          * @inheritdoc
          */
@@ -91,10 +92,14 @@ class SubServicesController extends Controller {
                 if (!empty($subcat)) {
                         foreach ($subcat as $sub) {
                                 $subtotal += $sub->total;
+                                $subtotal_unit += $sub->unit;
+                                $subtotal_rate += $sub->unit_price;
                         }
                         $estimates = EstimatedProforma::findOne(['id' => $sub->estid]);
                         $estimates->epda = $subtotal;
-                        $estimates->save();
+                        $estimates->unit = $subtotal_unit;
+                        $estimates->unit_rate = $subtotal_rate;
+                        $estimates->save(false);
                 }
                 if (empty($subcat)) {
                         if (!empty($mastersub)) {
@@ -165,7 +170,7 @@ class SubServicesController extends Controller {
         public function actionDeleteSub($id) {
                 $this->findModel($id)->delete();
 
-                //return $this->redirect(['index']); 
+                //return $this->redirect(['index']);
                 return $this->redirect(Yii::$app->request->referrer);
         }
 
@@ -195,7 +200,7 @@ class SubServicesController extends Controller {
                         throw new NotFoundHttpException('The requested page does not exist.');
                 }
         }
-        
+
         public function actionEditEstimateSub() {
                 if (Yii::$app->request->isAjax) {
                         $id = $_POST['id'];
@@ -211,7 +216,7 @@ class SubServicesController extends Controller {
                         }
                         if ($value != '') {
                                 $sub_service->$name = $value;
-                                if ($sub_service->save()) {
+                                if ($sub_service->save(false)) {
                                         return 1;
                                 } else {
                                         return 2;

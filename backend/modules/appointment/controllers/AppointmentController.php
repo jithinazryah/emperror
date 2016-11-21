@@ -23,7 +23,7 @@ use common\models\ImigrationClearance;
  * AppointmentController implements the CRUD actions for Appointment model.
  */
 class AppointmentController extends Controller {
-        
+
         public function init() {
                 if (Yii::$app->user->isGuest)
                         $this->redirect(['/site/index']);
@@ -41,7 +41,7 @@ class AppointmentController extends Controller {
                         'class' => AccessControl::className(),
                         'only' => ['addBasic'],
                         'rules' => [
-                            [
+                                [
                                 'actions' => ['appointmentNo'],
                                 'allow' => true,
                                 'roles' => ['?'],
@@ -289,6 +289,29 @@ class AppointmentController extends Controller {
                                 return $year . '-' . $month . '-' . $day;
                         }
                 }
+        }
+
+        public function actionRepport() {
+                $from = $_POST['from'];
+                $to = $_POST['to'];
+                $searchModel = new AppointmentSearch();
+                $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+                if ($from != '' && $to != '') {
+                        $dataProvider->query->where(['between', 'DOC', $from, $to]);
+                }
+                return $this->render('report', [
+                            'searchModel' => $searchModel,
+                            'dataProvider' => $dataProvider,
+                ]);
+        }
+
+        public function actionReport() {
+                $searchModel = new AppointmentSearch();
+                $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+                return $this->render('report', [
+                            'searchModel' => $searchModel,
+                            'dataProvider' => $dataProvider,
+                ]);
         }
 
 }

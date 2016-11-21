@@ -5,12 +5,22 @@ namespace common\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\Appointment;
+use common\models\Report;
 
 /**
  * AppointmentSearch represents the model behind the search form about `common\models\Appointment`.
  */
-class AppointmentSearch extends Appointment {
+class ReportSearch extends Report {
+
+        /**
+         * @var string
+         */
+        public $createdFrom;
+
+        /**
+         * @var string
+         */
+        public $createdTo;
 
         /**
          * @inheritdoc
@@ -80,7 +90,9 @@ class AppointmentSearch extends Appointment {
                         ->andFilterWhere(['like', 'cargo', $this->cargo])
                         ->andFilterWhere(['like', 'quantity', $this->quantity])
                         ->andFilterWhere(['like', 'last_port', $this->last_port])
-                        ->andFilterWhere(['like', 'next_port', $this->next_port]);
+                        ->andFilterWhere(['like', 'next_port', $this->next_port])
+                        ->andFilterWhere(['>=', 'DOC', $this->createdFrom])
+                        ->andFilterWhere(['<=', 'DOC', $this->createdTo]);
 
                 return $dataProvider;
         }

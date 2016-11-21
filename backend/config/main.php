@@ -80,4 +80,5 @@ return [
         ],
     ],
     'params' => $params,
+    'timeZone' => 'Asia/Dubai'
 ];

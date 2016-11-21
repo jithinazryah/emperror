@@ -35,11 +35,11 @@ class SubServices extends \yii\db\ActiveRecord {
         public function rules() {
                 return [
                     //[['service_id', 'sub_service'], 'required'],
-                   // [['service_id', 'status', 'CB', 'UB'], 'integer'],
-                    [['unit', 'unit_price', 'total'], 'number'],
-                    [['comments','rate_to_category'], 'string'],
-                    [['DOC', 'DOU'], 'safe'],
-                    [['sub_service'], 'string', 'max' => 50],
+                    // [['service_id', 'status', 'CB', 'UB'], 'integer'],
+                        [['unit', 'unit_price', 'total'], 'number'],
+                        [['comments', 'rate_to_category'], 'string'],
+                        [['DOC', 'DOU'], 'safe'],
+                        [['sub_service'], 'string', 'max' => 50],
                 ];
         }
 
@@ -67,13 +67,12 @@ class SubServices extends \yii\db\ActiveRecord {
         public function getService() {
                 return $this->hasOne(Services::className(), ['id' => 'service_id']);
         }
-        
+
         public function getSub() {
                 return $this->hasOne(MasterSubService::className(), ['id' => 'sub_service']);
         }
+
 //        public function getMasterService() {
 //                return $this->hasOne(MasterSubService::className(), ['id' => 'sub_service']);
 //        }
-        
-
 }

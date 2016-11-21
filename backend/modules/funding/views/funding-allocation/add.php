@@ -9,6 +9,7 @@ use common\models\Appointment;
 use yii\helpers\ArrayHelper;
 use yii\db\Expression;
 use common\components\AppointmentWidget;
+use common\models\FundingAllocation;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\EstimatedProforma */
@@ -35,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         </a>
                                 </div>
                         </div>
-                        <?php //Pjax::begin();    ?>
+                        <?php //Pjax::begin();      ?>
                         <div class="panel-body">
                                 <?= AppointmentWidget::widget(['id' => $appointment->id]) ?>
 
@@ -43,10 +44,76 @@ $this->params['breadcrumbs'][] = $this->title;
 
                                 <div class="table-responsive" data-pattern="priority-columns" data-focus-btn-icon="fa-asterisk" data-sticky-table-header="true" data-add-display-all-btn="true" data-add-focus-btn="true">
 
+                                        <?php
+                                        $principp = explode(',', $appointment->principal);
+                                        foreach ($principp as $value) {
+                                                $funds = FundingAllocation::findAll(['appointment_id' => $appointment->id, 'principal_id' => $value]);
+                                                if (!empty($funds)) {
+                                                        ?>
+                                                        <h5 style="font-weight:bold;color: #008cbd;">Principal Name :<?= $appointment->getDebtorName($value); ?></h5>
+                                                        <table cellspacing="0" class="table table-small-font table-bordered table-striped">
+                                                                <thead>
+                                                                        <tr>
+                                                                                <th>#</th>
+                                                                                <th>Type</th>
+                                                                                <th>Description</th>
+                                                                                <th>Date</th>
+                                                                                <th>Amount</th>
+                                                                                <th>Outstanding</th>
+                                                                                <th data-priority="1">ACTIONS</th>
+                                                                        </tr>
+                                                                </thead>
+                                                                <?php
+                                                                $j = 0;
+                                                                $totalamount = 0;
+                                                                foreach ($funds as $fund) {
+                                                                        $j++;
+                                                                        ?>
+                                                                        <tbody>
+                                                                                <tr class="filter">
+                                                                                        <td><?= $j; ?></td>
+                                                                                        <?php
+                                                                                        if ($fund->type == 1) {
+                                                                                                $fund_type = 'Credit';
+                                                                                        } elseif ($fund->type == 2) {
+                                                                                                $fund_type = 'Debit';
+                                                                                        } else {
+                                                                                                $fund_type = $fund->type;
+                                                                                        }
+                                                                                        ?>
+                                                                                        <td><?= $fund_type; ?></td>
+                                                                                        <td><?= Yii::$app->SetValues->DateFormate($fund->fund_date); ?></td>
+                                                                                        <td><?= $fund->amount; ?></td>
+                                                                                        <td><?= $fund->outstanding; ?></td>
+                                                                                        <td><?= Html::a('<i class="fa fa-pencil"></i>', ['/funding/funding-allocation/add', 'id' => $id, 'fund_id' => $fund->id], ['class' => '', 'tittle' => 'Edit']) ?></td>
+
+                                                                                </tr>
+                                                                                <?php
+                                                                                $totalamount += $fund->amount;
+                                                                                ?>
+
+                                                                                <?php
+                                                                        }
+                                                                        ?>
+                                                                        <tr>
+                                                                                <td colspan="3">Total</td>
+                                                                                <td><?= $totalamount ?></td>
+                                                                                <td></td>
+                                                                                <td></td>
+                                                                        </tr>
+                                                        </table>
+                                                        <?php
+                                                }
+                                        }
+                                        ?>
+                                </div>
+
+                                <div class="table-responsive" data-pattern="priority-columns" data-focus-btn-icon="fa-asterisk" data-sticky-table-header="true" data-add-display-all-btn="true" data-add-focus-btn="true">
+
                                         <table cellspacing="0" class="table table-small-font table-bordered table-striped">
                                                 <thead>
                                                         <tr>
-                                                                <th data-priority="1">#</th>
+                                                                <!--<th data-priority="1">#</th>-->
                                                                 <!--<th data-priority="3">Appointment ID</th>-->
                                                                 <th data-priority="3">Principal</th>
                                                                 <th data-priority="6" >Type</th>
@@ -56,42 +123,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                                         </tr>
                                                 </thead>
                                                 <tbody>
-                                                        <?php
-                                                        //var_dump($subcat);exit;
-                                                        $i = 0;
-                                                        foreach ($fundings as $funding):
-                                                                $i++;
-                                                                ?>
-                                                                <tr>
-                                                                        <td><?= $i; ?></td>
-                                                                        <!--<td><?php // $funding->appointment_id;                          ?></td>-->
-                                                                        <td><?= $funding->principal0->principal_id; ?></td>
-                                                                        <?php
-                                                                        if ($funding->type == 1) {
-                                                                                $funding_type = 'Credit';
-                                                                        } elseif ($funding->type == 2) {
-                                                                                $funding_type = 'Debit';
-                                                                        } else {
-                                                                                $funding_type = '';
-                                                                        }
-                                                                        ?>
-                                                                        <td><?= $funding_type; ?></td>
-                                                                        <td><?= $funding->amount; ?></td>
-                                                                        <td><?= $funding->outstanding; ?></td>
-                                                                        <td>
-                                                                                <?= Html::a('<i class="fa fa-pencil"></i>', ['/funding/funding-allocation/add', 'id' => $id, 'fund_id' => $funding->id], ['class' => '']) ?>
-                                                                                <?= Html::a('<i class="fa fa-remove"></i>', ['/funding/funding-allocation/delete-fund', 'id' => $funding->id], ['class' => '']) ?>
-                                                                        </td>
-                                                                        <?php
-//                                                                        $subtotal += $subcate->total;
-                                                                        ?>
-                                                                </tr>
-                                                                <?php
-                                                        endforeach;
-                                                        ?>
                                                         <tr class="filter">
                                                                 <?php $form = ActiveForm::begin(); ?>
-                                                                <td></td>
+                                                                <!--<td></td>-->
                                                                 <?php
                                                                 $arr1 = explode(',', $appointment->principal);
                                                                 if (count($arr1) == 1) {
@@ -114,6 +148,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                                 }
                                                                 ?>
                                                                 <td><?= $form->field($model, 'type')->dropDownList(['1' => 'Credit', '2' => 'Debit'], ['prompt' => '-Payment Type-'])->label(false) ?></td>
+                                                                <td><?= $form->field($model, 'fund_date')->textInput(['placeholder' => 'Date'])->label(false) ?></td>
                                                                 <td><?= $form->field($model, 'amount')->textInput(['placeholder' => 'Amount'])->label(false) ?></td>
                                                                 <td><?= $form->field($model, 'outstanding')->textInput(['placeholder' => 'Outstanding'])->label(false) ?></td>
                                                                 <td><?= Html::submitButton($model->isNewRecord ? 'Add' : 'Update', ['class' => 'btn btn-success']) ?>
@@ -194,7 +229,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         $("#closeestimatesubservice-total").prop("disabled", true);
                                 </script>
                         </div>
-                        <?php //Pjax::end();     ?>
+                        <?php //Pjax::end();        ?>
                 </div>
         </div>
 </div>

@@ -19,6 +19,7 @@ use kartik\mpdf\Pdf;
 use common\models\Services;
 use yii\web\UploadedFile;
 use yii\helpers\FileHelper;
+use common\models\FundingAllocation;
 
 /**
  * EstimatedProformaController implements the CRUD actions for EstimatedProforma model.
@@ -137,7 +138,14 @@ class EstimatedProformaController extends Controller {
         }
 
         public function CheckPerforma($id, $appointment) {
-                $appntment = Appointment::find()->where('id != :id and principal = :principal and DOC < NOW() ', ['id' => $id, 'principal' => $appointment->principal])->orderBy(['id' => SORT_DESC])->all();
+                if ($appointment->vessel_type != 1) {
+                        $appntment = Appointment::find()->where('id != :id and principal = :principal and DOC < NOW() and vessel =:vessel', ['id' => $id, 'principal' => $appointment->principal, 'vessel' => $appointment->vessel])->orderBy(['id' => SORT_DESC])->all();
+                } else {
+                        $appntment = Appointment::find()->where('id != :id and principal = :principal and DOC < NOW() and tug =:tug and barge =:barge', ['id' => $id, 'principal' => $appointment->principal, 'tug' => $appointment->tug, 'barge' => $appointment->barge])->orderBy(['id' => SORT_DESC])->all();
+                }
+                if (empty($appntment)) {
+                        $appntment = Appointment::find()->where('id != :id and principal = :principal and DOC < NOW() and vessel_type =:vessel_type', ['id' => $id, 'principal' => $appointment->principal, 'vessel_type' => $appointment->vessel_type])->orderBy(['id' => SORT_DESC])->all();
+                }
 
                 foreach ($appntment as $ar) {
                         $performa_check = EstimatedProforma::findAll(['apponitment_id' => $ar->id]);
@@ -152,7 +160,7 @@ class EstimatedProformaController extends Controller {
         public function actionDeletePerforma($id) {
                 $this->findModel($id)->delete();
 
-                //return $this->redirect(['index']); 
+                //return $this->redirect(['index']);
                 return $this->redirect(Yii::$app->request->referrer);
         }
 
@@ -184,7 +192,7 @@ class EstimatedProformaController extends Controller {
         public function actionDelete($id) {
                 $this->findModel($id)->delete();
 
-                //return $this->redirect(['index']); 
+                //return $this->redirect(['index']);
                 return $this->refresh();
         }
 
@@ -208,6 +216,7 @@ class EstimatedProformaController extends Controller {
                 $new_appid = substr($appointment->appointment_no, 2);
                 $old_appid = substr($appointment->appointment_no, 0, 2);
                 $estimates = EstimatedProforma::findAll(['apponitment_id' => $id]);
+                $this->UpdateFundAllocation($id, $appointment);
                 if (!empty($estimates)) {
                         if ($old_appid == 'EN') {
                                 $appointment->appointment_no = $new_appid;
@@ -219,6 +228,24 @@ class EstimatedProformaController extends Controller {
                 } else {
                         Yii::$app->getSession()->setFlash('error', 'Estimated Proforma Not Completed..');
                         return $this->redirect(['add', 'id' => $id]);
+                }
+        }
+
+        protected function UpdateFundAllocation($id, $appointment) {
+                $principp = explode(',', $appointment->principal);
+                foreach ($principp as $value) {
+                        $estimates = EstimatedProforma::findAll(['apponitment_id' => $id, 'principal' => $value]);
+                        $epda_total = 0;
+                        foreach ($estimates as $estimate) {
+                                $epda_total += $estimate->epda;
+                        }
+                        $model_fund = new FundingAllocation;
+                        $model_fund->appointment_id = $id;
+                        $model_fund->fund_date = date('Y-m-d h:m:s');
+                        $model_fund->outstanding = $epda_total;
+                        $model_fund->type = 'EPDA';
+                        $model_fund->principal_id = $value;
+                        $model_fund->save(false);
                 }
         }
 

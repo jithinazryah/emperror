@@ -1,4 +1,5 @@
 <?php
+
 return [
     'vendorPath' => dirname(dirname(__DIR__)) . '/vendor',
     'components' => [
@@ -6,13 +7,13 @@ return [
             'class' => 'yii\caching\FileCache',
         ],
         'SetValues' => [
-                              'class' => 'common\components\SetValues'
-                    ],
+            'class' => 'common\components\SetValues'
+        ],
         'UploadFile' => [
-                              'class' => 'common\components\UploadFile'
-                    ],
+            'class' => 'common\components\UploadFile'
+        ],
         'NumToWord' => [
-                              'class' => 'common\components\NumToWord'
-                    ],
+            'class' => 'common\components\NumToWord'
+        ],
     ],
 ];

@@ -46,13 +46,13 @@ class Appointment extends \yii\db\ActiveRecord {
          */
         public function rules() {
                 return [
-                    [['vessel_type', 'port_of_call','eta','principal'], 'required'],
-                    [['vessel_type', 'vessel', 'port_of_call', 'tug', 'barge', 'nominator', 'terminal', 'charterer', 'shipper', 'stage', 'sub_stages', 'status', 'CB', 'UB'], 'integer'],
-                    [['DOC', 'DOU', 'cargo_details','USD'], 'safe'],
-                    [['birth_no', 'appointment_no'], 'string', 'max' => 50],
-                    [['no_of_principal', 'quantity'], 'string', 'max' => 15],
-                    [['purpose', 'last_port', 'next_port'], 'string', 'max' => 200],
-                    [['cargo'], 'string', 'max' => 100],
+                        [['vessel_type', 'port_of_call', 'eta', 'principal'], 'required'],
+                        [['vessel_type', 'vessel', 'port_of_call', 'tug', 'barge', 'nominator', 'terminal', 'charterer', 'shipper', 'stage', 'sub_stages', 'status', 'CB', 'UB'], 'integer'],
+                        [['DOC', 'DOU', 'cargo_details', 'USD', 'client_reference', 'epda_content'], 'safe'],
+                        [['birth_no', 'appointment_no'], 'string', 'max' => 50],
+                        [['no_of_principal', 'quantity'], 'string', 'max' => 15],
+                        [['purpose', 'last_port', 'next_port'], 'string', 'max' => 200],
+                        [['cargo'], 'string', 'max' => 100],
                 ];
         }
 
@@ -82,7 +82,9 @@ class Appointment extends \yii\db\ActiveRecord {
                     'last_port' => 'Last Port',
                     'next_port' => 'Next Port',
                     'eta' => 'ETA',
+                    'client_reference' => 'Client Reference',
                     'stage' => 'Stage',
+                    'epda_content' => 'EPDA Content',
                     'sub_stages' => 'Sub Stages',
                     'status' => 'Status',
                     'CB' => 'Cb',
@@ -97,28 +99,28 @@ class Appointment extends \yii\db\ActiveRecord {
         }
 
         /**
-         * @return \yii\db\ActiveQuery 
+         * @return \yii\db\ActiveQuery
          */
         public function getVesselType() {
                 return $this->hasOne(VesselType::className(), ['id' => 'vessel_type']);
         }
 
         /**
-         * @return \yii\db\ActiveQuery 
+         * @return \yii\db\ActiveQuery
          */
         public function getPortOfCall() {
                 return $this->hasOne(Ports::className(), ['id' => 'port_of_call']);
         }
 
         /**
-         * @return \yii\db\ActiveQuery 
+         * @return \yii\db\ActiveQuery
          */
         public function getPurpose0() {
                 return $this->hasOne(Purpose::className(), ['id' => 'purpose']);
         }
 
         /**
-         * @return \yii\db\ActiveQuery 
+         * @return \yii\db\ActiveQuery
          */
         public function getTerminal0() {
                 return $this->hasOne(Terminal::className(), ['id' => 'terminal']);
@@ -138,7 +140,7 @@ class Appointment extends \yii\db\ActiveRecord {
                 $data = Debtor::findOne(['id' => $principal]);
                 return $data->principal_id;
         }
-        
+
         public function getClintRef($principal) {
                 $data = Debtor::findOne(['id' => $principal]);
                 return $data->principal_ref_no;
