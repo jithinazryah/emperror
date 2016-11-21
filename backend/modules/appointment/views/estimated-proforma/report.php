@@ -249,9 +249,9 @@ use common\models\Currency;
 
                                         </div>
                                         <br/>
-                                        <div class="content">
+                                        <div class="content-description">
                                                 <?php if ($appointment->epda_content != '') { ?>
-                                                        <p class="para-heading" style="font-size: 10px;"><?php echo '-' . $appointment->epda_content ?></p>
+                                                        <span><?= $appointment->epda_content ?></span>
                                                 <?php } else {
                                                         ?>
                                                         <p class="para-heading" style="font-size: 10px;">- Additional scope of work other than mentioned in the tarrif to be mutually agreed between two parties prior initiation of service.</p>
