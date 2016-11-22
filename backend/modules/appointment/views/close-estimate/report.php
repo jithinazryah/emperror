@@ -102,8 +102,8 @@ and open the template in the editor.
                                                                 <td style="width: 25%;">EPDA Ref :<?php echo $ref_no; ?></td>
                                                                 <td style="width: 25%;">Customer Code :
                                                                         <?php
-                                                                        if ($princip->principal != '') {
-                                                                                echo $appointment->getClintCode($princip->principal);
+                                                                        if ($principp != '') {
+                                                                                echo $appointment->getClintCode($principp);
                                                                         } else {
                                                                                 echo $appointment->getClintCode($appointment->principal);
                                                                         }
@@ -116,8 +116,8 @@ and open the template in the editor.
                                                                 <td rowspan="3" style="width: 50%; font-weight: bold;">
                                                                         <p>
                                                                                 <?php
-                                                                                if ($princip->principal != '') {
-                                                                                        echo $appointment->getInvoiceAddress($princip->principal);
+                                                                                if ($principp != '') {
+                                                                                        echo $appointment->getInvoiceAddress($principp);
                                                                                 } else {
                                                                                         echo $appointment->getInvoiceAddress($appointment->principal);
                                                                                 }

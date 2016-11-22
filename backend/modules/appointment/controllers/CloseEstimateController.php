@@ -21,6 +21,7 @@ use common\models\CloseEstimateSubService;
 use common\models\Services;
 use common\models\InvoiceType;
 use common\models\Debtor;
+use common\models\FundingAllocation;
 
 /**
  * CloseEstimateController implements the CRUD actions for CloseEstimate model.
@@ -271,6 +272,7 @@ class CloseEstimateController extends Controller {
                 $appointment = Appointment::findOne($app);
                 $ports = PortCallData::findOne($app);
                 if ($invoice_type == 'all') {
+                        $this->UpdateFundAllocation($app, $principp);
                         $princip = CloseEstimate::findAll(['principal' => $principp, 'apponitment_id' => $app]);
                         echo $content = $this->renderPartial('report', [
                     'appointment' => $appointment,
@@ -310,7 +312,7 @@ class CloseEstimateController extends Controller {
                     // your html content input
                     'content' => $content,
                     // format content from your own css file if needed or use the
-                    // enhanced bootstrap css built by Krajee for mPDF formatting 
+                    // enhanced bootstrap css built by Krajee for mPDF formatting
                     'cssFile' => '@backend/web/css/pdf.css',
                         // any css to be embedded if required
                         //'cssInline' => '.kv-heading-1{font-size:18px}',
@@ -325,6 +327,27 @@ class CloseEstimateController extends Controller {
 
                 // return the pdf output as per the destination setting
                 return $pdf->render();
+        }
+
+        protected function UpdateFundAllocation($id, $principp) {
+                $close_estimates = CloseEstimate::findAll(['apponitment_id' => $id, 'principal' => $principp]);
+                $model_fund = FundingAllocation::findOne(['appointment_id' => $id, 'principal_id' => $principp, 'type' => 4]);
+                $fda_total = 0;
+                foreach ($close_estimates as $estimate) {
+                        $fda_total += $estimate->fda;
+                }
+                if (!empty($model_fund)) {
+                        $model_fund->outstanding = $fda_total;
+                } else {
+                        $model_fund = new FundingAllocation;
+                        $model_fund->appointment_id = $id;
+                        $model_fund->fund_date = date('Y-m-d h:m:s');
+                        $model_fund->outstanding = $fda_total;
+                        $model_fund->type = '4';
+                        $model_fund->principal_id = $principp;
+                        Yii::$app->SetValues->Attributes($model_fund);
+                }
+                $model_fund->save();
         }
 
         public function actionRemove($path) {

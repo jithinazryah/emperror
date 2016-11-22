@@ -66,6 +66,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                                 <?php
                                                                 $j = 0;
                                                                 $totalamount = 0;
+                                                                $flag = 0;
                                                                 foreach ($funds as $fund) {
                                                                         $j++;
                                                                         ?>
@@ -77,11 +78,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                                                                                 $fund_type = 'Credit';
                                                                                         } elseif ($fund->type == 2) {
                                                                                                 $fund_type = 'Debit';
+                                                                                        } elseif ($fund->type == 3) {
+                                                                                                $fund_type = 'EPDA';
                                                                                         } else {
-                                                                                                $fund_type = $fund->type;
+                                                                                                $fund_type = 'FDA';
                                                                                         }
                                                                                         ?>
                                                                                         <td><?= $fund_type; ?></td>
+                                                                                        <td><?= $fund->description; ?></td>
                                                                                         <td><?= Yii::$app->SetValues->DateFormate($fund->fund_date); ?></td>
                                                                                         <td><?= $fund->amount; ?></td>
                                                                                         <td><?= $fund->outstanding; ?></td>
@@ -89,6 +93,14 @@ $this->params['breadcrumbs'][] = $this->title;
 
                                                                                 </tr>
                                                                                 <?php
+                                                                                if ($fund->type == 3) {
+                                                                                        $flag = 1;
+                                                                                        $epda_outstanding = $fund->outstanding;
+                                                                                }
+                                                                                if ($fund->type == 4) {
+                                                                                        $flag = 2;
+                                                                                        $fda_outstanding = $fund->outstanding;
+                                                                                }
                                                                                 $totalamount += $fund->amount;
                                                                                 ?>
 
@@ -96,9 +108,32 @@ $this->params['breadcrumbs'][] = $this->title;
                                                                         }
                                                                         ?>
                                                                         <tr>
-                                                                                <td colspan="3">Total</td>
+                                                                                <td colspan="4">Total</td>
                                                                                 <td><?= $totalamount ?></td>
                                                                                 <td></td>
+                                                                                <td></td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                                <?php
+                                                                                if ($flag == 1) {
+                                                                                        $epda_outstanding = $epda_outstanding - $totalamount;
+                                                                                        ?>
+                                                                                        <td colspan="5">Balance Outstanding After EPDA</td>
+                                                                                        <td><?= $epda_outstanding ?></td>
+                                                                                        <?php
+                                                                                } elseif ($flag == 2) {
+                                                                                        $fda_outstanding = $fda_outstanding - $totalamount;
+                                                                                        ?>
+                                                                                        <td colspan="5">Balance Outstanding After FDA</td>
+                                                                                        <td><?= $fda_outstanding ?></td>
+                                                                                        <?php
+                                                                                } else {
+                                                                                        ?>
+                                                                                        <td colspan="5">Balance Outstanding</td>
+                                                                                        <td><?= $totalamount ?></td>
+                                                                                        <?php
+                                                                                }
+                                                                                ?>
                                                                                 <td></td>
                                                                         </tr>
                                                         </table>
@@ -117,6 +152,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                                 <!--<th data-priority="3">Appointment ID</th>-->
                                                                 <th data-priority="3">Principal</th>
                                                                 <th data-priority="6" >Type</th>
+                                                                <th data-priority="6" >Description</th>
                                                                 <th data-priority="6">Amount</th>
                                                                 <th data-priority="6">Outstanding</th>
                                                                 <th data-priority="1">ACTIONS</th>
@@ -147,7 +183,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                                                         <?php
                                                                 }
                                                                 ?>
-                                                                <td><?= $form->field($model, 'type')->dropDownList(['1' => 'Credit', '2' => 'Debit'], ['prompt' => '-Payment Type-'])->label(false) ?></td>
+                                                                <td><?= $form->field($model, 'type')->dropDownList(['1' => 'Credit', '2' => 'Debit', '3' => 'EPDA', '4' => 'FDA'], ['prompt' => '-Payment Type-'])->label(false) ?></td>
+                                                                <td><?= $form->field($model, 'description')->textInput(['placeholder' => 'Description'])->label(false) ?></td>
                                                                 <td><?= $form->field($model, 'fund_date')->textInput(['placeholder' => 'Date'])->label(false) ?></td>
                                                                 <td><?= $form->field($model, 'amount')->textInput(['placeholder' => 'Amount'])->label(false) ?></td>
                                                                 <td><?= $form->field($model, 'outstanding')->textInput(['placeholder' => 'Outstanding'])->label(false) ?></td>

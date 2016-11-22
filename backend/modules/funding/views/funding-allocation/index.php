@@ -92,7 +92,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                     'buttons' => [
                                                         //view button
                                                         'update' => function ($url) {
-                                                                return Html::a('<span class="glyphicon glyphicon-pencil"></span>', $url, ['title' => Yii::t('app', 'Update')]);
+                                                                return Html::a('<span class="fa fa-credit-card"></span>', $url, ['title' => Yii::t('app', 'Update Fund Allocation')]);
                                                         },
                                                     ],
                                                     'urlCreator' => function ($action, $model, $key, $index) {

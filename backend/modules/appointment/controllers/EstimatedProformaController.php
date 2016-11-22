@@ -235,17 +235,23 @@ class EstimatedProformaController extends Controller {
                 $principp = explode(',', $appointment->principal);
                 foreach ($principp as $value) {
                         $estimates = EstimatedProforma::findAll(['apponitment_id' => $id, 'principal' => $value]);
+                        $model_fund = FundingAllocation::findOne(['appointment_id' => $id, 'principal_id' => $value, 'type' => 3]);
                         $epda_total = 0;
                         foreach ($estimates as $estimate) {
                                 $epda_total += $estimate->epda;
                         }
-                        $model_fund = new FundingAllocation;
-                        $model_fund->appointment_id = $id;
-                        $model_fund->fund_date = date('Y-m-d h:m:s');
-                        $model_fund->outstanding = $epda_total;
-                        $model_fund->type = 'EPDA';
-                        $model_fund->principal_id = $value;
-                        $model_fund->save(false);
+                        if (!empty($model_fund)) {
+                                $model_fund->outstanding = $epda_total;
+                        } else {
+                                $model_fund = new FundingAllocation;
+                                $model_fund->appointment_id = $id;
+                                $model_fund->fund_date = date('Y-m-d h:m:s');
+                                $model_fund->outstanding = $epda_total;
+                                $model_fund->type = '3';
+                                $model_fund->principal_id = $value;
+                                Yii::$app->SetValues->Attributes($model_fund);
+                        }
+                        $model_fund->save();
                 }
         }
 

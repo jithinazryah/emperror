@@ -98,14 +98,19 @@ use dosamigos\ckeditor\CKEditor;
 
         <?= $form->field($model, 'status')->dropDownList(['1' => 'Enabled', '0' => 'Disabled']) ?>
 
-        <?=
-        $form->field($model, 'epda_content')->widget(CKEditor::className(), [
-            'options' => ['rows' => 6],
-            'preset' => 'basic',
-        ])
+        <?= Html::activeTextarea($model, 'epda_content', ['class' => 'newsletter-cta-mail txtarea']); ?>
+        <?php
+//        if ($model->isNewRecord) {
+//                if ($model->epda_content != '') {
+//                        $model->epda_content = '<p>- Additional scope of work other than mentioned in the tarrif to be mutually agreed between two parties prior initiation of service.</p>';
+//                }
+//        } else {
+//                echo $form->field($model, 'epda_content')->widget(CKEditor::className(), [
+//                    'options' => ['rows' => 6],
+//                    'preset' => 'basic',
+//                ]);
+//        }
         ?>
-        <div class="form-group"></div>
-        <div class="form-group"></div>
 
         <div class="form-group">
                 <input type="checkbox" id="queue-order" name="check" value="1" checked="checked" uncheckValue="0"><label>Load Previous Proforma</label>
@@ -289,6 +294,11 @@ use dosamigos\ckeditor\CKEditor;
                 height: 9%;
                 position: absolute;
                 z-index: 100;
+        }
+        .txtarea{
+                width:81% !important;
+                margin-left: 28px;
+                height: 150px;
         }
 
 </style>

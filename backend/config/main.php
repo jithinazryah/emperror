@@ -10,6 +10,7 @@ return [
     'controllerNamespace' => 'backend\controllers',
     'bootstrap' => ['log'],
     'bootstrap' => ['gii'],
+    'timeZone' => 'Asia/Dubai',
     'modules' => [
         'gii' => [
             'class' => 'yii\gii\Module',
@@ -80,5 +81,4 @@ return [
         ],
     ],
     'params' => $params,
-    'timeZone' => 'Asia/Dubai'
 ];
