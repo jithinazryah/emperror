@@ -17,6 +17,19 @@ use dosamigos\ckeditor\CKEditor;
 /* @var $model common\models\Appointment */
 /* @var $form yii\widgets\ActiveForm */
 ?>
+<style>
+        .new-width{
+                width: 17% !important;
+        }
+        .form-group-new{
+                padding-left: 29px;
+                width: 83%;
+        }
+        .form-group-new label{
+                color:black;
+                font-weight: bold;
+        }
+</style>
 
 <div class="appointment-form form-inline">
 
@@ -98,18 +111,28 @@ use dosamigos\ckeditor\CKEditor;
 
         <?= $form->field($model, 'status')->dropDownList(['1' => 'Enabled', '0' => 'Disabled']) ?>
 
-        <?= Html::activeTextarea($model, 'epda_content', ['class' => 'newsletter-cta-mail txtarea']); ?>
         <?php
-//        if ($model->isNewRecord) {
-//                if ($model->epda_content != '') {
-//                        $model->epda_content = '<p>- Additional scope of work other than mentioned in the tarrif to be mutually agreed between two parties prior initiation of service.</p>';
-//                }
-//        } else {
-//                echo $form->field($model, 'epda_content')->widget(CKEditor::className(), [
-//                    'options' => ['rows' => 6],
-//                    'preset' => 'basic',
-//                ]);
-//        }
+        if ($model->isNewRecord) {
+                if ($model->epda_content == '') {
+                        $content = '- Additional scope of work other than mentioned in the tarrif to be mutually agreed between two parties prior initiation of service.';
+                        ?>
+                        <?=
+                        $form->field($model, 'epda_content', ['options' => ['class' => 'form-group-new']])->textArea([
+                            'rows' => '6', 'value' => $content
+                        ])
+                        ?>
+                        <?php
+                }
+        } else {
+                ?>
+                <?=
+                $form->field($model, 'epda_content', ['options' => ['class' => 'form-group-new']])->textArea([
+                    'rows' => '6', 'value' => $content
+                ])
+                ?>
+                <?php // $form->field($model, 'epda_content')->textArea(['rows' => '6', 'template' => '{label} <div class="row">EPDA Content<div class="col-sm-4">{input}{error}{hint}</div></div>']) ?>
+                <?php
+        }
         ?>
 
         <div class="form-group">

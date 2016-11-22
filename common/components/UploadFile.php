@@ -36,7 +36,7 @@ class UploadFile extends Component {
                         return false;
                 }
         }
-        
+
         public function UploadSingle($files, $model, $paths) {
                 if ($files != '' && $model != '') {
                         // $folder = $this->folderName(0, 10000, $model->appointment_id);
@@ -54,13 +54,13 @@ class UploadFile extends Component {
 
                 $attach = '';
                 $folder = $this->folderName(0, 10000, $id);
-                $path = Yii::getAlias(Yii::$app->params['uploadPath']) . '/'.Yii::$app->params['mainPath'].'/'.Yii::$app->params['appointmentPath'].'/' . $folder . '/' . $id . '/' . $type;
-                
+                $path = Yii::getAlias(Yii::$app->params['uploadPath']) . '/' . Yii::$app->params['mainPath'] . '/' . Yii::$app->params['appointmentPath'] . '/' . $folder . '/' . $id . '/' . $type;
+
                 foreach (glob("{$path}/*") as $file) {
                         if ($file != '') {
                                 $arry = explode('/', $file);
-                                $path= Yii::$app->params['mainPath'].'/'.Yii::$app->params['appointmentPath'].'/' . $folder . '/' . $id . '/' . $type . '/' . end($arry);
-                                $attach.='<a target="_blank" href="' . Yii::$app->homeUrl . '/'.Yii::$app->params['mainPath'].'/'.Yii::$app->params['appointmentPath'].'/' . $folder . '/' . $id . '/' . $type . '/' . end($arry) . '">' . end($arry) . '</a>&nbsp;&nbsp;<a href="' . Yii::$app->homeUrl .Yii::$app->params['appointmentPath'].'/' .$type.'/'. 'remove?path='. $path .'"><i class="fa fa-remove"></i></a>&nbsp;&nbsp;|&nbsp;&nbsp;';
+                                $path = Yii::$app->params['mainPath'] . '/' . Yii::$app->params['appointmentPath'] . '/' . $folder . '/' . $id . '/' . $type . '/' . end($arry);
+                                $attach .= '<a target="_blank" href="' . Yii::$app->homeUrl . '/' . Yii::$app->params['mainPath'] . '/' . Yii::$app->params['appointmentPath'] . '/' . $folder . '/' . $id . '/' . $type . '/' . end($arry) . '">' . end($arry) . '</a>&nbsp;&nbsp;<a href="' . Yii::$app->homeUrl . Yii::$app->params['appointmentPath'] . '/' . $type . '/' . 'remove?path=' . $path . '"><i class="fa fa-remove"></i></a>&nbsp;&nbsp;|&nbsp;&nbsp;';
                         }
                 }
                 // echo $attach;exit;
@@ -77,13 +77,13 @@ class UploadFile extends Component {
                 }
                 return $root;
         }
-        
+
         public function CheckPath1($paths) {
                 $root = Yii::getAlias(Yii::$app->params['uploadPath']); /* Yii::$app->basePath; */
 
-                        $root .= '/' . $paths;
-                        if (!is_dir($root))
-                                mkdir($root);
+                $root .= '/' . $paths;
+                if (!is_dir($root))
+                        mkdir($root);
                 return $root;
         }
 

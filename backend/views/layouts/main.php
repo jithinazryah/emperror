@@ -97,9 +97,9 @@ AppAsset::register($this);
                                                                 <li>
                                                                         <?= Html::a('File Uploads', ['/appointment/uploads/index'], ['class' => 'title']) ?>
                                                                 </li>
-                                                                <!--                                                                <li>
-                                                                <?php // Html::a('Reports', ['/appointment/report/index'], ['class' => 'title']) ?>
-                                                                                                                                </li>-->
+                                                                <li>
+                                                                        <?= Html::a('Reports', ['/appointment/report/index'], ['class' => 'title']) ?>
+                                                                </li>
                                                                 <!--                                                                <li>
                                                                 <?php // Html::a('Reports', ['/appointment/appointment/report'], ['class' => 'title']) ?>
                                                                                                                                 </li>-->
