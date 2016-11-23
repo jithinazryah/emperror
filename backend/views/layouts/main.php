@@ -47,7 +47,7 @@ AppAsset::register($this);
                                                         </a>
 
                                                         <a href="<?= Yii::$app->homeUrl; ?>" class="logo-collapsed">
-                                                                <img src="<?= Yii::$app->homeUrl; ?>/images/logo-collapsed@2x.png" width="40" alt="" />
+                                                                <img src="<?= Yii::$app->homeUrl; ?>/images/logoemp.png" width="40" alt="" />
                                                         </a>
                                                 </div>
                                                 <!-- This will toggle the mobile menu and will be visible only on mobile devices -->

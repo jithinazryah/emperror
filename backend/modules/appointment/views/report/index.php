@@ -24,7 +24,9 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="col-md-12">
 
                         <div class="panel panel-default">
-                                <h3 class="panel-title">Advanced Search</h3>
+                                <a class="advanced-search" style="font-size: 17px;">Advanced Search</a>
+                                <br/>
+                                <hr class="appoint_history" />
                                 <br/>
                                 <?= $this->render('_search', ['model' => $searchModel]) ?>
                                 <div class="panel-heading">
@@ -140,13 +142,17 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
 </div>
 <style>
-        .form-control {
-                width: 63% !important;
-                padding: 5px;
-        }
-        .btn{
-                margin-top: 11px !important;
+        .hidediv1{
+                display:none;
         }
 </style>
+<script>
+        $(document).ready(function () {
+                $('.advanced-search').click(function () {
+                        $('.hidediv1').slideToggle();
+                });
+        });
+</script>
+
 
 

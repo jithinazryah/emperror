@@ -23,6 +23,16 @@ class ReportSearch extends Report {
         public $createdTo;
 
         /**
+         * @var string
+         */
+        public $etaFrom;
+
+        /**
+         * @var string
+         */
+        public $etaTo;
+
+        /**
          * @inheritdoc
          */
         public function rules() {
@@ -68,6 +78,8 @@ class ReportSearch extends Report {
                     'id' => $this->id,
                     'vessel_type' => $this->vessel_type,
                     'vessel' => $this->vessel,
+                    'tug' => $this->tug,
+                    'barge' => $this->barge,
                     'port_of_call' => $this->port_of_call,
                     'terminal' => $this->terminal,
                     'principal' => $this->principal,
@@ -91,8 +103,13 @@ class ReportSearch extends Report {
                         ->andFilterWhere(['like', 'quantity', $this->quantity])
                         ->andFilterWhere(['like', 'last_port', $this->last_port])
                         ->andFilterWhere(['like', 'next_port', $this->next_port])
-                        ->andFilterWhere(['>=', 'DOC', $this->createdFrom])
-                        ->andFilterWhere(['<=', 'DOC', $this->createdTo]);
+                        ->andFilterWhere(['like', 'tug', $params['ReportSearch']['tug']])
+                        ->andFilterWhere(['like', 'barge', $params['ReportSearch']['barge']])
+                        ->andFilterWhere(['>=', 'eta', $params['ReportSearch']['etaFrom']])
+                        ->andFilterWhere(['<=', 'eta', $params['ReportSearch']['etaTo']])
+                        ->andFilterWhere(['>=', 'DOC', $params['ReportSearch']['createdFrom']])
+                        ->andFilterWhere(['<=', 'DOC', $params['ReportSearch']['createdTo']]);
+
 
                 return $dataProvider;
         }
