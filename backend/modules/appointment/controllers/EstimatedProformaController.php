@@ -270,6 +270,7 @@ class EstimatedProformaController extends Controller {
                 foreach ($performa_check as $pfrma) {
                         $value = EstimatedProforma::find()->where(['id' => $pfrma->id])->one();
                         $model = new EstimatedProforma;
+                        $auto_id = $value->id;
                         $model->apponitment_id = $id;
                         $model->service_id = $value->service_id;
                         $model->service_category = $value->service_category;
@@ -280,12 +281,36 @@ class EstimatedProformaController extends Controller {
                         $model->principal = $value->principal;
                         $model->invoice_type = $value->invoice_type;
                         $model->comments = $value->comments;
+                        $model->rate_to_category = $value->rate_to_category;
                         $model->status = $value->status;
                         $model->CB = Yii::$app->user->identity->id;
                         $model->DOC = date('Y-m-d');
                         $model->save();
+                        $new_id = $model->id;
+                        $sub_service = SubServices::find()->where(['estid' => $auto_id])->all();
+                        if (!empty($sub_service)) {
+                                $this->SetSubService($sub_service, $new_id, $model->apponitment_id);
+                        }
                 }
                 return TRUE;
+        }
+
+        protected function SetSubService($sub_service, $new_id, $appointment_id) {
+                foreach ($sub_service as $value) {
+                        $model = new SubServices;
+                        $model->appointment_id = $appointment_id;
+                        $model->estid = $new_id;
+                        $model->service_id = $value->service_id;
+                        $model->sub_service = $value->id;
+                        $model->unit = $value->unit;
+                        $model->unit_price = $value->unit_price;
+                        $model->total = $value->total;
+                        $model->comments = $value->comments;
+                        $model->rate_to_category = $value->rate_to_category;
+                        $model->status = $value->status;
+                        $model->save(false);
+                }
+                return true;
         }
 
         public function actionSupplier() {

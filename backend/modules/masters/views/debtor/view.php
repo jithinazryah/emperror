@@ -55,9 +55,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                                         'tele_phone',
                                                         'fax',
                                                         'invoicing_address:ntext',
+                                                        'epda_address:ntext',
                                                         'da_dispatch_addresss_1:ntext',
                                                         'da_dispatch_addresss_2:ntext',
-                                                        [
+                                                            [
                                                             'attribute' => 'status',
                                                             'value' => $model->status == 1 ? 'Enabled' : 'Disabled',
                                                         ],

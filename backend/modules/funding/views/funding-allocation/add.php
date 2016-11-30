@@ -55,9 +55,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                                                 <thead>
                                                                         <tr>
                                                                                 <th>#</th>
-                                                                                <th>Type</th>
+                                                                                <th>Payment Mode</th>
                                                                                 <th>Description</th>
                                                                                 <th>Date</th>
+                                                                                <th>Payment Type</th>
+                                                                                <th>Check Number</th>
                                                                                 <th>Amount</th>
                                                                                 <th>Outstanding</th>
                                                                                 <th data-priority="1">ACTIONS</th>
@@ -87,6 +89,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                                                                         <td><?= $fund_type; ?></td>
                                                                                         <td><?= $fund->description; ?></td>
                                                                                         <td><?= Yii::$app->SetValues->DateFormate($fund->fund_date); ?></td>
+                                                                                        <?php
+                                                                                        if ($fund->payment_type == 1) {
+                                                                                                $payment_type = 'Cash';
+                                                                                        } else {
+                                                                                                $payment_type = 'Check';
+                                                                                        }
+                                                                                        ?>
+                                                                                        <td><?= $payment_type; ?></td>
+                                                                                        <td><?= $fund->check_no; ?></td>
                                                                                         <td><?= $fund->amount; ?></td>
                                                                                         <td><?= $fund->outstanding; ?></td>
                                                                                         <td><?= Html::a('<i class="fa fa-pencil"></i>', ['/funding/funding-allocation/add', 'id' => $id, 'fund_id' => $fund->id], ['class' => '', 'tittle' => 'Edit']) ?></td>
@@ -151,8 +162,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                                                 <!--<th data-priority="1">#</th>-->
                                                                 <!--<th data-priority="3">Appointment ID</th>-->
                                                                 <th data-priority="3">Principal</th>
-                                                                <th data-priority="6" >Type</th>
+                                                                <th data-priority="6" >Payment Mode</th>
                                                                 <th data-priority="6" >Description</th>
+                                                                <th data-priority="6">Payment Date</th>
+                                                                <th data-priority="6">Payment Type</th>
+                                                                <th data-priority="6">Check Number</th>
                                                                 <th data-priority="6">Amount</th>
                                                                 <th data-priority="6">Outstanding</th>
                                                                 <th data-priority="1">ACTIONS</th>
@@ -183,9 +197,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                                                         <?php
                                                                 }
                                                                 ?>
-                                                                <td><?= $form->field($model, 'type')->dropDownList(['1' => 'Credit', '2' => 'Debit', '3' => 'EPDA', '4' => 'FDA'], ['prompt' => '-Payment Type-'])->label(false) ?></td>
+                                                                <td><?= $form->field($model, 'type')->dropDownList(['1' => 'Credit', '2' => 'Debit', '3' => 'EPDA', '4' => 'FDA'], ['prompt' => '-Payment Mode-'])->label(false) ?></td>
                                                                 <td><?= $form->field($model, 'description')->textInput(['placeholder' => 'Description'])->label(false) ?></td>
                                                                 <td><?= $form->field($model, 'fund_date')->textInput(['placeholder' => 'Date'])->label(false) ?></td>
+                                                                <td><?= $form->field($model, 'payment_type')->dropDownList(['1' => 'Cash', '2' => 'Check'], ['prompt' => '-Payment Type-'])->label(false) ?></td>
+                                                                <td><?= $form->field($model, 'check_no')->textInput(['placeholder' => 'Check Number'])->label(false) ?></td>
                                                                 <td><?= $form->field($model, 'amount')->textInput(['placeholder' => 'Amount'])->label(false) ?></td>
                                                                 <td><?= $form->field($model, 'outstanding')->textInput(['placeholder' => 'Outstanding'])->label(false) ?></td>
                                                                 <td><?= Html::submitButton($model->isNewRecord ? 'Add' : 'Update', ['class' => 'btn btn-success']) ?>
@@ -264,6 +280,13 @@ $this->params['breadcrumbs'][] = $this->title;
 
                                         }
                                         $("#closeestimatesubservice-total").prop("disabled", true);
+                                        $("#fundingallocation-check_no").prop("disabled", true);
+                                        $('#fundingallocation-payment_type').change(function () {
+                                                var payment_id = $(this).val();
+                                                if (payment_id == 2) {
+                                                        $("#fundingallocation-check_no").prop("disabled", false);
+                                                }
+                                        });
                                 </script>
                         </div>
                         <?php //Pjax::end();        ?>

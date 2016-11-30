@@ -47,9 +47,21 @@ use yii\db\Expression;
 
                         <?= $form->field($model, 'terminal')->dropDownList(ArrayHelper::map(Terminal::findAll(['status' => 1]), 'id', 'terminal'), ['prompt' => '-Choose a Terminal-']) ?>
 
-                        <?= $form->field($model, 'createdFrom')->textInput() ?>
+                        <?=
+                        $form->field($model, 'createdFrom')->widget(\yii\jui\DatePicker::classname(), [
+                            //'language' => 'ru',
+                            'dateFormat' => 'yyyy-MM-dd',
+                            'options' => ['class' => 'form-control']
+                        ])
+                        ?>
 
-                        <?= $form->field($model, 'createdTo')->textInput() ?>
+                        <?=
+                        $form->field($model, 'createdTo')->widget(\yii\jui\DatePicker::classname(), [
+                            //'language' => 'ru',
+                            'dateFormat' => 'yyyy-MM-dd',
+                            'options' => ['class' => 'form-control']
+                        ])
+                        ?>
 
                         <?= $form->field($model, 'birth_no')->textInput() ?>
 
@@ -65,9 +77,21 @@ use yii\db\Expression;
 
                         <?= $form->field($model, 'next_port')->textInput() ?>
 
-                        <?= $form->field($model, 'etaFrom')->textInput() ?>
+                        <?=
+                        $form->field($model, 'etaFrom')->widget(\yii\jui\DatePicker::classname(), [
+                            //'language' => 'ru',
+                            'dateFormat' => 'yyyy-MM-dd',
+                            'options' => ['class' => 'form-control']
+                        ])
+                        ?>
 
-                        <?= $form->field($model, 'etaTo')->textInput() ?>
+                        <?=
+                        $form->field($model, 'etaTo')->widget(\yii\jui\DatePicker::classname(), [
+                            //'language' => 'ru',
+                            'dateFormat' => 'yyyy-MM-dd',
+                            'options' => ['class' => 'form-control']
+                        ])
+                        ?>
 
                         <div class="form-group"></div>
 

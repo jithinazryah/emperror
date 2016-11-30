@@ -68,7 +68,7 @@ use common\models\Currency;
                                                         <table class="tb2">
                                                                 <tr>
                                                                         <td>TO </td> <td style="width: 50px;text-align: center">:</td>
-                                                                        <td style="max-width: 405px"><?= $appointment->getDebtorName($princip); ?></td>
+                                                                        <td style="max-width: 405px"><?= $appointment->getEpdaAddress($princip); ?></td>
                                                                 </tr>
                                                         </table>
                                                 </div>
@@ -76,7 +76,7 @@ use common\models\Currency;
                                                         <table class="tb2">
                                                                 <tr>
                                                                         <td>Date </td> <td style="width: 50px;text-align: center">:</td>
-                                                                        <td style="max-width: 200px"><?= date("d-M-Y h:m") ?></td>
+                                                                        <td style="max-width: 200px"><?= date("d-M-Y") ?></td>
                                                                 </tr>
                                                                 <tr>
                                                                         <td>Client Code </td> <td style="width: 50px;text-align: center">:</td>
@@ -405,13 +405,14 @@ use common\models\Currency;
         <div class="print" style="float:left;">
                 <button onclick="printContent('print')" style="font-weight: bold !important;">Print</button>
                 <button onclick="window.close();" style="font-weight: bold !important;">Close</button>
+                <a href="<?= Yii::$app->homeUrl ?>/appointment/estimated-proforma/save-report?id=<?= $appointment->id ?>"><button onclick="" style="font-weight: bold !important;">Save</button></a>
 
         </div>
-        <div class="save" style="float:left;">
-                <?php
-                echo Html::a('<span>SAVE</span>', ['/appointment/estimated-proforma/save-report', 'id' => $appointment->id], ['class' => 'btn btn-gray']);
-                ?>
-        </div>
+        <!--        <div class="save" style="float:left;">
+        <?php
+        //echo Html::a('<span>SAVE</span>', ['/appointment/estimated-proforma/save-report', 'id' => $appointment->id], ['class' => 'btn btn-gray']);
+        ?>
+                </div>-->
 </div>
 <!--</body>
 </html>-->

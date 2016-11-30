@@ -22,53 +22,52 @@ use Yii;
  * @property string $DOC
  * @property string $DOU
  */
-class Debtor extends \yii\db\ActiveRecord
-{
-    /**
-     * @inheritdoc
-     */
-    public static function tableName()
-    {
-        return 'debtor';
-    }
+class Debtor extends \yii\db\ActiveRecord {
 
-    /**
-     * @inheritdoc
-     */
-    public function rules()
-    {
-        return [
-            [['principal_name', 'address', 'mobile'], 'required'],
-            [['address', 'invoicing_address', 'da_dispatch_addresss_1', 'da_dispatch_addresss_2'], 'string'],
-            [['status', 'CB', 'UB'], 'integer'],
-            [['DOC', 'DOU'], 'safe'],
-            [['principal_name', 'principal_id','principal_ref_no'], 'string', 'max' => 100],
-            [['mobile', 'tele_phone', 'fax'], 'string', 'max' => 15],
-        ];
-    }
+        /**
+         * @inheritdoc
+         */
+        public static function tableName() {
+                return 'debtor';
+        }
 
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'id' => 'ID',
-            'principal_name' => 'Principal Name',
-            'principal_id' => 'Principal ID',
-            'principal_ref_no' => 'Principal Reference No',
-            'address' => 'Address',
-            'mobile' => 'Mobile',
-            'tele_phone' => 'Tele Phone',
-            'fax' => 'Fax',
-            'invoicing_address' => 'Invoicing Address',
-            'da_dispatch_addresss_1' => 'Da Dispatch Addresss 1',
-            'da_dispatch_addresss_2' => 'Da Dispatch Addresss 2',
-            'status' => 'Status',
-            'CB' => 'Cb',
-            'UB' => 'Ub',
-            'DOC' => 'Doc',
-            'DOU' => 'Dou',
-        ];
-    }
+        /**
+         * @inheritdoc
+         */
+        public function rules() {
+                return [
+                        [['principal_name', 'address', 'mobile'], 'required'],
+                        [['address', 'invoicing_address', 'da_dispatch_addresss_1', 'da_dispatch_addresss_2', 'epda_address'], 'string'],
+                        [['status', 'CB', 'UB'], 'integer'],
+                        [['DOC', 'DOU'], 'safe'],
+                        [['principal_name', 'principal_id', 'principal_ref_no'], 'string', 'max' => 100],
+                        [['mobile', 'tele_phone', 'fax'], 'string', 'max' => 15],
+                ];
+        }
+
+        /**
+         * @inheritdoc
+         */
+        public function attributeLabels() {
+                return [
+                    'id' => 'ID',
+                    'principal_name' => 'Principal Name',
+                    'principal_id' => 'Principal ID',
+                    'principal_ref_no' => 'Principal Reference No',
+                    'address' => 'Address',
+                    'mobile' => 'Mobile',
+                    'tele_phone' => 'Tele Phone',
+                    'fax' => 'Fax',
+                    'invoicing_address' => 'Invoicing Address',
+                    'epda_address' => 'EPDA Address',
+                    'da_dispatch_addresss_1' => 'Da Dispatch Addresss 1',
+                    'da_dispatch_addresss_2' => 'Da Dispatch Addresss 2',
+                    'status' => 'Status',
+                    'CB' => 'Cb',
+                    'UB' => 'Ub',
+                    'DOC' => 'Doc',
+                    'DOU' => 'Dou',
+                ];
+        }
+
 }

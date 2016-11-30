@@ -37,7 +37,7 @@ class FundingAllocation extends \yii\db\ActiveRecord {
                         [['amount', 'outstanding'], 'number'],
                         [['CB', 'UB', 'DOC'], 'required'],
                         [['DOC', 'DOU', 'fund_date', 'description'], 'safe'],
-                        [['type'], 'string', 'max' => 50],
+                        [['type', 'payment_type', 'check_no'], 'string', 'max' => 50],
                 ];
         }
 
@@ -51,6 +51,8 @@ class FundingAllocation extends \yii\db\ActiveRecord {
                     'principal_id' => 'Principal ID',
                     'description' => 'Description',
                     'type' => 'Type',
+                    'payment_type' => 'Payment Type',
+                    'check_no' => 'Check Number',
                     'amount' => 'Amount',
                     'outstanding' => 'Outstanding',
                     'status' => 'Status',

@@ -150,4 +150,9 @@ class Appointment extends \yii\db\ActiveRecord {
                 return $this->hasOne(Stages::className(), ['id' => 'stage']);
         }
 
+        public function getEpdaAddress($debtor_id) {
+                $data = Debtor::findOne(['id' => $debtor_id]);
+                return $data->epda_address;
+        }
+
 }

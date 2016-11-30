@@ -13,9 +13,9 @@ use yii\widgets\ActiveForm;
         <?php $form = ActiveForm::begin(); ?>
 
         <?= $form->field($model, 'principal_name')->textInput(['maxlength' => true]) ?>
-    
+
         <?= $form->field($model, 'principal_id')->textInput(['maxlength' => true]) ?>
-    
+
         <?= $form->field($model, 'principal_ref_no')->textInput(['maxlength' => true]) ?>
 
         <?= $form->field($model, 'address')->textarea(['rows' => 6]) ?>
@@ -27,6 +27,8 @@ use yii\widgets\ActiveForm;
         <?= $form->field($model, 'fax')->textInput(['maxlength' => true]) ?>
 
         <?= $form->field($model, 'invoicing_address')->textarea(['rows' => 6]) ?>
+
+        <?= $form->field($model, 'epda_address')->textarea(['rows' => 6]) ?>
 
         <?= $form->field($model, 'da_dispatch_addresss_1')->textarea(['rows' => 6]) ?>
 

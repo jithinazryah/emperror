@@ -87,6 +87,9 @@ class SubServicesController extends Controller {
 //                var_dump($estimates);exit;
                 $appointment = Appointment::findOne($estimates->apponitment_id);
                 $mastersub = MasterSubService::findAll(['service_id' => $estimates->service_id]);
+
+//                var_dump($sub_service);
+//                exit;
                 $subcat = SubServices::findAll(['estid' => $id]);
                 $subtotal = 0;
                 if (!empty($subcat)) {
@@ -115,7 +118,7 @@ class SubServicesController extends Controller {
 
                 if ($model->load(Yii::$app->request->post()) && Yii::$app->SetValues->Attributes($model, $id)) {
                         $model->total = $model->unit * $model->unit_price;
-                        $model->service_id = $estimates->apponitment_id;
+                        $model->service_id = $estimates->service_id;
                         $model->appointment_id = $estimates->apponitment_id;
                         $model->estid = $id;
                         if ($model->save()) {
