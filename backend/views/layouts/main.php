@@ -213,48 +213,22 @@ AppAsset::register($this);
                                         <ul class="user-info-menu right-links list-inline list-unstyled">
                                                 <li class="dropdown user-profile">
                                                         <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                                                <img src="<?= Yii::$app->homeUrl; ?>/images/user-4.png" alt="user-image" class="img-circle img-inline userpic-32" width="28" />
+                            <!--                                <img src="<?= Yii::$app->homeUrl; ?>/images/user-4.png" alt="user-image" class="img-circle img-inline userpic-32" width="28" />-->
                                                                 <span>
-                                                                        <?= Yii::$app->user->identity->name ?>
+                                                                        <?php
+                                                                        echo '<li class="last">'
+                                                                        . Html::beginForm(['/site/logout'], 'post') . '<a>'
+                                                                        . Html::submitButton(
+                                                                                '<i class="fa-lock"></i> Logout (' . Yii::$app->user->identity->user_name . ')', ['class' => 'btn btn-link linker']
+                                                                        ) . '</a>'
+                                                                        . Html::endForm()
+                                                                        . '</li>';
+                                                                        ?>
+                                                                        <?php // Yii::$app->user->identity->name ?>
                                                                         <i class="fa-angle-down"></i>
                                                                 </span>
                                                         </a>
-                                                        <ul class="dropdown-menu user-profile-menu list-unstyled">
-                                                                <li>
-                                                                        <a href="#edit-profile">
-                                                                                <i class="fa-edit"></i>
-                                                                                New Post
-                                                                        </a>
-                                                                </li>
-                                                                <li>
-                                                                        <a href="#settings">
-                                                                                <i class="fa-wrench"></i>
-                                                                                Settings
-                                                                        </a>
-                                                                </li>
-                                                                <li>
-                                                                        <a href="#profile">
-                                                                                <i class="fa-user"></i>
-                                                                                Profile
-                                                                        </a>
-                                                                </li>
-                                                                <li>
-                                                                        <a href="#help">
-                                                                                <i class="fa-info"></i>
-                                                                                Help
-                                                                        </a>
-                                                                </li>
 
-                                                                <?php
-                                                                echo '<li class="last">'
-                                                                . Html::beginForm(['/site/logout'], 'post') . '<a>'
-                                                                . Html::submitButton(
-                                                                        '<i class="fa-lock"></i> Logout (' . Yii::$app->user->identity->user_name . ')', ['class' => 'btn btn-link linker']
-                                                                ) . '</a>'
-                                                                . Html::endForm()
-                                                                . '</li>';
-                                                                ?>
-                                                        </ul>
                                                 </li>
 
 

@@ -28,7 +28,7 @@ $this->title = 'Login';
                         </div>
 
                         <!-- Add class "fade-in-effect" for login form effect -->
- <?php
+                        <?php
                         $form = ActiveForm::begin(
                                         [
                                             'id' => 'login',
@@ -49,7 +49,7 @@ $this->title = 'Login';
                                 <p>Dear user, Please log in to access!</p>
                         </div>
 
-                       
+
                         <div class="form-group">
                                 <?= $form->field($model, 'user_name')->textInput(['class' => 'form-control input-dark', 'autofocus' => 'true']) ?>
                         </div>
@@ -61,20 +61,15 @@ $this->title = 'Login';
                         <div class="form-group">
                                 <?= Html::submitButton('<i class="fa-lock"></i>Log In', ['class' => 'btn btn-dark  btn-block text-left'])
                                 ?>
-                               
+
                         </div>
-                       
+
                         <div class="login-footer">
-                                <a href="#">Forgot your password?</a>
-
-                                <div class="info-links">
-                                        <a href="#">ToS</a> -
-                                        <a href="#">Privacy Policy</a>
-                                </div>
+                                <a href="<?= Yii::$app->homeUrl; ?>site/forgot">Forgot your password?</a>
 
                         </div>
 
- <?php ActiveForm::end(); ?>
+                        <?php ActiveForm::end(); ?>
 
 
                 </div>
