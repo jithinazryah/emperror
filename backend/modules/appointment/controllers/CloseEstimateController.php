@@ -391,6 +391,7 @@ class CloseEstimateController extends Controller {
         public function GenerateInvoiceNo($estid) {
                 $model_report = new InvoiceNumber();
                 $close_estimate = CloseEstimate::findOne($estid);
+                $arr1 = ['1' => 'A', '2' => 'B', '3' => 'C', '4' => 'D', '5' => 'E', '6' => 'F', '7' => 'G', '8' => 'H', '9' => 'I', '10' => 'J', '11' => 'K', '12' => 'L'];
                 $last = InvoiceNumber::find()->orderBy(['id' => SORT_DESC])->where(['invoice_type' => $close_estimate->invoice_type])->one();
                 $last_report_saved = InvoiceNumber::find()->orderBy(['id' => SORT_DESC])->where(['appointment_id' => $close_estimate->apponitment_id, 'invoice_type' => $close_estimate->invoice_type])->one();
                 $model_report->appointment_id = $close_estimate->apponitment_id;
@@ -415,6 +416,13 @@ class CloseEstimateController extends Controller {
                         } else {
                                 return;
                         }
+                }
+                $sub_invoice_saved = InvoiceNumber::find()->orderBy(['id' => SORT_DESC])->where(['appointment_id' => $close_estimate->apponitment_id, 'invoice_type' => $close_estimate->invoice_type])->all();
+                $key = count($sub_invoice_saved);
+                if ($key == 0) {
+                        $model_report->sub_invoice = $model_report->invoice_number;
+                } else {
+                        $model_report->sub_invoice = $model_report->invoice_number . $arr1[$key];
                 }
                 return $model_report;
         }

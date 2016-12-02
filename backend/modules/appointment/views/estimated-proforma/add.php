@@ -238,7 +238,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                                                                                         </span>
                                                                                 </td>
-                                                                                <!--<td><?php // $estimate->images;                                               ?></td>-->
+                                                                                <!--<td><?php // $estimate->images;                                                 ?></td>-->
                                                                                 <td>
                                                                                         <?= Html::a('<i class="fa fa-pencil"></i>', ['/appointment/estimated-proforma/add', 'id' => $id, 'prfrma_id' => $estimate->id], ['class' => '', 'tittle' => 'Edit']) ?>
                                                                                         <?= Html::a('<i class="fa fa-remove"></i>', ['/appointment/estimated-proforma/delete-performa', 'id' => $estimate->id], ['class' => '', 'tittle' => 'Edit', 'data-confirm' => 'Are you sure you want to delete this item?']) ?>
@@ -268,10 +268,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                                                         <td></td>
                                                                         <td><?= $form->field($model, 'service_id')->dropDownList(ArrayHelper::map(Services::findAll(['status' => 1]), 'id', 'service'), ['prompt' => '-Service-'])->label(false); ?></td>
                                                                         <td><?= $form->field($model, 'supplier')->dropDownList(ArrayHelper::map(Contacts::findAll(['status' => 1]), 'id', 'name'), ['prompt' => '-Supplier-'])->label(false); ?></td>
-                                                                       <!--<td><?php //$form->field($model, 'currency')->dropDownList(ArrayHelper::map(Currency::findAll(['status' => 1]), 'id', 'currency_name'), ['prompt' => '-Currency-'])->label(false);                                                                                 ?></td>-->
+                                                                       <!--<td><?php //$form->field($model, 'currency')->dropDownList(ArrayHelper::map(Currency::findAll(['status' => 1]), 'id', 'currency_name'), ['prompt' => '-Currency-'])->label(false);                                                                                   ?></td>-->
                                                                         <td><?= $form->field($model, 'unit_rate')->textInput(['placeholder' => 'Unit Rate'])->label(false) ?></td>
                                                                         <td><?= $form->field($model, 'unit')->textInput(['placeholder' => 'Quantity'])->label(false) ?></td>
-                                                                        <!--<td><?php //$form->field($model, 'roe')->textInput(['placeholder' => 'ROE'])->label(false)                                                                                 ?></td>-->
+                                                                        <!--<td><?php //$form->field($model, 'roe')->textInput(['placeholder' => 'ROE'])->label(false)                                                                                   ?></td>-->
                                                                         <td><?= $form->field($model, 'epda')->textInput(['placeholder' => 'EPDA', 'disabled' => true])->label(false) ?></td>
                                                                         <?php
                                                                         $arr1 = explode(',', $appointment->principal);
@@ -296,7 +296,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                                         ?>
                                                                         <td><?= $form->field($model, 'rate_to_category')->textInput(['placeholder' => 'Rate to Category'])->label(false) ?></td>
                                                                         <td><?= $form->field($model, 'comments')->textInput(['placeholder' => 'Comments'])->label(false) ?></td>
-                                                                        <!--<td><?php // $form->field($model, 'images[]')->fileInput(['multiple' => true])->label(false)                                               ?></td>-->
+                                                                        <!--<td><?php // $form->field($model, 'images[]')->fileInput(['multiple' => true])->label(false)                                                 ?></td>-->
                                                                         <td><?= Html::submitButton($model->isNewRecord ? 'Add' : 'Update', ['class' => 'btn btn-success']) ?>
                                                                         </td>
                                                                         <?php ActiveForm::end(); ?>
