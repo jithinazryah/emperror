@@ -103,8 +103,9 @@ class FundingAllocationController extends Controller {
 
                 if ($model->load(Yii::$app->request->post()) && Yii::$app->SetValues->Attributes($model)) {
                         $model->appointment_id = $id;
+                        $model->type = 1;
                         $model->fund_date = $this->SingleDateFormat($model->fund_date);
-                        if ($model->save()) {
+                        if ($model->save(false)) {
                                 return $this->redirect(['add', 'id' => $id]);
                         }
                         // return $this->refresh();

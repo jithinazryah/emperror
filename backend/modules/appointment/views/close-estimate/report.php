@@ -13,6 +13,8 @@ use common\models\Services;
 use common\models\InvoiceType;
 use common\models\Currency;
 use common\models\EstimateReport;
+use common\models\InvoiceNumber;
+use common\models\FundingAllocation;
 ?>
 <!DOCTYPE html>
 <!--
@@ -178,10 +180,10 @@ and open the template in the editor.
                                 <td>
                                         <?php
                                         if ($invoice_type != 'all') {
-                                                if ($princip->principal != '') {
-                                                        $close_estimates = CloseEstimate::findAll(['apponitment_id' => $appointment->id, 'invoice_type' => $princip->invoice_type, 'principal' => $princip->principal]);
+                                                if ($principp != '') {
+                                                        $close_estimates = CloseEstimate::findAll(['apponitment_id' => $appointment->id, 'principal' => $principp]);
                                                 } else {
-                                                        $close_estimates = CloseEstimate::findAll(['apponitment_id' => $appointment->id, 'invoice_type' => $princip->invoice_type]);
+                                                        $close_estimates = CloseEstimate::findAll(['apponitment_id' => $appointment->id, 'principal' => $appointment->principal]);
                                                 }
                                         } else {
                                                 $close_estimates = CloseEstimate::findAll(['apponitment_id' => $appointment->id, 'principal' => $principp]);
@@ -207,7 +209,7 @@ and open the template in the editor.
                                                                         <td style="width: 10%;"><?= $i ?></td>
                                                                         <td style="width: 40%;"><?php echo Services::findOne(['id' => $close_estimate->service_id])->service; ?></td>
                                                                         <td style="width: 25%;"><?php echo InvoiceType::findOne(['id' => $close_estimate->invoice_type])->invoice_type; ?></td>
-                                                                        <td style="width: 25%;"><?= Yii::$app->SetValues->NumberFormat($close_estimate->fda); ?></td>
+                                                                        <td style="width: 25%;text-align:right;"><?= Yii::$app->SetValues->NumberFormat($close_estimate->fda); ?></td>
                                                                         <?php
                                                                         $grandtotal += $close_estimate->fda;
                                                                         ?>
@@ -218,7 +220,7 @@ and open the template in the editor.
                                                         <tr>
                                                                 <td style="width: 10%;"></td>
                                                                 <td  colspan="2"style="width: 65%;text-align:right;font-weight: bold;">Total</td>
-                                                                <td style="width: 25%;font-weight: bold;">AED <?= Yii::$app->SetValues->NumberFormat(round($grandtotal, 2)); ?></td>
+                                                                <td style="width: 25%;font-weight: bold;text-align:right;">AED <?= Yii::$app->SetValues->NumberFormat(round($grandtotal, 2)); ?></td>
                                                         </tr>
                                                 </table>
                                         </div>
@@ -226,6 +228,30 @@ and open the template in the editor.
                         </tr>
                         <tr>
                                 <td>
+                                        <?php
+                                        if ($principp != '') {
+                                                $funds = FundingAllocation::findAll(['appointment_id' => $appointment->id, 'principal_id' => $principp]);
+                                        } else {
+                                                $funds = FundingAllocation::findAll(['appointment_id' => $appointment->id]);
+                                        }
+                                        $fundamount = 0;
+                                        $flag = 0;
+                                        $check_total = 0;
+                                        $cash_total = 0;
+                                        foreach ($funds as $fund) {
+                                                if ($fund->payment_type == 2) {
+                                                        $flag = 1;
+                                                        $check_total += $fund->amount;
+                                                        $check_no = $fund->check_no;
+                                                        $date = $fund->fund_date;
+                                                } else {
+                                                        $cash_total += $fund->amount;
+                                                        $date = $fund->fund_date;
+                                                }
+                                                $fundamount += $fund->amount;
+                                        }
+                                        $totaloutstanding = $fundamount - $grandtotal;
+                                        ?>
                                         <div class="closeestimate-Receipts">
 
                                                 <table class="table tbl">
@@ -234,25 +260,50 @@ and open the template in the editor.
                                                                 <th style="width: 25%;">Amount</th>
                                                         </tr>
                                                         <tr>
-                                                                <td style="width: 75%;">Receipts</td>
-                                                                <td style="width: 25%;"></td>
+                                                                <?php
+                                                                if ($flag == 1) {
+                                                                        ?>
+                                                                        <td style="width: 75%;text-align:left;font-size:11px;">Net Received on <?= $date ?> against cheque no: <b><?= $check_no ?></b></td>
+                                                                        <td style="width: 25%;font-size: 11px;"><?= $check_total ?></td>
+                                                                        <?php
+                                                                } else {
+                                                                        ?>
+                                                                        <td style="width: 75%;text-align:left;font-size: 11px;">Net Received on <?= $date ?></td>
+                                                                        <td style="width: 25%;font-size: 11px;"><?= $cash_total ?></td>
+                                                                        <?php
+                                                                }
+                                                                ?>
+
                                                         </tr>
                                                 </table>
                                         </div>
+
                                         <div class="closeestimate-content">
                                                 <h6>Total Outstanding</h6>
                                                 <table class="table tbl">
                                                         <tr>
-                                                                <td style="width: 75%;">Total Due in our favour </td>
-                                                                <td style="width: 25%;font-weight: bold;">AED <?= Yii::$app->SetValues->NumberFormat(round($grandtotal, 2)); ?></td>
+                                                                <?php
+                                                                if ($totaloutstanding < 0) {
+                                                                        ?>
+                                                                        <td style="width: 75%;text-align:right;">Total Due in our favour </td>
+                                                                        <td style="width: 25%;font-weight: bold;text-align:right;">AED <?= Yii::$app->SetValues->NumberFormat(round(abs($totaloutstanding), 2)); ?></td>
+                                                                        <?php
+                                                                } else {
+                                                                        ?>
+                                                                        <td style="width: 75%;text-align:right;">Total Due in Your favour </td>
+                                                                        <td style="width: 25%;font-weight: bold;text-align:right;">AED <?= Yii::$app->SetValues->NumberFormat(round(abs($totaloutstanding), 2)); ?></td>
+                                                                        <?php
+                                                                }
+                                                                ?>
+
                                                         </tr>
                                                         <?php
                                                         $currency = Currency::findOne(['id' => 1]);
-                                                        $usd = round($grandtotal * $currency->currency_value, 2);
+                                                        $usd = round(abs($totaloutstanding) * $currency->currency_value, 2);
                                                         ?>
                                                         <tr>
                                                                 <td style="width: 75%;"></th>
-                                                                <td style="width: 25%;font-weight: bold;">USD <?= Yii::$app->SetValues->NumberFormat($usd); ?></td>
+                                                                <td style="width: 25%;font-weight: bold;text-align:right;">USD <?= Yii::$app->SetValues->NumberFormat($usd); ?></td>
                                                         </tr>
                                                 </table>
                                         </div>
@@ -262,7 +313,7 @@ and open the template in the editor.
                                 <td>
                                         <div class="bank">
                                                 <p>Amount chargeable (in words)</p>
-                                                <h6>UAE Dirhams <?php echo ucwords(Yii::$app->NumToWord->ConvertNumberToWords(round($grandtotal, 2))) . ' Only'; ?> </h6>
+                                                <h6>UAE Dirhams <?php echo ucwords(Yii::$app->NumToWord->ConvertNumberToWords(round(abs($totaloutstanding), 2))) . ' Only'; ?> </h6>
                                                 <h6>USD <?php echo ucwords(Yii::$app->NumToWord->ConvertNumberToWords($usd, 'USD')) . ' Only'; ?> </h6>
                                                 <h6>Company's Bank Details:</h6>
                                                 <div class="bank-left">
@@ -300,18 +351,16 @@ and open the template in the editor.
                                                 <div class="bank-right">
                                                         <table class="">
                                                                 <tr>
-                                                                        <td>Remarks: </td> <td>:</td>
-                                                                        <td></td>
-                                                                </tr>
-                                                                <tr>
-                                                                        <td>Vessel </td> <td>:</td>
-                                                                        <td><?php
+                                                                        <td>Remarks:Vessel </td> <td>:</td>
+                                                                        <td>
+                                                                                <?php
                                                                                 if ($appointment->vessel_type == 1) {
                                                                                         echo 'T - ' . Vessel::findOne($appointment->tug)->vessel_name . ' / B - ' . Vessel::findOne($appointment->barge)->vessel_name;
                                                                                 } else {
                                                                                         echo Vessel::findOne($appointment->vessel)->vessel_name;
                                                                                 }
-                                                                                ?></td>
+                                                                                ?>
+                                                                        </td>
                                                                 </tr>
                                                         </table>
                                                 </div>

@@ -297,11 +297,12 @@ class EstimatedProformaController extends Controller {
 
         protected function SetSubService($sub_service, $new_id, $appointment_id) {
                 foreach ($sub_service as $value) {
+
                         $model = new SubServices;
                         $model->appointment_id = $appointment_id;
                         $model->estid = $new_id;
                         $model->service_id = $value->service_id;
-                        $model->sub_service = $value->id;
+                        $model->sub_service = $value->sub_service;
                         $model->unit = $value->unit;
                         $model->unit_price = $value->unit_price;
                         $model->total = $value->total;
@@ -355,9 +356,18 @@ class EstimatedProformaController extends Controller {
                             'appointment' => $appointment,
                             //'estimates' => $estimates,
                             'princip' => $princip,
+                            'save' => false,
+                            'print' => true,
                 ]));
+                echo $this->renderPartial('report', [
+                    'appointment' => $appointment,
+                    //'estimates' => $estimates,
+                    'princip' => $princip,
+                    'save' => true,
+                    'print' => false,
+                ]);
 
-                echo Yii::$app->session['epda'];
+//                echo Yii::$app->session['epda'];
                 exit;
 
                 // setup kartik\mpdf\Pdf component

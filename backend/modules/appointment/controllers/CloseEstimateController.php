@@ -22,6 +22,7 @@ use common\models\Services;
 use common\models\InvoiceType;
 use common\models\Debtor;
 use common\models\FundingAllocation;
+use common\models\InvoiceNumber;
 
 /**
  * CloseEstimateController implements the CRUD actions for CloseEstimate model.
@@ -288,6 +289,7 @@ class CloseEstimateController extends Controller {
                         } else {
                                 $princip = CloseEstimate::findOne(['invoice_type' => $invoice_type, 'apponitment_id' => $app]);
                         }
+//                        $this->SaveReport($app, $invoice_type);
                         echo $content = $this->renderPartial('report_fda', [
                     'appointment' => $appointment,
                     'invoice_type' => $invoice_type,
@@ -360,13 +362,74 @@ class CloseEstimateController extends Controller {
                 $close_estimate = CloseEstimate::findOne($estid);
                 $appointment = Appointment::findOne($id);
                 $ports = PortCallData::findOne($id);
+//                $this->SaveReport($id, $close_estimate->invoice_type, $estid);
                 //var_dump($appointment);exit;
-                echo $content = $this->renderPartial('fda_report', [
-            'appointment' => $appointment,
-            'ports' => $ports,
-            'close_estimate' => $close_estimate,
+                Yii::$app->session->set('fda', $this->renderPartial('fda_report', [
+                            'appointment' => $appointment,
+                            'close_estimate' => $close_estimate,
+                            'save' => false,
+                            'print' => true,
+                ]));
+                echo $this->renderPartial('fda_report', [
+                    'appointment' => $appointment,
+                    'close_estimate' => $close_estimate,
+                    'save' => true,
+                    'print' => false,
                 ]);
+
+//                echo Yii::$app->session['fda'];
                 exit;
+        }
+
+        public function actionSaveReport($estid) {
+                $model_report = $this->GenerateInvoiceNo($estid);
+                $model_report->save();
+                echo "<script>window.close();</script>";
+                exit;
+        }
+
+        public function GenerateInvoiceNo($estid) {
+                $model_report = new InvoiceNumber();
+                $close_estimate = CloseEstimate::findOne($estid);
+                $last = InvoiceNumber::find()->orderBy(['id' => SORT_DESC])->where(['invoice_type' => $close_estimate->invoice_type])->one();
+                $last_report_saved = InvoiceNumber::find()->orderBy(['id' => SORT_DESC])->where(['appointment_id' => $close_estimate->apponitment_id, 'invoice_type' => $close_estimate->invoice_type])->one();
+                $model_report->appointment_id = $close_estimate->apponitment_id;
+                $model_report->invoice_type = $close_estimate->invoice_type;
+                $model_report->estimate_id = $estid;
+                $model_report->report = Yii::$app->session['fda'];
+                if (!empty($last)) {
+                        if (empty($last_report_saved)) {
+                                $model_report->invoice_number = $last->invoice_number + 1;
+                        } else {
+                                $model_report->invoice_number = $last_report_saved->invoice_number;
+                        }
+                } else {
+                        if ($close_estimate->invoice_type == 1) {
+                                $model_report->invoice_number = 76;
+                        } elseif ($close_estimate->invoice_type == 3) {
+                                $model_report->invoice_number = 80;
+                        } elseif ($close_estimate->invoice_type == 7) {
+                                $model_report->invoice_number = 84;
+                        } elseif ($close_estimate->invoice_type == 8) {
+                                $model_report->invoice_number = 47;
+                        } else {
+                                return;
+                        }
+                }
+                return $model_report;
+        }
+
+        public function actionShowReport($id) {
+                $model_report = InvoiceNumber::findOne($id);
+                $model_report->report;
+                return $this->renderPartial('_old', [
+                            'model_report' => $model_report,
+                ]);
+        }
+
+        public function actionRemoveReport($id) {
+                InvoiceNumber::findOne($id)->delete();
+                return $this->redirect(Yii::$app->request->referrer);
         }
 
         public function actionEditEstimate() {

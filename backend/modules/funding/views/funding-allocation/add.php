@@ -119,7 +119,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                                         }
                                                                         ?>
                                                                         <tr>
-                                                                                <td colspan="4">Total</td>
+                                                                                <td colspan="6">Total</td>
                                                                                 <td><?= $totalamount ?></td>
                                                                                 <td></td>
                                                                                 <td></td>
@@ -129,18 +129,18 @@ $this->params['breadcrumbs'][] = $this->title;
                                                                                 if ($flag == 1) {
                                                                                         $epda_outstanding = $epda_outstanding - $totalamount;
                                                                                         ?>
-                                                                                        <td colspan="5">Balance Outstanding After EPDA</td>
+                                                                                        <td colspan="7">Balance Outstanding After EPDA</td>
                                                                                         <td><?= $epda_outstanding ?></td>
                                                                                         <?php
                                                                                 } elseif ($flag == 2) {
                                                                                         $fda_outstanding = $fda_outstanding - $totalamount;
                                                                                         ?>
-                                                                                        <td colspan="5">Balance Outstanding After FDA</td>
+                                                                                        <td colspan="7">Balance Outstanding After FDA</td>
                                                                                         <td><?= $fda_outstanding ?></td>
                                                                                         <?php
                                                                                 } else {
                                                                                         ?>
-                                                                                        <td colspan="5">Balance Outstanding</td>
+                                                                                        <td colspan="7">Balance Outstanding</td>
                                                                                         <td><?= $totalamount ?></td>
                                                                                         <?php
                                                                                 }
@@ -162,7 +162,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                                 <!--<th data-priority="1">#</th>-->
                                                                 <!--<th data-priority="3">Appointment ID</th>-->
                                                                 <th data-priority="3">Principal</th>
-                                                                <th data-priority="6" >Payment Mode</th>
+                                                                <!--<th data-priority="6" >Payment Mode</th>-->
                                                                 <th data-priority="6" >Description</th>
                                                                 <th data-priority="6">Payment Date</th>
                                                                 <th data-priority="6">Payment Type</th>
@@ -197,7 +197,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                                         <?php
                                                                 }
                                                                 ?>
-                                                                <td><?= $form->field($model, 'type')->dropDownList(['1' => 'Credit', '2' => 'Debit', '3' => 'EPDA', '4' => 'FDA'], ['prompt' => '-Payment Mode-'])->label(false) ?></td>
+<!--<td><?php // $form->field($model, 'type')->dropDownList(['1' => 'Credit', '2' => 'Debit', '3' => 'EPDA', '4' => 'FDA'], ['prompt' => '-Payment Mode-'])->label(false)          ?></td>-->
                                                                 <td><?= $form->field($model, 'description')->textInput(['placeholder' => 'Description'])->label(false) ?></td>
                                                                 <td><?= $form->field($model, 'fund_date')->textInput(['placeholder' => 'Date'])->label(false) ?></td>
                                                                 <td><?= $form->field($model, 'payment_type')->dropDownList(['1' => 'Cash', '2' => 'Check'], ['prompt' => '-Payment Type-'])->label(false) ?></td>
@@ -285,6 +285,8 @@ $this->params['breadcrumbs'][] = $this->title;
                                                 var payment_id = $(this).val();
                                                 if (payment_id == 2) {
                                                         $("#fundingallocation-check_no").prop("disabled", false);
+                                                } else {
+                                                        $("#fundingallocation-check_no").prop("disabled", true);
                                                 }
                                         });
                                 </script>

@@ -24,9 +24,8 @@ class UploadFile extends Component {
                         $folder = $this->folderName(0, 10000, $model->appointment_id);
 
                         $paths = [Yii::$app->params['mainPath'], Yii::$app->params['appointmentPath'], $folder, $model->appointment_id, $model->type];
+
                         $path = $this->CheckPath($paths);
-
-
                         foreach ($files as $file) {
                                 $name = $this->fileExists($path, $file->baseName . '.' . $file->extension, $file, 1);
                                 $file->saveAs($path . '/' . $name);

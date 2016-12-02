@@ -403,9 +403,21 @@ use common\models\Currency;
 </script>
 <div style="display:inline-block">
         <div class="print" style="float:left;">
-                <button onclick="printContent('print')" style="font-weight: bold !important;">Print</button>
+                <?php
+                if ($print) {
+                        ?>
+                        <button onclick="printContent('print')" style="font-weight: bold !important;">Print</button>
+                        <?php
+                }
+                ?>
                 <button onclick="window.close();" style="font-weight: bold !important;">Close</button>
-                <a href="<?= Yii::$app->homeUrl ?>/appointment/estimated-proforma/save-report?id=<?= $appointment->id ?>"><button onclick="" style="font-weight: bold !important;">Save</button></a>
+                <?php
+                if ($save) {
+                        ?>
+                        <a href="<?= Yii::$app->homeUrl ?>/appointment/estimated-proforma/save-report?id=<?= $appointment->id ?>"><button onclick="" style="font-weight: bold !important;">Save</button></a>
+                        <?php
+                }
+                ?>
 
         </div>
         <!--        <div class="save" style="float:left;">
