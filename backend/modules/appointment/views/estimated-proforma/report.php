@@ -20,9 +20,12 @@ use common\models\Currency;
 
                 @media print {
                         thead {display: table-header-group;}
+                        tfoot {display: table-footer-group}
                         /*tfoot {position: absolute;bottom: 0px;}*/
                         .main-tabl{width: 100%}
+                        .footer {position: fixed ; left: 0px; bottom: 0px; right: 0px; font-size:10px; }
                 }
+                /*.footer {position: fixed ; left: 0px; bottom: 0px; right: 0px; font-size:10px; }*/
                 @media screen{
                         .main-tabl{
                                 width: 60%;
@@ -371,6 +374,8 @@ use common\models\Currency;
                                         </div>
                                 </td>
                         </tr>
+                </tbody>
+                <tfoot>
                         <tr>
                                 <td style="width:100%">
                                         <div class="footer">
@@ -388,7 +393,7 @@ use common\models\Currency;
                                         </div>
                                 </td>
                         </tr>
-                </tbody>
+                </tfoot>
         </table>
 </div>
 

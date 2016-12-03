@@ -13,14 +13,14 @@ body,p,tr,td,table,div,span{
 }
 @page {
         size: A4;
-        // margin: 40px;
-        // margin-top: 100px;
+        /*         margin: 40px;
+                 margin-top: 100px;*/
 }
 @media print{
 
-        // size: A4;
-        //margin: 30px;
-        //margin: 20mm;
+        /*        // size: A4;
+                //margin: 30px;
+                //margin: 20mm;*/
 
 
 
@@ -29,13 +29,13 @@ body,p,tr,td,table,div,span{
 .main-tabl{
         margin: auto;
 }
-thead { display: table-header-group;   }
+/*thead { display: table-header-group;   }*/
 tfoot{display: table-footer-group;}
 table { page-break-inside:auto;}
 tr{ page-break-inside:avoid; page-break-after:auto; }
 
-//h6 {page-break-before: always}
-//table {page-break-after: always}
+/*//h6 {page-break-before: always}*/
+/*//table {page-break-after: always}*/
 table.table{
         border: 1px solid black;
         border-collapse: collapse;
@@ -103,7 +103,7 @@ h6{
 }
 .heading{
         width: 98%;
-        //margin-top: 26px;
+        /*//margin-top: 26px;*/
         text-align: center;
         font-weight: bold;
         font-size: 17px;

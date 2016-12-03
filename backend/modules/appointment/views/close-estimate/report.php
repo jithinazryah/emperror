@@ -33,9 +33,10 @@ and open the template in the editor.
 
                 @media print {
                         thead {display: table-header-group;}
-                        /*            tfoot {position:absolute;
-                                           bottom:0;}*/
+                        tfoot {display: table-footer-group}
+                        /*tfoot {position: absolute;bottom: 0px;}*/
                         .main-tabl{width: 100%}
+                        .footer {position: fixed ; left: 0px; bottom: 0px; right: 0px; font-size:10px; }
                 }
                 @media screen{
                         .main-tabl{
@@ -382,6 +383,9 @@ and open the template in the editor.
                                         </div>
                                 </td>
                         </tr>
+
+                </tbody>
+                <tfoot>
                         <tr>
                                 <td style="width:100%">
                                         <div class="footer">
@@ -399,7 +403,7 @@ and open the template in the editor.
                                         </div>
                                 </td>
                         </tr>
-                </tbody>
+                </tfoot>
         </table>
 </div>
 <script>
