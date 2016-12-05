@@ -15,7 +15,7 @@ use common\models\FundingAllocation;
 /* @var $model common\models\EstimatedProforma */
 
 $this->title = 'Funding allocation';
-$this->params['breadcrumbs'][] = ['label' => 'Funding Allocation', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => ' Pre-Funding', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 
@@ -41,7 +41,20 @@ $this->params['breadcrumbs'][] = $this->title;
                                 <?= AppointmentWidget::widget(['id' => $appointment->id]) ?>
 
                                 <hr class="appoint_history" />
+                                <ul class="estimat nav nav-tabs nav-tabs-justified">
+                                        <li class="active">
+                                                <?php
+                                                echo Html::a('<span class="visible-xs"><i class="fa-home"></i></span><span class="hidden-xs">Pre-Funding</span>', ['funding-allocation/add', 'id' => $appointment->id]);
+                                                ?>
 
+                                        </li>
+                                        <li>
+                                                <?php
+                                                echo Html::a('<span class="visible-xs"><i class="fa-home"></i></span><span class="hidden-xs">Actual Funding</span>', ['actual-funding/add', 'id' => $appointment->id]);
+                                                ?>
+
+                                        </li>
+                                </ul>
                                 <div class="table-responsive" data-pattern="priority-columns" data-focus-btn-icon="fa-asterisk" data-sticky-table-header="true" data-add-display-all-btn="true" data-add-focus-btn="true">
 
                                         <?php
@@ -197,7 +210,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                                         <?php
                                                                 }
                                                                 ?>
-<!--<td><?php // $form->field($model, 'type')->dropDownList(['1' => 'Credit', '2' => 'Debit', '3' => 'EPDA', '4' => 'FDA'], ['prompt' => '-Payment Mode-'])->label(false)          ?></td>-->
+<!--<td><?php // $form->field($model, 'type')->dropDownList(['1' => 'Credit', '2' => 'Debit', '3' => 'EPDA', '4' => 'FDA'], ['prompt' => '-Payment Mode-'])->label(false)                    ?></td>-->
                                                                 <td><?= $form->field($model, 'description')->textInput(['placeholder' => 'Description'])->label(false) ?></td>
                                                                 <td><?= $form->field($model, 'fund_date')->textInput(['placeholder' => 'Date'])->label(false) ?></td>
                                                                 <td><?= $form->field($model, 'payment_type')->dropDownList(['1' => 'Cash', '2' => 'Check'], ['prompt' => '-Payment Type-'])->label(false) ?></td>
