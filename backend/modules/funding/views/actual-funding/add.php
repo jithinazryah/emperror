@@ -51,110 +51,90 @@ $this->params['breadcrumbs'][] = $this->title;
                                         </li>
                                         <li class="active">
                                                 <?php
-                                                echo Html::a('<span class="visible-xs"><i class="fa-home"></i></span><span class="hidden-xs">Actual Funding</span>', ['actual-funding/add', 'id' => $appointment->id]);
+                                                echo Html::a('<span class="visible-xs"><i class="fa-home"></i></span><span class="hidden-xs">Actual Price</span>', ['actual-funding/add', 'id' => $appointment->id]);
+                                                ?>
+
+                                        </li>
+                                        <li>
+                                                <?php
+                                                echo Html::a('<span class="visible-xs"><i class="fa-home"></i></span><span class="hidden-xs">Supplier Funding</span>', ['supplier-funding/add', 'id' => $appointment->id]);
                                                 ?>
 
                                         </li>
                                 </ul>
+                                <?= Html::beginForm(['actual-funding/save-actual-price'], 'post') ?>
                                 <div class="table-responsive" data-pattern="priority-columns" data-focus-btn-icon="fa-asterisk" data-sticky-table-header="true" data-add-display-all-btn="true" data-add-focus-btn="true">
 
-                                        <?php
-                                        if (!empty($actual_fundings)) {
-                                                ?>
-                                                <table cellspacing="0" class="table table-small-font table-bordered table-striped">
-                                                        <thead>
-                                                                <tr>
-                                                                        <th>#</th>
-                                                                        <th>Service</th>
-                                                                        <th>FDA Amount</th>
-                                                                        <th>Actual Amount</th>
-                                                                        <th>Amount Difference</th>
-                                                                        <th data-priority="1">ACTIONS</th>
-                                                                </tr>
-                                                        </thead>
+
+                                        <input type="hidden" name="app_id" value="<?= $id; ?>" />
+                                        <table cellspacing="0" class="table table-small-font table-bordered table-striped">
+                                                <thead>
+                                                        <tr>
+                                                                <th>#</th>
+                                                                <th>SERVICES</th>
+                                                                <th>SUPPLIER</th>
+                                                                <th>RATE /QTY</th>
+                                                                <th>QTY</th>
+                                                                <th>FDA AMOUNT</th>
+                                                                <th>ACTUAL AMOUNT</th>
+                                                                <th>AMOUNT DIFFERENCE</th>
+                                                                <!--<th data-priority="1">ACTIONS</th>-->
+                                                        </tr>
+                                                </thead>
+                                                <?php
+                                                if (!empty($actual_fundings)) {
+                                                        ?>
                                                         <tbody>
+
                                                                 <?php
                                                                 $j = 0;
+                                                                $fda = 0;
+                                                                $actual_total = 0;
+                                                                $amount_difference = 0;
                                                                 foreach ($actual_fundings as $fund) {
                                                                         $j++;
                                                                         ?>
                                                                         <tr class="filter">
                                                                                 <td><?= $j; ?></td>
                                                                                 <td><?= Services::findOne($fund->service_id)->service; ?></td>
+                                                                                <td><?= Contacts::findOne($fund->supplier)->name; ?></td>
+                                                                                <td><?= $fund->unit_rate; ?></td>
+                                                                                <td><?= $fund->unit; ?></td>
                                                                                 <td><?= $fund->fda_amount; ?></td>
-                                                                                <td><?= $fund->actual_amount; ?></td>
+                                                                                <td><input type="text" name="actual_amount[<?= $fund->id; ?>]" value="<?= $fund->actual_amount ?>" /></td>
                                                                                 <td><?= $fund->amount_difference; ?></td>
-                                                                                <td><?= Html::a('<i class="fa fa-pencil"></i>', ['/funding/actual-funding/add', 'id' => $id, 'fund_id' => $fund->id], ['class' => '', 'tittle' => 'Edit']) ?></td>
-
+                                                                                <!--<td><?php // Html::a('<i class="fa fa-pencil"></i>', ['/funding/actual-funding/add', 'id' => $id, 'fund_id' => $fund->id], ['class' => '', 'tittle' => 'Edit'])                                                          ?></td>-->
+                                                                                <?php
+                                                                                $fda = $fda += $fund->fda_amount;
+                                                                                $actual_total += $fund->actual_amount;
+                                                                                $amount_difference += $fund->amount_difference;
+                                                                                ?>
                                                                         </tr>
                                                                         <?php
                                                                 }
                                                                 ?>
                                                                 <tr>
-                                                                        <td colspan="2">Total</td>
-                                                                        <td></td>
-                                                                        <td></td>
-                                                                        <td></td>
-                                                                        <td></td>
+                                                                        <td colspan="5">Total</td>
+                                                                        <td><?= $fda ?></td>
+                                                                        <td><?= $actual_total ?></td>
+                                                                        <td><?= $amount_difference ?></td>
                                                                 </tr>
                                                         </tbody>
-                                                </table>
-                                                <?php
-                                        }
-                                        ?>
-                                </div>
-
-                                <div class="table-responsive" data-pattern="priority-columns" data-focus-btn-icon="fa-asterisk" data-sticky-table-header="true" data-add-display-all-btn="true" data-add-focus-btn="true">
-
-                                        <table cellspacing="0" class="table table-small-font table-bordered table-striped">
-                                                <thead>
-                                                        <tr>
-                                                                <th data-priority="3">Service</th>
-                                                                <th data-priority="6" >FDA Amount</th>
-                                                                <th data-priority="6">Actual Amount</th>
-                                                                <th data-priority="6">Amount Difference</th>
-                                                                <th data-priority="1">ACTIONS</th>
-                                                        </tr>
-                                                </thead>
-                                                <tbody>
-                                                        <tr class="filter">
-                                                                <?php $form = ActiveForm::begin(); ?>
-                                                                <!--<td></td>-->
-                                                                <td><?= $form->field($model, 'service_id')->textInput(['placeholder' => 'Service'])->label(false) ?></td>
-                                                                <td><?= $form->field($model, 'fda_amount')->textInput(['placeholder' => 'FDA'])->label(false) ?></td>
-                                                                <td><?= $form->field($model, 'actual_amount')->textInput(['placeholder' => 'Actual Amount'])->label(false) ?></td>
-                                                                <td><?= $form->field($model, 'amount_difference')->textInput(['placeholder' => 'Amount Difference'])->label(false) ?></td>
-                                                                <td><?= Html::submitButton('Update', ['class' => 'btn btn-success']) ?>
-                                                                </td>
-                                                                <?php ActiveForm::end(); ?>
-
-
-                                                </tbody>
-                                        </table>
-                                        <div>
-                                                <?php
-                                                // echo Html::a('<span>Back to Close Estimate</span>', ['/appointment/close-estimate/add', 'id' => $appointment->id], ['class' => 'btn btn-secondary']);
+                                                        <?php
+                                                }
                                                 ?>
-                                        </div>
+                                        </table>
+
+                                </div>
+                                <div class="col-md-4" style="float:right;">
+                                        <?= Html::submitButton('Submit', ['class' => 'btn btn-black']) ?>
+                                        <?= Html::endForm() ?>
+                                        <?php ?>
                                 </div>
 
-<!--                                <script>
-                                        $("document").ready(function () {
-                                                $('#subservices-service_id').change(function () {
-                                                        var service_id = $(this).val();
-                                                        $.ajax({
-                                                                type: 'POST',
-                                                                cache: false,
-                                                                data: {service_id: service_id},
-                                                                url: '<?= Yii::$app->homeUrl; ?>/appointment/estimated-proforma/subservice',
-                                                                success: function (data) {
-                                                                        $('#subservices-sub_service').html(data);
-                                                                }
-                                                        });
-                                                });
 
-                                        });
-                                </script>-->
+
+
                                 <script type="text/javascript">
                                         jQuery(document).ready(function ($)
                                         {

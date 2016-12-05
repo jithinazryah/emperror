@@ -19,46 +19,44 @@ use Yii;
  * @property string $DOC
  * @property string $DOU
  */
-class ActualFunding extends \yii\db\ActiveRecord
-{
-    /**
-     * @inheritdoc
-     */
-    public static function tableName()
-    {
-        return 'actual_funding';
-    }
+class ActualFunding extends \yii\db\ActiveRecord {
 
-    /**
-     * @inheritdoc
-     */
-    public function rules()
-    {
-        return [
-            [['appointment_id', 'service_id', 'status', 'CB', 'UB'], 'integer'],
-            [['fda_amount', 'actual_amount', 'amount_difference'], 'number'],
-            [['CB', 'UB', 'DOC'], 'required'],
-            [['DOC', 'DOU'], 'safe'],
-        ];
-    }
+        /**
+         * @inheritdoc
+         */
+        public static function tableName() {
+                return 'actual_funding';
+        }
 
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'id' => 'ID',
-            'appointment_id' => 'Appointment ID',
-            'service_id' => 'Service ID',
-            'fda_amount' => 'Fda Amount',
-            'actual_amount' => 'Actual Amount',
-            'amount_difference' => 'Amount Difference',
-            'status' => 'Status',
-            'CB' => 'Cb',
-            'UB' => 'Ub',
-            'DOC' => 'Doc',
-            'DOU' => 'Dou',
-        ];
-    }
+        /**
+         * @inheritdoc
+         */
+        public function rules() {
+                return [
+                        [['appointment_id', 'service_id', 'status', 'CB', 'UB', 'close_estimate_id'], 'integer'],
+                        [['fda_amount', 'actual_amount', 'amount_difference'], 'number'],
+                        [['CB', 'UB', 'DOC', 'supplier', 'unit_rate', 'unit'], 'required'],
+                        [['DOC', 'DOU'], 'safe'],
+                ];
+        }
+
+        /**
+         * @inheritdoc
+         */
+        public function attributeLabels() {
+                return [
+                    'id' => 'ID',
+                    'appointment_id' => 'Appointment ID',
+                    'service_id' => 'Service ID',
+                    'fda_amount' => 'Fda Amount',
+                    'actual_amount' => 'Actual Amount',
+                    'amount_difference' => 'Amount Difference',
+                    'status' => 'Status',
+                    'CB' => 'Cb',
+                    'UB' => 'Ub',
+                    'DOC' => 'Doc',
+                    'DOU' => 'Dou',
+                ];
+        }
+
 }

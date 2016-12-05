@@ -56,26 +56,26 @@ class ActualFundingController extends Controller {
         }
 
         public function actionAdd($id, $fund_id = NULL) {
-                $actual_fundings = ActualFunding::findAll(['appointment_id' => $id]);
+                $model = ActualFunding::findAll(['appointment_id' => $id]);
                 $appointment = Appointment::findOne($id);
                 $close_estimates = CloseEstimate::findAll(['apponitment_id' => $id]);
-                if (empty($actual_fundings)) {
+                if (empty($model)) {
                         $actual_fundings = $this->SetData($close_estimates, $id);
                 }
 
-                if (!isset($fund_id)) {
-                        $model = new ActualFunding;
-                } else {
-                        $model = $this->findModel($fund_id);
-                }
-
-                if ($model->load(Yii::$app->request->post()) && Yii::$app->SetValues->Attributes($model)) {
-                        $model->amount_difference = abs($model->fda_amount - $model->actual_amount);
-                        if ($model->save(false)) {
-                                return $this->redirect(['add', 'id' => $id]);
-                        }
-                }
-
+//                if (!isset($fund_id)) {
+//                        $model = new ActualFunding;
+//                } else {
+//                        $model = $this->findModel($fund_id);
+//                }
+//
+//                if ($model->load(Yii::$app->request->post()) && Yii::$app->SetValues->Attributes($model)) {
+//                        $model->amount_difference = abs($model->fda_amount - $model->actual_amount);
+//                        if ($model->save(false)) {
+//                                return $this->redirect(['add', 'id' => $id]);
+//                        }
+//                }
+                $actual_fundings = ActualFunding::findAll(['appointment_id' => $id]);
                 return $this->render('add', [
                             'model' => $model,
                             'actual_fundings' => $actual_fundings,
@@ -89,13 +89,35 @@ class ActualFundingController extends Controller {
                 foreach ($close_estimates as $close_estimate) {
                         $model = new ActualFunding;
                         $model->appointment_id = $id;
+                        $model->close_estimate_id = $close_estimate->id;
                         $model->service_id = $close_estimate->service_id;
+                        $model->supplier = $close_estimate->supplier;
+                        $model->unit_rate = $close_estimate->unit_rate;
+                        $model->unit = $close_estimate->unit;
                         $model->fda_amount = $close_estimate->fda;
                         $model->status = 1;
                         Yii::$app->SetValues->Attributes($model);
                         $model->save();
                 }
                 return $model;
+        }
+
+        public function actionSaveActualPrice() {
+                $id = $_POST['app_id'];
+                if (isset($_POST['actual_amount']) && $_POST['actual_amount'] != '') {
+                        foreach ($_POST['actual_amount'] as $key => $value) {
+                                $this->UpdateActualPrice($key, $value);
+                        }
+                        return $this->redirect(['add', 'id' => $id]);
+                }
+        }
+
+        protected function UpdateActualPrice($key, $value) {
+                $actual_model = ActualFunding::findOne(['id' => $key]);
+                $actual_model->actual_amount = $value;
+                $actual_model->amount_difference = abs($actual_model->fda_amount - $value);
+                $actual_model->save(false);
+                return TRUE;
         }
 
         /**
