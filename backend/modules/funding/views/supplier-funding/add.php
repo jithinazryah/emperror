@@ -11,6 +11,8 @@ use yii\helpers\ArrayHelper;
 use yii\db\Expression;
 use common\components\AppointmentWidget;
 use common\models\FundingAllocation;
+use common\models\SupplierFunding;
+use common\models\ActualFunding;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\EstimatedProforma */
@@ -90,21 +92,41 @@ $this->params['breadcrumbs'][] = $this->title;
                                                                 $actual_total = 0;
                                                                 $amount_debit_total = 0;
                                                                 $balance = 0;
-                                                                foreach ($supplier_fundings as $fund) {
+                                                                $balance_total = 0;
+                                                                foreach ($close_estimates as $close_estimate) {
                                                                         $j++;
                                                                         ?>
                                                                         <tr class="filter">
                                                                                 <td><?= $j; ?></td>
-                                                                                <td><?= Services::findOne($fund->service_id)->service; ?></td>
-                                                                                <td><?= Contacts::findOne($fund->supplier)->name; ?></td>
-                                                                                <td><?= $fund->actual_amount; ?></td>
-                                                                                <td><input type="text" name="amount_debit[<?= $fund->id; ?>]" value="<?= $fund->amount_debit ?>" /></td>
-                                                                                <td><?= $fund->balance_amount; ?></td>
-                                                                                <!--<td><?php // Html::a('<i class="fa fa-pencil"></i>', ['/funding/actual-funding/add', 'id' => $id, 'fund_id' => $fund->id], ['class' => '', 'tittle' => 'Edit'])                                                                             ?></td>-->
+                                                                                <td><?= Services::findOne($close_estimate->service_id)->service; ?></td>
+                                                                                <td><?= Contacts::findOne($close_estimate->supplier)->name; ?></td>
                                                                                 <?php
-                                                                                $actual_total = $actual_total += $fund->actual_amount;
-                                                                                $amount_debit_total += $fund->amount_debit;
-                                                                                $balance += $fund->balance_amount;
+                                                                                $actual_funding = ActualFunding::findOne(['close_estimate_id' => $close_estimate->id]);
+                                                                                ?>
+                                                                                <td><?= $actual_funding->actual_amount; ?></td>
+                                                                                <td>
+                                                                                        <?php
+                                                                                        $funding = SupplierFunding::findAll(['close_estimate_id' => $close_estimate->id]);
+                                                                                        $debit_balance = 0;
+                                                                                        $fund_balance = 0;
+                                                                                        foreach ($funding as $fund) {
+                                                                                                $debit_balance += $fund->amount_debit;
+                                                                                                $balance += $fund->amount_debit;
+                                                                                                if ($fund->amount_debit != '') {
+                                                                                                        ?>
+                                                                                                        <span><?= $fund->amount_debit ?></span><br/>
+                                                                                                        <?php
+                                                                                                }
+                                                                                        }
+                                                                                        ?>
+                                                                                        <input type="text" name="amount_debit[<?= $close_estimate->id; ?>]" value="" />
+                                                                                </td>
+                                                                                <td><?= $actual_funding->actual_amount - $debit_balance; ?></td>
+                                                                                <!--<td><?php // Html::a('<i class="fa fa-pencil"></i>', ['/funding/actual-funding/add', 'id' => $id, 'fund_id' => $fund->id], ['class' => '', 'tittle' => 'Edit'])                                                                                                                    ?></td>-->
+                                                                                <?php
+                                                                                $actual_total = $actual_total += $actual_funding->actual_amount;
+                                                                                $amount_debit_total += $debit_balance;
+                                                                                $balance_total += $actual_funding->actual_amount - $debit_balance;
                                                                                 ?>
                                                                         </tr>
                                                                         <?php
@@ -114,7 +136,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                                         <td colspan="3">Total</td>
                                                                         <td><?= $actual_total ?></td>
                                                                         <td><?= $amount_debit_total ?></td>
-                                                                        <td><?= $balance ?></td>
+                                                                        <td><?= $balance_total ?></td>
                                                                 </tr>
                                                         </tbody>
                                                         <?php

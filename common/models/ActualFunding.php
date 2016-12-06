@@ -35,8 +35,8 @@ class ActualFunding extends \yii\db\ActiveRecord {
                 return [
                         [['appointment_id', 'service_id', 'status', 'CB', 'UB', 'close_estimate_id'], 'integer'],
                         [['fda_amount', 'actual_amount', 'amount_difference'], 'number'],
-                        [['CB', 'UB', 'DOC', 'supplier', 'unit_rate', 'unit'], 'required'],
-                        [['DOC', 'DOU'], 'safe'],
+                        [['CB', 'UB', 'DOC', 'unit_rate', 'unit'], 'required'],
+                        [['DOC', 'DOU', 'supplier'], 'safe'],
                 ];
         }
 
