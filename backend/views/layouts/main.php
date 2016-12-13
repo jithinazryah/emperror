@@ -100,6 +100,9 @@ AppAsset::register($this);
                                                                 <li>
                                                                         <?= Html::a('Reports', ['/appointment/report/index'], ['class' => 'title']) ?>
                                                                 </li>
+                                                                <li>
+                                                                        <?= Html::a('Search', ['/appointment/appointment/search'], ['class' => 'title']) ?>
+                                                                </li>
                                                                 <!--                                                                <li>
                                                                 <?php // Html::a('Reports', ['/appointment/appointment/report'], ['class' => 'title']) ?>
                                                                                                                                 </li>-->

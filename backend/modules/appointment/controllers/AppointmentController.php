@@ -314,4 +314,11 @@ class AppointmentController extends Controller {
                 ]);
         }
 
+        public function actionSearch() {
+                $appointment = Appointment::find()->all();
+                return $this->render('search', [
+                            'appointment' => $appointment,
+                ]);
+        }
+
 }
