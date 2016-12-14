@@ -270,8 +270,9 @@ class CloseEstimateController extends Controller {
                 $invoice_type = $_POST['invoice_type'];
                 $app = $_POST['app_id'];
                 $principp = $_POST['fda'];
+                $invoice_date = $this->SingleDateFormat($_POST['invoice_date']);
                 $appointment = Appointment::findOne($app);
-                $ports = PortCallData::findOne($app);
+                $ports = PortCallData::findOne(['appointment_id' => $app]);
                 if ($invoice_type == 'all') {
                         $this->UpdateFundAllocation($app, $principp);
                         $princip = CloseEstimate::findAll(['principal' => $principp, 'apponitment_id' => $app]);
@@ -281,6 +282,7 @@ class CloseEstimateController extends Controller {
                     'princip' => $princip,
                     'ports' => $ports,
                     'principp' => $principp,
+                    'invoice_date' => $invoice_date,
                         ]);
                         exit;
                 } else {
@@ -296,6 +298,7 @@ class CloseEstimateController extends Controller {
                     'princip' => $princip,
                     'ports' => $ports,
                     'principp' => $principp,
+                    'invoice_date' => $invoice_date,
                         ]);
                         exit;
                 }
@@ -361,7 +364,7 @@ class CloseEstimateController extends Controller {
                 // get your HTML raw content without any layouts or scripts
                 $close_estimate = CloseEstimate::findOne($estid);
                 $appointment = Appointment::findOne($id);
-                $ports = PortCallData::findOne($id);
+                $ports = PortCallData::findOne(['appointment_id' => $id]);
 //                $this->SaveReport($id, $close_estimate->invoice_type, $estid);
                 //var_dump($appointment);exit;
                 Yii::$app->session->set('fda', $this->renderPartial('fda_report', [
@@ -381,22 +384,100 @@ class CloseEstimateController extends Controller {
                 exit;
         }
 
-        public function actionSaveReport($estid) {
-                $model_report = $this->GenerateInvoiceNo($estid);
-                $model_report->save();
-                echo "<script>window.close();</script>";
+        public function actionSelectedReport() {
+                $appointment_id = $_POST['app_id'];
+                $appointment = Appointment::findOne($appointment_id);
+                $ports = PortCallData::findOne(['appointment_id' => $appointment_id]);
+                if (!empty($_POST['invoice_type'])) {
+                        $est_id = array();
+                        $invoice = array();
+                        foreach ($_POST['invoice_type'] as $key => $value) {
+                                $est_id[] = $key;
+                                $invoice[] = $value;
+                        }
+                        if ($invoice[0] == '') {
+                                $error = 'Invoice type field cannot be blank';
+                                return $this->renderPartial('error', [
+                                            'error' => $error,
+                                ]);
+                        }
+                        if (count(array_unique($invoice)) === 1) {
+                                $princip = CloseEstimate::findOne(['invoice_type' => $invoice[0], 'apponitment_id' => $appointment_id]);
+                                $close_estimates = CloseEstimate::findAll(['invoice_type' => $invoice[0], 'apponitment_id' => $appointment_id, 'id' => $est_id]);
+                                if (!empty($close_estimates)) {
+                                        $flag = 0;
+                                        foreach ($close_estimates as $close_estimate) {
+                                                if ($close_estimate->status == 1) {
+                                                        $flag = 1;
+                                                }
+                                        }
+                                        if ($flag == 1) {
+                                                $error = 'Already generate FDA on this esimate';
+                                                return $this->renderPartial('error', [
+                                                            'error' => $error,
+                                                ]);
+                                        }
+                                }
+                                Yii::$app->session->set('fda', $this->renderPartial('fda_report', [
+                                            'appointment' => $appointment,
+                                            'close_estimates' => $close_estimates,
+                                            '$invoice' => $invoice,
+                                            'princip' => $princip,
+                                            'ports' => $ports,
+                                            'est_id' => $est_id,
+                                            'save' => false,
+                                            'print' => true,
+                                ]));
+                                echo $this->renderPartial('fda_report', [
+                                    'appointment' => $appointment,
+                                    'close_estimates' => $close_estimates,
+                                    '$invoice' => $invoice,
+                                    'princip' => $princip,
+                                    'ports' => $ports,
+                                    'est_id' => $est_id,
+                                    'save' => true,
+                                    'print' => false,
+                                ]);
+
+//                echo Yii::$app->session['fda'];
+                                exit;
+                        } else {
+                                $error = 'Choose Same Invoice Type';
+                                return $this->renderPartial('error', [
+                                            'error' => $error,
+                                ]);
+//                                Yii::$app->getSession()->setFlash('close-error', 'Choose Same Invoice Type');
+//                                return $this->redirect(Yii::$app->request->referrer);
+//                                exit;
+                        }
+                }
                 exit;
         }
 
+        public function actionSaveReport($estid) {
+                $model_report = $this->GenerateInvoiceNo($estid);
+                if ($model_report->save()) {
+                        $estimate_ids = explode("_", $estid);
+                        foreach ($estimate_ids as $value) {
+                                $close_estimate = CloseEstimate::findOne($value);
+                                $close_estimate->status = 1;
+                                $close_estimate->save();
+                        }
+                        echo "<script>window.close();</script>";
+                        exit;
+                }
+        }
+
         public function GenerateInvoiceNo($estid) {
+                $estimate = explode("_", $estid);
                 $model_report = new InvoiceNumber();
-                $close_estimate = CloseEstimate::findOne($estid);
+                $close_estimate = CloseEstimate::findOne($estimate[0]);
                 $arr1 = ['1' => 'A', '2' => 'B', '3' => 'C', '4' => 'D', '5' => 'E', '6' => 'F', '7' => 'G', '8' => 'H', '9' => 'I', '10' => 'J', '11' => 'K', '12' => 'L'];
                 $last = InvoiceNumber::find()->orderBy(['id' => SORT_DESC])->where(['invoice_type' => $close_estimate->invoice_type])->one();
                 $last_report_saved = InvoiceNumber::find()->orderBy(['id' => SORT_DESC])->where(['appointment_id' => $close_estimate->apponitment_id, 'invoice_type' => $close_estimate->invoice_type])->one();
                 $model_report->appointment_id = $close_estimate->apponitment_id;
                 $model_report->invoice_type = $close_estimate->invoice_type;
-                $model_report->estimate_id = $estid;
+                $model_report->estimate_id = implode(",", $estimate);
                 $model_report->report = Yii::$app->session['fda'];
                 if (!empty($last)) {
                         if (empty($last_report_saved)) {
@@ -406,13 +487,13 @@ class CloseEstimateController extends Controller {
                         }
                 } else {
                         if ($close_estimate->invoice_type == 1) {
-                                $model_report->invoice_number = 76;
+                                $model_report->invoice_number = 85;
                         } elseif ($close_estimate->invoice_type == 3) {
-                                $model_report->invoice_number = 80;
+                                $model_report->invoice_number = 87;
                         } elseif ($close_estimate->invoice_type == 7) {
-                                $model_report->invoice_number = 84;
+                                $model_report->invoice_number = 91;
                         } elseif ($close_estimate->invoice_type == 8) {
-                                $model_report->invoice_number = 47;
+                                $model_report->invoice_number = 48;
                         } else {
                                 return;
                         }
@@ -491,6 +572,61 @@ class CloseEstimateController extends Controller {
                                         }
                                         echo $options;
                                 }
+                        }
+                }
+        }
+
+        public function ChangeFormat($data) {
+
+                $day = substr($data, 0, 2);
+                $month = substr($data, 2, 2);
+                $year = substr($data, 4, 4);
+                $hour = substr($data, 9, 2) == '' ? '00' : substr($data, 9, 2);
+                $min = substr($data, 11, 2) == '' ? '00' : substr($data, 11, 2);
+                $sec = substr($data, 13, 2) == '' ? '00' : substr($data, 13, 2);
+                if ($hour != '00' && $min != '00' && $sec != '00') {
+                        //echo '1';exit;
+                        return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min . ':' . $sec;
+                } elseif ($hour == '00' && $min != '00') {
+                        //echo '2';exit;
+                        return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min;
+                } elseif ($hour != '00' && $min != '00') {
+                        //echo '2';exit;
+                        return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min;
+                } elseif ($hour != '00') {
+                        //echo '3';exit;
+                        return $year . '-' . $month . '-' . $day . ' ' . $hour . ':00';
+                } else {
+
+                        return $year . '-' . $month . '-' . $day;
+                }
+        }
+
+        public function SingleDateFormat($dta) {
+                if (strpos($dta, '-') == false) {
+
+                        if (strlen($dta) < 16 && strlen($dta) >= 8 && $dta != NULL)
+                                return $this->ChangeFormat($dta);
+                        //echo $model->$key;exit;
+                }else {
+                        $year = substr($dta, 0, 4);
+                        $month = substr($dta, 5, 2);
+                        $day = substr($dta, 8, 2);
+                        $hour = substr($dta, 11, 2) == '' ? '00' : substr($dta, 11, 2);
+                        $min = substr($dta, 14, 2) == '' ? '00' : substr($dta, 14, 2);
+                        $sec = substr($dta, 17, 2) == '' ? '00' : substr($dta, 17, 2);
+
+                        if ($hour != '00' && $min != '00' && $sec != '00') {
+                                return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min . ':' . $sec;
+                        } elseif ($hour == '00' && $min != '00') {
+                                //echo '2';exit;
+                                return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min;
+                        } elseif ($hour != '00' && $min != '00') {
+                                return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min;
+                        } elseif ($hour != '00') {
+                                return $year . '-' . $month . '-' . $day . ' ' . $hour . ':00';
+                        } else {
+                                return $year . '-' . $month . '-' . $day;
                         }
                 }
         }

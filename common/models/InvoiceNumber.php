@@ -27,8 +27,8 @@ class InvoiceNumber extends \yii\db\ActiveRecord {
          */
         public function rules() {
                 return [
-                        [['appointment_id', 'invoice_type', 'invoice_number', 'estimate_id'], 'integer'],
-                        [['date_time'], 'safe'],
+                        [['appointment_id', 'invoice_type', 'invoice_number'], 'integer'],
+                        [['date_time', 'estimate_id'], 'safe'],
                 ];
         }
 

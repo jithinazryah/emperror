@@ -94,7 +94,7 @@ and open the template in the editor.
                                                         <table class="tb2">
                                                                 <tr>
                                                                         <td>Date </td> <td style="width: 50px;text-align: center">:</td>
-                                                                        <td style="max-width: 200px"><?= date("d-M-Y") ?></td>
+                                                                        <td style="max-width: 200px"><?php echo date('d-M-Y', strtotime($invoice_date)); ?></td>
                                                                 </tr>
                                                                 <tr>
                                                                         <td>Invoice No </td> <td style="width: 50px;text-align: center">:</td>

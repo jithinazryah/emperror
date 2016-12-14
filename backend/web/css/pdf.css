@@ -11,6 +11,9 @@ and open the template in the editor.
 body,p,tr,td,table,div,span{
         font-family: 'Roboto', sans-serif;
 }
+body h6,h1,h2,h3,h4,h5,p,b,tr,td,span,th,div{
+        color:#525252 !important;
+}
 @page {
         size: A4;
         /*         margin: 40px;
@@ -37,24 +40,24 @@ tr{ page-break-inside:avoid; page-break-after:auto; }
 /*//h6 {page-break-before: always}*/
 /*//table {page-break-after: always}*/
 table.table{
-        border: 1px solid black;
+        border: .1px solid #969696;
         border-collapse: collapse;
         width:100%;
 }
 .table th {
-        border: 1px solid black;
-        color: #464545;
-        font-size: 13px;
+        border: .1px solid #969696;
+        color: #525252;
+        font-size: 11px;
         font-weight: bold;
 }
 .table td {
-        border: 1px solid black;
+        border: .1px solid #969696;
         font-size: 8px;
         text-align: center;
         padding: 3px;
 }
 .tbl{
-        border: 1px solid black ! important;
+        border: 1px solid #525252 ! important;
 }
 .tb2 td {
         font-size: 9px;
@@ -69,13 +72,13 @@ h6{
         margin-bottom: 2px;
         margin-top: 15px;
         font-size: 15px;
-        color: #464545;
+        color: #525252;
 }
 .content-body h6 {
         margin-bottom: 2px;
         margin-top: 15px;
         font-size: 10px;
-        color: #464545;
+        color: #525252;
 }
 
 .main-left{
@@ -195,11 +198,11 @@ h6{
         text-align: left;
 }
 
-.closeestimate-content h6 {
+.sub-heading{
         margin-bottom: 4px;
         margin-top: 6px;
         font-size: 12px;
-        color: #464545;
+        color: #525252 !important;
 }
 .bank{
         width:100%;
@@ -218,13 +221,13 @@ h6{
         margin-bottom: 4px;
         margin-top: 6px;
         font-size: 12px;
-        color: black;
+        color: #525252 !important;
 }
 .bank  p{
         margin-bottom: 4px;
         margin-top: 6px;
         font-size: 12px;
-        color: black;
+        color: #525252;
 }
 .bank td{
         font-size: 11px;
@@ -272,61 +275,13 @@ h6{
         color: #464545;
 }
 
-/*
-.ptittle{
-    color: red;
-    font-size: 12px;
+.footer-red{
+        color:#f44336 !important;
 }
-.pcontent{
-    font-size: 10px;
+.footer-blue2{
+        color:#0d2fe8 !important;
+        text-decoration: underline;
 }
-.dt1
-{
-    width:300px;
-    height:100px;
-    float:left;
-    font-family: 'Roboto', sans-serif;
-    font-size:14px;
+.footer-blue1{
+        color:#2295f1 !important;
 }
-.dt1 table td{
-    font-family: 'Roboto', sans-serif;
-    font-size:12px;
-}
-.dt2
-{
-    width:250px;
-    height:100px;
-    float:right !important;
-    font-family: 'Roboto', sans-serif;
-    font-size:14px;
-}
-.container
-{width:1000px;
- height:100px;
-}
-.hei{
-    height: 100px;
-}
-.footer
-{width:1000px;
- height:100px;
-}
-.footer p{
-    text-align: center;
-    font-family: 'Roboto', sans-serif;
-    font-size:12px;
-}
-.header{
-    width:1000px;
-    height:100px;
-}
-.left{
-    width:300px;
-    height:100px;
-    float:left;
-}
-.right{
-    width:250px;
-    height:100px;
-    float:right !important;
-}*/

@@ -36,11 +36,17 @@ and open the template in the editor.
                         tfoot {display: table-footer-group}
                         /*tfoot {position: absolute;bottom: 0px;}*/
                         .main-tabl{width: 100%}
-                        .footer {position: fixed ; left: 0px; bottom: 0px; right: 0px; font-size:10px; }
+                        .footer {position: fixed ; left: 0px; bottom: 20px; right: 0px; font-size:10px; }
+                        body{
+                                color:#525252;
+                        }
                 }
                 @media screen{
                         .main-tabl{
                                 width: 60%;
+                        }
+                        body{
+                                color:#525252;
                         }
                 }
                 .print{
@@ -79,7 +85,7 @@ and open the template in the editor.
                                                                 <tr>
                                                                         <td style="max-width: 405px">
                                                                                 <?php
-                                                                                echo $close_estimate->getInvoiceAddress($close_estimate->principal);
+                                                                                echo Debtor::findOne($princip->principal)->principal_name;
                                                                                 ?>
                                                                         </td>
                                                                 </tr>
@@ -95,20 +101,21 @@ and open the template in the editor.
                                                                         <td>Invoice No </td> <td style="width: 50px;text-align: center">:</td>
                                                                         <?php
                                                                         $arr1 = ['1' => 'A', '2' => 'B', '3' => 'C', '4' => 'D', '5' => 'E', '6' => 'F', '7' => 'G', '8' => 'H', '9' => 'I', '10' => 'J', '11' => 'K', '12' => 'L'];
-                                                                        $last = InvoiceNumber::find()->orderBy(['id' => SORT_DESC])->where(['invoice_type' => $close_estimate->invoice_type])->one();
+                                                                        $last = InvoiceNumber::find()->orderBy(['id' => SORT_DESC])->where(['invoice_type' => $invoice[0]])->one();
                                                                         if (!empty($last)) {
-                                                                                $last_invoice_report_saved = InvoiceNumber::find()->select('estimate_id')->distinct()->orderBy(['estimate_id' => SORT_ASC])->where(['appointment_id' => $appointment->id, 'invoice_type' => $close_estimate->invoice_type])->all();
+                                                                                $last_invoice_report_saved = InvoiceNumber::find()->select('estimate_id')->distinct()->orderBy(['estimate_id' => SORT_ASC])->where(['appointment_id' => $appointment->id, 'invoice_type' => $invoice[0]])->all();
                                                                                 $key = count($last_invoice_report_saved);
                                                                                 if ($key == 0) {
                                                                                         $model_report = $this->context->GenerateInvoiceNo($close_estimate->id);
-                                                                                        $invoice_no = $close_estimate->getInvoiceName($close_estimate->invoice_type) . ' ' . $model_report->invoice_number;
+                                                                                        $invoice_no = $close_estimate->getInvoiceName($invoice[0]) . ' ' . $model_report->invoice_number;
                                                                                 } else {
-                                                                                        $invoice_no = $close_estimate->getInvoiceName($close_estimate->invoice_type) . ' ' . $last->invoice_number . $arr1[$key];
+                                                                                        $invoice_no = $close_estimate->getInvoiceName($invoice[0]) . ' ' . $last->invoice_number . $arr1[$key];
                                                                                 }
                                                                         } else {
-                                                                                $model_report = $this->context->GenerateInvoiceNo($close_estimate->id);
-                                                                                $invoice_no = $close_estimate->getInvoiceName($close_estimate->invoice_type) . ' ' . $model_report->invoice_number;
+                                                                                $model_report = $this->context->GenerateInvoiceNo(implode('_', $est_id));
+                                                                                $invoice_no = InvoiceType::findOne($invoice[0])->invoice_type . ' ' . $model_report->sub_invoice;
                                                                         }
+//
                                                                         ?>
                                                                         <td style="max-width: 200px">
                                                                                 <?php echo $invoice_no; ?>
@@ -118,7 +125,7 @@ and open the template in the editor.
                                                                         <td>Customer Code </td> <td style="width: 50px;text-align: center">:</td>
                                                                         <td style="max-width: 200px">
                                                                                 <?php
-                                                                                echo $close_estimate->getClintCode($close_estimate->principal);
+                                                                                echo Debtor::findOne(['id' => $princip->principal])->principal_id;
                                                                                 ?>
                                                                         </td>
                                                                 </tr>
@@ -192,7 +199,11 @@ and open the template in the editor.
                                                                 <tr>
                                                                         <td>Arrival Date </td> <td style="width: 50px;">:</td>
                                                                         <td style="max-width: 405px">
-                                                                                <?= Yii::$app->SetValues->DateFormate($ports->eosp); ?>
+                                                                                <?php
+                                                                                if ($ports->all_fast != '') {
+                                                                                        echo date("d-M-Y", strtotime($ports->all_fast));
+                                                                                }
+                                                                                ?>
                                                                         </td>
                                                                 </tr>
                                                         </table>
@@ -201,7 +212,13 @@ and open the template in the editor.
                                                         <table class="tb2">
                                                                 <tr>
                                                                         <td>Sailing Date </td> <td style="width: 50px;text-align: center">:</td>
-                                                                        <td style="max-width: 200px"><?= Yii::$app->SetValues->DateFormate($ports->cast_off); ?></td>
+                                                                        <td style="max-width: 200px">
+                                                                                <?php
+                                                                                if ($ports->cast_off != '') {
+                                                                                        echo date("d-M-Y", strtotime($ports->cast_off));
+                                                                                }
+                                                                                ?>
+                                                                        </td>
                                                                 </tr>
                                                         </table>
                                                 </div>
@@ -217,9 +234,9 @@ and open the template in the editor.
                                                 <table style="width:100%">
                                                         <tr>
                                                                 <th style="width: 10%;font-size: 10px;">Sl No.</th>
-                                                                <th style="width: 60%;font-size: 10px;text-align:left;">Particulars
+                                                                <th style="width: 60%;font-size: 10px;text-align: left;">Particulars
                                                                 </th>
-                                                                <th style="width: 30%;font-size: 10px;text-align:right;">Amount</th>
+                                                                <th style="width: 30%;font-size: 10px;text-align: right;">Amount</th>
                                                         </tr>
                                                         <tr></tr>
                                                         <tr></tr>
@@ -227,14 +244,29 @@ and open the template in the editor.
                                                         <tr></tr>
                                                         <tr></tr>
                                                         <tr></tr>
-                                                        <tr>
-                                                                <td style="width: 10%;text-align: center;font-size: 9px;">1</td>
-                                                                <td style="width: 60%;font-size:11px;text-align: left;font-size: 9px;"><?php echo Services::findOne(['id' => $close_estimate->service_id])->service; ?>
-                                                                        <br/>
-                                                                        <p style="font-style:italic;font-weight: bold;text-align: left;"><?= $close_estimate->comment_to_fda ?></p>
-                                                                </td>
-                                                                <td style="width: 30%;font-weight: bold;text-align: right;font-size: 9px;"><?= Yii::$app->SetValues->NumberFormat($close_estimate->fda); ?></td>
-                                                        </tr>
+                                                        <?php
+                                                        $i = 0;
+                                                        $grandtotal = 0;
+                                                        foreach ($close_estimates as $close_estimate):
+                                                                $i++;
+                                                                ?>
+                                                                <tr>
+                                                                        <td style="width: 10%;text-align: center;font-size: 9px;"><?= $i ?></td>
+                                                                        <td style="width: 60%;font-size:11px;text-align: left;font-size: 9px;"><?php echo Services::findOne(['id' => $close_estimate->service_id])->service; ?>
+                                                                        </td>
+                                                                        <td style="width: 30%;font-weight: bold;text-align: right;font-size: 9px;"><?= Yii::$app->SetValues->NumberFormat($close_estimate->fda); ?></td>
+                                                                        <?php
+                                                                        $grandtotal += $close_estimate->fda;
+                                                                        ?>
+                                                                </tr>
+                                                                <tr>
+                                                                        <td style="width: 10%;text-align: center;font-size: 9px;"></td>
+                                                                        <td style="width: 60%;"><p style="font-style:italic;text-align: left;font-size: 9px;"><?= $close_estimate->comment_to_fda ?></p></td>
+                                                                        <td style="width: 30%;font-weight: bold;text-align: right;font-size: 9px;"></td>
+                                                                </tr>
+                                                                <?php
+                                                        endforeach;
+                                                        ?>
                                                         <tr>
                                                                 <td style="width: 10%;"></td>
                                                                 <td style="width: 60%;text-align:center;font-weight: bold;">
@@ -244,9 +276,9 @@ and open the template in the editor.
                                                                 </td>
                                                                 <?php
                                                                 $currency = Currency::findOne(['id' => 1]);
-                                                                $usd = round($close_estimate->fda * $currency->currency_value, 2);
+                                                                $usd = round($grandtotal * $currency->currency_value, 2);
                                                                 ?>
-                                                                <td style="width: 30%;font-weight: bold;font-size:8px;"><p style="text-align:right;">AED <?= Yii::$app->SetValues->NumberFormat(round($close_estimate->fda, 2)); ?></p>
+                                                                <td style="width: 30%;font-weight: bold;font-size:8px;"><p style="text-align:right;">AED <?= Yii::$app->SetValues->NumberFormat(round($grandtotal, 2)); ?></p>
                                                                         <p style="text-align:right;">USD <?= Yii::$app->SetValues->NumberFormat($usd); ?></p>
                                                                         <p style="text-align:right;">E & OE</p>
                                                                 </td>
@@ -276,7 +308,7 @@ and open the template in the editor.
 
                         <tr>
                                 <td>
-                                        <div class="close-estimate-footer">
+                                        <div class="close-estimate-footer" style="margin-top: 100px;">
                                                 <div class="close-left">
                                                         <p>This is computer generated invoice</p>
                                                 </div>
@@ -297,13 +329,16 @@ and open the template in the editor.
                                         <div class="footer">
                                                 <span>
                                                         <p>
-                                                                Emperor Shipping Lines LLC, P.O.Box-328231, Saqr Port, Al Shaam, Ras Al Khaimah, UAE
-                                                        </p>
-                                                        <p>
-                                                                Tel: +971 7 268 9676 / Fax: +917 7 268 9677
+                                                                <span class="footer-red">Emperor</span> <span  class="footer-blue1">Shipping Lines LLC</span> &#8208; Ras Al Khaimah (Br)| P.O.Box-328231 |Ops Email: <span class="footer-blue2">opsrak@emperor.ae</span> |Accts Email: <span class="footer-blue2">accrak@emperor.ae</span>
                                                         </p>
                                                         <p>
                                                                 www.emperor.ae
+                                                        </p>
+                                                        <p>
+                                                                Main Office: RAK Medical Centre Bldg |Floor II, Room 06 | Al Shaam, RAK, UAE | Tel: +971 7 268 9676 |Fax: +971 7 268 9677
+                                                        </p>
+                                                        <p>
+                                                                Port Office: Shipping Agents Bldg |Ground Floor, Room: 10 A | Saqr Port Authority, Ras Al Khaimah, UAE | Tel: +971 7 268 9626
                                                         </p>
                                                 </span>
                                         </div>
@@ -333,7 +368,7 @@ and open the template in the editor.
         <?php
         if ($save) {
                 ?>
-                <a href="<?= Yii::$app->homeUrl ?>appointment/close-estimate/save-report?estid=<?= $close_estimate->id ?>"><button onclick="" style="font-weight: bold !important;">Save</button></a>
+                <a href="<?= Yii::$app->homeUrl ?>appointment/close-estimate/save-report?estid=<?php echo implode('_', $est_id) ?>"><button onclick="" style="font-weight: bold !important;">Save</button></a>
                 <?php
         }
         ?>

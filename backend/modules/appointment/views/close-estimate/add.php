@@ -41,6 +41,13 @@ $this->params['breadcrumbs'][] = $this->title;
                                 </div>
                         </div>
                         <?php //Pjax::begin();  ?>
+                        <div class="col-lg-12">
+                                <?php if (Yii::$app->session->hasFlash('close-error')): ?>
+                                        <div class="alert alert-danger" role="alert">
+                                                <?= Yii::$app->session->getFlash('close-error') ?>
+                                        </div>
+                                <?php endif; ?>
+                        </div>
                         <div class="panel-body">
 
                                 <?= AppointmentWidget::widget(['id' => $appointment->id]) ?>
@@ -56,6 +63,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                                 <div class="col-md-12" style="float: left;">
                                         <div class="row">
+
                                                 <?php
                                                 $arr = CloseEstimate::find()->select('invoice_type')->distinct()->where(['apponitment_id' => $appointment->id])->all();
                                                 foreach ($arr as $value) {
@@ -73,7 +81,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                         ?>
                                                         <input type="hidden" name="app_id" value="<?= $appointment->id ?>">
                                                         <?php //                                                ?>
-                                                        <input type="hidden" name="invoice_type" value="//<?php // $arr->invoice_type                                                            ?>">
+                                                        <input type="hidden" name="invoice_type" value="//<?php // $arr->invoice_type                                                                                                                                                   ?>">
                                                         <?php
                                                         ?>
 
@@ -87,7 +95,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                                         <?php
                                                 }
                                                 ?>
-                                                <div class="col-md-4">
+                                                <div class="col-md-3">
+                                                        <input type="text" name="invoice_date" value="" class="form-control" placeholder="Invoice Date"/>
+                                                </div>
+                                                <div class="col-md-3">
                                                         <select name = "invoice_type" id = "close-estimate-invoice" class="form-control">
                                                                 <option selected = "selected">Select Invoice Type</option>
                                                                 <option value="all">All</option>
@@ -110,7 +121,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                 $principals = CloseEstimate::find()->select('principal')->distinct()->where(['apponitment_id' => $appointment->id])->all();
                                                 if (count($principals) > 1) {
                                                         ?>
-                                                        <div class="col-md-4 principp">
+                                                        <div class="col-md-3 principp">
 
                                                                 <select name = "fda" id = "fda" class="form-control">
                                                                         <option value="" selected = "selected">Select Principal</option>
@@ -137,7 +148,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                         }
                                                 }
                                                 ?>
-                                                <div class="col-md-4">
+                                                <div class="col-md-3">
                                                         <?= Html::submitButton('<i class="fa-print"></i><span>Generate Final DA</span>', ['class' => 'btn btn-secondary btn-icon btn-icon-standalone']) ?>
                                                         <?= Html::endForm() ?>
                                                         <?php
@@ -200,13 +211,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                         <!--                                                                <th data-priority="6">ROE</th>-->
                                                                         <th data-priority="6">EPDA VALUE</th>
                                                                         <th data-priority="6">FDA VALUE</th>
-                                                                        <th data-priority="6">PAYMENT TYPE</th>
+                                                                        <!--<th data-priority="6">PAYMENT TYPE</th>-->
                                                                         <!--<th data-priority="6">TOTAL</th>-->
                                                                         <th data-priority="6">INVOICE TYPE</th>
                                                                         <th data-priority="6">PRINCIPAL</th>
                                                                         <th data-priority="6">COMMENTS TO EPDA</th>
                                                                         <th data-priority="6">COMMENTS TO FDA</th>
                                                                         <th data-priority="1">ACTIONS</th>
+                                                                        <th data-priority="1">PRINT</th>
                                                                 </tr>
                                                         </thead>
 
@@ -255,25 +267,25 @@ $this->params['breadcrumbs'][] = $this->title;
                                                                                         </span>
                                                                                 </td>
                                                                                 <?php
-                                                                                if ($estimate->payment_type == 1) {
-                                                                                        $payment_type = 'Manual';
-                                                                                } elseif ($estimate->payment_type == 2) {
-                                                                                        $payment_type = 'Check';
-                                                                                } else {
-                                                                                        $payment_type = '';
-                                                                                }
+//                                                                                if ($estimate->payment_type == 1) {
+//                                                                                        $payment_type = 'Manual';
+//                                                                                } elseif ($estimate->payment_type == 2) {
+//                                                                                        $payment_type = 'Check';
+//                                                                                } else {
+//                                                                                        $payment_type = '';
+//                                                                                }
                                                                                 ?>
-                                                                                <td><span class="edit_dropdown"  drop_id="closeestimate-payment_type" id="<?= $estimate->id ?>-payment_type" val="<?= $estimate->payment_type ?>">
-                                                                                                <?php
-                                                                                                if ($estimate->payment_type == '') {
-                                                                                                        echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
-                                                                                                } else {
-                                                                                                        echo $payment_type;
-                                                                                                }
-                                                                                                ?>
+        <!--                                                                                <td><span class="edit_dropdown"  drop_id="closeestimate-payment_type" id="<?= $estimate->id ?>-payment_type" val="<?= $estimate->payment_type ?>">
+                                                                                <?php
+//                                                                                                if ($estimate->payment_type == '') {
+//                                                                                                        echo '&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';
+//                                                                                                } else {
+//                                                                                                        echo $payment_type;
+//                                                                                                }
+                                                                                ?>
                                                                                         </span>
-                                                                                </td>
-                                                                                <!--<td><?php // $estimate->total;                                                           ?></td>-->
+                                                                                </td>-->
+                                                                                <!--<td><?php // $estimate->total;                                                                                                                                                  ?></td>-->
                                                                                 <td><span class="edit_dropdown" drop_id="closeestimate-invoice_type" id="<?= $estimate->id ?>-invoice_type" val="<?= $estimate->invoice_type ?>">
                                                                                                 <?php
                                                                                                 if ($estimate->invoice_type == '') {
@@ -329,6 +341,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                                                                         <?= Html::a('<i class="fa fa-database"></i>', ['/appointment/close-estimate-sub-service/add', 'id' => $estimate->id], ['class' => '', 'target' => '_blank']) ?>
                                                                                         <?= Html::a('<i class="fa-print"></i>', ['close-estimate/fda-report'], ['class' => '', 'onclick' => "window.open('fda-report?id=$estimate->apponitment_id & estid=$estimate->id', 'newwindow', 'width=1200, height=500');return false;"]) ?>
                                                                                 </td>
+                                                                                <td>
+                                                                                        <?= Html::beginForm(['close-estimate/selected-report'], 'post', ['target' => 'print_popup', 'onSubmit' => "window.open('about:blank','print_popup','width=1200,height=600');"]) ?>
+                                                                                        <input type="checkbox" name="invoice_type[<?= $estimate->id ?>]" value="<?= $estimate->invoice_type ?>">
+                                                                                        <input type="hidden" name="app_id" value="<?= $appointment->id ?>">
+                                                                                </td>
                                                                                 <?php
                                                                                 $epdatotal += $estimate->epda;
                                                                                 $fdatotal += $estimate->fda;
@@ -345,26 +362,29 @@ $this->params['breadcrumbs'][] = $this->title;
                                                                         <td style="font-weight: bold;"><?php echo Yii::$app->SetValues->NumberFormat($epdatotal) . '/-'; ?></td>
                                                                         <td style="font-weight: bold;"><?php echo Yii::$app->SetValues->NumberFormat($fdatotal) . '/-'; ?>
                                                                         <td></td>
-                                                                        <!--<td style="font-weight: bold;"><?php //echo $grandtotal . '/-';                                                            ?></td>-->
+                                                                        <!--<td style="font-weight: bold;"><?php //echo $grandtotal . '/-';                                                                                                                                                   ?></td>-->
                                                                         <td colspan=""></td>
                                                                         <td colspan=""></td>
                                                                         <td colspan=""></td>
                                                                         <td colspan=""></td>
-                                                                        <td colspan=""></td>
+                                                                        <td colspan="">
+                                                                                <?= Html::submitButton('<i class="fa-print"></i><span>FDA</span>', ['class' => 'btn btn-secondary btn-icon btn-icon-standalone']) ?>
+                                                                                <?= Html::endForm() ?>
+                                                                        </td>
                                                                 </tr>
                                                                 <tr class="formm">
                                                                         <?php $form = ActiveForm::begin(); ?>
                                                                         <td></td>
                                                                         <td><?= $form->field($model, 'service_id')->dropDownList(ArrayHelper::map(Services::findAll(['status' => 1]), 'id', 'service'), ['prompt' => '-Service-'])->label(false); ?></td>
                                                                         <td><?= $form->field($model, 'supplier')->dropDownList(ArrayHelper::map(Contacts::find()->where(new Expression('FIND_IN_SET(:contact_type, contact_type)'))->addParams([':contact_type' => 4])->all(), 'id', 'name'), ['prompt' => '-Supplier-'])->label(false); ?></td>
-                                        <!--                                <td><?php // $form->field($model, 'supplier')->dropDownList(ArrayHelper::map(Contacts::findAll(['status' => 1]), 'id', 'name'), ['prompt' => '-Supplier-'])->label(false);                                                                                               ?></td>-->
-                                        <!--                                                                <td><?php // $form->field($model, 'currency')->dropDownList(ArrayHelper::map(Currency::findAll(['status' => 1]), 'id', 'currency_name'), ['prompt' => '-Currency-'])->label(false);                                                                                                    ?></td>-->
+                                        <!--                                <td><?php // $form->field($model, 'supplier')->dropDownList(ArrayHelper::map(Contacts::findAll(['status' => 1]), 'id', 'name'), ['prompt' => '-Supplier-'])->label(false);                                                                                                                                                                                      ?></td>-->
+                                        <!--                                                                <td><?php // $form->field($model, 'currency')->dropDownList(ArrayHelper::map(Currency::findAll(['status' => 1]), 'id', 'currency_name'), ['prompt' => '-Currency-'])->label(false);                                                                                                                                                                                           ?></td>-->
                                                                         <td><?= $form->field($model, 'unit_rate')->textInput(['placeholder' => 'Unit Rate'])->label(false) ?></td>
                                                                         <td><?= $form->field($model, 'unit')->textInput(['placeholder' => 'Quantity'])->label(false) ?></td>
                                                                         <td><?= $form->field($model, 'epda')->textInput(['placeholder' => 'EPDA'])->label(false) ?></td>
                                                                         <td><?= $form->field($model, 'fda')->textInput(['placeholder' => 'FDA'])->label(false) ?></td>
-                                                                        <td><?= $form->field($model, 'payment_type')->dropDownList(['1' => 'Manual', '2' => 'Check'], ['prompt' => '-Payment Type-'])->label(false) ?></td>
-                                                                        <!--<td><?php // $form->field($model, 'total')->textInput(['placeholder' => 'TOTAL'])->label(false)                                                            ?></td>-->
+                                                                        <!--<td><?php // $form->field($model, 'payment_type')->dropDownList(['1' => 'Manual', '2' => 'Check'], ['prompt' => '-Payment Type-'])->label(false)                                                                                  ?></td>-->
+                                                                        <!--<td><?php // $form->field($model, 'total')->textInput(['placeholder' => 'TOTAL'])->label(false)                                                                                                                                                   ?></td>-->
                                                                         <td><?= $form->field($model, 'invoice_type')->dropDownList(ArrayHelper::map(InvoiceType::findAll(['status' => 1]), 'id', 'invoice_type'), ['prompt' => '-Invoice Type-'])->label(false); ?></td>
                                                                         <?php
                                                                         $arr1 = explode(',', $appointment->principal);
@@ -453,10 +473,9 @@ $this->params['breadcrumbs'][] = $this->title;
                                                                                                 <td style="border: 1px solid black;padding: 10px;">
                                                                                                         <?= Yii::$app->UploadFile->ListFile($appointment->id, Yii::$app->params['closePath']); ?>
                                                                                                 </td>
-                                                                                        </tr>
-                                                                                        <?php
-                                                                                }
-                                                                                ?>
+                                                                                                <?php
+                                                                                        }
+                                                                                        ?>
 
                                                                         </table>
                                                                 </div>

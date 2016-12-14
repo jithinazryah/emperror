@@ -8,6 +8,7 @@ use common\models\EstimatedProforma;
 use common\models\Debtor;
 use common\models\PortCallData;
 use common\models\Vessel;
+use common\models\Ports;
 use common\models\CloseEstimate;
 use common\models\Services;
 use common\models\InvoiceType;
@@ -36,7 +37,10 @@ and open the template in the editor.
                         tfoot {display: table-footer-group}
                         /*tfoot {position: absolute;bottom: 0px;}*/
                         .main-tabl{width: 100%}
-                        .footer {position: fixed ; left: 0px; bottom: 0px; right: 0px; font-size:10px; }
+                        .footer {position: fixed ; left: 0px; bottom: 20px; right: 0px; font-size:10px; }
+                        body h6,h1,h2,h3,h4,h5,p,b,tr,td,span,th,div{
+                                color:#525252 !important;
+                        }
                 }
                 @media screen{
                         .main-tabl{
@@ -55,7 +59,7 @@ and open the template in the editor.
         </style>
         <!--    </head>
             <body >-->
-        <table class="main-tabl" border="0">
+        <table border ="0"  class="main-tabl" border="0">
                 <thead>
                         <tr>
                                 <th style="width:100%">
@@ -78,9 +82,9 @@ and open the template in the editor.
                                 <td>
                                         <div class="heading">INVOICE</div>
                                         <div class="closeestimate-content">
-                                                <table class="table tbl">
+                                                <table border ="0"  class="table tbl">
                                                         <tr>
-                                                                <td rowspan="2" style="width: 50%; font-weight: bold;">
+                                                                <td rowspan="2" style="width: 50%;">
                                                                         <p>
                                                                                 EMPEROR SHIPPING LINES LLC<br>
                                                                                 Room 06 / Floor II; P.O.Box-328231<br>
@@ -88,8 +92,20 @@ and open the template in the editor.
                                                                                 Ras Al Khaimah, UAE
                                                                         </p>
                                                                 </td>
-                                                                <td style="width: 25%;">Invoice No : </td>
-                                                                <td style="width: 25%;">Invoice Date : <?php echo date('d-M-y'); ?></td>
+                                                                <?php
+                                                                $port_code = Ports::findOne($appointment->port_of_call)->code;
+                                                                if ($principp != '') {
+                                                                        $princip_id = Debtor::findOne($principp)->principal_id;
+                                                                } else {
+                                                                        $princip_id = Debtor::findOne($appointment->principal)->principal_id;
+                                                                }
+                                                                $new_port_code = substr($port_code, -3);
+                                                                $app_no = ltrim(substr($appointment->appointment_no, -4), '0');
+                                                                $invoice_number = $new_port_code . '-' . $app_no . '-' . $princip_id;
+                                                                ?>
+
+                                                                <td style="width: 25%;">Invoice No : <?= $invoice_number ?></td>
+                                                                <td style="width: 25%;">Invoice Date : <?php echo date('d-M-Y', strtotime($invoice_date)); ?></td>
                                                         </tr>
                                                         <tr>
                                                                 <?php
@@ -102,7 +118,7 @@ and open the template in the editor.
                                                                         $ref_no = 'EMPRK-' . $appointment->id . $arr[$c] . '/' . date('Y');
                                                                 }
                                                                 ?>
-                                                                <td style="width: 25%;">EPDA Ref :<?php echo $ref_no; ?></td>
+                                                                <td style="width: 25%;">EPDA Ref : <?php echo $ref_no; ?></td>
                                                                 <td style="width: 25%;">Customer Code :
                                                                         <?php
                                                                         if ($principp != '') {
@@ -116,7 +132,7 @@ and open the template in the editor.
 
                                                         </tr>
                                                         <tr>
-                                                                <td rowspan="3" style="width: 50%; font-weight: bold;">
+                                                                <td rowspan="3" style="width: 50%;">
                                                                         <p>
                                                                                 <?php
                                                                                 if ($principp != '') {
@@ -143,7 +159,7 @@ and open the template in the editor.
                                                                         }
                                                                 }
                                                                 ?>
-                                                                <td style="width: 25%;">Ops Reference :<?php echo $appointment->appointment_no . oopsNo(rtrim($data_principal, ","), $principp); ?> </td>
+                                                                <td style="width: 25%;">Ops Reference : <?php echo $appointment->appointment_no . oopsNo(rtrim($data_principal, ","), $principp); ?> </td>
                                                         </tr>
                                                         <?php
 
@@ -164,14 +180,20 @@ and open the template in the editor.
                                                         }
                                                         ?>
                                                         <tr>
-                                                                <td style="width: 25%;">Port of Call :<?= $appointment->portOfCall->port_name ?> </td>
-                                                                <td style="width: 25%;">Client Ref :
-                                                                        <?= $appointment->client_reference ?>
-                                                                </td>
+                                                                <td style="width: 25%;">Port of Call : <?= $appointment->portOfCall->port_name ?> </td>
+                                                                <td style="width: 25%;">Client Ref : <?= $appointment->client_reference ?></td>
                                                         </tr>
                                                         <tr>
-                                                                <td style="width: 25%;">Arrival Date :<?= Yii::$app->SetValues->DateFormate($ports->eosp); ?></td>
-                                                                <td style="width: 25%;">Sailing Date :<?= Yii::$app->SetValues->DateFormate($ports->cast_off); ?></td>
+                                                                <td style="width: 25%;">Arrival Date : <?php
+                                                                        if ($ports->all_fast != '') {
+                                                                                echo date("d-M-Y", strtotime($ports->all_fast));
+                                                                        }
+                                                                        ?></td>
+                                                                <td style="width: 25%;">Sailing Date : <?php
+                                                                        if ($ports->cast_off != '') {
+                                                                                echo date("d-M-Y", strtotime($ports->cast_off));
+                                                                        }
+                                                                        ?></td>
                                                         </tr>
                                                 </table>
                                         </div>
@@ -191,9 +213,9 @@ and open the template in the editor.
                                         }
                                         ?>
                                         <div class="closeestimate-content">
-                                                <h6>Disbursement Summary:</h6>
-                                                <h6>Total Disbursement</h6>
-                                                <table class="table tbl">
+                                                <h6 class="sub-heading">Disbursement Summary:</h6>
+                                                <h6 class="sub-heading">Total Disbursement</h6>
+                                                <table border ="0"  class="table tbl">
                                                         <tr>
                                                                 <th style="width: 10%;">Sl No.</th>
                                                                 <th style="width: 40%;">Particulars</th>
@@ -244,32 +266,44 @@ and open the template in the editor.
                                                         $flag = 1;
                                                         $check_total += $fund->amount;
                                                         $check_no = $fund->check_no;
-                                                        $date = $fund->fund_date;
+                                                        if ($date != '') {
+                                                                $date = date("d-m-Y", strtotime($fund->fund_date));
+                                                        } else {
+                                                                $date = '';
+                                                        }
                                                 } else {
                                                         $cash_total += $fund->amount;
-                                                        $date = $fund->fund_date;
+                                                        if ($date != '') {
+                                                                $date = date("d-m-Y", strtotime($fund->fund_date));
+                                                        } else {
+                                                                $date = '';
+                                                        }
                                                 }
                                                 $fundamount += $fund->amount;
                                         }
                                         $totaloutstanding = $fundamount - $grandtotal;
                                         ?>
                                         <div class="closeestimate-Receipts">
+                                                <h6 class="sub-heading">TOTAL RECEIPTS(PREFUNDING)</h6>
 
-                                                <table class="table tbl">
+                                                <table border ="0"  class="table tbl">
                                                         <tr>
-                                                                <th style="width: 75%;">Description </th>
+                                                                <th style="width: 75%;">Prefunding Description </th>
                                                                 <th style="width: 25%;">Amount</th>
                                                         </tr>
                                                         <tr>
                                                                 <?php
                                                                 if ($flag == 1) {
                                                                         ?>
-                                                                        <td style="width: 75%;text-align:left;font-size:11px;">Net Received on <?= $date ?> against cheque no: <b><?= $check_no ?></b></td>
+                                                                        <td style="width: 75%;text-align:left;font-size:11px;"><?php if ($check_total != 0) { ?>Net Received on <?= $date ?> <?php if ($check_no != '') { ?>against cheque no: <b><?= $check_no ?><?php
+                                                                                                }
+                                                                                        } else {
+                                                                                                ?>NIL PREFUNDING RECEIVED <?php } ?></b></td>
                                                                         <td style="width: 25%;font-size: 11px;"><?= $check_total ?></td>
                                                                         <?php
                                                                 } else {
                                                                         ?>
-                                                                        <td style="width: 75%;text-align:left;font-size: 11px;">Net Received on <?= $date ?></td>
+                                                                        <td style="width: 75%;text-align:left;font-size: 11px;"><?php if ($cash_total != 0) { ?>Net Received on <?= $date ?><?php } else { ?>NIL PREFUNDING RECEIVED<?php } ?></td>
                                                                         <td style="width: 25%;font-size: 11px;"><?= $cash_total ?></td>
                                                                         <?php
                                                                 }
@@ -280,8 +314,8 @@ and open the template in the editor.
                                         </div>
 
                                         <div class="closeestimate-content">
-                                                <h6>Total Outstanding</h6>
-                                                <table class="table tbl">
+                                                <h6 class="sub-heading">Total Outstanding</h6>
+                                                <table border ="0"  class="table tbl">
                                                         <tr>
                                                                 <?php
                                                                 if ($totaloutstanding < 0) {
@@ -318,7 +352,7 @@ and open the template in the editor.
                                                 <h6>USD <?php echo ucwords(Yii::$app->NumToWord->ConvertNumberToWords($usd, 'USD')) . ' Only'; ?> </h6>
                                                 <h6>Company's Bank Details:</h6>
                                                 <div class="bank-left">
-                                                        <table class="tbl3">
+                                                        <table border ="0"  class="tbl3">
                                                                 <tr>
                                                                         <td>Name: </td> <td>:</td>
                                                                         <td>EMPEROR SHIPPING LINES LLC</td>
@@ -350,13 +384,17 @@ and open the template in the editor.
                                                         </table>
                                                 </div>
                                                 <div class="bank-right">
-                                                        <table class="">
+                                                        <table border ="0"  class="">
                                                                 <tr>
-                                                                        <td>Remarks:Vessel </td> <td>:</td>
+                                                                        <td>Remarks </td> <td>:</td>
                                                                         <td>
                                                                                 <?php
                                                                                 if ($appointment->vessel_type == 1) {
                                                                                         echo 'T - ' . Vessel::findOne($appointment->tug)->vessel_name . ' / B - ' . Vessel::findOne($appointment->barge)->vessel_name;
+                                                                                } elseif ($appointment->vessel_type == 2) {
+                                                                                        echo 'M/V - ' . Vessel::findOne($appointment->vessel)->vessel_name;
+                                                                                } elseif ($appointment->vessel_type == 3) {
+                                                                                        echo 'M/T - ' . Vessel::findOne($appointment->vessel)->vessel_name;
                                                                                 } else {
                                                                                         echo Vessel::findOne($appointment->vessel)->vessel_name;
                                                                                 }
@@ -391,13 +429,16 @@ and open the template in the editor.
                                         <div class="footer">
                                                 <span>
                                                         <p>
-                                                                Emperor Shipping Lines LLC, P.O.Box-328231, Saqr Port, Al Shaam, Ras Al Khaimah, UAE
-                                                        </p>
-                                                        <p>
-                                                                Tel: +971 7 268 9676 / Fax: +917 7 268 9677
+                                                                <span class="footer-red">Emperor</span> <span  class="footer-blue1">Shipping Lines LLC</span> &#8208; Ras Al Khaimah (Br)| P.O.Box-328231 |Ops Email: <span class="footer-blue2">opsrak@emperor.ae</span> |Accts Email: <span class="footer-blue2">accrak@emperor.ae</span>
                                                         </p>
                                                         <p>
                                                                 www.emperor.ae
+                                                        </p>
+                                                        <p>
+                                                                Main Office: RAK Medical Centre Bldg |Floor II, Room 06 | Al Shaam, RAK, UAE | Tel: +971 7 268 9676 |Fax: +971 7 268 9677
+                                                        </p>
+                                                        <p>
+                                                                Port Office: Shipping Agents Bldg |Ground Floor, Room: 10 A | Saqr Port Authority, Ras Al Khaimah, UAE | Tel: +971 7 268 9626
                                                         </p>
                                                 </span>
                                         </div>
