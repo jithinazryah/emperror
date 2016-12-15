@@ -339,7 +339,7 @@ class CloseEstimateController extends Controller {
                 }
                 $new_port_code = substr($port_code, -3);
                 $app_no = ltrim(substr($appointment->appointment_no, -4), '0');
-                $invoice_number = $new_port_code . '-' . $app_no . '-' . $princip_id;
+                $invoice_number = $new_port_code . '-' . $app_no . '-' . $princip_id . '-' . date("y");
                 $model_report = new FdaReport();
                 $model_report->appointment_id = $appintment_id;
                 $model_report->principal_id = $principal_id;
