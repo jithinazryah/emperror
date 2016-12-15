@@ -381,13 +381,16 @@ use common\models\Currency;
                                         <div class="footer">
                                                 <span>
                                                         <p>
-                                                                Emperor Shipping Lines LLC, P.O.Box-328231, Saqr Port, Al Shaam, Ras Al Khaimah, UAE
-                                                        </p>
-                                                        <p>
-                                                                Tel: +971 7 268 9676 / Fax: +917 7 268 9677
+                                                                <span class="footer-red">Emperor</span> <span  class="footer-blue1">Shipping Lines LLC</span> &#8208; Ras Al Khaimah (Br)| P.O.Box-328231 |Ops Email: <span class="footer-blue2">opsrak@emperor.ae</span> |Accts Email: <span class="footer-blue2">accrak@emperor.ae</span>
                                                         </p>
                                                         <p>
                                                                 www.emperor.ae
+                                                        </p>
+                                                        <p>
+                                                                Main Office: RAK Medical Centre Bldg |Floor II, Room 06 | Al Shaam, RAK, UAE | Tel: +971 7 268 9676 |Fax: +971 7 268 9677
+                                                        </p>
+                                                        <p>
+                                                                Port Office: Shipping Agents Bldg |Ground Floor, Room: 10 A | Saqr Port Authority, Ras Al Khaimah, UAE | Tel: +971 7 268 9626
                                                         </p>
                                                 </span>
                                         </div>

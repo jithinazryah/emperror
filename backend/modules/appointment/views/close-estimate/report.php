@@ -105,7 +105,14 @@ and open the template in the editor.
                                                                 ?>
 
                                                                 <td style="width: 25%;">Invoice No : <?= $invoice_number ?></td>
-                                                                <td style="width: 25%;">Invoice Date : <?php echo date('d-M-Y', strtotime($invoice_date)); ?></td>
+                                                                <?php
+                                                                if ($invoice_date != '') {
+                                                                        $date_invoice = date('d-M-Y', strtotime($invoice_date));
+                                                                } else {
+                                                                        $date_invoice = '';
+                                                                }
+                                                                ?>
+                                                                <td style="width: 25%;">Invoice Date : <?php echo $date_invoice; ?></td>
                                                         </tr>
                                                         <tr>
                                                                 <?php

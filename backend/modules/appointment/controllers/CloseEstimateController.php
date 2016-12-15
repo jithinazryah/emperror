@@ -273,65 +273,30 @@ class CloseEstimateController extends Controller {
                 $invoice_date = $this->SingleDateFormat($_POST['invoice_date']);
                 $appointment = Appointment::findOne($app);
                 $ports = PortCallData::findOne(['appointment_id' => $app]);
-                if ($invoice_type == 'all') {
-                        $this->UpdateFundAllocation($app, $principp);
-                        $princip = CloseEstimate::findAll(['principal' => $principp, 'apponitment_id' => $app]);
-                        echo $content = $this->renderPartial('report', [
-                    'appointment' => $appointment,
-                    'invoice_type' => $invoice_type,
-                    'princip' => $princip,
-                    'ports' => $ports,
-                    'principp' => $principp,
-                    'invoice_date' => $invoice_date,
-                        ]);
-                        exit;
-                } else {
-                        if ($principp != '') {
-                                $princip = CloseEstimate::findOne(['invoice_type' => $invoice_type, 'apponitment_id' => $app, 'principal' => $principp]);
-                        } else {
-                                $princip = CloseEstimate::findOne(['invoice_type' => $invoice_type, 'apponitment_id' => $app]);
-                        }
-//                        $this->SaveReport($app, $invoice_type);
-                        echo $content = $this->renderPartial('report_fda', [
-                    'appointment' => $appointment,
-                    'invoice_type' => $invoice_type,
-                    'princip' => $princip,
-                    'ports' => $ports,
-                    'principp' => $principp,
-                    'invoice_date' => $invoice_date,
-                        ]);
-                        exit;
-                }
-                // get your HTML raw content without any layouts or scripts
-                //var_dump($appointment);exit;
-                // setup kartik\mpdf\Pdf component
-                $pdf = new Pdf([
-                    // set to use core fonts only
-                    //'mode' => Pdf::MODE_CORE,
-                    // A4 paper format
-                    'format' => Pdf::FORMAT_A4,
-                    // portrait orientation
-//                    'orientation' => Pdf::ORIENT_PORTRAIT,
-                    // stream to browser inline
-//                    'destination' => Pdf::DEST_BROWSER,
-                    // your html content input
-                    'content' => $content,
-                    // format content from your own css file if needed or use the
-                    // enhanced bootstrap css built by Krajee for mPDF formatting
-                    'cssFile' => '@backend/web/css/pdf.css',
-                        // any css to be embedded if required
-                        //'cssInline' => '.kv-heading-1{font-size:18px}',
-                        // set mPDF properties on the fly
-                        //'options' => ['title' => 'Krajee Report Title'],
-                        // call mPDF methods on the fly
-                        /*                    'methods' => [
-                          'SetHeader' => ['Estimated proforma generated on ' . date("d/m/Y h:m:s")],
-                          'SetFooter' => ['|page {PAGENO}'],
-                          ] */
+                $this->UpdateFundAllocation($app, $principp);
+                $princip = CloseEstimate::findAll(['principal' => $principp, 'apponitment_id' => $app]);
+                echo $content = $this->renderPartial('report', [
+            'appointment' => $appointment,
+            'invoice_type' => $invoice_type,
+            'princip' => $princip,
+            'ports' => $ports,
+            'principp' => $principp,
+            'invoice_date' => $invoice_date,
                 ]);
-
-                // return the pdf output as per the destination setting
-                return $pdf->render();
+                exit;
+//                if ($invoice_type == 'all') {
+//                        $this->UpdateFundAllocation($app, $principp);
+//                        $princip = CloseEstimate::findAll(['principal' => $principp, 'apponitment_id' => $app]);
+//                        echo $content = $this->renderPartial('report', [
+//                    'appointment' => $appointment,
+//                    'invoice_type' => $invoice_type,
+//                    'princip' => $princip,
+//                    'ports' => $ports,
+//                    'principp' => $principp,
+//                    'invoice_date' => $invoice_date,
+//                        ]);
+//                        exit;
+//                }
         }
 
         protected function UpdateFundAllocation($id, $principp) {
