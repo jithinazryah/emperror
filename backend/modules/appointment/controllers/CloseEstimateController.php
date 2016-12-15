@@ -23,6 +23,8 @@ use common\models\InvoiceType;
 use common\models\Debtor;
 use common\models\FundingAllocation;
 use common\models\InvoiceNumber;
+use common\models\FdaReport;
+use common\models\Ports;
 
 /**
  * CloseEstimateController implements the CRUD actions for CloseEstimate model.
@@ -263,10 +265,11 @@ class CloseEstimateController extends Controller {
         }
 
         /*
-         * Generate Close Estimate Report depends on Invoice Tyype
+         * Generate Close Estimate Report depends on principal
          */
 
         public function actionReport() {
+                empty(Yii::$app->session['fda-report']);
                 $invoice_type = $_POST['invoice_type'];
                 $app = $_POST['app_id'];
                 $principp = $_POST['fda'];
@@ -275,29 +278,88 @@ class CloseEstimateController extends Controller {
                 $ports = PortCallData::findOne(['appointment_id' => $app]);
                 $this->UpdateFundAllocation($app, $principp);
                 $princip = CloseEstimate::findAll(['principal' => $principp, 'apponitment_id' => $app]);
-                echo $content = $this->renderPartial('report', [
-            'appointment' => $appointment,
-            'invoice_type' => $invoice_type,
-            'princip' => $princip,
-            'ports' => $ports,
-            'principp' => $principp,
-            'invoice_date' => $invoice_date,
+
+                echo $this->renderPartial('report', [
+                    'appointment' => $appointment,
+                    'invoice_type' => $invoice_type,
+                    'princip' => $princip,
+                    'ports' => $ports,
+                    'principp' => $principp,
+                    'invoice_date' => $invoice_date,
+                    'save' => true,
+                    'print' => false,
                 ]);
+                Yii::$app->session->set('fda-report', $this->renderPartial('report', [
+                            'appointment' => $appointment,
+                            'invoice_type' => $invoice_type,
+                            'princip' => $princip,
+                            'ports' => $ports,
+                            'principp' => $principp,
+                            'invoice_date' => $invoice_date,
+                            'save' => false,
+                            'print' => true,
+                ]));
+//                echo Yii::$app->session['fda-report'];
                 exit;
-//                if ($invoice_type == 'all') {
-//                        $this->UpdateFundAllocation($app, $principp);
-//                        $princip = CloseEstimate::findAll(['principal' => $principp, 'apponitment_id' => $app]);
-//                        echo $content = $this->renderPartial('report', [
-//                    'appointment' => $appointment,
-//                    'invoice_type' => $invoice_type,
-//                    'princip' => $princip,
-//                    'ports' => $ports,
-//                    'principp' => $principp,
-//                    'invoice_date' => $invoice_date,
-//                        ]);
-//                        exit;
-//                }
         }
+
+        public function actionSaveAllReport($appintment_id, $principal_id) {
+                $model_report = $this->InvoiceGeneration($appintment_id, $principal_id);
+                if ($model_report->save(false)) {
+                        echo "<script>window.close();</script>";
+                        exit;
+                }
+        }
+
+        public function oopsNo($data_principal, $principp) {
+                $arr = ['0' => '', '1' => 'A', '2' => 'B', '3' => 'C', '4' => 'D', '5' => 'E', '6' => 'F', '7' => 'G', '8' => 'H', '9' => 'I', '10' => 'J', '11' => 'K', '12' => 'L'];
+                $data = explode(',', $data_principal);
+                $j = 0;
+                foreach ($data as $value) {
+                        if ($value == $principp) {
+                                foreach ($arr as $key => $value) {
+                                        if ($key == $j) {
+                                                return $value;
+                                        }
+                                }
+                        }
+                        $j++;
+                }
+        }
+
+        public function InvoiceGeneration($appintment_id, $principal_id) {
+                $appointment = Appointment::findOne($appintment_id);
+                $last_data = FdaReport::find()->orderBy(['id' => SORT_DESC])->where(['principal_id' => $principal_id])->one();
+                $last_report_saved = FdaReport::find()->orderBy(['id' => SORT_DESC])->where(['appointment_id' => $appintment_id, 'principal_id' => $principal_id])->one();
+                $port_code = Ports::findOne($appointment->port_of_call)->code;
+                if ($principal_id != '') {
+                        $princip_id = Debtor::findOne($principal_id)->principal_id;
+                } else {
+                        $princip_id = Debtor::findOne($appointment->principal)->principal_id;
+                }
+                $new_port_code = substr($port_code, -3);
+                $app_no = ltrim(substr($appointment->appointment_no, -4), '0');
+                $invoice_number = $new_port_code . '-' . $app_no . '-' . $princip_id;
+                $model_report = new FdaReport();
+                $model_report->appointment_id = $appintment_id;
+                $model_report->principal_id = $principal_id;
+                $model_report->invoice_number = $invoice_number;
+                $model_report->report = Yii::$app->session['fda-report'];
+                if (empty($last_data)) {
+                        $model_report->sub_invoice = 124;
+                } else {
+                        if (empty($last_report_saved)) {
+                                $model_report->sub_invoice = $last_report_saved->sub_invoice + 1;
+                        } else {
+                                $model_report->sub_invoice = $last_report_saved->sub_invoice;
+                        }
+                }
+                return $model_report;
+        }
+
+        /*
+         * Update Funding allocation when generating final DA
+         */
 
         protected function UpdateFundAllocation($id, $principp) {
                 $close_estimates = CloseEstimate::findAll(['apponitment_id' => $id, 'principal' => $principp]);
@@ -319,6 +381,10 @@ class CloseEstimateController extends Controller {
                 }
                 $model_fund->save();
         }
+
+        /*
+         * Remove the uploaded data path
+         */
 
         public function actionRemove($path) {
                 unlink($path);
@@ -386,7 +452,7 @@ class CloseEstimateController extends Controller {
                                 Yii::$app->session->set('fda', $this->renderPartial('fda_report', [
                                             'appointment' => $appointment,
                                             'close_estimates' => $close_estimates,
-                                            '$invoice' => $invoice,
+                                            'invoice' => $invoice,
                                             'princip' => $princip,
                                             'ports' => $ports,
                                             'est_id' => $est_id,
@@ -396,7 +462,7 @@ class CloseEstimateController extends Controller {
                                 echo $this->renderPartial('fda_report', [
                                     'appointment' => $appointment,
                                     'close_estimates' => $close_estimates,
-                                    '$invoice' => $invoice,
+                                    'invoice' => $invoice,
                                     'princip' => $princip,
                                     'ports' => $ports,
                                     'est_id' => $est_id,
@@ -481,8 +547,21 @@ class CloseEstimateController extends Controller {
                 ]);
         }
 
+        public function actionShowAllReport($id) {
+                $model_report = FdaReport::findOne($id);
+                $model_report->report;
+                return $this->renderPartial('_old', [
+                            'model_report' => $model_report,
+                ]);
+        }
+
         public function actionRemoveReport($id) {
                 InvoiceNumber::findOne($id)->delete();
+                return $this->redirect(Yii::$app->request->referrer);
+        }
+
+        public function actionRemoveAllReport($id) {
+                FdaReport::findOne($id)->delete();
                 return $this->redirect(Yii::$app->request->referrer);
         }
 

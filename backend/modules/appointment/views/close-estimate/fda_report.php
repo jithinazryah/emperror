@@ -85,7 +85,7 @@ and open the template in the editor.
                                                                 <tr>
                                                                         <td style="max-width: 405px">
                                                                                 <?php
-                                                                                echo Debtor::findOne($princip->principal)->principal_name;
+                                                                                echo Debtor::findOne($princip->principal)->invoicing_address;
                                                                                 ?>
                                                                         </td>
                                                                 </tr>
@@ -105,14 +105,15 @@ and open the template in the editor.
                                                                         if (!empty($last)) {
                                                                                 $last_invoice_report_saved = InvoiceNumber::find()->select('estimate_id')->distinct()->orderBy(['estimate_id' => SORT_ASC])->where(['appointment_id' => $appointment->id, 'invoice_type' => $invoice[0]])->all();
                                                                                 $key = count($last_invoice_report_saved);
+                                                                                $model_report = backend\modules\appointment\controllers\CloseEstimateController::GenerateInvoiceNo(implode('_', $est_id));
                                                                                 if ($key == 0) {
-                                                                                        $model_report = $this->context->GenerateInvoiceNo($close_estimate->id);
-                                                                                        $invoice_no = $close_estimate->getInvoiceName($invoice[0]) . ' ' . $model_report->invoice_number;
+
+                                                                                        $invoice_no = InvoiceType::findOne($invoice[0])->invoice_type . ' ' . $model_report->invoice_number;
                                                                                 } else {
-                                                                                        $invoice_no = $close_estimate->getInvoiceName($invoice[0]) . ' ' . $last->invoice_number . $arr1[$key];
+                                                                                        $invoice_no = InvoiceType::findOne($invoice[0])->invoice_type . ' ' . $model_report->invoice_number . $arr1[$key];
                                                                                 }
                                                                         } else {
-                                                                                $model_report = $this->context->GenerateInvoiceNo(implode('_', $est_id));
+//                                                                                $model_report = $this->context->GenerateInvoiceNo(implode('_', $est_id));
                                                                                 $invoice_no = InvoiceType::findOne($invoice[0])->invoice_type . ' ' . $model_report->sub_invoice;
                                                                         }
 //

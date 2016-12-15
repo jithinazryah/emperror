@@ -80,7 +80,7 @@ and open the template in the editor.
                 <tbody>
                         <tr>
                                 <td>
-                                        <div class="heading">INVOICE</div>
+                                        <div class="heading">VOYAGE DISBURSEMENT ACCOUNT</div>
                                         <div class="closeestimate-content">
                                                 <table border ="0"  class="table tbl">
                                                         <tr>
@@ -93,18 +93,15 @@ and open the template in the editor.
                                                                         </p>
                                                                 </td>
                                                                 <?php
-                                                                $port_code = Ports::findOne($appointment->port_of_call)->code;
                                                                 if ($principp != '') {
-                                                                        $princip_id = Debtor::findOne($principp)->principal_id;
+                                                                        $principal_id = $principp;
                                                                 } else {
-                                                                        $princip_id = Debtor::findOne($appointment->principal)->principal_id;
+                                                                        $principal_id = $appointment->principal;
                                                                 }
-                                                                $new_port_code = substr($port_code, -3);
-                                                                $app_no = ltrim(substr($appointment->appointment_no, -4), '0');
-                                                                $invoice_number = $new_port_code . '-' . $app_no . '-' . $princip_id;
+                                                                $model_report = $this->context->InvoiceGeneration($appointment->id, $principal_id);
                                                                 ?>
 
-                                                                <td style="width: 25%;">Invoice No : <?= $invoice_number ?></td>
+                                                                <td style="width: 25%;">Invoice No : <?= $model_report->invoice_number ?>-<?= $model_report->sub_invoice ?></td>
                                                                 <?php
                                                                 if ($invoice_date != '') {
                                                                         $date_invoice = date('d-M-Y', strtotime($invoice_date));
@@ -166,25 +163,9 @@ and open the template in the editor.
                                                                         }
                                                                 }
                                                                 ?>
-                                                                <td style="width: 25%;">Ops Reference : <?php echo $appointment->appointment_no . oopsNo(rtrim($data_principal, ","), $principp); ?> </td>
+                                                                <td style="width: 25%;">Ops Reference : <?php echo $appointment->appointment_no . $this->context->oopsNo(rtrim($data_principal, ","), $principp); ?> </td>
                                                         </tr>
                                                         <?php
-
-                                                        function oopsNo($data_principal, $principp) {
-                                                                $arr = ['0' => '', '1' => 'A', '2' => 'B', '3' => 'C', '4' => 'D', '5' => 'E', '6' => 'F', '7' => 'G', '8' => 'H', '9' => 'I', '10' => 'J', '11' => 'K', '12' => 'L'];
-                                                                $data = explode(',', $data_principal);
-                                                                $j = 0;
-                                                                foreach ($data as $value) {
-                                                                        if ($value == $principp) {
-                                                                                foreach ($arr as $key => $value) {
-                                                                                        if ($key == $j) {
-                                                                                                return $value;
-                                                                                        }
-                                                                                }
-                                                                        }
-                                                                        $j++;
-                                                                }
-                                                        }
                                                         ?>
                                                         <tr>
                                                                 <td style="width: 25%;">Port of Call : <?= $appointment->portOfCall->port_name ?> </td>
@@ -238,7 +219,14 @@ and open the template in the editor.
                                                                 <tr>
                                                                         <td style="width: 10%;"><?= $i ?></td>
                                                                         <td style="width: 40%;"><?php echo Services::findOne(['id' => $close_estimate->service_id])->service; ?></td>
-                                                                        <td style="width: 25%;"><?php echo InvoiceType::findOne(['id' => $close_estimate->invoice_type])->invoice_type; ?></td>
+                                                                        <?php
+                                                                        $incoice_data = InvoiceNumber::find()->where("FIND_IN_SET($close_estimate->id,estimate_id)")->one();
+                                                                        ?>
+                                                                        <td style="width: 25%;"><?php echo InvoiceType::findOne(['id' => $close_estimate->invoice_type])->invoice_type; ?><?php
+                                                                                if ($incoice_data->sub_invoice != '') {
+                                                                                        echo '-' . $incoice_data->sub_invoice;
+                                                                                }
+                                                                                ?></td>
                                                                         <td style="width: 25%;text-align:right;"><?= Yii::$app->SetValues->NumberFormat($close_estimate->fda); ?></td>
                                                                         <?php
                                                                         $grandtotal += $close_estimate->fda;
@@ -291,11 +279,11 @@ and open the template in the editor.
                                         $totaloutstanding = $fundamount - $grandtotal;
                                         ?>
                                         <div class="closeestimate-Receipts">
-                                                <h6 class="sub-heading">TOTAL RECEIPTS(PREFUNDING)</h6>
+                                                <h6 class="sub-heading">Total Receipts(Prefunding)</h6>
 
                                                 <table border ="0"  class="table tbl">
                                                         <tr>
-                                                                <th style="width: 75%;">Prefunding Description </th>
+                                                                <th style="width: 75%;">Description </th>
                                                                 <th style="width: 25%;">Amount</th>
                                                         </tr>
                                                         <tr>
@@ -464,8 +452,24 @@ and open the template in the editor.
         }
 </script>
 <div class="print">
-        <button onclick="printContent('print')" style="font-weight: bold !important;">Print</button>
-        <button onclick="window.close();" style="font-weight: bold !important;">Close</button>
+        <div class="print" style="float:left;">
+                <?php
+                if ($print) {
+                        ?>
+                        <button onclick="printContent('print')" style="font-weight: bold !important;">Print</button>
+                        <?php
+                }
+                ?>
+                <button onclick="window.close();" style="font-weight: bold !important;">Close</button>
+                <?php
+                if ($save) {
+                        ?>
+                        <a href="<?= Yii::$app->homeUrl ?>appointment/close-estimate/save-all-report?appintment_id=<?= $appointment->id ?>&&principal_id=<?= $principp ?>"><button onclick="" style="font-weight: bold !important;">Save</button></a>
+                        <?php
+                }
+                ?>
+
+        </div>
 </div>
 <!--</body>
 
