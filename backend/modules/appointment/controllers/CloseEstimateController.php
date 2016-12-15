@@ -276,7 +276,7 @@ class CloseEstimateController extends Controller {
                 $invoice_date = $this->SingleDateFormat($_POST['invoice_date']);
                 $appointment = Appointment::findOne($app);
                 $ports = PortCallData::findOne(['appointment_id' => $app]);
-                $this->UpdateFundAllocation($app, $principp);
+
                 $princip = CloseEstimate::findAll(['principal' => $principp, 'apponitment_id' => $app]);
 
                 echo $this->renderPartial('report', [
@@ -304,8 +304,11 @@ class CloseEstimateController extends Controller {
         }
 
         public function actionSaveAllReport($appintment_id, $principal_id) {
+                echo 'hii';
+                exit;
                 $model_report = $this->InvoiceGeneration($appintment_id, $principal_id);
                 if ($model_report->save(false)) {
+                        $this->UpdateFundAllocation($appintment_id, $principal_id);
                         echo "<script>window.close();</script>";
                         exit;
                 }

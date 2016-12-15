@@ -146,10 +146,13 @@ class EstimatedProformaController extends Controller {
                 if (empty($appntment)) {
                         $appntment = Appointment::find()->where('id != :id and principal = :principal and DOC < NOW() and vessel_type =:vessel_type', ['id' => $id, 'principal' => $appointment->principal, 'vessel_type' => $appointment->vessel_type])->orderBy(['id' => SORT_DESC])->all();
                 }
-
+                var_dump($appntment);
+                exit;
                 foreach ($appntment as $ar) {
                         $performa_check = EstimatedProforma::findAll(['apponitment_id' => $ar->id]);
                         if (!empty($performa_check)) {
+                                echo 'sfg';
+                                exit;
                                 $this->SetData($performa_check, $id);
                                 break;
                                 return true;
@@ -266,7 +269,8 @@ class EstimatedProformaController extends Controller {
         }
 
         protected function SetData($performa_check, $id) {
-
+                var_dump($performa_check);
+                exit;
                 foreach ($performa_check as $pfrma) {
                         $value = EstimatedProforma::find()->where(['id' => $pfrma->id])->one();
                         $model = new EstimatedProforma;

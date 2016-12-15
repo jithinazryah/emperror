@@ -257,18 +257,20 @@ and open the template in the editor.
                                         $check_total = 0;
                                         $cash_total = 0;
                                         foreach ($funds as $fund) {
-                                                if ($fund->payment_type == 2) {
-                                                        $flag = 1;
-                                                        $check_total += $fund->amount;
-                                                        $check_no = $fund->check_no;
-                                                        if ($date != '') {
+
+                                                if ($fund->payment_type == 1) {
+
+                                                        $cash_total += $fund->amount;
+                                                        if ($fund->fund_date != '') {
                                                                 $date = date("d-m-Y", strtotime($fund->fund_date));
                                                         } else {
                                                                 $date = '';
                                                         }
-                                                } else {
-                                                        $cash_total += $fund->amount;
-                                                        if ($date != '') {
+                                                } elseif ($fund->payment_type == 1) {
+                                                        $flag = 1;
+                                                        $check_total += $fund->amount;
+                                                        $check_no = $fund->check_no;
+                                                        if ($fund->fund_date != '') {
                                                                 $date = date("d-m-Y", strtotime($fund->fund_date));
                                                         } else {
                                                                 $date = '';
@@ -294,12 +296,12 @@ and open the template in the editor.
                                                                                                 }
                                                                                         } else {
                                                                                                 ?>NIL PREFUNDING RECEIVED <?php } ?></b></td>
-                                                                        <td style="width: 25%;font-size: 11px;"><?= $check_total ?></td>
+                                                                        <td style="width: 25%;font-size: 11px;">AED <?= Yii::$app->SetValues->NumberFormat(round(abs($check_total), 2)); ?></td>
                                                                         <?php
                                                                 } else {
                                                                         ?>
                                                                         <td style="width: 75%;text-align:left;font-size: 11px;"><?php if ($cash_total != 0) { ?>Net Received on <?= $date ?><?php } else { ?>NIL PREFUNDING RECEIVED<?php } ?></td>
-                                                                        <td style="width: 25%;font-size: 11px;"><?= $cash_total ?></td>
+                                                                        <td style="width: 25%;font-size: 11px;">AED <?= Yii::$app->SetValues->NumberFormat(round(abs($cash_total), 2)); ?></td>
                                                                         <?php
                                                                 }
                                                                 ?>

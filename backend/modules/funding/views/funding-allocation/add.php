@@ -216,7 +216,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                                         <?php
                                                                 }
                                                                 ?>
-<!--<td><?php // $form->field($model, 'type')->dropDownList(['1' => 'Credit', '2' => 'Debit', '3' => 'EPDA', '4' => 'FDA'], ['prompt' => '-Payment Mode-'])->label(false)                       ?></td>-->
+<!--<td><?php // $form->field($model, 'type')->dropDownList(['1' => 'Credit', '2' => 'Debit', '3' => 'EPDA', '4' => 'FDA'], ['prompt' => '-Payment Mode-'])->label(false)                          ?></td>-->
                                                                 <td><?= $form->field($model, 'description')->textInput(['placeholder' => 'Description'])->label(false) ?></td>
                                                                 <td><?= $form->field($model, 'fund_date')->textInput(['placeholder' => 'Date'])->label(false) ?></td>
                                                                 <td><?= $form->field($model, 'payment_type')->dropDownList(['1' => 'Cash', '2' => 'Check'], ['prompt' => '-Payment Type-'])->label(false) ?></td>
@@ -310,7 +310,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         });
                                 </script>
                         </div>
-                        <?php //Pjax::end();        ?>
+                        <?php //Pjax::end();         ?>
                 </div>
         </div>
 </div>
