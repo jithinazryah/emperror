@@ -331,6 +331,7 @@ class CloseEstimateController extends Controller {
         }
 
         public function InvoiceGeneration($appintment_id, $principal_id) {
+
                 $appointment = Appointment::findOne($appintment_id);
                 $last_data = FdaReport::find()->orderBy(['id' => SORT_DESC])->where(['principal_id' => $principal_id])->one();
                 $last_report_saved = FdaReport::find()->orderBy(['id' => SORT_DESC])->where(['appointment_id' => $appintment_id, 'principal_id' => $principal_id])->one();
@@ -352,7 +353,7 @@ class CloseEstimateController extends Controller {
                         $model_report->sub_invoice = 124;
                 } else {
                         if (empty($last_report_saved)) {
-                                $model_report->sub_invoice = $last_report_saved->sub_invoice + 1;
+                                $model_report->sub_invoice = $last_data->sub_invoice + 1;
                         } else {
                                 $model_report->sub_invoice = $last_report_saved->sub_invoice;
                         }
