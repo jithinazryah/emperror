@@ -101,20 +101,21 @@ and open the template in the editor.
                                                                         <td>Invoice No </td> <td style="width: 50px;text-align: center">:</td>
                                                                         <?php
                                                                         $arr1 = ['1' => 'A', '2' => 'B', '3' => 'C', '4' => 'D', '5' => 'E', '6' => 'F', '7' => 'G', '8' => 'H', '9' => 'I', '10' => 'J', '11' => 'K', '12' => 'L'];
-                                                                        $last = InvoiceNumber::find()->orderBy(['id' => SORT_DESC])->where(['invoice_type' => $invoice[0]])->one();
+                                                                        $last = InvoiceNumber::find()->orderBy(['id' => SORT_DESC])->where(['invoice_type' => $princip->invoice_type])->one();
                                                                         if (!empty($last)) {
-                                                                                $last_invoice_report_saved = InvoiceNumber::find()->select('estimate_id')->distinct()->orderBy(['estimate_id' => SORT_ASC])->where(['appointment_id' => $appointment->id, 'invoice_type' => $invoice[0]])->all();
+                                                                                $last_invoice_report_saved = InvoiceNumber::find()->select('estimate_id')->distinct()->orderBy(['estimate_id' => SORT_ASC])->where(['appointment_id' => $appointment->id, 'invoice_type' => $princip->invoice_type])->all();
                                                                                 $key = count($last_invoice_report_saved);
-                                                                                $model_report = backend\modules\appointment\controllers\CloseEstimateController::GenerateInvoiceNo(implode('_', $est_id));
+                                                                                $model_report = $this->context->GenerateInvoiceNo(implode('_', $est_id));
+//                                                                                $model_report = backend\modules\appointment\controllers\CloseEstimateController::GenerateInvoiceNo(implode('_', $est_id));
                                                                                 if ($key == 0) {
 
-                                                                                        $invoice_no = InvoiceType::findOne($invoice[0])->invoice_type . ' ' . $model_report->invoice_number;
+                                                                                        $invoice_no = InvoiceType::findOne($princip->invoice_type)->invoice_type . ' ' . $model_report->invoice_number;
                                                                                 } else {
-                                                                                        $invoice_no = InvoiceType::findOne($invoice[0])->invoice_type . ' ' . $model_report->invoice_number . $arr1[$key];
+                                                                                        $invoice_no = InvoiceType::findOne($princip->invoice_type)->invoice_type . ' ' . $model_report->invoice_number . $arr1[$key];
                                                                                 }
                                                                         } else {
 //                                                                                $model_report = $this->context->GenerateInvoiceNo(implode('_', $est_id));
-                                                                                $invoice_no = InvoiceType::findOne($invoice[0])->invoice_type . ' ' . $model_report->sub_invoice;
+                                                                                $invoice_no = InvoiceType::findOne($princip->invoice_type)->invoice_type . ' ' . $model_report->sub_invoice;
                                                                         }
 //
                                                                         ?>

@@ -80,12 +80,12 @@ table.table tr.filters{
 .table-striped>tbody>tr:nth-child(odd) {
         background-color: #f5efb5;
         color: black;
-            font-size: 15px;
+        font-size: 15px;
 }
 .table-striped>tbody>tr:nth-child(even) {
         background-color: #caffe6;
         color: black;
-            font-size: 15px;
+        font-size: 15px;
 }
 .table.table-bordered>thead>tr>td, .table.table-bordered>tbody>tr>td, .table.table-bordered>tfood>tr>td, .table.table-bordered>thead>tr>th, .table.table-bordered>tbody>tr>th, .table.table-bordered>tfood>tr>th{
         border-color: #b7b7b7;
@@ -125,7 +125,7 @@ table.table tr td:last-child a {
         border: 1px solid #9a9a9a;
         height: 37px;
         color: black;
-            font-size: 15px;
+        font-size: 15px;
 }
 .portcall {
         color: #0049a0;
@@ -136,7 +136,7 @@ table.table tr td:last-child a {
         text-decoration: underline;
 }
 .colo.nav.nav-tabs>li>a{
-        // background-color: #b9c7a7;
+        /*background-color: #b9c7a7;*/
 }
 .colo.nav.nav-tabs>li.active>a {
         background-color: #b9c7a7;
@@ -152,43 +152,44 @@ table.table tr td:last-child a {
         background-color: #e0e0e0;
 }
 html .select2-drop .select2-results li.select2-result-selectable .select2-result-label {
-    color: #000000;
-    padding-left: 15px;
+        color: #000000;
+        padding-left: 15px;
 }
 form .form-group .form-control{
         color: black;
-            font-size: 15px;
+        font-size: 15px;
 }
 .form-group label{
         color: black;
 }
 .form-control {
-    border: 1px solid #bdbcbc;
-    color: black;
+        border: 1px solid #bdbcbc;
+        color: black;
 }
 .panel{
         background-color: #ffffd9;
 }
 .main-heading{
-    margin-left: 35px;
-    margin-bottom: 10px;
-    font-size: 23px;
-    color: #000000;
+        margin-left: 35px;
+        margin-bottom: 10px;
+        font-size: 23px;
+        color: #000000;
 }
 .sub-heading{
-    margin-left: 35px;
-    margin-bottom: 10px;
-    font-size: 18px;
-    color: #0049a0;
+        margin-left: 35px;
+        margin-bottom: 10px;
+        font-size: 18px;
+        color: #0049a0;
 }
 .upload_file_list {
-    background-color: #FF9800;
-    color: #fff;
-    padding: 8px;
-    font-size: 13px;
-    font-weight: bold;
+        color: #fff !important;
+        background-color: #40bbea;
+        border-color: #29b3e7;
+        padding: 14px 10px 10px 10px;
+        font-size: 13px;
+        font-weight: bold;
 }
 .upload_file_list a:hover {
-    text-decoration: none;
-    color: #8BC34A;
+        text-decoration: none;
+        color: white;
 }

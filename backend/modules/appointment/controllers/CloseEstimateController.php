@@ -436,9 +436,11 @@ class CloseEstimateController extends Controller {
                                             'error' => $error,
                                 ]);
                         }
+
                         if (count(array_unique($invoice)) === 1) {
-                                $princip = CloseEstimate::findOne(['invoice_type' => $invoice[0], 'apponitment_id' => $appointment_id]);
-                                $close_estimates = CloseEstimate::findAll(['invoice_type' => $invoice[0], 'apponitment_id' => $appointment_id, 'id' => $est_id]);
+                                $princip = CloseEstimate::findOne(['apponitment_id' => $appointment_id, 'id' => $est_id[0]]);
+                                $close_estimates = CloseEstimate::findAll(['invoice_type' => $princip->invoice_type, 'apponitment_id' => $appointment_id, 'id' => $est_id]);
+
                                 if (!empty($close_estimates)) {
                                         $flag = 0;
                                         foreach ($close_estimates as $close_estimate) {
@@ -551,17 +553,23 @@ class CloseEstimateController extends Controller {
                 ]);
         }
 
+        public function actionRemoveReport($id, $est_id) {
+                InvoiceNumber::findOne($id)->delete();
+                $estimate_ids = explode(",", $est_id);
+                foreach ($estimate_ids as $value) {
+                        $close_estimate = CloseEstimate::findOne($value);
+                        $close_estimate->status = 0;
+                        $close_estimate->save();
+                }
+                return $this->redirect(Yii::$app->request->referrer);
+        }
+
         public function actionShowAllReport($id) {
                 $model_report = FdaReport::findOne($id);
                 $model_report->report;
                 return $this->renderPartial('_old', [
                             'model_report' => $model_report,
                 ]);
-        }
-
-        public function actionRemoveReport($id) {
-                InvoiceNumber::findOne($id)->delete();
-                return $this->redirect(Yii::$app->request->referrer);
         }
 
         public function actionRemoveAllReport($id) {
