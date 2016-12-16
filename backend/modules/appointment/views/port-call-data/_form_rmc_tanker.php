@@ -17,7 +17,7 @@
 
 <?= $form->field($model, 'pob_outbound')->textInput(['tabindex' => 33]) ?>
 
-<div class="form-group"></div>
+<?= $form->field($model, 'cast_off')->textInput(['tabindex' => 37]) ?>
 
 <?= $form->field($model, 'gangway_down')->textInput(['tabindex' => 22]) ?>
 
@@ -33,6 +33,6 @@
 
 <?= $form->field($model, 'surveyor_on_board')->textInput(['tabindex' => 27]) ?>
 
-<?= $form->field($model, 'customs_clearance_ondeparture')->textInput(['tabindex' => 31]) ?> 
+<?= $form->field($model, 'customs_clearance_ondeparture')->textInput(['tabindex' => 31]) ?>
 
 <?= $form->field($model, 'lastline_away')->textInput(['tabindex' => 35]) ?>
