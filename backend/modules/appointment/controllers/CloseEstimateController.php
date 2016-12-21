@@ -304,8 +304,6 @@ class CloseEstimateController extends Controller {
         }
 
         public function actionSaveAllReport($appintment_id, $principal_id) {
-                echo 'hii';
-                exit;
                 $model_report = $this->InvoiceGeneration($appintment_id, $principal_id);
                 if ($model_report->save(false)) {
                         $this->UpdateFundAllocation($appintment_id, $principal_id);

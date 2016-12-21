@@ -192,9 +192,17 @@ and open the template in the editor.
                                         <?php
                                         if ($invoice_type != 'all') {
                                                 if ($principp != '') {
-                                                        $close_estimates = CloseEstimate::findAll(['apponitment_id' => $appointment->id, 'principal' => $principp]);
+                                                        $close_estimates = CloseEstimate::find()
+                                                                ->where(['apponitment_id' => $appointment->id, 'principal' => $principp])
+                                                                ->orderBy(['(invoice_type)' => SORT_ASC])
+                                                                ->all();
+//                                                        $close_estimates = CloseEstimate::findAll(['apponitment_id' => $appointment->id, 'principal' => $principp])->orderBy(['invoice_type' => SORT_DESC]);
                                                 } else {
-                                                        $close_estimates = CloseEstimate::findAll(['apponitment_id' => $appointment->id, 'principal' => $appointment->principal]);
+                                                        $close_estimates = CloseEstimate::find()
+                                                                ->where(['apponitment_id' => $appointment->id, 'principal' => $appointment->principal])
+                                                                ->orderBy(['(invoice_type)' => SORT_ASC])
+                                                                ->all();
+//                                                        $close_estimates = CloseEstimate::findAll(['apponitment_id' => $appointment->id, 'principal' => $appointment->principal])->orderBy(['invoice_type' => SORT_DESC]);
                                                 }
                                         } else {
                                                 $close_estimates = CloseEstimate::findAll(['apponitment_id' => $appointment->id, 'principal' => $principp]);
