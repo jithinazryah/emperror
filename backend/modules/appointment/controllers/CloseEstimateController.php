@@ -35,8 +35,10 @@ class CloseEstimateController extends Controller {
                 if (Yii::$app->user->isGuest)
                         $this->redirect(['/site/index']);
 
-                if (Yii::$app->session['post']['admin'] != 1)
-                        $this->redirect(['/site/home']);
+                if (Yii::$app->session['post']['close_estimate'] != 1) {
+                        Yii::$app->getSession()->setFlash('exception', 'You have no permission to access this page');
+                        $this->redirect(['/site/exception']);
+                }
         }
 
         /**
@@ -99,13 +101,20 @@ class CloseEstimateController extends Controller {
          */
 
         public function actionAdd($id, $prfrma_id = NULL) {
+                if (Yii::$app->session['post']['close_estimate'] != 1) {
+                        Yii::$app->getSession()->setFlash('exception', 'You have no permission to access this page');
+                        $this->redirect(['/site/exception']);
+                }
                 $estimates = CloseEstimate::findAll(['apponitment_id' => $id]);
                 $appointment = Appointment::findOne($id);
                 $model_upload = new UploadFile();
-//                if (empty($estimates)) {
-//                        $this->InsertCloseEstimate($id);
-//                        $estimates = CloseEstimate::findAll(['apponitment_id' => $id]);
-//                }
+                if ($appointment->status == 0) {
+                        return $this->render('_closed', [
+                                    'estimates' => $estimates,
+                                    'appointment' => $appointment,
+                                    'id' => $id,
+                        ]);
+                }
                 if (!isset($prfrma_id)) {
                         $model = new CloseEstimate;
                 } else {
@@ -117,7 +126,6 @@ class CloseEstimateController extends Controller {
                         if ($model->save()) {
                                 return $this->redirect(['add', 'id' => $id]);
                         }
-                        // return $this->refresh();
                 }
                 return $this->render('add', [
                             'model' => $model,
@@ -163,6 +171,10 @@ class CloseEstimateController extends Controller {
                 return $this->redirect(Yii::$app->request->referrer);
         }
 
+        /*
+         * Load  Estimated Proforma subservices  Values into Close Estimate Subservices
+         */
+
         public function AddSubService($estimate_sub_services, $id, $appointment_id) {
                 foreach ($estimate_sub_services as $sub_service) {
                         $model = new CloseEstimateSubService();
@@ -174,11 +186,19 @@ class CloseEstimateController extends Controller {
                         $model->unit_price = $sub_service->unit_price;
                         $model->total = $sub_service->total;
                         $model->comments = $sub_service->comments;
-                        $model->status = $value->status;
+                        $model->status = $sub_service->status;
+                        $model->CB = Yii::$app->user->identity->id;
+                        $model->UB = Yii::$app->user->identity->id;
+                        $model->DOC = date('Y-m-d');
                         $model->save(false);
                 }
                 return true;
         }
+
+        /*
+         * Delete Closeestimate
+         * If delete is successful, the browser will be redirected to the 'add' page.
+         */
 
         public function actionDeleteCloseEstimate($id) {
 
@@ -230,6 +250,10 @@ class CloseEstimateController extends Controller {
                 }
         }
 
+        /*
+         * It will set CB,UB,DOC values by calling the controller function StValues
+         */
+
         protected function SetValues($model, $id) {
 
                 if (Yii::$app->SetValues->Attributes($model)) {
@@ -239,6 +263,11 @@ class CloseEstimateController extends Controller {
                         return false;
                 }
         }
+
+        /*
+         * This will find the supplier options from Services Table
+         * return supplier_optionns
+         */
 
         public function actionSupplier() {
                 if (Yii::$app->request->isAjax) {
@@ -250,6 +279,7 @@ class CloseEstimateController extends Controller {
 
         /*
          * Function for Multiple File Upload
+         * return to the 'add' view page
          */
 
         public function actionUploads() {
@@ -266,6 +296,8 @@ class CloseEstimateController extends Controller {
 
         /*
          * Generate Close Estimate Report depends on principal
+         * It generate report for all invoice type with same principal
+         * if principal is not mentioned it will generate report on all the data in the close estimte
          */
 
         public function actionReport() {
@@ -276,7 +308,6 @@ class CloseEstimateController extends Controller {
                 $invoice_date = $this->SingleDateFormat($_POST['invoice_date']);
                 $appointment = Appointment::findOne($app);
                 $ports = PortCallData::findOne(['appointment_id' => $app]);
-
                 $princip = CloseEstimate::findAll(['principal' => $principp, 'apponitment_id' => $app]);
 
                 echo $this->renderPartial('report', [
@@ -299,18 +330,29 @@ class CloseEstimateController extends Controller {
                             'save' => false,
                             'print' => true,
                 ]));
-//                echo Yii::$app->session['fda-report'];
                 exit;
         }
 
+        /*
+         * This function save close estimate report generated based on principal
+         * return to the close-estimate 'add' view page
+         */
+
         public function actionSaveAllReport($appintment_id, $principal_id) {
                 $model_report = $this->InvoiceGeneration($appintment_id, $principal_id);
+                Yii::$app->SetValues->Attributes($model_report);
                 if ($model_report->save(false)) {
                         $this->UpdateFundAllocation($appintment_id, $principal_id);
                         echo "<script>window.close();</script>";
                         exit;
                 }
         }
+
+        /*
+         * This function generate oops reference number for report
+         * This function is called from 'report' view
+         * return oops reference number
+         */
 
         public function oopsNo($data_principal, $principp) {
                 $arr = ['0' => '', '1' => 'A', '2' => 'B', '3' => 'C', '4' => 'D', '5' => 'E', '6' => 'F', '7' => 'G', '8' => 'H', '9' => 'I', '10' => 'J', '11' => 'K', '12' => 'L'];
@@ -327,6 +369,12 @@ class CloseEstimateController extends Controller {
                         $j++;
                 }
         }
+
+        /*
+         * This function generate invoice number for All report
+         * this function is called from 'report' view and 'SaveAllReport' action in close-estimate controller
+         * return model
+         */
 
         public function InvoiceGeneration($appintment_id, $principal_id) {
 
@@ -360,7 +408,31 @@ class CloseEstimateController extends Controller {
         }
 
         /*
-         * Update Funding allocation when generating final DA
+         * This function shows saved All reports
+         */
+
+        public function actionShowAllReport($id) {
+                $model_report = FdaReport::findOne($id);
+                $model_report->report;
+                return $this->renderPartial('_old', [
+                            'model_report' => $model_report,
+                ]);
+        }
+
+        /*
+         * This function remove saved report from Fda report Table
+         */
+
+        public function actionRemoveAllReport($id) {
+                if (Yii::$app->session['post']['id'] == 1) {
+                        FdaReport::findOne($id)->delete();
+                }
+                return $this->redirect(Yii::$app->request->referrer);
+        }
+
+        /*
+         * Update Funding allocation when Saving  final DA
+         * This function performing only when generating all report based on principal
          */
 
         protected function UpdateFundAllocation($id, $principp) {
@@ -372,6 +444,7 @@ class CloseEstimateController extends Controller {
                 }
                 if (!empty($model_fund)) {
                         $model_fund->outstanding = $fda_total;
+                        $model_fund->UB = Yii::$app->user->identity->id;
                 } else {
                         $model_fund = new FundingAllocation;
                         $model_fund->appointment_id = $id;
@@ -389,33 +462,16 @@ class CloseEstimateController extends Controller {
          */
 
         public function actionRemove($path) {
-                unlink($path);
+                if (Yii::$app->session['post']['id'] == 1) {
+                        unlink($path);
+                }
                 return $this->redirect(Yii::$app->request->referrer);
         }
 
-        public function actionFdaReport($id, $estid) {
-                // get your HTML raw content without any layouts or scripts
-                $close_estimate = CloseEstimate::findOne($estid);
-                $appointment = Appointment::findOne($id);
-                $ports = PortCallData::findOne(['appointment_id' => $id]);
-//                $this->SaveReport($id, $close_estimate->invoice_type, $estid);
-                //var_dump($appointment);exit;
-                Yii::$app->session->set('fda', $this->renderPartial('fda_report', [
-                            'appointment' => $appointment,
-                            'close_estimate' => $close_estimate,
-                            'save' => false,
-                            'print' => true,
-                ]));
-                echo $this->renderPartial('fda_report', [
-                    'appointment' => $appointment,
-                    'close_estimate' => $close_estimate,
-                    'save' => true,
-                    'print' => false,
-                ]);
-
-//                echo Yii::$app->session['fda'];
-                exit;
-        }
+        /*
+         * This function generate FDA for individual or selected close estimate
+         * This function is performed based on invoice type
+         */
 
         public function actionSelectedReport() {
                 $appointment_id = $_POST['app_id'];
@@ -434,63 +490,70 @@ class CloseEstimateController extends Controller {
                                             'error' => $error,
                                 ]);
                         }
-
                         if (count(array_unique($invoice)) === 1) {
                                 $princip = CloseEstimate::findOne(['apponitment_id' => $appointment_id, 'id' => $est_id[0]]);
                                 $close_estimates = CloseEstimate::findAll(['invoice_type' => $princip->invoice_type, 'apponitment_id' => $appointment_id, 'id' => $est_id]);
-
-                                if (!empty($close_estimates)) {
-                                        $flag = 0;
-                                        foreach ($close_estimates as $close_estimate) {
-                                                if ($close_estimate->status == 1) {
-                                                        $flag = 1;
-                                                }
-                                        }
-                                        if ($flag == 1) {
-                                                $error = 'Already generate FDA on this esimate';
-                                                return $this->renderPartial('error', [
-                                                            'error' => $error,
-                                                ]);
-                                        }
-                                }
-                                Yii::$app->session->set('fda', $this->renderPartial('fda_report', [
-                                            'appointment' => $appointment,
-                                            'close_estimates' => $close_estimates,
-                                            'invoice' => $invoice,
-                                            'princip' => $princip,
-                                            'ports' => $ports,
-                                            'est_id' => $est_id,
-                                            'save' => false,
-                                            'print' => true,
-                                ]));
-                                echo $this->renderPartial('fda_report', [
-                                    'appointment' => $appointment,
-                                    'close_estimates' => $close_estimates,
-                                    'invoice' => $invoice,
-                                    'princip' => $princip,
-                                    'ports' => $ports,
-                                    'est_id' => $est_id,
-                                    'save' => true,
-                                    'print' => false,
-                                ]);
-
-//                echo Yii::$app->session['fda'];
-                                exit;
+                                $this->GenerateReport($close_estimates, $appointment, $invoice, $princip, $ports, $est_id);
                         } else {
                                 $error = 'Choose Same Invoice Type';
                                 return $this->renderPartial('error', [
                                             'error' => $error,
                                 ]);
-//                                Yii::$app->getSession()->setFlash('close-error', 'Choose Same Invoice Type');
-//                                return $this->redirect(Yii::$app->request->referrer);
-//                                exit;
                         }
                 }
                 exit;
         }
 
+        /*
+         * This function will generate individual FDA report
+         */
+
+        protected function GenerateReport($close_estimates, $appointment, $invoice, $princip, $ports, $est_id) {
+                if (!empty($close_estimates)) {
+                        $flag = 0;
+                        foreach ($close_estimates as $close_estimate) {
+                                if ($close_estimate->status == 1) {
+                                        $flag = 1;
+                                }
+                        }
+                        if ($flag == 1) {
+                                $error = 'Already generate FDA on this esimate';
+                                return $this->renderPartial('error', [
+                                            'error' => $error,
+                                ]);
+                        }
+                }
+                Yii::$app->session->set('fda', $this->renderPartial('fda_report', [
+                            'appointment' => $appointment,
+                            'close_estimates' => $close_estimates,
+                            'invoice' => $invoice,
+                            'princip' => $princip,
+                            'ports' => $ports,
+                            'est_id' => $est_id,
+                            'save' => false,
+                            'print' => true,
+                ]));
+                echo $this->renderPartial('fda_report', [
+                    'appointment' => $appointment,
+                    'close_estimates' => $close_estimates,
+                    'invoice' => $invoice,
+                    'princip' => $princip,
+                    'ports' => $ports,
+                    'est_id' => $est_id,
+                    'save' => true,
+                    'print' => false,
+                ]);
+
+                exit;
+        }
+
+        /*
+         * This function will save individual FDA repors
+         */
+
         public function actionSaveReport($estid) {
                 $model_report = $this->GenerateInvoiceNo($estid);
+                Yii::$app->SetValues->Attributes($model_report);
                 if ($model_report->save()) {
                         $estimate_ids = explode("_", $estid);
                         foreach ($estimate_ids as $value) {
@@ -502,6 +565,12 @@ class CloseEstimateController extends Controller {
                         exit;
                 }
         }
+
+        /*
+         * This function generate invoice number for individual report
+         * This function is called from 'fda_report' view and 'SaveReport' controller action
+         * return model
+         */
 
         public function GenerateInvoiceNo($estid) {
                 $estimate = explode("_", $estid);
@@ -543,6 +612,10 @@ class CloseEstimateController extends Controller {
                 return $model_report;
         }
 
+        /*
+         * This function shows saved individual reports
+         */
+
         public function actionShowReport($id) {
                 $model_report = InvoiceNumber::findOne($id);
                 $model_report->report;
@@ -551,29 +624,27 @@ class CloseEstimateController extends Controller {
                 ]);
         }
 
+        /*
+         * This function remove saved report from Invoice Number Table
+         */
+
         public function actionRemoveReport($id, $est_id) {
-                InvoiceNumber::findOne($id)->delete();
-                $estimate_ids = explode(",", $est_id);
-                foreach ($estimate_ids as $value) {
-                        $close_estimate = CloseEstimate::findOne($value);
-                        $close_estimate->status = 0;
-                        $close_estimate->save();
+                if (Yii::$app->session['post']['id'] == 1) {
+                        InvoiceNumber::findOne($id)->delete();
+                        $estimate_ids = explode(",", $est_id);
+                        foreach ($estimate_ids as $value) {
+                                $close_estimate = CloseEstimate::findOne($value);
+                                $close_estimate->status = 0;
+                                $close_estimate->UB = Yii::$app->user->identity->id;
+                                $close_estimate->save();
+                        }
                 }
                 return $this->redirect(Yii::$app->request->referrer);
         }
 
-        public function actionShowAllReport($id) {
-                $model_report = FdaReport::findOne($id);
-                $model_report->report;
-                return $this->renderPartial('_old', [
-                            'model_report' => $model_report,
-                ]);
-        }
-
-        public function actionRemoveAllReport($id) {
-                FdaReport::findOne($id)->delete();
-                return $this->redirect(Yii::$app->request->referrer);
-        }
+        /*
+         * This function will edit the close estimate text field on double click
+         */
 
         public function actionEditEstimate() {
                 if (Yii::$app->request->isAjax) {
@@ -590,6 +661,7 @@ class CloseEstimateController extends Controller {
                         }
                         if ($value != '') {
                                 $estimate->$name = $value;
+                                $estimate->UB = Yii::$app->user->identity->id;
                                 if ($estimate->save()) {
                                         return 1;
                                 } else {
@@ -599,6 +671,10 @@ class CloseEstimateController extends Controller {
                 }
         }
 
+        /*
+         * This function will edit the close estimate dropdown field on double click
+         */
+
         public function actionEditEstimateService() {
                 if (Yii::$app->request->isAjax) {
                         $id = $_POST['id'];
@@ -607,6 +683,7 @@ class CloseEstimateController extends Controller {
                         $estimate = CloseEstimate::find()->where(['id' => $id])->one();
                         if ($value != '') {
                                 $estimate->$name = $value;
+                                $estimate->UB = Yii::$app->user->identity->id;
                                 if ($estimate->save()) {
                                         if ($name == 'service_id') {
                                                 $servicess = Services::find()->where(['id' => $value])->one();
@@ -682,6 +759,32 @@ class CloseEstimateController extends Controller {
                         } else {
                                 return $year . '-' . $month . '-' . $day;
                         }
+                }
+        }
+
+        /*
+         * This function first check the close estimae has completed or not
+         * If complete it will change the appointment status
+         * After closing cnnot edit the close estimate
+         */
+
+        public function actionEstimateComplete($id) {
+                $appointment = Appointment::findOne($id);
+                $estimates = CloseEstimate::findAll(['apponitment_id' => $id]);
+                if (!empty($estimates)) {
+                        if (Yii::$app->session['post']['id'] == 1) {
+                                $appointment->stage = 5;
+                                $appointment->sub_stages = 5;
+                                $appointment->status = 0;
+                                $appointment->UB = Yii::$app->user->identity->id;
+                                $appointment->save();
+                                return $this->redirect(['add', 'id' => $id]);
+                        } else {
+                                return $this->redirect(['add', 'id' => $id]);
+                        }
+                } else {
+                        Yii::$app->getSession()->setFlash('error', 'Close Estimate Not Completed..');
+                        return $this->redirect(['add', 'id' => $id]);
                 }
         }
 

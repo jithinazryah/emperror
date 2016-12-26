@@ -177,30 +177,25 @@ $this->params['breadcrumbs'][] = 'Update';
                                         </div>
                                         <br/>
                                         <hr class="appoint_history" />
-                                        <div class="display-uploads">
-                                                <div class="row" style="display:inline-block">
-                                                        <table>
-                                                                <tr>
-                                                                        <td style="border: 1px solid black;"><h4 class="sub-heading">Uploaded Files</h4></td>
-                                                                </tr>
-                                                                <?php
-                                                                if (!empty(Yii::$app->UploadFile->ListFile($model_appointment->id, Yii::$app->params['datPath']))) {
+                                        <div class="row">
+                                                <div class="col-md-12">
+                                                        <h4 class="sub-heading" style="text-decoration:underline;">Uploaded Files</h4>
+                                                        <br/>
+                                                        <?php
+                                                        if (!empty(Yii::$app->UploadFile->ListFile($model_appointment->id, Yii::$app->params['datPath']))) {
+                                                                $string = Yii::$app->UploadFile->ListFile($model_appointment->id, Yii::$app->params['datPath']);
+                                                                $uploads = explode("|", $string);
+                                                                array_pop($uploads);
+                                                                foreach ($uploads as $upload) {
                                                                         ?>
-                                                                        <tr>
-                                                                                <td style="border: 1px solid black;padding: 10px;">
-                                                                                        <?= Yii::$app->UploadFile->ListFile($model_appointment->id, Yii::$app->params['datPath']); ?>
-                                                                                </td>
-                                                                        </tr>
+                                                                        <span class="upload_file_list"><?= $upload ?></span>
                                                                         <?php
                                                                 }
-                                                                ?>
-
-                                                        </table>
+                                                        }
+                                                        ?>
 
                                                 </div>
-
                                         </div>
-
                                 </div>
                         </div>
                         <div style="float:right;padding-top: 5px;">

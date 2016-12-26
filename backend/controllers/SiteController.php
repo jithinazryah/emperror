@@ -25,7 +25,7 @@ class SiteController extends Controller {
                         'class' => AccessControl::className(),
                         'rules' => [
                                 [
-                                'actions' => ['login', 'error', 'index', 'home', 'report', 'forgot', 'new-password'],
+                                'actions' => ['login', 'error', 'index', 'home', 'report', 'forgot', 'new-password', 'exception'],
                                 'allow' => true,
                             ],
                                 [
@@ -252,6 +252,10 @@ class SiteController extends Controller {
                 } else {
 
                 }
+        }
+
+        public function actionException() {
+                return $this->render('exception');
         }
 
 }

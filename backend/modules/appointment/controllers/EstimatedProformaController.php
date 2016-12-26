@@ -30,8 +30,10 @@ class EstimatedProformaController extends Controller {
                 if (Yii::$app->user->isGuest)
                         $this->redirect(['/site/index']);
 
-                if (Yii::$app->session['post']['admin'] != 1)
-                        $this->redirect(['/site/home']);
+                if (Yii::$app->session['post']['estimated_proforma'] != 1) {
+                        Yii::$app->getSession()->setFlash('exception', 'You have no permission to access this page');
+                        $this->redirect(['/site/exception']);
+                }
         }
 
         /**
@@ -96,9 +98,20 @@ class EstimatedProformaController extends Controller {
          */
 
         public function actionAdd($id, $prfrma_id = NULL, $check = NULL) {
+                if (Yii::$app->session['post']['estimated_proforma'] != 1) {
+                        Yii::$app->getSession()->setFlash('exception', 'You have no permission to access this page');
+                        $this->redirect(['/site/exception']);
+                }
                 $estimates = EstimatedProforma::findAll(['apponitment_id' => $id]);
                 $appointment = Appointment::findOne($id);
                 $model_upload = new UploadFile();
+                if ($appointment->status == 0) {
+                        return $this->render('_closed', [
+                                    'estimates' => $estimates,
+                                    'appointment' => $appointment,
+                                    'id' => $id,
+                        ]);
+                }
                 if (empty($estimates) && !empty($check)) {
                         $this->CheckPerforma($id, $appointment);
                         $estimates = EstimatedProforma::findAll(['apponitment_id' => $id]);
@@ -126,6 +139,10 @@ class EstimatedProformaController extends Controller {
                 ]);
         }
 
+        /*
+         * This function upload multiple fies in estimated proforma
+         */
+
         public function actionUploads() {
                 $model_upload = new UploadFile();
                 if ($model_upload->load(Yii::$app->request->post())) {
@@ -137,6 +154,11 @@ class EstimatedProformaController extends Controller {
                 }
         }
 
+        /*
+         * This function will check the estimated performa contain estmates on the same principal
+         * If it contain Load it into the new appointment
+         */
+
         public function CheckPerforma($id, $appointment) {
                 if ($appointment->vessel_type != 1) {
                         $appntment = Appointment::find()->where('id != :id and principal = :principal and DOC < NOW() and vessel =:vessel', ['id' => $id, 'principal' => $appointment->principal, 'vessel' => $appointment->vessel])->orderBy(['id' => SORT_DESC])->all();
@@ -146,13 +168,9 @@ class EstimatedProformaController extends Controller {
                 if (empty($appntment)) {
                         $appntment = Appointment::find()->where('id != :id and principal = :principal and DOC < NOW() and vessel_type =:vessel_type', ['id' => $id, 'principal' => $appointment->principal, 'vessel_type' => $appointment->vessel_type])->orderBy(['id' => SORT_DESC])->all();
                 }
-                var_dump($appntment);
-                exit;
                 foreach ($appntment as $ar) {
                         $performa_check = EstimatedProforma::findAll(['apponitment_id' => $ar->id]);
                         if (!empty($performa_check)) {
-                                echo 'sfg';
-                                exit;
                                 $this->SetData($performa_check, $id);
                                 break;
                                 return true;
@@ -160,10 +178,12 @@ class EstimatedProformaController extends Controller {
                 }
         }
 
+        /*
+         * This function delete estimated performa based on the esimate id
+         */
+
         public function actionDeletePerforma($id) {
                 $this->findModel($id)->delete();
-
-                //return $this->redirect(['index']);
                 return $this->redirect(Yii::$app->request->referrer);
         }
 
@@ -214,6 +234,12 @@ class EstimatedProformaController extends Controller {
                 }
         }
 
+        /*
+         * This action will called when complete the estimated proforma
+         * This action change the aoppintment number and save it in the appointment
+         * return to the port call data update
+         */
+
         public function actionEstimateConfirm($id) {
                 $appointment = Appointment::findOne($id);
                 $new_appid = substr($appointment->appointment_no, 2);
@@ -224,8 +250,6 @@ class EstimatedProformaController extends Controller {
                         if ($old_appid == 'EN') {
                                 $appointment->appointment_no = $new_appid;
                         }
-//                        $appointment->stage = 2;
-//                        $appointment->sub_stages = 2;
                         $appointment->save();
                         return $this->redirect(['/appointment/port-call-data/update', 'id' => $appointment->id]);
                 } else {
@@ -233,6 +257,10 @@ class EstimatedProformaController extends Controller {
                         return $this->redirect(['add', 'id' => $id]);
                 }
         }
+
+        /*
+         * After complete estimated froforma ,update the fund allocation
+         */
 
         protected function UpdateFundAllocation($id, $appointment) {
                 $principp = explode(',', $appointment->principal);
@@ -258,6 +286,10 @@ class EstimatedProformaController extends Controller {
                 }
         }
 
+        /*
+         * This function set CB,UB,DOC
+         */
+
         protected function SetValues($model, $id) {
 
                 if (Yii::$app->SetValues->Attributes($model)) {
@@ -268,9 +300,11 @@ class EstimatedProformaController extends Controller {
                 }
         }
 
+        /*
+         * This function set previous estimated proforma to the new appoinment
+         */
+
         protected function SetData($performa_check, $id) {
-                var_dump($performa_check);
-                exit;
                 foreach ($performa_check as $pfrma) {
                         $value = EstimatedProforma::find()->where(['id' => $pfrma->id])->one();
                         $model = new EstimatedProforma;
@@ -299,6 +333,10 @@ class EstimatedProformaController extends Controller {
                 return TRUE;
         }
 
+        /*
+         * This function load previously generated subservices
+         */
+
         protected function SetSubService($sub_service, $new_id, $appointment_id) {
                 foreach ($sub_service as $value) {
 
@@ -318,6 +356,11 @@ class EstimatedProformaController extends Controller {
                 return true;
         }
 
+        /*
+         * This function find the supplier for a particular service
+         * return result to the 'add' view
+         */
+
         public function actionSupplier() {
                 if (Yii::$app->request->isAjax) {
                         $service_id = $_POST['service_id'];
@@ -333,6 +376,11 @@ class EstimatedProformaController extends Controller {
                 }
         }
 
+        /*
+         * This function find the 'sub services' for a particular service
+         * return result to the 'add' view
+         */
+
         public function actionSubservice() {
                 if (Yii::$app->request->isAjax) {
                         $service_id = $_POST['service_id'];
@@ -345,17 +393,14 @@ class EstimatedProformaController extends Controller {
                 }
         }
 
+        /*
+         * It generate estimate report based on principal
+         */
+
         public function actionReports() {
                 $princip = $_POST['principal'];
-//                if($princip == 'Select Principal'){
-//                        return;
-//                }
                 $app = $_POST['app_id'];
-                //$estimates = EstimatedProforma::findAll(['apponitment_id' => $app, 'principal' => $princip]);
-                // get your HTML raw content without any layouts or scripts
                 $appointment = Appointment::findOne($app);
-
-                //var_dump($appointment);exit;
                 Yii::$app->session->set('epda', $this->renderPartial('report', [
                             'appointment' => $appointment,
                             //'estimates' => $estimates,
@@ -370,56 +415,38 @@ class EstimatedProformaController extends Controller {
                     'save' => true,
                     'print' => false,
                 ]);
-
-//                echo Yii::$app->session['epda'];
                 exit;
-
-                // setup kartik\mpdf\Pdf component
-                /*  $pdf = new Pdf([
-                  // set to use core fonts only
-                  //'mode' => Pdf::MODE_CORE,
-                  // A4 paper format
-                  'format' => Pdf::FORMAT_A4,
-                  // portrait orientation
-                  //                    'orientation' => Pdf::ORIENT_PORTRAIT,
-                  // stream to browser inline
-                  //                    'destination' => Pdf::DEST_BROWSER,
-                  // your html content input
-                  'content' => $content,
-                  // format content from your own css file if needed or use the
-                  // enhanced bootstrap css built by Krajee for mPDF formatting
-                  'cssFile' => '@backend/web/css/pdf.css',
-                  // any css to be embedded if required
-                  //'cssInline' => '.kv-heading-1{font-size:18px}',
-                  // set mPDF properties on the fly
-                  //'options' => ['title' => 'Krajee Report Title'],
-                  // call mPDF methods on the fly
-                  /*                    'methods' => [
-                  'SetHeader' => ['Estimated proforma generated on ' . date("d/m/Y h:m:s")],
-                  'SetFooter' => ['|page {PAGENO}'],
-                  ] */
-                /* ]);
-
-                  // return the pdf output as per the destination setting
-                  return $pdf->render(); */
         }
+
+        /*
+         * It removes the uploaded files from directory
+         */
 
         public function actionRemove($path) {
-                unlink($path);
+                if (Yii::$app->session['post']['id'] == 1) {
+                        unlink($path);
+                }
                 return $this->redirect(Yii::$app->request->referrer);
         }
+
+        /*
+         * This function save the generate Estimated Proforma report
+         */
 
         public function actionSaveReport($id) {
                 $model_report = new EstimateReport();
                 $model_report->appointment_id = $id;
                 $model_report->report = Yii::$app->session['epda'];
                 $model_report->status = 1;
+                Yii::$app->SetValues->Attributes($model_report);
                 $model_report->save();
-//                return $this->redirect(Yii::$app->request->referrer);
-
                 echo "<script>window.close();</script>";
                 exit;
         }
+
+        /*
+         * This function shoe the saved reports
+         */
 
         public function actionShowReport($id) {
                 $model_report = EstimateReport::findOne($id);
@@ -429,10 +456,20 @@ class EstimatedProformaController extends Controller {
                 ]);
         }
 
+        /*
+         * This function remove the saved estimate report
+         */
+
         public function actionRemoveReport($id) {
-                EstimateReport::findOne($id)->delete();
+                if (Yii::$app->session['post']['id'] == 1) {
+                        EstimateReport::findOne($id)->delete();
+                }
                 return $this->redirect(Yii::$app->request->referrer);
         }
+
+        /*
+         * This function save the estimated proforma text field values on double click
+         */
 
         public function actionEditEstimate() {
                 if (Yii::$app->request->isAjax) {

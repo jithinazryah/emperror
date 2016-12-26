@@ -7,6 +7,7 @@ use common\models\Services;
 use common\models\Currency;
 use common\models\Contacts;
 use common\models\Debtor;
+use common\models\Employee;
 use common\models\EstimateReport;
 use common\models\UploadFile;
 use common\models\Appointment;
@@ -238,7 +239,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                                                                                         </span>
                                                                                 </td>
-                                                                                <!--<td><?php // $estimate->images;                                                 ?></td>-->
+                                                                                <!--<td><?php // $estimate->images;                                                                                ?></td>-->
                                                                                 <td>
                                                                                         <?= Html::a('<i class="fa fa-pencil"></i>', ['/appointment/estimated-proforma/add', 'id' => $id, 'prfrma_id' => $estimate->id], ['class' => '', 'tittle' => 'Edit']) ?>
                                                                                         <?= Html::a('<i class="fa fa-remove"></i>', ['/appointment/estimated-proforma/delete-performa', 'id' => $estimate->id], ['class' => '', 'tittle' => 'Edit', 'data-confirm' => 'Are you sure you want to delete this item?']) ?>
@@ -268,10 +269,10 @@ $this->params['breadcrumbs'][] = $this->title;
                                                                         <td></td>
                                                                         <td><?= $form->field($model, 'service_id')->dropDownList(ArrayHelper::map(Services::findAll(['status' => 1]), 'id', 'service'), ['prompt' => '-Service-'])->label(false); ?></td>
                                                                         <td><?= $form->field($model, 'supplier')->dropDownList(ArrayHelper::map(Contacts::findAll(['status' => 1]), 'id', 'name'), ['prompt' => '-Supplier-'])->label(false); ?></td>
-                                                                       <!--<td><?php //$form->field($model, 'currency')->dropDownList(ArrayHelper::map(Currency::findAll(['status' => 1]), 'id', 'currency_name'), ['prompt' => '-Currency-'])->label(false);                                                                                   ?></td>-->
+                                                                       <!--<td><?php //$form->field($model, 'currency')->dropDownList(ArrayHelper::map(Currency::findAll(['status' => 1]), 'id', 'currency_name'), ['prompt' => '-Currency-'])->label(false);                                                                                                                  ?></td>-->
                                                                         <td><?= $form->field($model, 'unit_rate')->textInput(['placeholder' => 'Unit Rate'])->label(false) ?></td>
                                                                         <td><?= $form->field($model, 'unit')->textInput(['placeholder' => 'Quantity'])->label(false) ?></td>
-                                                                        <!--<td><?php //$form->field($model, 'roe')->textInput(['placeholder' => 'ROE'])->label(false)                                                                                   ?></td>-->
+                                                                        <!--<td><?php //$form->field($model, 'roe')->textInput(['placeholder' => 'ROE'])->label(false)                                                                                                                  ?></td>-->
                                                                         <td><?= $form->field($model, 'epda')->textInput(['placeholder' => 'EPDA', 'disabled' => true])->label(false) ?></td>
                                                                         <?php
                                                                         $arr1 = explode(',', $appointment->principal);
@@ -296,7 +297,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                                         ?>
                                                                         <td><?= $form->field($model, 'rate_to_category')->textInput(['placeholder' => 'Rate to Category'])->label(false) ?></td>
                                                                         <td><?= $form->field($model, 'comments')->textInput(['placeholder' => 'Comments'])->label(false) ?></td>
-                                                                        <!--<td><?php // $form->field($model, 'images[]')->fileInput(['multiple' => true])->label(false)                                                 ?></td>-->
+                                                                        <!--<td><?php // $form->field($model, 'images[]')->fileInput(['multiple' => true])->label(false)                                                                                ?></td>-->
                                                                         <td><?= Html::submitButton($model->isNewRecord ? 'Add' : 'Update', ['class' => 'btn btn-success']) ?>
                                                                         </td>
                                                                         <?php ActiveForm::end(); ?>
@@ -327,50 +328,62 @@ $this->params['breadcrumbs'][] = $this->title;
                                                 </div>
                                                 <br/>
                                                 <hr class="appoint_history" />
-                                                <div class="display-uploads" style="margin-bottom: 25px;">
-                                                        <div class="row" style="display:inline-block">
-                                                                <div class="col-md-4" style="float:left;text-align: center;">
-                                                                        <table>
-                                                                                <tr>
-                                                                                        <td style="border: 1px solid black;"><h4 class="sub-heading">Previously Generated EPDA'S</h4></td>
-                                                                                </tr>
-                                                                                <?php
-                                                                                $estmate_reports = EstimateReport::findAll(['appointment_id' => $appointment->id]);
-                                                                                ?>
-                                                                                <?php foreach ($estmate_reports as $estmate_report) { ?>
-                                                                                        <tr>
-                                                                                                <td style="border: 1px solid black;padding: 10px;">
-                                                                                                        <?php echo Html::a($estmate_report->date_time, ['/appointment/estimated-proforma/show-report'], ['onclick' => "window.open('show-report?id=$estmate_report->id', 'newwindow', 'width=750, height=500');return false;"]) . '&nbsp;&nbsp;<a href="remove-report?id=' . $estmate_report->id . '"><i class="fa fa-remove"></i></a>'; ?>
-                                                                                                </td>
-                                                                                        </tr>
-                                                                                        <?php
-                                                                                }
-                                                                                ?>
+                                                <div class="row">
+                                                        <div class="col-md-12">
+                                                                <h4 class="sub-heading" style="text-decoration:underline;">Previously Generated FDA'S</h4>
+                                                                <br/>
+                                                                <?php
+                                                                $estmate_reports = EstimateReport::findAll(['appointment_id' => $appointment->id]);
+                                                                ?>
+                                                                <?php
+                                                                foreach ($estmate_reports as $estmate_report) {
+                                                                        ?>
+                                                                        <div class="row" style="width: 200px;margin-left: 30px;display: inline-block;">
+                                                                                <div class="upload_file_list" style="float:left;margin-right: 5px;height: 55px;">
+                                                                                        <div>
+                                                                                                <span class=""><?php echo Html::a($estmate_report->date_time, ['/appointment/estimated-proforma/show-report'], ['onclick' => "window.open('show-report?id=$estmate_report->id', 'newwindow', 'width=750, height=500');return false;"]) . '&nbsp;&nbsp;'; ?>
+                                                                                                </span>
+                                                                                        </div>
+                                                                                        <div>
+                                                                                                <?= Employee::findOne($estmate_report->CB)->user_name; ?>
+                                                                                        </div>
+                                                                                </div>
+                                                                                <div class="upload_file_list" style="float:left;height: 55px;">
+                                                                                        <div>
+                                                                                                <span style="font-size: 20px;"><?= Html::a('<i class="fa fa-remove"></i>', ['/appointment/estimated-proforma/remove-report', 'id' => $estmate_report->id], ['class' => '']) ?></span>
+                                                                                        </div>
+                                                                                </div>
+                                                                        </div>
+                                                                        <?php
+                                                                }
+                                                                ?>
 
-                                                                        </table>
-                                                                </div>
-                                                                <div class="col-md-8" style="float:left;text-align: center;">
-                                                                        <table>
-                                                                                <tr>
-                                                                                        <td style="border: 1px solid black;"><h4 class="sub-heading">Uploaded Files</h4></td>
-                                                                                </tr>
-                                                                                <?php
-                                                                                if (!empty(Yii::$app->UploadFile->ListFile($appointment->id, Yii::$app->params['estimatePath']))) {
+                                                        </div>
+                                                </div>
+                                                <br/>
+                                                <hr class="appoint_history" />
+                                                <div class="row">
+                                                        <div class="col-md-12">
+                                                                <h4 class="sub-heading" style="text-decoration:underline;">Uploaded Files</h4>
+                                                                <br/>
+                                                                <div style="margin-left:30px;">
+                                                                        <?php
+                                                                        if (!empty(Yii::$app->UploadFile->ListFile($appointment->id, Yii::$app->params['estimatePath']))) {
+                                                                                $string = Yii::$app->UploadFile->ListFile($appointment->id, Yii::$app->params['estimatePath']);
+                                                                                $uploads = explode("|", $string);
+                                                                                array_pop($uploads);
+                                                                                foreach ($uploads as $upload) {
                                                                                         ?>
-                                                                                        <tr>
-                                                                                                <td style="border: 1px solid black;padding: 10px;">
-                                                                                                        <?= Yii::$app->UploadFile->ListFile($appointment->id, Yii::$app->params['estimatePath']); ?>
-                                                                                                </td>
-                                                                                        </tr>
+                                                                                        <span class="upload_file_list"><?= $upload ?></span>
                                                                                         <?php
                                                                                 }
-                                                                                ?>
-
-                                                                        </table>
+                                                                        }
+                                                                        ?>
                                                                 </div>
                                                         </div>
-
                                                 </div>
+
+                                                <hr class="appoint_history" />
 
                                         </div>
                                 </div>

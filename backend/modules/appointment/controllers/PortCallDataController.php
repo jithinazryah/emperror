@@ -30,9 +30,12 @@ class PortCallDataController extends Controller {
                 if (Yii::$app->user->isGuest)
                         $this->redirect(['/site/index']);
 
-                if (Yii::$app->session['post']['admin'] != 1)
-                        $this->redirect(['/site/home']);
+                if (Yii::$app->session['post']['port_call_data'] != 1) {
+                        Yii::$app->getSession()->setFlash('exception', 'You have no permission to access this page');
+                        $this->redirect(['/site/exception']);
+                }
         }
+
         /**
          * @inheritdoc
          */
@@ -98,6 +101,10 @@ class PortCallDataController extends Controller {
          * @return mixed
          */
         public function actionUpdate($id) {
+                if (Yii::$app->session['post']['port_call_data'] != 1) {
+                        Yii::$app->getSession()->setFlash('exception', 'You have no permission to access this page');
+                        $this->redirect(['/site/exception']);
+                }
                 $model_appointment = Appointment::findOne(['id' => $id]);
                 $model = PortCallData::findOne(['appointment_id' => $id]);
                 $model_draft = PortCallDataDraft::findOne(['appointment_id' => $id]);
@@ -108,7 +115,7 @@ class PortCallDataController extends Controller {
                 $model_port_cargo_details = PortCargoDetails::findOne(['appointment_id' => $id]);
                 $model_port_stoppages = PortStoppages::findAll(['appointment_id' => $id]);
                 $model_upload = new UploadFile();
-                $model = $this->dateformat($model, $model->attributes);
+                $model = Yii::$app->ChangeDateFormate->DateFormat($model, $model->attributes);
                 $this->AddStages($model, $model_appointment);
                 if ($model_port_cargo_details == '')
                         $model_port_cargo_details = new PortCargoDetails;
@@ -138,15 +145,15 @@ class PortCallDataController extends Controller {
                 } else if ($model_rob->load(Yii::$app->request->post()) && $model_draft->load(Yii::$app->request->post())) {
                         $this->saveportcalldraftrob($model_rob, $model_draft);
                 }
-                $model = $this->dateformat($model);
-                $model_imigration = $this->dateformat($model_imigration);
-                $model_draft = $this->dateformat($model_draft);
+                $model = Yii::$app->ChangeDateFormate->DateFormat($model);
+                $model_imigration = Yii::$app->ChangeDateFormate->DateFormat($model_imigration);
+                $model_draft = Yii::$app->ChangeDateFormate->DateFormat($model_draft);
                 foreach ($model_additional as $additional) {
-                        $additional->value = $this->SingleDateFormat($additional->value);
+                        $additional->value = Yii::$app->ChangeDateFormate->SingleDateFormat($additional->value);
                 }
                 foreach ($model_port_stoppages as $port_stoppages) {
-                        $port_stoppages->stoppage_from = $this->SingleDateFormat($port_stoppages->stoppage_from);
-                        $port_stoppages->stoppage_to = $this->SingleDateFormat($port_stoppages->stoppage_to);
+                        $port_stoppages->stoppage_from = Yii::$app->ChangeDateFormate->SingleDateFormat($port_stoppages->stoppage_from);
+                        $port_stoppages->stoppage_to = Yii::$app->ChangeDateFormate->SingleDateFormat($port_stoppages->stoppage_to);
                 }
                 return $this->render('update', [
                             'model' => $model,
@@ -163,113 +170,162 @@ class PortCallDataController extends Controller {
                 ]);
         }
 
+        /*
+         * This function save port call data
+         */
+
         public function SavePortcallData($model, $model_imigration) {
                 Yii::$app->SetValues->Attributes($model);
                 Yii::$app->SetValues->Attributes($model_imigration);
-                $this->dateformat($model);
-                $this->dateformat($model_imigration);
+                Yii::$app->ChangeDateFormate->DateFormat($model);
+                Yii::$app->ChangeDateFormate->DateFormat($model_imigration);
                 $model->save();
                 $model_imigration->save();
                 if (isset($_POST['create']) && $_POST['create'] != '') {
-                        //echo 'create';exit;
-                        $arr = [];
-                        $i = 0;
-
-                        foreach ($_POST['create']['label'] as $val) {
-                                $arr[$i]['label'] = $val;
-                                $i++;
-                        }
-                        $i = 0;
-                        foreach ($_POST['create']['valuee'] as $val) {
-                                $arr[$i]['valuee'] = $val;
-                                $i++;
-                        }
-                        $i = 0;
-                        foreach ($_POST['create']['comment'] as $val) {
-                                $arr[$i]['comment'] = $val;
-                                $i++;
-                        }
-                        foreach ($arr as $val) {
-                                $aditional = new PortCallDataAdditional;
-                                $aditional->appointment_id = $model->appointment_id;
-                                $aditional->label = $val['label'];
-                                $aditional->value = $this->SingleDateFormat($val['valuee']);
-                                $aditional->comment = $val['comment'];
-                                $aditional->status = 1;
-                                $aditional->CB = Yii::$app->user->identity->id;
-                                $aditional->UB = Yii::$app->user->identity->id;
-                                $aditional->DOC = date('Y-m-d');
-                                if (!empty($aditional->label))
-                                        $aditional->save();
-                        }
+                        $this->AddAditionalCreate($_POST['create'], $model);
                 }
 
-                /*
-                 * for updating additional data
-                 */
                 if (isset($_POST['updatee']) && $_POST['updatee'] != '') {
-                        $arr = [];
-                        $i = 0;
-                        foreach ($_POST['updatee'] as $key => $val) {
-                                $arr[$key]['label'] = $val['label'][0];
-                                $arr[$key]['value'] = $val['value'][0];
-                                $arr[$key]['comment'] = $val['comment'][0];
-                                $i++;
-                        }
-                        foreach ($arr as $key => $value) {
-                                $aditional = PortCallDataAdditional::findOne($key);
-                                $aditional->label = $value['label'];
-                                $aditional->value = $this->SingleDateFormat($value['value']);
-                                $aditional->comment = $value['comment'];
-                                $aditional->save();
-                        }
+                        $this->AddAditionalUpdate($_POST['updatee']);
                 }
+                /*
+                 * for delete additional data
+                 */
                 if (isset($_POST['delete_port_vals']) && $_POST['delete_port_vals'] != '') {
-                        //echo 'delete';exit;
-                        $vals = rtrim($_POST['delete_port_vals'], ',');
-                        $vals = explode(',', $vals);
-                        foreach ($vals as $val) {
-                                PortCallDataAdditional::findOne($val)->delete();
-                        }
+                        $this->AddAditionalDelete($_POST['delete_port_vals']);
                 }
                 return true;
         }
 
+        /*
+         * for create additional data
+         */
+
+        public function AddAditionalCreate($create, $model) {
+                $arr = [];
+                $i = 0;
+                foreach ($create['label'] as $val) {
+                        $arr[$i]['label'] = $val;
+                        $i++;
+                }
+                $i = 0;
+                foreach ($create['valuee'] as $val) {
+                        $arr[$i]['valuee'] = $val;
+                        $i++;
+                }
+                $i = 0;
+                foreach ($create['comment'] as $val) {
+                        $arr[$i]['comment'] = $val;
+                        $i++;
+                }
+                $this->SaveAddAitional($arr, $model);
+        }
+
+        /*
+         * for save add portcall data additional
+         */
+
+        public function SaveAddAitional($arr, $model) {
+                foreach ($arr as $val) {
+                        $aditional = new PortCallDataAdditional;
+                        $aditional->appointment_id = $model->appointment_id;
+                        $aditional->label = $val['label'];
+                        $aditional->value = Yii::$app->ChangeDateFormate->SingleDateFormat($val['valuee']);
+                        $aditional->comment = $val['comment'];
+                        $aditional->status = 1;
+                        $aditional->CB = Yii::$app->user->identity->id;
+                        $aditional->UB = Yii::$app->user->identity->id;
+                        $aditional->DOC = date('Y-m-d');
+                        if (!empty($aditional->label))
+                                $aditional->save();
+                }
+        }
+
+        /*
+         * for updating additional data
+         */
+
+        public function AddAditionalUpdate($update) {
+                $arr = [];
+                $i = 0;
+                foreach ($update as $key => $val) {
+                        $arr[$key]['label'] = $val['label'][0];
+                        $arr[$key]['value'] = $val['value'][0];
+                        $arr[$key]['comment'] = $val['comment'][0];
+                        $i++;
+                }
+                foreach ($arr as $key => $value) {
+                        $aditional = PortCallDataAdditional::findOne($key);
+                        $aditional->label = $value['label'];
+                        $aditional->value = Yii::$app->ChangeDateFormate->SingleDateFormat($value['value']);
+                        $aditional->comment = $value['comment'];
+                        $aditional->save();
+                }
+        }
+
+        /*
+         * for delete portcall data additional data
+         */
+
+        public function AddAditionalDelete($param) {
+                $vals = rtrim($param, ',');
+                $vals = explode(',', $vals);
+                foreach ($vals as $val) {
+                        PortCallDataAdditional::findOne($val)->delete();
+                }
+        }
+
+        /*
+         * for saving portcall data draft and rob
+         */
+
         public function SavePortcallDraftRob($model_rob, $model_draft) {
                 Yii::$app->SetValues->Attributes($model_draft);
                 Yii::$app->SetValues->Attributes($model_rob);
-                $this->dateformat($model_draft);
+                Yii::$app->ChangeDateFormate->DateFormat($model_draft);
                 $model_draft->save();
                 $model_rob->save();
         }
 
+        /*
+         * for add stages
+         */
+
         public function AddStages($model, $model_appointment) {
                 if (!empty($model->eta)) {
                         $model_appointment->stage = 1;
+                        $model_appointment->UB = Yii::$app->user->identity->id;
                         $model_appointment->save();
                 }
                 if (!empty($model->eosp)) {
                         if ($model_appointment->stage != 2 && $model_appointment->stage < 2) {
                                 $model_appointment->stage = 2;
+                                $model_appointment->UB = Yii::$app->user->identity->id;
                                 $model_appointment->save();
                         }
                 }
                 if (!empty($model->all_fast)) {
                         if ($model_appointment->stage != 3 && $model_appointment->stage < 3) {
                                 $model_appointment->stage = 3;
+                                $model_appointment->UB = Yii::$app->user->identity->id;
                                 $model_appointment->save();
                         }
                 }
                 if (!empty($model->cast_off)) {
                         if ($model_appointment->stage != 4 && $model_appointment->stage < 4) {
                                 $model_appointment->stage = 4;
+                                $model_appointment->UB = Yii::$app->user->identity->id;
                                 $model_appointment->save();
                         }
                 }
         }
 
+        /*
+         * Check all the port call data related tables are empty
+         * if empty set values an save
+         */
+
         public function Check($id, $model, $model_draft, $model_rob, $model_imigration) {
-                //echo 'hai';exit;
                 if ($model != null && $model_draft != null && $model_rob != null && $model_imigration != null && $model_port_cargo_details != null) {
                         return true;
                 } else {
@@ -309,12 +365,16 @@ class PortCallDataController extends Controller {
                 return $this->redirect(['index']);
         }
 
+        /*
+         * for complete portcall data and return to close estimate for further processig
+         */
+
         public function actionPortcallComplete($id) {
                 $appointment = Appointment::findOne($id);
                 $ports = PortCallData::findAll(['appointment_id' => $id]);
                 if (!empty($ports) && $appointment->stage == 4) {
-                        $appointment->stage = 5;
-//                        $appointment->sub_stages = 2;
+                        $appointment->stage = 6;
+                        $appointment->UB = Yii::$app->user->identity->id;
                         $appointment->save();
                         return $this->redirect(['/appointment/close-estimate/add', 'id' => $appointment->id]);
                 } else {
@@ -338,74 +398,9 @@ class PortCallDataController extends Controller {
                 }
         }
 
-        public function DateFormat($model) {
-                if (!empty($model)) {
-                        $a = ['id', 'appointment_id', 'additional_info', 'comments', 'status', 'type', 'data_id', 'label', 'CB', 'UB', 'DOC', 'fwd_arrival_unit', 'fwd_arrival_quantity', 'aft_arrival_unit',
-                            'aft_arrival_quantity', 'mean_arrival_unit', 'mean_arrival_quantity', 'fwd_sailing_unit', 'fwd_sailing_quantity', 'aft_sailing_unit', 'aft_sailing_quantity',
-                            'mean_sailing_unit', 'mean_sailing_quantity',];
-                        foreach ($model->attributes as $key => $dta) {
-                                if (!in_array($key, $a)) {
-                                        $model->$key = $this->SingleDateFormat($dta);
-                                }
-                        }
-                        return $model;
-                }
-        }
-
-        public function ChangeFormat($data) {
-
-                $day = substr($data, 0, 2);
-                $month = substr($data, 2, 2);
-                $year = substr($data, 4, 4);
-                $hour = substr($data, 9, 2) == '' ? '00' : substr($data, 9, 2);
-                $min = substr($data, 11, 2) == '' ? '00' : substr($data, 11, 2);
-                $sec = substr($data, 13, 2) == '' ? '00' : substr($data, 13, 2);
-                if ($hour != '00' && $min != '00' && $sec != '00') {
-                        //echo '1';exit;
-                        return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min . ':' . $sec;
-                } elseif ($hour == '00' && $min != '00') {
-                        //echo '2';exit;
-                        return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min;
-                } elseif ($hour != '00' && $min != '00') {
-                        //echo '2';exit;
-                        return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min;
-                } elseif ($hour != '00') {
-                        //echo '3';exit;
-                        return $year . '-' . $month . '-' . $day . ' ' . $hour . ':00';
-                } else {
-
-                        return $year . '-' . $month . '-' . $day;
-                }
-        }
-
-        public function SingleDateFormat($dta) {
-                if (strpos($dta, '-') == false) {
-
-                        if (strlen($dta) < 16 && strlen($dta) >= 8 && $dta != NULL)
-                                return $this->ChangeFormat($dta);
-                        //echo $model->$key;exit;
-                }else {
-                        $year = substr($dta, 0, 4);
-                        $month = substr($dta, 5, 2);
-                        $day = substr($dta, 8, 2);
-                        $hour = substr($dta, 11, 2) == '' ? '00' : substr($dta, 11, 2);
-                        $min = substr($dta, 14, 2) == '' ? '00' : substr($dta, 14, 2);
-                        $sec = substr($dta, 17, 2) == '' ? '00' : substr($dta, 17, 2);
-
-                        if ($hour != '00' && $min != '00' && $sec != '00') {
-                                return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min . ':' . $sec;
-                        } elseif ($hour == '00' && $min != '00') {
-                                //echo '2';exit;
-                                return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min;
-                        } elseif ($hour != '00' && $min != '00') {
-                                return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min;
-                        } elseif ($hour != '00') {
-                                return $year . '-' . $month . '-' . $day . ' ' . $hour . ':00';
-                        } else {
-                                return $year . '-' . $month . '-' . $day;
-                        }
-                }
-        }
+        /*
+         * for add port cargo details and port stoppages
+         */
 
         public function actionPortBreak() {
                 $id = $_POST['app_id'];
@@ -420,81 +415,120 @@ class PortCallDataController extends Controller {
                 }
 
                 if (isset($_POST['create']) && $_POST['create'] != '') {
-                        $arr = [];
-                        $i = 0;
-                        foreach ($_POST['create']['from'] as $val) {
-                                $arr[$i]['from'] = $val;
-                                $i++;
-                        }
-                        $i = 0;
-                        foreach ($_POST['create']['too'] as $val) {
-                                $arr[$i]['too'] = $val;
-                                $i++;
-                        }
-                        $i = 0;
-                        foreach ($_POST['create']['comment'] as $val) {
-                                $arr[$i]['comment'] = $val;
-                                $i++;
-                        }
-
-                        foreach ($arr as $val) {
-                                $port_stoppages = new PortStoppages;
-                                $port_stoppages->appointment_id = $id;
-                                $port_stoppages->stoppage_from = $this->SingleDateFormat($val['from']);
-                                $port_stoppages->stoppage_to = $this->SingleDateFormat($val['too']);
-                                $port_stoppages->comment = $val['comment'];
-                                $port_stoppages->status = 1;
-                                $port_stoppages->CB = Yii::$app->user->identity->id;
-                                $port_stoppages->UB = Yii::$app->user->identity->id;
-                                $port_stoppages->DOC = date('Y-m-d');
-                                if (!empty($port_stoppages->comment))
-                                        $port_stoppages->save();
-                        }
+                        $this->PortStoppageCreate($_POST['create'], $id);
                 }
                 if (isset($_POST['updatee']) && $_POST['updatee'] != '') {
-                        $arr = [];
-                        $i = 0;
-
-                        foreach ($_POST['updatee'] as $key => $val) {
-                                $arr[$key]['from'] = $val['from'][0];
-                                $arr[$key]['to'] = $val['to'][0];
-                                $arr[$key]['comment'] = $val['comment'][0];
-                                $i++;
-                        }
-                        foreach ($arr as $key => $value) {
-
-                                $port_stoppages = PortStoppages::findOne($key);
-                                $port_stoppages->stoppage_from = $this->SingleDateFormat($value['from']);
-                                $port_stoppages->stoppage_to = $this->SingleDateFormat($value['to']);
-                                $port_stoppages->comment = $value['comment'];
-                                if ($port_stoppages->comment != '') {
-                                        $port_stoppages->save();
-                                }
-                        }
+                        $this->PortStoppageUpdate($_POST['updatee']);
                 }
                 if (isset($_POST['delete_port_stoppages']) && $_POST['delete_port_stoppages'] != '') {
-                        $vals = rtrim($_POST['delete_port_stoppages'], ',');
-                        $vals = explode(',', $vals);
-                        foreach ($vals as $val) {
-                                PortStoppages::findOne($val)->delete();
-                        }
+                        $this->PortStoppageDelete($_POST['delete_port_stoppages']);
                 }
                 return $this->redirect(['update', 'id' => $id]);
         }
+
+        /*
+         * for save port cargo details
+         */
 
         public function SavePortCargoDetails($model_port_cargo_details, $id) {
                 $data = PortCallData::findOne(['appointment_id' => $id]);
                 $appointment = Appointment::findOne(['id' => $id]);
                 Yii::$app->SetValues->Attributes($model_port_cargo_details);
-                if(!empty($model_port_cargo_details->loaded_quantity)){
-                       $appointment->quantity = $model_port_cargo_details->loaded_quantity;
-                       $appointment->save();
+                if (!empty($model_port_cargo_details->loaded_quantity)) {
+                        $appointment->quantity = $model_port_cargo_details->loaded_quantity;
+                        $appointment->save();
                 }
                 $model_port_cargo_details->appointment_id = $id;
                 $model_port_cargo_details->port_call_id = $data->id;
                 $model_port_cargo_details->save();
                 return $model_port_cargo_details;
         }
+
+        /*
+         * for create port stoppages delay
+         */
+
+        public function PortStoppageCreate($create, $id) {
+                $arr = [];
+                $i = 0;
+                foreach ($create['from'] as $val) {
+                        $arr[$i]['from'] = $val;
+                        $i++;
+                }
+                $i = 0;
+                foreach ($create['too'] as $val) {
+                        $arr[$i]['too'] = $val;
+                        $i++;
+                }
+                $i = 0;
+                foreach ($create['comment'] as $val) {
+                        $arr[$i]['comment'] = $val;
+                        $i++;
+                }
+                $this->SavePortStoppage($arr, $id);
+        }
+
+        /*
+         * for save portstoppages delay
+         */
+
+        public function SavePortStoppage($arr, $id) {
+                foreach ($arr as $val) {
+                        $port_stoppages = new PortStoppages;
+                        $port_stoppages->appointment_id = $id;
+                        $port_stoppages->stoppage_from = Yii::$app->ChangeDateFormate->SingleDateFormat($val['from']);
+                        $port_stoppages->stoppage_to = Yii::$app->ChangeDateFormate->SingleDateFormat($val['too']);
+                        $port_stoppages->comment = $val['comment'];
+                        $port_stoppages->status = 1;
+                        $port_stoppages->CB = Yii::$app->user->identity->id;
+                        $port_stoppages->UB = Yii::$app->user->identity->id;
+                        $port_stoppages->DOC = date('Y-m-d');
+                        if (!empty($port_stoppages->comment))
+                                $port_stoppages->save();
+                }
+        }
+
+        /*
+         * for updating port stoppages delay
+         */
+
+        public function PortStoppageUpdate($update) {
+                $arr = [];
+                $i = 0;
+                foreach ($update as $key => $val) {
+                        $arr[$key]['from'] = $val['from'][0];
+                        $arr[$key]['to'] = $val['to'][0];
+                        $arr[$key]['comment'] = $val['comment'][0];
+                        $i++;
+                }
+                foreach ($arr as $key => $value) {
+
+                        $port_stoppages = PortStoppages::findOne($key);
+                        $port_stoppages->stoppage_from = Yii::$app->ChangeDateFormate->SingleDateFormat($value['from']);
+                        $port_stoppages->stoppage_to = Yii::$app->ChangeDateFormate->SingleDateFormat($value['to']);
+                        $port_stoppages->comment = $value['comment'];
+                        if ($port_stoppages->comment != '') {
+                                $port_stoppages->save();
+                        }
+                }
+        }
+
+        /*
+         * for delete port stoppages delay
+         */
+
+        public function PortStoppageDelete($param) {
+                $vals = rtrim($param, ',');
+                $vals = explode(',', $vals);
+                foreach ($vals as $val) {
+                        PortStoppages::findOne($val)->delete();
+                }
+        }
+
+        /*
+         * This functon called from 'report' view
+         * for find and seperate the fields into date with time and without time
+         */
 
         public function portcallReport($data, $label) {
                 $arr = [];
@@ -544,6 +578,10 @@ class PortCallDataController extends Controller {
                 return $arr;
         }
 
+        /*
+         * for upload files
+         */
+
         public function actionUploads() {
                 $model_upload = new UploadFile();
                 if ($model_upload->load(Yii::$app->request->post())) {
@@ -556,6 +594,10 @@ class PortCallDataController extends Controller {
                 }
         }
 
+        /*
+         * for generate SOF Report
+         */
+
         public function actionReports() {
                 $id = $_POST['app_id'];
                 $check = $_POST['check'];
@@ -566,9 +608,7 @@ class PortCallDataController extends Controller {
                 $ports_additional = PortCallDataAdditional::findAll(['appointment_id' => $id]);
                 $port_stoppages = PortStoppages::findAll(['appointment_id' => $id]);
                 $ports_imigration = ImigrationClearance::findOne(['appointment_id' => $id]);
-                // get your HTML raw content without any layouts or scripts
                 $appointment = Appointment::findOne($id);
-                //var_dump($appointment);exit;
                 echo $content = $this->renderPartial('report', [
             'appointment' => $appointment,
             'ports' => $ports,
@@ -581,36 +621,11 @@ class PortCallDataController extends Controller {
             'check' => $check,
                 ]);
                 exit;
-
-                // setup kartik\mpdf\Pdf component
-                $pdf = new Pdf([
-                    // set to use core fonts only
-                    //'mode' => Pdf::MODE_CORE,
-                    // A4 paper format
-                    'format' => Pdf::FORMAT_A4,
-                    // portrait orientation
-//                    'orientation' => Pdf::ORIENT_PORTRAIT,
-                    // stream to browser inline
-//                    'destination' => Pdf::DEST_BROWSER,
-                    // your html content input
-                    'content' => $content,
-                    // format content from your own css file if needed or use the
-                    // enhanced bootstrap css built by Krajee for mPDF formatting 
-                    'cssFile' => '@backend/web/css/pdf.css',
-                        // any css to be embedded if required
-                        //'cssInline' => '.kv-heading-1{font-size:18px}',
-                        // set mPDF properties on the fly
-                        //'options' => ['title' => 'Krajee Report Title'],
-                        // call mPDF methods on the fly
-                        /*                    'methods' => [
-                          'SetHeader' => ['Estimated proforma generated on ' . date("d/m/Y h:m:s")],
-                          'SetFooter' => ['|page {PAGENO}'],
-                          ] */
-                ]);
-
-                // return the pdf output as per the destination setting
-                return $pdf->render();
         }
+
+        /*
+         * for generating Sailing Report
+         */
 
         public function actionSailing($id) {
                 $ports = PortCallData::findOne(['appointment_id' => $id]);
@@ -620,7 +635,6 @@ class PortCallDataController extends Controller {
                 $ports_additional = PortCallDataAdditional::findAll(['appointment_id' => $id]);
                 $port_stoppages = PortStoppages::findAll(['appointment_id' => $id]);
                 $ports_imigration = ImigrationClearance::findOne(['appointment_id' => $id]);
-                // get your HTML raw content without any layouts or scripts
                 $appointment = Appointment::findOne($id);
                 echo $content = $this->renderPartial('sailing_report', [
             'appointment' => $appointment,
@@ -633,35 +647,11 @@ class PortCallDataController extends Controller {
             'ports_imigration' => $ports_imigration,
                 ]);
                 exit;
-                // setup kartik\mpdf\Pdf component
-                $pdf = new Pdf([
-                    // set to use core fonts only
-                    //'mode' => Pdf::MODE_CORE,
-                    // A4 paper format
-                    'format' => Pdf::FORMAT_A4,
-                    // portrait orientation
-//                    'orientation' => Pdf::ORIENT_PORTRAIT,
-                    // stream to browser inline
-//                    'destination' => Pdf::DEST_BROWSER,
-                    // your html content input
-                    'content' => $content,
-                    // format content from your own css file if needed or use the
-                    // enhanced bootstrap css built by Krajee for mPDF formatting 
-                    'cssFile' => '@backend/web/css/pdf.css',
-                        // any css to be embedded if required
-                        //'cssInline' => '.kv-heading-1{font-size:18px}',
-                        // set mPDF properties on the fly
-                        //'options' => ['title' => 'Krajee Report Title'],
-                        // call mPDF methods on the fly
-                        /*                    'methods' => [
-                          'SetHeader' => ['Estimated proforma generated on ' . date("d/m/Y h:m:s")],
-                          'SetFooter' => ['|page {PAGENO}'],
-                          ] */
-                ]);
-
-                // return the pdf output as per the destination setting
-                return $pdf->render();
         }
+
+        /*
+         * for generate Arrival Report
+         */
 
         public function actionArrival($id) {
                 $ports = PortCallData::findOne(['appointment_id' => $id]);
@@ -671,7 +661,6 @@ class PortCallDataController extends Controller {
                 $ports_additional = PortCallDataAdditional::findAll(['appointment_id' => $id]);
                 $port_stoppages = PortStoppages::findAll(['appointment_id' => $id]);
                 $port_imigration = ImigrationClearance::findAll(['appointment_id' => $id]);
-                // get your HTML raw content without any layouts or scripts
                 $appointment = Appointment::findOne($id);
                 echo $content = $this->renderPartial('arrival_report', [
             'appointment' => $appointment,
@@ -684,38 +673,16 @@ class PortCallDataController extends Controller {
             'port_imigration' => $port_imigration,
                 ]);
                 exit;
-                // setup kartik\mpdf\Pdf component
-                $pdf = new Pdf([
-                    // set to use core fonts only
-                    //'mode' => Pdf::MODE_CORE,
-                    // A4 paper format
-                    'format' => Pdf::FORMAT_A4,
-                    // portrait orientation
-//                    'orientation' => Pdf::ORIENT_PORTRAIT,
-                    // stream to browser inline
-//                    'destination' => Pdf::DEST_BROWSER,
-                    // your html content input
-                    'content' => $content,
-                    // format content from your own css file if needed or use the
-                    // enhanced bootstrap css built by Krajee for mPDF formatting 
-                    'cssFile' => '@backend/web/css/pdf.css',
-                        // any css to be embedded if required
-                        //'cssInline' => '.kv-heading-1{font-size:18px}',
-                        // set mPDF properties on the fly
-                        //'options' => ['title' => 'Krajee Report Title'],
-                        // call mPDF methods on the fly
-                        /*                    'methods' => [
-                          'SetHeader' => ['Estimated proforma generated on ' . date("d/m/Y h:m:s")],
-                          'SetFooter' => ['|page {PAGENO}'],
-                          ] */
-                ]);
-
-                // return the pdf output as per the destination setting
-                return $pdf->render();
         }
 
+        /*
+         * for remove uploaded file path
+         */
+
         public function actionRemove($path) {
-                unlink($path);
+                if (Yii::$app->session['post']['id'] == 1) {
+                        unlink($path);
+                }
                 return $this->redirect(Yii::$app->request->referrer);
         }
 

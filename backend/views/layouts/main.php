@@ -67,131 +67,154 @@ AppAsset::register($this);
 
                                         </header>
                                         <ul id="main-menu" class="main-menu">
-                                                <li >
-                                                        <a href="">
-                                                                <i class="linecons-cog"></i>
-                                                                <span class="title">Administration</span>
-                                                        </a>
-                                                        <ul>
-                                                                <li>
-                                                                        <?= Html::a('Access Powers', ['/admin/admin-posts/index'], ['class' => 'title']) ?>
-                                                                </li>
-                                                                <li>
-                                                                        <?= Html::a('Employees', ['/admin/employee/index'], ['class' => 'title']) ?>
-                                                                </li>
-                                                                <li>
-                                                                        <?= Html::a('Branches', ['/admin/branch/index'], ['class' => 'title']) ?>
-                                                                </li>
-                                                        </ul>
-                                                </li>
+                                                <?php
+                                                if (Yii::$app->session['post']['admin'] == 1) {
+                                                        ?>
+                                                        <li>
+                                                                <a href="">
+                                                                        <i class="linecons-cog"></i>
+                                                                        <span class="title">Administration</span>
+                                                                </a>
+                                                                <ul>
+                                                                        <li>
+                                                                                <?= Html::a('Access Powers', ['/admin/admin-posts/index'], ['class' => 'title']) ?>
+                                                                        </li>
+                                                                        <li>
+                                                                                <?= Html::a('Employees', ['/admin/employee/index'], ['class' => 'title']) ?>
+                                                                        </li>
+                                                                        <li>
+                                                                                <?= Html::a('Branches', ['/admin/branch/index'], ['class' => 'title']) ?>
+                                                                        </li>
+                                                                </ul>
+                                                        </li>
+                                                        <?php
+                                                }
+                                                ?>
+                                                <?php
+                                                if (Yii::$app->session['post']['appointments'] == 1) {
+                                                        ?>
+                                                        <li>
+                                                                <a href="">
+                                                                        <i class="fa fa-file"></i>
+                                                                        <span class="title">Appointments</span>
+                                                                </a>
+                                                                <ul>
+                                                                        <li>
+                                                                                <?= Html::a('Appointmets', ['/appointment/appointment/index'], ['class' => 'title']) ?>
+                                                                        </li>
+                                                                        <li>
+                                                                                <?= Html::a('File Uploads', ['/appointment/uploads/index'], ['class' => 'title']) ?>
+                                                                        </li>
+                                                                        <li>
+                                                                                <?= Html::a('Reports', ['/appointment/report/index'], ['class' => 'title']) ?>
+                                                                        </li>
+                                                                        <li>
+                                                                                <?= Html::a('Search', ['/appointment/appointment/search'], ['class' => 'title']) ?>
+                                                                        </li>
+                                                                        <!--                                                                <li>
+                                                                        <?php // Html::a('Reports', ['/appointment/appointment/report'], ['class' => 'title']) ?>
+                                                                                                                                        </li>-->
+                                                                        <!--                               <li>
+                                                                        <?php // Html::a('Test', ['/appointment/test/index'], ['class' => 'title']) ?>
+                                                                                                     </li>
+                                                                                                    <li>
+                                                                        <?php // Html::a('Estimated Proforma', ['/appointment/estimated-proforma/index'], ['class' => 'title']) ?>
+                                                                                                     </li>
+                                                                                                     <li>
+                                                                        <?php // Html::a('Port Call Data', ['/appointment/port-call-data/index'], ['class' => 'title']) ?>
+                                                                                                     </li>
+                                                                                                     <li>
+                                                                        <?php // Html::a('Close estimate', ['/appointment/close-estimate/index'], ['class' => 'title']) ?>
+                                                                                                     </li>-->
+                                                                </ul>
+                                                        </li>
+                                                        <?php
+                                                }
+                                                ?>
+                                                <?php
+                                                if (Yii::$app->session['post']['funding_allocation'] == 1) {
+                                                        ?>
 
-                                                <li>
-                                                        <a href="">
-                                                                <i class="fa fa-file"></i>
-                                                                <span class="title">Appointments</span>
-                                                        </a>
-                                                        <ul>
-                                                                <li>
-                                                                        <?= Html::a('Appointmets', ['/appointment/appointment/index'], ['class' => 'title']) ?>
-                                                                </li>
-                                                                <li>
-                                                                        <?= Html::a('File Uploads', ['/appointment/uploads/index'], ['class' => 'title']) ?>
-                                                                </li>
-                                                                <li>
-                                                                        <?= Html::a('Reports', ['/appointment/report/index'], ['class' => 'title']) ?>
-                                                                </li>
-                                                                <li>
-                                                                        <?= Html::a('Search', ['/appointment/appointment/search'], ['class' => 'title']) ?>
-                                                                </li>
-                                                                <!--                                                                <li>
-                                                                <?php // Html::a('Reports', ['/appointment/appointment/report'], ['class' => 'title']) ?>
-                                                                                                                                </li>-->
-                                                                <!--                               <li>
-                                                                <?php // Html::a('Test', ['/appointment/test/index'], ['class' => 'title']) ?>
-                                                                                             </li>
-                                                                                            <li>
-                                                                <?php // Html::a('Estimated Proforma', ['/appointment/estimated-proforma/index'], ['class' => 'title']) ?>
-                                                                                             </li>
-                                                                                             <li>
-                                                                <?php // Html::a('Port Call Data', ['/appointment/port-call-data/index'], ['class' => 'title']) ?>
-                                                                                             </li>
-                                                                                             <li>
-                                                                <?php // Html::a('Close estimate', ['/appointment/close-estimate/index'], ['class' => 'title']) ?>
-                                                                                             </li>-->
-                                                        </ul>
-                                                </li>
+                                                        <li>
+                                                                <a href="">
+                                                                        <i class="fa fa-credit-card"></i>
+                                                                        <span class="title">Funding Allocation</span>
+                                                                </a>
+                                                                <ul>
+                                                                        <li>
+                                                                                <?= Html::a('Fund Allocation', ['/funding/funding-allocation/index'], ['class' => 'title']) ?>
+                                                                        </li>
 
-                                                <li>
-                                                        <a href="">
-                                                                <i class="fa fa-credit-card"></i>
-                                                                <span class="title">Funding Allocation</span>
-                                                        </a>
-                                                        <ul>
-                                                                <li>
-                                                                        <?= Html::a('Fund Allocation', ['/funding/funding-allocation/index'], ['class' => 'title']) ?>
-                                                                </li>
+                                                                </ul>
+                                                        </li>
+                                                        <?php
+                                                }
+                                                ?>
+                                                <?php
+                                                if (Yii::$app->session['post']['masters'] == 1) {
+                                                        ?>
 
-                                                        </ul>
-                                                </li>
+                                                        <li>
+                                                                <a href="">
+                                                                        <i class="fa fa-database"></i>
+                                                                        <span class="title">Masters</span>
+                                                                </a>
+                                                                <ul>
+                                                                        <li>
+                                                                                <?= Html::a('Contacts', ['/masters/contacts/index'], ['class' => 'title']) ?>
+                                                                        </li>
+                                                                        <li>
+                                                                                <?= Html::a('Debtor', ['/masters/debtor/index'], ['class' => 'title']) ?>
+                                                                        </li>
+                                                                        <li>
+                                                                                <?= Html::a('Ports', ['/masters/ports/index'], ['class' => 'title']) ?>
+                                                                        </li>
+                                                                        <li>
+                                                                                <?= Html::a('Purpose', ['/masters/purpose/index'], ['class' => 'title']) ?>
+                                                                        </li>
 
-                                                <li>
-                                                        <a href="">
-                                                                <i class="fa fa-database"></i>
-                                                                <span class="title">Masters</span>
-                                                        </a>
-                                                        <ul>
-                                                                <li>
-                                                                        <?= Html::a('Contacts', ['/masters/contacts/index'], ['class' => 'title']) ?>
-                                                                </li>
-                                                                <li>
-                                                                        <?= Html::a('Debtor', ['/masters/debtor/index'], ['class' => 'title']) ?>
-                                                                </li>
-                                                                <li>
-                                                                        <?= Html::a('Ports', ['/masters/ports/index'], ['class' => 'title']) ?>
-                                                                </li>
-                                                                <li>
-                                                                        <?= Html::a('Purpose', ['/masters/purpose/index'], ['class' => 'title']) ?>
-                                                                </li>
+                                                                        <li>
+                                                                                <?= Html::a('Invoice Type', ['/masters/invoice-type/index'], ['class' => 'title']) ?>
+                                                                        </li>
+                                                                        <li>
+                                                                                <?= Html::a('Services', ['/masters/services/index'], ['class' => 'title']) ?>
+                                                                        </li>
+                                                                        <li>
+                                                                                <?= Html::a(' Master Sub Services', ['/masters/master-sub-service/index'], ['class' => 'title']) ?>
+                                                                        </li>
+                                                                        <li>
+                                                                                <?= Html::a('Service Categories', ['/masters/service-categorys/index'], ['class' => 'title']) ?>
+                                                                        </li>
+                                                                        <!--                                                                        <li>
+                                                                        <?php // Html::a('Stages', ['/masters/stages/index'], ['class' => 'title']) ?>
+                                                                                                                                                </li>-->
+                                                                        <!--                                                                        <li>
+                                                                        <?php // Html::a('Stage Categories', ['/masters/stage-categorys/index'], ['class' => 'title']) ?>
+                                                                                                                                                </li>-->
+                                                                        <li>
+                                                                                <?= Html::a('Vessel', ['/masters/vessel/index'], ['class' => 'title']) ?>
+                                                                        </li>
+                                                                        <li>
+                                                                                <?= Html::a('Vessel Types', ['/masters/vessel-type/index'], ['class' => 'title']) ?>
+                                                                        </li>
+                                                                        <li>
+                                                                                <?= Html::a('Terminals', ['/masters/terminal/index'], ['class' => 'title']) ?>
+                                                                        </li>
+                                                                        <li>
+                                                                                <?= Html::a('Units', ['/masters/units/index'], ['class' => 'title']) ?>
+                                                                        </li>
+                                                                        <li>
+                                                                                <?= Html::a('Currency', ['/masters/currency/index'], ['class' => 'title']) ?>
+                                                                        </li>
+                                                                        <li>
+                                                                                <?= Html::a('Uploads', ['/masters/uploads/index'], ['class' => 'title']) ?>
+                                                                        </li>
 
-                                                                <li>
-                                                                        <?= Html::a('Invoice Type', ['/masters/invoice-type/index'], ['class' => 'title']) ?>
-                                                                </li>
-                                                                <li>
-                                                                        <?= Html::a('Services', ['/masters/services/index'], ['class' => 'title']) ?>
-                                                                </li>
-                                                                <li>
-                                                                        <?= Html::a(' Master Sub Services', ['/masters/master-sub-service/index'], ['class' => 'title']) ?>
-                                                                </li>
-                                                                <li>
-                                                                        <?= Html::a('Service Categories', ['/masters/service-categorys/index'], ['class' => 'title']) ?>
-                                                                </li>
-                                                                <li>
-                                                                        <?= Html::a('Stages', ['/masters/stages/index'], ['class' => 'title']) ?>
-                                                                </li>
-                                                                <li>
-                                                                        <?= Html::a('Stage Categories', ['/masters/stage-categorys/index'], ['class' => 'title']) ?>
-                                                                </li>
-                                                                <li>
-                                                                        <?= Html::a('Vessel', ['/masters/vessel/index'], ['class' => 'title']) ?>
-                                                                </li>
-                                                                <li>
-                                                                        <?= Html::a('Vessel Types', ['/masters/vessel-type/index'], ['class' => 'title']) ?>
-                                                                </li>
-                                                                <li>
-                                                                        <?= Html::a('Terminals', ['/masters/terminal/index'], ['class' => 'title']) ?>
-                                                                </li>
-                                                                <li>
-                                                                        <?= Html::a('Units', ['/masters/units/index'], ['class' => 'title']) ?>
-                                                                </li>
-                                                                <li>
-                                                                        <?= Html::a('Currency', ['/masters/currency/index'], ['class' => 'title']) ?>
-                                                                </li>
-                                                                <li>
-                                                                        <?= Html::a('Uploads', ['/masters/uploads/index'], ['class' => 'title']) ?>
-                                                                </li>
-
-                                                        </ul>
-                                                </li>
+                                                                </ul>
+                                                        </li>
+                                                        <?php
+                                                }
+                                                ?>
                                         </ul>
 
                                 </div>

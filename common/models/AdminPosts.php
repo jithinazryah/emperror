@@ -23,56 +23,54 @@ use Yii;
  *
  * @property Employee[] $employees
  */
-class AdminPosts extends \yii\db\ActiveRecord
-{
-    /**
-     * @inheritdoc
-     */
-    public static function tableName()
-    {
-        return 'admin_posts';
-    }
+class AdminPosts extends \yii\db\ActiveRecord {
 
-    /**
-     * @inheritdoc
-     */
-    public function rules()
-    {
-        return [
-            [['post_name'], 'required'],
-            [['admin', 'masters', 'appointments', 'estimated_proforma', 'port_call_data', 'close_estimate', 'status', 'CB', 'UB'], 'integer'],
-            [['DOC', 'DOU'], 'safe'],
-            [['post_name'], 'string', 'max' => 100],
-        ];
-    }
+        /**
+         * @inheritdoc
+         */
+        public static function tableName() {
+                return 'admin_posts';
+        }
 
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'id' => 'ID',
-            'post_name' => 'Post Name',
-            'admin' => 'Admin',
-            'masters' => 'Masters',
-            'appointments' => 'Appointments',
-            'estimated_proforma' => 'Estimated Proforma',
-            'port_call_data' => 'Port Call Data',
-            'close_estimate' => 'Close Estimate',
-            'status' => 'Status',
-            'CB' => 'Cb',
-            'UB' => 'Ub',
-            'DOC' => 'Doc',
-            'DOU' => 'Dou',
-        ];
-    }
+        /**
+         * @inheritdoc
+         */
+        public function rules() {
+                return [
+                        [['post_name'], 'required'],
+                        [['admin', 'masters', 'appointments', 'estimated_proforma', 'port_call_data', 'close_estimate', 'status', 'CB', 'UB', 'funding_allocation'], 'integer'],
+                        [['DOC', 'DOU'], 'safe'],
+                        [['post_name'], 'string', 'max' => 100],
+                ];
+        }
 
-    /**
-     * @return \yii\db\ActiveQuery
-     */
-    public function getEmployees()
-    {
-        return $this->hasMany(Employee::className(), ['post_id' => 'id']);
-    }
+        /**
+         * @inheritdoc
+         */
+        public function attributeLabels() {
+                return [
+                    'id' => 'ID',
+                    'post_name' => 'Post Name',
+                    'admin' => 'Admin',
+                    'masters' => 'Masters',
+                    'appointments' => 'Appointments',
+                    'estimated_proforma' => 'Estimated Proforma',
+                    'port_call_data' => 'Port Call Data',
+                    'close_estimate' => 'Close Estimate',
+                    'funding_allocation' => 'Fund Allocation',
+                    'status' => 'Status',
+                    'CB' => 'Cb',
+                    'UB' => 'Ub',
+                    'DOC' => 'Doc',
+                    'DOU' => 'Dou',
+                ];
+        }
+
+        /**
+         * @return \yii\db\ActiveQuery
+         */
+        public function getEmployees() {
+                return $this->hasMany(Employee::className(), ['post_id' => 'id']);
+        }
+
 }

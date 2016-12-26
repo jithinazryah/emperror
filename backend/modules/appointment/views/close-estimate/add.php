@@ -10,6 +10,7 @@ use common\models\CloseEstimate;
 use common\models\Debtor;
 use common\models\InvoiceType;
 use common\models\Vessel;
+use common\models\Employee;
 use common\models\FdaReport;
 use common\models\InvoiceNumber;
 use yii\helpers\ArrayHelper;
@@ -19,9 +20,10 @@ use common\components\AppointmentWidget;
 /* @var $this yii\web\View */
 /* @var $model common\models\EstimatedProforma */
 
-$this->title = 'Create Close Estimte';
-$this->params['breadcrumbs'][] = ['label' => 'Close Estimte', 'url' => ['index']];
+$this->title = 'Create Close Estimate';
+$this->params['breadcrumbs'][] = ['label' => 'Close Estimate', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+$token = Yii::$app->request->get('token');
 ?>
 
 <div class="row">
@@ -80,7 +82,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //                                                                        if ($value->invoice_type != '') {
 //                                                                                $data = InvoiceType::findOne(['id' => $value->invoice_type]);
                                                 ?>
-                                                                                                                                <!--<option value="<?php // $value->invoice_type                                                        ?>"><?php // $data->invoice_type                                                        ?></option>-->
+                                                                                                                                <!--<option value="<?php // $value->invoice_type                                                                                                                                                                                                                                                                                                                                                                                                               ?>"><?php // $data->invoice_type                                                                                                                                                                                                                                                                                                                                                                                                               ?></option>-->
                                                 <?php
 //                                                                        }
 //                                                                }
@@ -258,7 +260,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                                                 ?>
                                                                                         </span>
                                                                                 </td>-->
-                                                                                <!--<td><?php // $estimate->total;                                                                                                                                                                                                                    ?></td>-->
+                                                                                <!--<td><?php // $estimate->total;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ?></td>-->
                                                                                 <td><span class="edit_dropdown" drop_id="closeestimate-invoice_type" id="<?= $estimate->id ?>-invoice_type" val="<?= $estimate->invoice_type ?>">
                                                                                                 <?php
                                                                                                 if ($estimate->invoice_type == '') {
@@ -335,7 +337,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                                         <td style="font-weight: bold;"><?php echo Yii::$app->SetValues->NumberFormat($epdatotal) . '/-'; ?></td>
                                                                         <td style="font-weight: bold;"><?php echo Yii::$app->SetValues->NumberFormat($fdatotal) . '/-'; ?>
                                                                         <td></td>
-                                                                        <!--<td style="font-weight: bold;"><?php //echo $grandtotal . '/-';                                                                                                                                                                                                                     ?></td>-->
+                                                                        <!--<td style="font-weight: bold;"><?php //echo $grandtotal . '/-';                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             ?></td>-->
                                                                         <td colspan=""></td>
                                                                         <td colspan=""></td>
                                                                         <td colspan=""></td>
@@ -350,14 +352,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                                                         <td></td>
                                                                         <td><?= $form->field($model, 'service_id')->dropDownList(ArrayHelper::map(Services::findAll(['status' => 1]), 'id', 'service'), ['prompt' => '-Service-'])->label(false); ?></td>
                                                                         <td><?= $form->field($model, 'supplier')->dropDownList(ArrayHelper::map(Contacts::find()->where(new Expression('FIND_IN_SET(:contact_type, contact_type)'))->addParams([':contact_type' => 4])->all(), 'id', 'name'), ['prompt' => '-Supplier-'])->label(false); ?></td>
-                                        <!--                                <td><?php // $form->field($model, 'supplier')->dropDownList(ArrayHelper::map(Contacts::findAll(['status' => 1]), 'id', 'name'), ['prompt' => '-Supplier-'])->label(false);                                                                                                                                                                                                                                                        ?></td>-->
-                                        <!--                                                                <td><?php // $form->field($model, 'currency')->dropDownList(ArrayHelper::map(Currency::findAll(['status' => 1]), 'id', 'currency_name'), ['prompt' => '-Currency-'])->label(false);                                                                                                                                                                                                                                                             ?></td>-->
+                                        <!--                                <td><?php // $form->field($model, 'supplier')->dropDownList(ArrayHelper::map(Contacts::findAll(['status' => 1]), 'id', 'name'), ['prompt' => '-Supplier-'])->label(false);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                ?></td>-->
+                                        <!--                                                                <td><?php // $form->field($model, 'currency')->dropDownList(ArrayHelper::map(Currency::findAll(['status' => 1]), 'id', 'currency_name'), ['prompt' => '-Currency-'])->label(false);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     ?></td>-->
                                                                         <td><?= $form->field($model, 'unit_rate')->textInput(['placeholder' => 'Unit Rate'])->label(false) ?></td>
                                                                         <td><?= $form->field($model, 'unit')->textInput(['placeholder' => 'Quantity'])->label(false) ?></td>
                                                                         <td><?= $form->field($model, 'epda')->textInput(['placeholder' => 'EPDA'])->label(false) ?></td>
                                                                         <td><?= $form->field($model, 'fda')->textInput(['placeholder' => 'FDA'])->label(false) ?></td>
-                                                                        <!--<td><?php // $form->field($model, 'payment_type')->dropDownList(['1' => 'Manual', '2' => 'Check'], ['prompt' => '-Payment Type-'])->label(false)                                                                                                                                                    ?></td>-->
-                                                                        <!--<td><?php // $form->field($model, 'total')->textInput(['placeholder' => 'TOTAL'])->label(false)                                                                                                                                                                                                                     ?></td>-->
+                                                                        <!--<td><?php // $form->field($model, 'payment_type')->dropDownList(['1' => 'Manual', '2' => 'Check'], ['prompt' => '-Payment Type-'])->label(false)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            ?></td>-->
+                                                                        <!--<td><?php // $form->field($model, 'total')->textInput(['placeholder' => 'TOTAL'])->label(false)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             ?></td>-->
                                                                         <td><?= $form->field($model, 'invoice_type')->dropDownList(ArrayHelper::map(InvoiceType::findAll(['status' => 1]), 'id', 'invoice_type'), ['prompt' => '-Invoice Type-'])->label(false); ?></td>
                                                                         <?php
                                                                         $arr1 = explode(',', $appointment->principal);
@@ -395,8 +397,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
                                                 </table>
                                                 <br/>
-                                                <hr class="appoint_history" />
-                                                <div style="margin-left: 46%;">
+
+                                                <div style="float: left;margin-left: 46%;">
                                                         <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data'], 'action' => Yii::$app->homeUrl . 'appointment/close-estimate/uploads', 'method' => 'post']) ?>
                                                         <?php
                                                         $model_upload->appointment_id = $appointment->id;
@@ -410,77 +412,103 @@ $this->params['breadcrumbs'][] = $this->title;
 
                                                         <?php ActiveForm::end() ?>
                                                 </div>
+                                                <br/><br/>
+                                                <!--                                                <hr class="appoint_history" />-->
+                                                <div class="row">
+
+                                                        <div class="col-md-12" style="margin-left: 30px;">
+                                                                <hr class="appoint_history" />
+                                                                <h4 class="sub-heading" style="text-decoration:underline;">Previously Generated FDA'S</h4>
+                                                                <br/>
+                                                                <?php
+                                                                $estmate_reports = InvoiceNumber::findAll(['appointment_id' => $appointment->id]);
+                                                                ?>
+                                                                <?php
+                                                                foreach ($estmate_reports as $estmate_report) {
+                                                                        $invoice_number = InvoiceType::findOne($estmate_report->invoice_type)->invoice_type . '-' . $estmate_report->sub_invoice;
+                                                                        ?>
+                                                                        <div class="row" style="width: 180px;display: inline-block;">
+                                                                                <div class="upload_file_list" style="float:left;margin-right: 5px;height: 55px;">
+                                                                                        <div>
+                                                                                                <span class=""><?php echo Html::a($invoice_number, ['/appointment/close-estimate/show-report'], ['onclick' => "window.open('show-report?id=$estmate_report->id', 'newwindow', 'width=750, height=500');return false;"]) . '&nbsp;&nbsp;'; ?>
+                                                                                                </span>
+                                                                                        </div>
+                                                                                        <div>
+                                                                                                <?= Employee::findOne($estmate_report->CB)->user_name; ?>
+
+                                                                                        </div>
+                                                                                </div>
+                                                                                <div class="upload_file_list" style="float:left;height: 55px;">
+                                                                                        <div>
+                                                                                                <span style="font-size: 20px;"><?= Html::a('<i class="fa fa-remove"></i>', ['/appointment/close-estimate/remove-report', 'id' => $estmate_report->id, 'est_id' => $estmate_report->estimate_id], ['class' => '']) ?></span>
+                                                                                        </div>
+                                                                                </div>
+                                                                        </div>
+                                                                        <?php
+                                                                }
+                                                                ?>
+                                                                <?php
+                                                                $estmate_all_reports = FdaReport::findAll(['appointment_id' => $appointment->id]);
+                                                                ?>
+                                                                <?php
+                                                                foreach ($estmate_all_reports as $estmate_all_report) {
+//                                                                        $invoice_number = InvoiceType::findOne($estmate_report->invoice_type)->invoice_type . '-' . $estmate_report->sub_invoice;
+                                                                        ?>
+                                                                        <div class="row" style="width: 170px;display: inline-block;">
+                                                                                <div class="upload_file_list" style="float:left;margin-right: 5px;height: 55px;">
+                                                                                        <div>
+                                                                                                <span class=""><?php echo Html::a($estmate_all_report->invoice_number, ['/appointment/close-estimate/show-all-report'], ['onclick' => "window.open('show-all-report?id=$estmate_all_report->id', 'newwindow', 'width=1200, height=500');return false;"]) . '&nbsp;&nbsp;'; ?>
+                                                                                                </span>
+                                                                                        </div>
+                                                                                        <div>
+                                                                                                <?= Employee::findOne($estmate_all_report->CB)->user_name; ?>
+                                                                                        </div>
+                                                                                </div>
+                                                                                <div class="upload_file_list" style="float:left;height: 55px;">
+                                                                                        <div>
+                                                                                                <span style="font-size: 20px;"><?= Html::a('<i class="fa fa-remove"></i>', ['/appointment/close-estimate/remove-all-report', 'id' => $estmate_all_report->id], ['class' => '']) ?></span>
+                                                                                        </div>
+                                                                                </div>
+                                                                        </div>
+                                                                        <?php
+                                                                }
+                                                                ?>
+
+                                                        </div>
+                                                </div>
                                                 <br/>
                                                 <hr class="appoint_history" />
-                                                <div style="text-align: center;">
-                                                        <h4 class="sub-heading">Previously Generated EPDA'S</h4>
-                                                        <?php
-                                                        $estmate_reports = InvoiceNumber::findAll(['appointment_id' => $appointment->id]);
-                                                        ?>
-                                                        <?php foreach ($estmate_reports as $estmate_report) { ?>
-                                                                <span class="upload_file_list"><?php echo Html::a($estmate_report->date_time, ['/appointment/close-estimate/show-report'], ['onclick' => "window.open('show-report?id=$estmate_report->id', 'newwindow', 'width=750, height=500');return false;"]) . '&nbsp;&nbsp;<a href="remove-report?id=' . $estmate_report->id . '"><i class="fa fa-remove"></i></a>'; ?></span>
+                                                <div class="row">
+                                                        <div class="col-md-12">
+                                                                <h4 class="sub-heading" style="text-decoration:underline;">Uploaded Files</h4>
+                                                                <br/>
+                                                                <div style="margin-left:30px;">
+                                                                        <?php
+                                                                        if (!empty(Yii::$app->UploadFile->ListFile($appointment->id, Yii::$app->params['closePath']))) {
+                                                                                $string = Yii::$app->UploadFile->ListFile($appointment->id, Yii::$app->params['closePath']);
+                                                                                $uploads = explode("|", $string);
+                                                                                array_pop($uploads);
+                                                                                foreach ($uploads as $upload) {
+                                                                                        ?>
+                                                                                        <span class="upload_file_list"><?= $upload ?></span>
+                                                                                        <?php
+                                                                                }
+                                                                        }
+                                                                        ?>
+                                                                </div>
+                                                        </div>
+                                                </div>
+
+                                                <div style="float:right;padding-top: 5px;">
+                                                        <?php if ($token == 1) { ?>
+                                                                <button class="btn btn-red">Closed</button>
                                                                 <?php
+                                                        } else {
+                                                                echo Html::a('<span> Close Estimate Completed</span>', ['close-estimate/estimate-complete', 'id' => $appointment->id], ['class' => 'btn btn-secondary']);
                                                         }
                                                         ?>
 
                                                 </div>
-                                                <hr class="appoint_history" />
-                                                <div class="display-uploads" style="margin-bottom: 25px;">
-                                                        <div class="row" style="display:inline-block">
-                                                                <div class="col-md-4" style="float:left;text-align: center;">
-                                                                        <table>
-                                                                                <tr>
-                                                                                        <td style="border: 1px solid black;"><h4 class="sub-heading">Previously Generated FDA'S</h4></td>
-                                                                                </tr>
-                                                                                <?php
-//                                                                                $estmate_reports = InvoiceNumber::findAll(['appointment_id' => $appointment->id]);
-                                                                                ?>
-                                                                                <?php foreach ($estmate_reports as $estmate_report) { ?>
-                                                                                        <tr>
-                                                                                                <td style="border: 1px solid black;padding: 10px;">
-                                                                                                        <?php echo Html::a($estmate_report->date_time, ['/appointment/close-estimate/show-report'], ['onclick' => "window.open('show-report?id=$estmate_report->id', 'newwindow', 'width=750, height=500');return false;"]) . '&nbsp;&nbsp;<a href="remove-report?id=' . $estmate_report->id . '&&est_id=' . $estmate_report->estimate_id . '"><i class="fa fa-remove"></i></a>'; ?>
-                                                                                                </td>
-                                                                                        </tr>
-                                                                                        <?php
-                                                                                }
-                                                                                ?>
-                                                                                <?php
-                                                                                $estmate_all_reports = FdaReport::findAll(['appointment_id' => $appointment->id]);
-                                                                                ?>
-                                                                                <?php foreach ($estmate_all_reports as $estmate_all_report) { ?>
-                                                                                        <tr>
-                                                                                                <td style="border: 1px solid black;padding: 10px;">
-                                                                                                        <?php echo Html::a($estmate_all_report->invoice_number, ['/appointment/close-estimate/show-all-report'], ['onclick' => "window.open('show-all-report?id=$estmate_all_report->id', 'newwindow', 'width=1200, height=500');return false;"]) . '&nbsp;&nbsp;<a href="remove-all-report?id=' . $estmate_all_report->id . '"><i class="fa fa-remove"></i></a>'; ?>
-                                                                                                </td>
-                                                                                        </tr>
-                                                                                        <?php
-                                                                                }
-                                                                                ?>
-
-                                                                        </table>
-                                                                </div>
-                                                                <div class="col-md-8" style="float:left;text-align: center;">
-                                                                        <table>
-                                                                                <tr>
-                                                                                        <td style="border: 1px solid black;"><h4 class="sub-heading">Uploaded Files</h4></td>
-                                                                                </tr>
-                                                                                <?php
-                                                                                if (!empty(Yii::$app->UploadFile->ListFile($appointment->id, Yii::$app->params['closePath']))) {
-                                                                                        ?>
-                                                                                        <tr>
-                                                                                                <td style="border: 1px solid black;padding: 10px;">
-                                                                                                        <?= Yii::$app->UploadFile->ListFile($appointment->id, Yii::$app->params['closePath']); ?>
-                                                                                                        <?php
-                                                                                                }
-                                                                                                ?>
-
-                                                                        </table>
-                                                                </div>
-                                                        </div>
-
-                                                </div>
-
-
                                                 <!--                                                <div class="display-uploads">
                                                                                                         <div class="row" style="display:inline-block">
                                                                                                                 <table>
@@ -492,7 +520,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                 ?>
                                                                                                                                 <tr>
                                                                                                                                         <td style="border: 1px solid black;padding: 10px;">
-                                                <?php // Yii::$app->UploadFile->ListFile($appointment->id, Yii::$app->params['closePath']);    ?>
+                                                <?php // Yii::$app->UploadFile->ListFile($appointment->id, Yii::$app->params['closePath']);         ?>
                                                                                                                                         </td>
                                                                                                                                 </tr>
                                                 <?php
@@ -600,7 +628,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
 
                                 </div>
-                                <?php //Pjax::end();                  ?>
+                                <?php //Pjax::end();                       ?>
                         </div>
                 </div>
         </div>

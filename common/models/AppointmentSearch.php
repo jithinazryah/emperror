@@ -38,7 +38,7 @@ class AppointmentSearch extends Appointment {
          * @return ActiveDataProvider
          */
         public function search($params) {
-                $query = Appointment::find()->orderBy(['id' => SORT_DESC]);
+                $query = Appointment::find()->where(['!=', 'stage', 5])->orderBy(['id' => SORT_DESC]);
                 // add conditions that should always apply here
 
                 $dataProvider = new ActiveDataProvider([

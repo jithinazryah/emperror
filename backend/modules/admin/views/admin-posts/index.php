@@ -52,65 +52,73 @@ $this->params['breadcrumbs'][] = $this->title;
                                                 'aria-describedby' => 'example-3_info',
                                             ],
                                             'columns' => [
-                                                ['class' => 'yii\grid\SerialColumn'],
+                                                    ['class' => 'yii\grid\SerialColumn'],
                                                 'post_name',
-                                                [
+                                                    [
                                                     'attribute' => 'admin',
-                                                    'filter' => [1=>'Yes',0=>'No'],
+                                                    'filter' => [1 => 'Yes', 0 => 'No'],
                                                     'value' => function ($model) {
                                                             return $model->admin == 1 ? 'Yes' : 'No';
                                                     },
-                                                            'filter' => [1=>'Yes',0=>'No'],
+                                                    'filter' => [1 => 'Yes', 0 => 'No'],
                                                 ],
-                                                [
+                                                    [
                                                     'attribute' => 'masters',
                                                     'format' => 'raw',
-                                                     'filter' => [1=>'Yes',0=>'No'],
+                                                    'filter' => [1 => 'Yes', 0 => 'No'],
                                                     'value' => function ($model) {
                                                             return $model->masters == 1 ? 'Yes' : 'No';
                                                     },
                                                 ],
-                                                [
+                                                    [
                                                     'attribute' => 'appointments',
                                                     'format' => 'raw',
-                                                     'filter' => [1=>'Yes',0=>'No'],
+                                                    'filter' => [1 => 'Yes', 0 => 'No'],
                                                     'value' => function ($model) {
                                                             return $model->appointments == 1 ? 'Yes' : 'No';
                                                     },
                                                 ],
-                                                [
+                                                    [
                                                     'attribute' => 'estimated_proforma',
                                                     'format' => 'raw',
-                                                     'filter' => [1=>'Yes',0=>'No'],
+                                                    'filter' => [1 => 'Yes', 0 => 'No'],
                                                     'value' => function ($model) {
                                                             return $model->estimated_proforma == 1 ? 'Yes' : 'No';
                                                     },
                                                 ],
-                                                [
+                                                    [
                                                     'attribute' => 'port_call_data',
                                                     'format' => 'raw',
-                                                     'filter' => [1=>'Yes',0=>'No'],
+                                                    'filter' => [1 => 'Yes', 0 => 'No'],
                                                     'value' => function ($model) {
                                                             return $model->port_call_data == 1 ? 'Yes' : 'No';
                                                     },
                                                 ],
-                                                [
+                                                    [
                                                     'attribute' => 'close_estimate',
                                                     'format' => 'raw',
-                                                     'filter' => [1=>'Yes',0=>'No'],
+                                                    'filter' => [1 => 'Yes', 0 => 'No'],
                                                     'value' => function ($model) {
                                                             return $model->close_estimate == 1 ? 'Yes' : 'No';
                                                     },
-                                                        ],
-                                                [
+                                                ],
+                                                    [
+                                                    'attribute' => 'funding_allocation',
+                                                    'format' => 'raw',
+                                                    'filter' => [1 => 'Yes', 0 => 'No'],
+                                                    'value' => function ($model) {
+                                                            return $model->close_estimate == 1 ? 'Yes' : 'No';
+                                                    },
+                                                ],
+                                                    [
                                                     'attribute' => 'status',
                                                     'format' => 'raw',
                                                     'filter' => [1 => 'Enabled', 0 => 'disabled'],
                                                     'value' => function ($model) {
-                                                                        return $model->status == 1 ? 'Enabled' : 'disabled';
-                                                                },
+                                                            return $model->status == 1 ? 'Enabled' : 'disabled';
+                                                    },
                                                 ],
-                                                ['class' => 'yii\grid\ActionColumn'],
+                                                    ['class' => 'yii\grid\ActionColumn'],
                                             ],
                                         ]);
                                         ?>

@@ -18,7 +18,7 @@ class StagesController extends Controller {
                 if (Yii::$app->user->isGuest)
                         $this->redirect(['/site/index']);
 
-                if (Yii::$app->session['post']['admin'] != 1)
+                if (Yii::$app->session['post']['masters'] != 1)
                         $this->redirect(['/site/home']);
         }
 

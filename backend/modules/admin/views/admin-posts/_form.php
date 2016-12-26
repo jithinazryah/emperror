@@ -26,6 +26,8 @@ use yii\widgets\ActiveForm;
 
         <?= $form->field($model, 'close_estimate')->dropDownList(['1' => 'Yes', '0' => 'No']) ?>
 
+        <?= $form->field($model, 'funding_allocation')->dropDownList(['1' => 'Yes', '0' => 'No']) ?>
+
         <?= $form->field($model, 'status')->dropDownList(['1' => 'Enabled', '0' => 'Disabled']) ?>
 
 

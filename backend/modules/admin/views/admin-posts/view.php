@@ -50,39 +50,44 @@ $this->params['breadcrumbs'][] = $this->title;
                                                         DetailView::widget([
                                                             'model' => $model,
                                                             'attributes' => [
-                                                               // 'id',
+                                                                // 'id',
                                                                 'post_name',
-                                                                [
+                                                                    [
                                                                     'label' => 'Admin',
                                                                     'format' => 'raw',
                                                                     'value' => $model->admin == 1 ? 'Yes' : 'No',
                                                                 ],
-                                                                [
+                                                                    [
                                                                     'label' => 'Masters',
                                                                     'format' => 'raw',
                                                                     'value' => $model->masters == 1 ? 'Yes' : 'No',
                                                                 ],
-                                                                [
+                                                                    [
                                                                     'label' => 'Appointments',
                                                                     'format' => 'raw',
                                                                     'value' => $model->appointments == 1 ? 'Yes' : 'No',
                                                                 ],
-                                                                [
+                                                                    [
                                                                     'label' => 'Estimated proforma',
                                                                     'format' => 'raw',
                                                                     'value' => $model->estimated_proforma == 1 ? 'Yes' : 'No',
                                                                 ],
-                                                                [
+                                                                    [
                                                                     'label' => 'Port call data',
                                                                     'format' => 'raw',
                                                                     'value' => $model->port_call_data == 1 ? 'Yes' : 'No',
                                                                 ],
-                                                                [
+                                                                    [
                                                                     'label' => 'Close estimate',
                                                                     'format' => 'raw',
                                                                     'value' => $model->close_estimate == 1 ? 'Yes' : 'No',
                                                                 ],
-                                                                [
+                                                                    [
+                                                                    'label' => 'Fund Allocation',
+                                                                    'format' => 'raw',
+                                                                    'value' => $model->funding_allocation == 1 ? 'Yes' : 'No',
+                                                                ],
+                                                                    [
                                                                     'label' => 'Status',
                                                                     'format' => 'raw',
                                                                     'value' => $model->status == 1 ? 'Enabled' : 'disabled',

@@ -15,5 +15,8 @@ return [
         'NumToWord' => [
             'class' => 'common\components\NumToWord'
         ],
+        'ChangeDateFormate' => [
+            'class' => 'common\components\ChangeDateFormate'
+        ],
     ],
 ];

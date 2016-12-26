@@ -29,12 +29,16 @@ use dosamigos\ckeditor\CKEditor;
                 color:black;
                 font-weight: bold;
         }
+        span a{
+                font-size: 16px;
+                color: #1630bf;
+        }
 </style>
 
 <div class="appointment-form form-inline">
 
         <?php $form = ActiveForm::begin(); ?>
-        <?php // $form->errorSummary($model) ?>
+        <?php // $form->errorSummary($model)  ?>
 
         <?= $form->field($model, 'vessel_type')->dropDownList(ArrayHelper::map(VesselType::findAll(['status' => 1]), 'id', 'vessel_type'), ['prompt' => '-Choose a Vessel Type-', 'class' => 'form-control vessels']) ?>
 
@@ -67,13 +71,13 @@ use dosamigos\ckeditor\CKEditor;
 
         <?= $form->field($model, 'terminal')->dropDownList(ArrayHelper::map(Terminal::findAll(['status' => 1]), 'id', 'terminal'), ['prompt' => '-Choose a Terminal-']) ?>
 
-        <?php // $form->field($model, 'terminal')->textInput(['maxlength' => true])  ?>
+        <?php // $form->field($model, 'terminal')->textInput(['maxlength' => true])    ?>
 
         <?= $form->field($model, 'birth_no')->textInput(['maxlength' => true]) ?>
 
         <?= $form->field($model, 'appointment_no')->textInput(['maxlength' => true, 'readonly' => true]) ?>
 
-        <?php // $form->field($model, 'no_of_principal')->textInput(['maxlength' => true])  ?>
+        <?php // $form->field($model, 'no_of_principal')->textInput(['maxlength' => true])   ?>
         <?php
         if ($model->isNewRecord) {
                 $model->no_of_principal = 1;
@@ -107,7 +111,7 @@ use dosamigos\ckeditor\CKEditor;
 
         <?= $form->field($model, 'client_reference')->textInput() ?>
 
-        <?php //$form->field($model, 'stage')->textInput()    ?>
+        <?php //$form->field($model, 'stage')->textInput()      ?>
 
         <?= $form->field($model, 'status')->dropDownList(['1' => 'Enabled', '0' => 'Disabled']) ?>
 
@@ -135,6 +139,11 @@ use dosamigos\ckeditor\CKEditor;
         }
         ?>
 
+        <?= "<br>" ?>
+
+        <?= $form->field($model, 'final_draft_bl', ['options' => ['class' => 'new-width form-group'], 'template' => '{label}<label></label>{input}{error}'])->fileInput(['maxlength' => true]) ?>
+        <div class="form-group "></div>
+        <div class="form-group "></div>
         <div class="form-group">
                 <input type="checkbox" id="queue-order" name="check" value="1" checked="checked" uncheckValue="0"><label>Load Previous Proforma</label>
         </div>
@@ -145,6 +154,24 @@ use dosamigos\ckeditor\CKEditor;
 
 
         <?php ActiveForm::end(); ?>
+
+        <br/>
+        <hr class="appoint_history" />
+        <div style="text-align: center;">
+                <h4 class="sub-heading">Uploaded Files</h4>
+                <br/>
+                <?php
+                $path = Yii::$app->basePath . '/web/uploads/final_draft' . '/' . $model->id;
+
+                foreach (glob("{$path}/*") as $file) {
+                        $arry = explode('/', $file);
+                        ?>
+                        <span class="upload_file_list"><?= Html::a(end($arry), Yii::$app->homeUrl . 'uploads/final_draft/' . $model->id . '/' . end($arry), ['target' => '_blank']) ?>&nbsp;&nbsp;&nbsp;&nbsp;<?= Html::a('<i class="fa fa-remove"></i>', Yii::$app->homeUrl . 'appointment/appointment/remove?path=uploads/final_draft/' . $model->id . '/' . end($arry)) ?></span>
+                        <?php
+                }
+                ?>
+        </div>
+
 
 </div>
 <link rel="stylesheet" href="<?= Yii::$app->homeUrl; ?>/js/select2/select2.css">
@@ -322,6 +349,9 @@ use dosamigos\ckeditor\CKEditor;
                 width:81% !important;
                 margin-left: 28px;
                 height: 150px;
+        }
+        .appoint_history{
+                border-top: 2px solid #eee !important;
         }
 
 </style>

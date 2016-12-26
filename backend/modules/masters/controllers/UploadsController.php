@@ -15,6 +15,14 @@ use yii\web\UploadedFile;
  */
 class UploadsController extends Controller {
 
+        public function init() {
+                if (Yii::$app->user->isGuest)
+                        $this->redirect(['/site/index']);
+
+                if (Yii::$app->session['post']['masters'] != 1)
+                        $this->redirect(['/site/home']);
+        }
+
         /**
          * @inheritdoc
          */
@@ -68,7 +76,7 @@ class UploadsController extends Controller {
                         $model->save();
                         $root_path = 'uploads/common_uploads/' . $model->id;
                         if (!empty($files)) {
-                                Yii::$app->UploadFile->UploadSingle($files, $model,$root_path);
+                                Yii::$app->UploadFile->UploadSingle($files, $model, $root_path);
                         }
                         return $this->redirect(['view', 'id' => $model->id]);
                 } else {
@@ -99,7 +107,7 @@ class UploadsController extends Controller {
                                         unlink($path);
                                 }
                                 $root_path = 'uploads/common_uploads/' . $model->id;
-                                Yii::$app->UploadFile->UploadSingle($files, $model,$root_path);
+                                Yii::$app->UploadFile->UploadSingle($files, $model, $root_path);
                         }
                         $model->save();
                         return $this->redirect(['view', 'id' => $model->id]);

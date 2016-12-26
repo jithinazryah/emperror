@@ -18,6 +18,13 @@ use yii\widgets\ListView;
 $this->title = 'Appointments';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<style>
+        .advanced-search{
+                font-size: 17px;
+                text-decoration: underline;
+                color: #0023e2;
+        }
+</style>
 <div class="appointment-index">
 
         <div class="row">

@@ -18,7 +18,7 @@ class ServicesController extends Controller {
                 if (Yii::$app->user->isGuest)
                         $this->redirect(['/site/index']);
 
-                if (Yii::$app->session['post']['admin'] != 1)
+                if (Yii::$app->session['post']['masters'] != 1)
                         $this->redirect(['/site/home']);
         }
 
@@ -116,7 +116,7 @@ class ServicesController extends Controller {
                         return TRUE;
                 }
         }
-        
+
         public function Invoice($model, $invocie_type) {
                 if ($model != null && $invocie_type != '') {
                         $model->invocie_type = implode(",", $invocie_type);

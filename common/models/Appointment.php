@@ -48,11 +48,13 @@ class Appointment extends \yii\db\ActiveRecord {
                 return [
                         [['vessel_type', 'port_of_call', 'eta', 'principal'], 'required'],
                         [['vessel_type', 'vessel', 'port_of_call', 'tug', 'barge', 'nominator', 'terminal', 'charterer', 'shipper', 'stage', 'sub_stages', 'status', 'CB', 'UB'], 'integer'],
-                        [['DOC', 'DOU', 'cargo_details', 'USD', 'client_reference', 'epda_content'], 'safe'],
+                        [['DOC', 'DOU', 'cargo_details', 'USD', 'client_reference', 'epda_content', 'final_draft_bl'], 'safe'],
                         [['birth_no', 'appointment_no'], 'string', 'max' => 50],
                         [['no_of_principal', 'quantity'], 'string', 'max' => 15],
                         [['purpose', 'last_port', 'next_port'], 'string', 'max' => 200],
                         [['cargo'], 'string', 'max' => 100],
+                        [['final_draft_bl'], 'file', 'skipOnEmpty' => true, 'extensions' => 'jpg, gif, png,jpeg', 'on' => 'create'],
+                        [['final_draft_bl'], 'file', 'skipOnEmpty' => FALSE, 'extensions' => 'jpg, gif, png,jpeg', 'on' => 'update'],
                 ];
         }
 
@@ -84,6 +86,7 @@ class Appointment extends \yii\db\ActiveRecord {
                     'eta' => 'ETA',
                     'client_reference' => 'Client Reference',
                     'stage' => 'Stage',
+                    'final_draft_bl' => 'Final Draft BL',
                     'epda_content' => 'EPDA Content',
                     'sub_stages' => 'Sub Stages',
                     'status' => 'Status',

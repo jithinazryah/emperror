@@ -18,6 +18,8 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\ImigrationClearance;
+use yii\web\UploadedFile;
+use yii\helpers\FileHelper;
 
 /**
  * AppointmentController implements the CRUD actions for Appointment model.
@@ -28,8 +30,10 @@ class AppointmentController extends Controller {
                 if (Yii::$app->user->isGuest)
                         $this->redirect(['/site/index']);
 
-                if (Yii::$app->session['post']['admin'] != 1)
+                if (Yii::$app->session['post']['appointments'] != 1) {
+                        echo "<script>alert('You Have NoPermission to Access this Page');</script>";
                         $this->redirect(['/site/home']);
+                }
         }
 
         /**
@@ -103,11 +107,15 @@ class AppointmentController extends Controller {
          */
         public function actionCreate() {
                 $model = new Appointment();
+                $model->setScenario('create');
                 if ($model->load(Yii::$app->request->post()) && Yii::$app->SetValues->Attributes($model) && $this->Principal($model, $_POST['Appointment']['principal'])) {
-//                        $model->stage = 1;
-//                        $model->sub_stages = 1;
-                        $model->eta = $this->SingleDateFormat($model->eta);
+                        $files = UploadedFile::getInstance($model, 'final_draft_bl');
+                        $model->final_draft_bl = $files->extension;
+                        $model->eta = Yii::$app->ChangeDateFormate->SingleDateFormat($model->eta);
                         $model->save();
+                        if (!empty($files)) {
+                                $this->Upload($model, $files);
+                        }
                         $this->PortCall($model);
                         if (!empty(Yii::$app->request->post(check))) {
                                 return $this->redirect(['/appointment/estimated-proforma/add', 'id' => $model->id, 'check' => true]);
@@ -121,6 +129,19 @@ class AppointmentController extends Controller {
                 }
         }
 
+        public function Upload($model, $files) {
+                $paths = Yii::$app->basePath . '/web/uploads/final_draft' . '/' . $model->id;
+                if (!is_dir($paths)) {
+                        mkdir($paths);
+                }
+                $path = Yii::$app->basePath . '/web/uploads/final_draft' . '/' . $model->id . '/' . $files->name;
+//                if (file_exists($path)) {
+//                        unlink($path);
+//                }
+                $files->saveAs($path);
+                return true;
+        }
+
         /**
          * Updates an existing Appointment model.
          * If update is successful, the browser will be redirected to the 'view' page.
@@ -131,12 +152,20 @@ class AppointmentController extends Controller {
                 $model = $this->findModel($id);
 
                 if ($model->load(Yii::$app->request->post()) && Yii::$app->SetValues->Attributes($model) && $this->Principal($model, $_POST['Appointment']['principal'])) {
-                        $model->eta = $this->SingleDateFormat($model->eta);
+                        $model->eta = Yii::$app->ChangeDateFormate->SingleDateFormat($model->eta);
+                        $files = UploadedFile::getInstance($model, 'final_draft_bl');
+                        if (!empty($files)) {
+                                $model->final_draft_bl = $files->extension;
+                                $this->Upload($model, $files);
+                        } else {
+                                $model_data = Appointment::findOne($id);
+                                $model->final_draft_bl = $model_data->final_draft_bl;
+                        }
                         $model->save();
-                        $model->eta = $this->SingleDateFormat($model->eta);
+                        $model->eta = Yii::$app->ChangeDateFormate->SingleDateFormat($model->eta);
                         return $this->redirect(['view', 'id' => $model->id]);
                 } else {
-                        $model->eta = $this->SingleDateFormat($model->eta);
+                        $model->eta = Yii::$app->ChangeDateFormate->SingleDateFormat($model->eta);
                         return $this->render('update', [
                                     'model' => $model,
                         ]);
@@ -150,13 +179,17 @@ class AppointmentController extends Controller {
                 return $this->redirect(['view', 'id' => $model->id]);
         }
 
+        /*
+         * This function create entry in port call data tables when creating a new appointment
+         */
+
         public function PortCall($model) {
                 $port_data = new PortCallData();
                 $port_draft = new PortCallDataDraft();
                 $port_rob = new PortCallDataRob();
                 $port_imigration = new ImigrationClearance();
                 $port_data->appointment_id = $model->id;
-                $port_data->eta = $this->SingleDateFormat($model->eta);
+                $port_data->eta = Yii::$app->ChangeDateFormate->SingleDateFormat($model->eta);
                 $port_draft->appointment_id = $model->id;
                 $port_rob->appointment_id = $model->id;
                 $port_imigration->appointment_id = $model->id;
@@ -167,6 +200,11 @@ class AppointmentController extends Controller {
                         return FALSE;
                 }
         }
+
+        /*
+         * This function get principal from multiple select box and implode it with comma
+         * return principal as a string
+         */
 
         public function Principal($model, $principle) {
                 if ($model != null && $principle != '') {
@@ -205,6 +243,11 @@ class AppointmentController extends Controller {
                 }
         }
 
+        /*
+         * This function generate appointment number basedon the previous appointment number
+         * return appointment number
+         */
+
         public function actionAppointmentNo() {
                 if (Yii::$app->request->isAjax) {
                         $port_id = $_POST['port_id'];
@@ -223,6 +266,11 @@ class AppointmentController extends Controller {
                 }
         }
 
+        /*
+         * This function select vessel type
+         * return result to the view
+         */
+
         public function actionVesselType() {
                 if (Yii::$app->request->isAjax) {
                         $vessel_type = $_POST['vessel_type'];
@@ -236,89 +284,26 @@ class AppointmentController extends Controller {
                 }
         }
 
-        public function ChangeFormat($data) {
-
-                $day = substr($data, 0, 2);
-                $month = substr($data, 2, 2);
-                $year = substr($data, 4, 4);
-                $hour = substr($data, 9, 2) == '' ? '00' : substr($data, 9, 2);
-                $min = substr($data, 11, 2) == '' ? '00' : substr($data, 11, 2);
-                $sec = substr($data, 13, 2) == '' ? '00' : substr($data, 13, 2);
-                if ($hour != '00' && $min != '00' && $sec != '00') {
-                        //echo '1';exit;
-                        return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min . ':' . $sec;
-                } elseif ($hour == '00' && $min != '00') {
-                        //echo '2';exit;
-                        return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min;
-                } elseif ($hour != '00' && $min != '00') {
-                        //echo '2';exit;
-                        return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min;
-                } elseif ($hour != '00') {
-                        //echo '3';exit;
-                        return $year . '-' . $month . '-' . $day . ' ' . $hour . ':00';
-                } else {
-
-                        return $year . '-' . $month . '-' . $day;
-                }
-        }
-
-        public function SingleDateFormat($dta) {
-                if (strpos($dta, '-') == false) {
-
-                        if (strlen($dta) < 16 && strlen($dta) >= 8 && $dta != NULL)
-                                return $this->ChangeFormat($dta);
-                        //echo $model->$key;exit;
-                }else {
-                        $year = substr($dta, 0, 4);
-                        $month = substr($dta, 5, 2);
-                        $day = substr($dta, 8, 2);
-                        $hour = substr($dta, 11, 2) == '' ? '00' : substr($dta, 11, 2);
-                        $min = substr($dta, 14, 2) == '' ? '00' : substr($dta, 14, 2);
-                        $sec = substr($dta, 17, 2) == '' ? '00' : substr($dta, 17, 2);
-
-                        if ($hour != '00' && $min != '00' && $sec != '00') {
-                                return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min . ':' . $sec;
-                        } elseif ($hour == '00' && $min != '00') {
-                                //echo '2';exit;
-                                return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min;
-                        } elseif ($hour != '00' && $min != '00') {
-                                return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min;
-                        } elseif ($hour != '00') {
-                                return $year . '-' . $month . '-' . $day . ' ' . $hour . ':00';
-                        } else {
-                                return $year . '-' . $month . '-' . $day;
-                        }
-                }
-        }
-
-        public function actionRepport() {
-                $from = $_POST['from'];
-                $to = $_POST['to'];
-                $searchModel = new AppointmentSearch();
-                $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-                if ($from != '' && $to != '') {
-                        $dataProvider->query->where(['between', 'DOC', $from, $to]);
-                }
-                return $this->render('report', [
-                            'searchModel' => $searchModel,
-                            'dataProvider' => $dataProvider,
-                ]);
-        }
-
-        public function actionReport() {
-                $searchModel = new AppointmentSearch();
-                $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-                return $this->render('report', [
-                            'searchModel' => $searchModel,
-                            'dataProvider' => $dataProvider,
-                ]);
-        }
+        /*
+         * This function generate report for all the appointment
+         */
 
         public function actionSearch() {
                 $appointment = Appointment::find()->all();
                 return $this->render('search', [
                             'appointment' => $appointment,
                 ]);
+        }
+
+        /*
+         * This unctio remove uploaded path
+         */
+
+        public function actionRemove($path) {
+                if (Yii::$app->session['post']['id'] == 1) {
+                        unlink($path);
+                }
+                return $this->redirect(Yii::$app->request->referrer);
         }
 
 }
