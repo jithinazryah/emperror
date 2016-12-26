@@ -305,7 +305,7 @@ class CloseEstimateController extends Controller {
                 $invoice_type = $_POST['invoice_type'];
                 $app = $_POST['app_id'];
                 $principp = $_POST['fda'];
-                $invoice_date = $this->SingleDateFormat($_POST['invoice_date']);
+                $invoice_date = Yii::$app->ChangeDateFormate->SingleDateFormat($_POST['invoice_date']);
                 $appointment = Appointment::findOne($app);
                 $ports = PortCallData::findOne(['appointment_id' => $app]);
                 $princip = CloseEstimate::findAll(['principal' => $principp, 'apponitment_id' => $app]);
@@ -518,9 +518,10 @@ class CloseEstimateController extends Controller {
                         }
                         if ($flag == 1) {
                                 $error = 'Already generate FDA on this esimate';
-                                return $this->renderPartial('error', [
-                                            'error' => $error,
+                                echo $this->renderPartial('error', [
+                                    'error' => $error,
                                 ]);
+                                exit;
                         }
                 }
                 Yii::$app->session->set('fda', $this->renderPartial('fda_report', [
@@ -644,6 +645,7 @@ class CloseEstimateController extends Controller {
 
         /*
          * This function will edit the close estimate text field on double click
+         * and also save changes to the database
          */
 
         public function actionEditEstimate() {
@@ -673,6 +675,7 @@ class CloseEstimateController extends Controller {
 
         /*
          * This function will edit the close estimate dropdown field on double click
+         * and also save changes to the database
          */
 
         public function actionEditEstimateService() {
@@ -703,61 +706,6 @@ class CloseEstimateController extends Controller {
                                         }
                                         echo $options;
                                 }
-                        }
-                }
-        }
-
-        public function ChangeFormat($data) {
-
-                $day = substr($data, 0, 2);
-                $month = substr($data, 2, 2);
-                $year = substr($data, 4, 4);
-                $hour = substr($data, 9, 2) == '' ? '00' : substr($data, 9, 2);
-                $min = substr($data, 11, 2) == '' ? '00' : substr($data, 11, 2);
-                $sec = substr($data, 13, 2) == '' ? '00' : substr($data, 13, 2);
-                if ($hour != '00' && $min != '00' && $sec != '00') {
-                        //echo '1';exit;
-                        return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min . ':' . $sec;
-                } elseif ($hour == '00' && $min != '00') {
-                        //echo '2';exit;
-                        return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min;
-                } elseif ($hour != '00' && $min != '00') {
-                        //echo '2';exit;
-                        return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min;
-                } elseif ($hour != '00') {
-                        //echo '3';exit;
-                        return $year . '-' . $month . '-' . $day . ' ' . $hour . ':00';
-                } else {
-
-                        return $year . '-' . $month . '-' . $day;
-                }
-        }
-
-        public function SingleDateFormat($dta) {
-                if (strpos($dta, '-') == false) {
-
-                        if (strlen($dta) < 16 && strlen($dta) >= 8 && $dta != NULL)
-                                return $this->ChangeFormat($dta);
-                        //echo $model->$key;exit;
-                }else {
-                        $year = substr($dta, 0, 4);
-                        $month = substr($dta, 5, 2);
-                        $day = substr($dta, 8, 2);
-                        $hour = substr($dta, 11, 2) == '' ? '00' : substr($dta, 11, 2);
-                        $min = substr($dta, 14, 2) == '' ? '00' : substr($dta, 14, 2);
-                        $sec = substr($dta, 17, 2) == '' ? '00' : substr($dta, 17, 2);
-
-                        if ($hour != '00' && $min != '00' && $sec != '00') {
-                                return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min . ':' . $sec;
-                        } elseif ($hour == '00' && $min != '00') {
-                                //echo '2';exit;
-                                return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min;
-                        } elseif ($hour != '00' && $min != '00') {
-                                return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min;
-                        } elseif ($hour != '00') {
-                                return $year . '-' . $month . '-' . $day . ' ' . $hour . ':00';
-                        } else {
-                                return $year . '-' . $month . '-' . $day;
                         }
                 }
         }
