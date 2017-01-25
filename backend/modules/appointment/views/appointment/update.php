@@ -64,6 +64,22 @@ $this->params['breadcrumbs'][] = 'Update';
                                                 ])
                                                 ?>
                                         </div>
+                                        <br/>
+                                        <hr class="appoint_history" />
+                                        <div style="text-align: center;">
+                                                <h4 class="sub-heading">Uploaded Files</h4>
+                                                <br/>
+                                                <?php
+                                                $path = Yii::$app->basePath . '/web/uploads/final_draft' . '/' . $model->id;
+
+                                                foreach (glob("{$path}/*") as $file) {
+                                                        $arry = explode('/', $file);
+                                                        ?>
+                                                        <span class="upload_file_list"><?= Html::a(end($arry), Yii::$app->homeUrl . 'uploads/final_draft/' . $model->id . '/' . end($arry), ['target' => '_blank']) ?>&nbsp;&nbsp;&nbsp;&nbsp;<?= Html::a('<i class="fa fa-remove"></i>', Yii::$app->homeUrl . 'appointment/appointment/remove?path=uploads/final_draft/' . $model->id . '/' . end($arry)) ?></span>
+                                                        <?php
+                                                }
+                                                ?>
+                                        </div>
                                 </div>
                         </div>
                 </div>

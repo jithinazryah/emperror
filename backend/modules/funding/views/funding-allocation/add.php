@@ -5,6 +5,7 @@ use yii\widgets\ActiveForm;
 use yii\widgets\Pjax;
 use common\models\Contacts;
 use common\models\Debtor;
+use common\models\OnAccount;
 use common\models\Appointment;
 use yii\helpers\ArrayHelper;
 use yii\db\Expression;
@@ -39,7 +40,13 @@ $this->params['breadcrumbs'][] = $this->title;
                         <?php //Pjax::begin();      ?>
                         <div class="panel-body">
                                 <?= AppointmentWidget::widget(['id' => $appointment->id]) ?>
-
+                                <div class="col-lg-12">
+                                        <?php if (Yii::$app->session->hasFlash('error')): ?>
+                                                <div class="alert alert-danger" role="alert">
+                                                        <?= Yii::$app->session->getFlash('error') ?>
+                                                </div>
+                                        <?php endif; ?>
+                                </div>
                                 <hr class="appoint_history" />
                                 <ul class="estimat nav nav-tabs nav-tabs-justified">
                                         <li class="active">
@@ -65,6 +72,12 @@ $this->params['breadcrumbs'][] = $this->title;
 
                                         <?php
                                         $principp = explode(',', $appointment->principal);
+                                        foreach ($principp as $value) {
+                                                $onaccount = OnAccount::find()->orderBy(['id' => SORT_DESC])->where(['debtor_id' => $value])->one();
+                                                ?>
+                                                <h5 style="font-weight:bold;color: #f44336;">On Account Balance for :<?= $appointment->getDebtorName($value) ?> - <?= Yii::$app->SetValues->NumberFormat($onaccount->balance) ?> /-</h5>
+                                                <?php
+                                        }
                                         foreach ($principp as $value) {
                                                 $funds = FundingAllocation::findAll(['appointment_id' => $appointment->id, 'principal_id' => $value]);
                                                 if (!empty($funds)) {
@@ -188,6 +201,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                                 <th data-priority="6">Check Number</th>
                                                                 <th data-priority="6">Amount</th>
                                                                 <th data-priority="6">Outstanding</th>
+                                                                <th data-priority="6">From On Account</th>
                                                                 <th data-priority="1">ACTIONS</th>
                                                         </tr>
                                                 </thead>
@@ -216,13 +230,17 @@ $this->params['breadcrumbs'][] = $this->title;
                                                                         <?php
                                                                 }
                                                                 ?>
-<!--<td><?php // $form->field($model, 'type')->dropDownList(['1' => 'Credit', '2' => 'Debit', '3' => 'EPDA', '4' => 'FDA'], ['prompt' => '-Payment Mode-'])->label(false)                          ?></td>-->
                                                                 <td><?= $form->field($model, 'description')->textInput(['placeholder' => 'Description'])->label(false) ?></td>
                                                                 <td><?= $form->field($model, 'fund_date')->textInput(['placeholder' => 'Date'])->label(false) ?></td>
                                                                 <td><?= $form->field($model, 'payment_type')->dropDownList(['1' => 'Cash', '2' => 'Check'], ['prompt' => '-Payment Type-'])->label(false) ?></td>
                                                                 <td><?= $form->field($model, 'check_no')->textInput(['placeholder' => 'Check Number'])->label(false) ?></td>
                                                                 <td><?= $form->field($model, 'amount')->textInput(['placeholder' => 'Amount'])->label(false) ?></td>
                                                                 <td><?= $form->field($model, 'outstanding')->textInput(['placeholder' => 'Outstanding'])->label(false) ?></td>
+                                                                <td>
+                                                                        <div class="form-group">
+                                                                                <input type="checkbox" id="queue-order" name="check" value="1" checked="checked" uncheckValue="0"><label>On Account</label>
+                                                                        </div>
+                                                                </td>
                                                                 <td><?= Html::submitButton($model->isNewRecord ? 'Add' : 'Update', ['class' => 'btn btn-success']) ?>
                                                                 </td>
                                                                 <?php ActiveForm::end(); ?>
@@ -310,7 +328,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         });
                                 </script>
                         </div>
-                        <?php //Pjax::end();         ?>
+                        <?php //Pjax::end();          ?>
                 </div>
         </div>
 </div>

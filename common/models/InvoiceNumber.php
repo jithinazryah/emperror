@@ -29,7 +29,7 @@ class InvoiceNumber extends \yii\db\ActiveRecord {
                 return [
                         [['appointment_id', 'invoice_type', 'invoice_number'], 'integer'],
                         [['status', 'CB', 'UB'], 'integer'],
-                        [['DOC', 'DOU', 'date_time', 'estimate_id'], 'safe'],
+                        [['DOC', 'date_time', 'estimate_id'], 'safe'],
                 ];
         }
 

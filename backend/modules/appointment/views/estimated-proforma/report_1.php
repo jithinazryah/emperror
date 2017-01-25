@@ -13,16 +13,7 @@ use common\models\EstimateReport;
 use common\models\Currency;
 ?>
 <!DOCTYPE html>
-<!--
-To change this license header, choose License Headers in Project Properties.
-To change this template file, choose Tools | Templates
-and open the template in the editor.
--->
-<!--<html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title></title>-->
+
 <div id="print">
         <link rel="stylesheet" href="<?= Yii::$app->homeUrl ?>/css/pdf.css">
         <style type="text/css">
@@ -37,14 +28,25 @@ and open the template in the editor.
                                 color:#525252 !important;
                         }
                 }
+                /*.footer {position: fixed ; left: 0px; bottom: 0px; right: 0px; font-size:10px; }*/
                 @media screen{
                         .main-tabl{
                                 width: 60%;
                         }
                 }
+                .table td {
+                        border: 1px solid black;
+                        font-size: 9px !important;
+                        text-align: center;
+                        padding: 3px;
+                }
                 .print{
                         margin-top: 18px;
-                        margin-left: 434px;
+                        margin-left: 375px;
+                }
+                .save{
+                        margin-top: 18px;
+                        margin-left: 6px !important;
                 }
                 footer {
                         width: 100%;
@@ -52,16 +54,13 @@ and open the template in the editor.
                         bottom: 0px;
                 }
         </style>
-        <!--    </head>
-            <body >-->
-        <table border ="0"  class="main-tabl" border="0">
+        <table class="main-tabl" border="0" >
                 <thead>
                         <tr>
                                 <th style="width:100%">
                                         <div class="header">
                                                 <div class="main-left">
                                                         <img src="<?= Yii::$app->homeUrl ?>/images/logoleft.jpg" style="width: 90px;height: 75px;"/>
-
                                                 </div>
                                                 <div class="main-right">
                                                         <img src="<?= Yii::$app->homeUrl ?>/images/logoright.jpg" style="width: 90px;height: 75px;"/>
@@ -408,6 +407,7 @@ and open the template in the editor.
                 </tfoot>
         </table>
 </div>
+
 <script>
         function printContent(el) {
                 var restorepage = document.body.innerHTML;
@@ -417,7 +417,7 @@ and open the template in the editor.
                 document.body.innerHTML = restorepage;
         }
 </script>
-<div class="print">
+<div style="display:inline-block">
         <div class="print" style="float:left;">
                 <?php
                 if ($print) {
@@ -436,7 +436,11 @@ and open the template in the editor.
                 ?>
 
         </div>
+        <!--        <div class="save" style="float:left;">
+        <?php
+        //echo Html::a('<span>SAVE</span>', ['/appointment/estimated-proforma/save-report', 'id' => $appointment->id], ['class' => 'btn btn-gray']);
+        ?>
+                </div>-->
 </div>
 <!--</body>
-
 </html>-->

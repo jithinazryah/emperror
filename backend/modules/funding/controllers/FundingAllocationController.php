@@ -6,6 +6,7 @@ use Yii;
 use common\models\FundingAllocation;
 use common\models\FundingAllocationSearch;
 use common\models\Appointment;
+use common\models\OnAccount;
 use common\models\AppointmentSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -93,22 +94,32 @@ class FundingAllocationController extends Controller {
         public function actionAdd($id, $fund_id = NULL) {
                 $fundings = FundingAllocation::findAll(['appointment_id' => $id]);
                 $appointment = Appointment::findOne($id);
-
                 if (!isset($fund_id)) {
                         $model = new FundingAllocation;
                 } else {
                         $model = $this->findModel($fund_id);
-                        $model->fund_date = $this->SingleDateFormat($model->fund_date);
+                        $model->fund_date = Yii::$app->ChangeDateFormate->SingleDateFormat($model->fund_date);
                 }
-
                 if ($model->load(Yii::$app->request->post()) && Yii::$app->SetValues->Attributes($model)) {
+                        $check = $_POST['check'];
                         $model->appointment_id = $id;
                         $model->type = 1;
-                        $model->fund_date = $this->SingleDateFormat($model->fund_date);
-                        if ($model->save(false)) {
-                                return $this->redirect(['add', 'id' => $id]);
+                        $model->fund_date = Yii::$app->ChangeDateFormate->SingleDateFormat($model->fund_date);
+                        if ($check == 1) {
+                                $onaccount = OnAccount::find()->orderBy(['id' => SORT_DESC])->where(['debtor_id' => $model->principal_id])->one();
+                                if (!empty($onaccount)) {
+                                        if ($onaccount->balance >= $model->amount) {
+                                                $model->save(false);
+                                                $this->UpdateOnAccount($model, $onaccount);
+                                        } else {
+                                                Yii::$app->getSession()->setFlash('error', 'On Account amount is Lower');
+                                                return $this->redirect(['add', 'id' => $id]);
+                                        }
+                                }
+                        } else {
+                                $model->save(false);
                         }
-                        // return $this->refresh();
+                        return $this->redirect(['add', 'id' => $id]);
                 }
                 return $this->render('add', [
                             'model' => $model,
@@ -116,6 +127,22 @@ class FundingAllocationController extends Controller {
                             'appointment' => $appointment,
                             'id' => $id,
                 ]);
+        }
+
+        public function UpdateOnAccount($model_fund, $onaccount) {
+                $model = new OnAccount;
+                $model->debtor_id = $model_fund->principal_id;
+                $model->transaction_type = 2;
+                $model->payment_type = $model_fund->principal_id;
+                $model->check_no = $model_fund->check_no;
+                $model->amount = $model_fund->amount;
+                $model->date = $model_fund->fund_date;
+                $model->appointment_id = $model_fund->appointment_id;
+                $model->balance = $onaccount->balance - $model_fund->amount;
+                $model->comment = $model_fund->description;
+                $model->date = Yii::$app->ChangeDateFormate->SingleDateFormat($model->date);
+                Yii::$app->SetValues->Attributes($model);
+                $model->save();
         }
 
         public function actionDeleteFund($id) {
@@ -148,61 +175,6 @@ class FundingAllocationController extends Controller {
                         return $model;
                 } else {
                         throw new NotFoundHttpException('The requested page does not exist.');
-                }
-        }
-
-        public function ChangeFormat($data) {
-
-                $day = substr($data, 0, 2);
-                $month = substr($data, 2, 2);
-                $year = substr($data, 4, 4);
-                $hour = substr($data, 9, 2) == '' ? '00' : substr($data, 9, 2);
-                $min = substr($data, 11, 2) == '' ? '00' : substr($data, 11, 2);
-                $sec = substr($data, 13, 2) == '' ? '00' : substr($data, 13, 2);
-                if ($hour != '00' && $min != '00' && $sec != '00') {
-                        //echo '1';exit;
-                        return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min . ':' . $sec;
-                } elseif ($hour == '00' && $min != '00') {
-                        //echo '2';exit;
-                        return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min;
-                } elseif ($hour != '00' && $min != '00') {
-                        //echo '2';exit;
-                        return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min;
-                } elseif ($hour != '00') {
-                        //echo '3';exit;
-                        return $year . '-' . $month . '-' . $day . ' ' . $hour . ':00';
-                } else {
-
-                        return $year . '-' . $month . '-' . $day;
-                }
-        }
-
-        public function SingleDateFormat($dta) {
-                if (strpos($dta, '-') == false) {
-
-                        if (strlen($dta) < 16 && strlen($dta) >= 8 && $dta != NULL)
-                                return $this->ChangeFormat($dta);
-                        //echo $model->$key;exit;
-                }else {
-                        $year = substr($dta, 0, 4);
-                        $month = substr($dta, 5, 2);
-                        $day = substr($dta, 8, 2);
-                        $hour = substr($dta, 11, 2) == '' ? '00' : substr($dta, 11, 2);
-                        $min = substr($dta, 14, 2) == '' ? '00' : substr($dta, 14, 2);
-                        $sec = substr($dta, 17, 2) == '' ? '00' : substr($dta, 17, 2);
-
-                        if ($hour != '00' && $min != '00' && $sec != '00') {
-                                return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min . ':' . $sec;
-                        } elseif ($hour == '00' && $min != '00') {
-                                //echo '2';exit;
-                                return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min;
-                        } elseif ($hour != '00' && $min != '00') {
-                                return $year . '-' . $month . '-' . $day . ' ' . $hour . ':' . $min;
-                        } elseif ($hour != '00') {
-                                return $year . '-' . $month . '-' . $day . ' ' . $hour . ':00';
-                        } else {
-                                return $year . '-' . $month . '-' . $day;
-                        }
                 }
         }
 
