@@ -215,6 +215,22 @@ AppAsset::register($this);
                                                         <?php
                                                 }
                                                 ?>
+                                                <li>
+                                                        <a href="">
+                                                                <i class="fa fa-print"></i>
+                                                                <span class="title">Invoices</span>
+                                                        </a>
+                                                        <ul>
+                                                                <li>
+                                                                        <?= Html::a('Generate Invoice', ['/invoice/generate-invoice/index'], ['class' => 'title']) ?>
+                                                                </li>
+
+                                                                <li>
+                                                                        <?= Html::a('Delivery Order', ['/invoice/delivery-order/index'], ['class' => 'title']) ?>
+                                                                </li>
+
+                                                        </ul>
+                                                </li>
                                         </ul>
 
                                 </div>

@@ -36,6 +36,9 @@ return [
         'funding' => [
             'class' => 'backend\modules\funding\Module',
         ],
+        'invoice' => [
+            'class' => 'backend\modules\invoice\Module',
+        ],
     ],
     'components' => [
         'request' => [
