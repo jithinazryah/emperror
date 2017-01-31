@@ -15,17 +15,37 @@ use common\models\FundingAllocation;
 /* @var $this yii\web\View */
 /* @var $model common\models\EstimatedProforma */
 
-$this->title = 'Generate Invoice';
+$this->title = 'General Invoice';
 $this->params['breadcrumbs'][] = ['label' => ' Invoice', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<style>
+        .appoint{
+                width: 100%;
+        }
+        .appoint .value{
+                font-weight: bold;
+                text-align: left;
+        }
+        .appoint .labell{
+                text-align: left;
+        }
+        .appoint .colen{
 
+        }
+        .appoint td{
+                padding: 10px;
+        }
+        .top-content{
+                margin-bottom: 25px;
+        }
+</style>
 <div class="row">
         <div class="col-md-12">
 
                 <div class="panel panel-default">
                         <div class="panel-heading">
-                                <h2  class="appoint-title panel-title"><?= Html::encode($this->title) . ' # <b style="color: #008cbd;">' . $appointment->appointment_no . '</b>' ?></h2>
+                                <h2  class="appoint-title panel-title"><?= Html::encode($this->title) . ' # <b style="color: #008cbd;">' . $invoice_data->invoice_number . '</b>' ?></h2>
 
                                 <div class="panel-options">
                                         <a href="#" data-toggle="panel">
@@ -39,7 +59,57 @@ $this->params['breadcrumbs'][] = $this->title;
                         </div>
                         <?php //Pjax::begin();          ?>
                         <div class="panel-body">
+                                <div class="top-content">
+                                        <table class="appoint">
+                                                <tr>
+                                                        <td class="labell">Invoice Number </td><td class="colen">:</td><td class="value"><?= $invoice_data->invoice_number; ?> </td>
+                                                        <td class="labell">Ops ID </td><td class="colen">:</td><td class="value"><?= $invoice_data->oops_id; ?> </td>
+                                                        <td class="labell">On Account Of </td><td class="colen">:</td><td class="value">
+                                                                <?php
+                                                                if ($invoice_data->on_account_of == 1) {
+                                                                        $account_of = 'CUSTOMS GATE PASS';
+                                                                } elseif ($invoice_data->on_account_of == 2) {
+                                                                        $account_of = 'CARGO CLEARANCE';
+                                                                } elseif ($invoice_data->on_account_of == 3) {
+                                                                        $account_of = 'EQUIPMENT HIRE';
+                                                                } elseif ($invoice_data->on_account_of == 4) {
+                                                                        $account_of = 'TRUCK CLEARANCE';
+                                                                }
+                                                                ?>
+                                                                <?= $account_of; ?>
+                                                        </td>
+                                                </tr>
+                                                <tr>
+                                                        <td class="labell">Job </td><td class="colen">:</td><td class="value">
+                                                                <?php
+                                                                if ($invoice_data->job == 1) {
+                                                                        $job = 'SERVICE / ATTENDANCE';
+                                                                } elseif ($invoice_data->job == 2) {
+                                                                        $job = 'AGENENTS / ATTENDANCE';
+                                                                }
+                                                                ?>
+                                                                <?= $job; ?>
 
+                                                        </td>
+                                                        <td class="labell">Payment Terms </td><td class="colen">:</td><td class="value">
+                                                                <?php
+                                                                if ($invoice_data->payment_terms == 1) {
+                                                                        $cash = 'CASH';
+                                                                } elseif ($invoice_data->job == 2) {
+                                                                        $cash = 'CHEQUE';
+                                                                }
+                                                                ?>
+                                                                <?= $cash; ?>
+
+                                                        </td>
+                                                        <td class="labell">Doc No </td><td class="colen">:</td><td class="value"><?= $invoice_data->doc_no; ?> </td>
+                                                </tr>
+
+                                        </table>
+                                </div>
+                                <?= Html::a('<i class="fa-th-list"></i><span> Manage Invoice</span>', ['generate-invoice/index'], ['class' => 'btn btn-warning  btn-icon btn-icon-standalone']) ?>
+                                <?= Html::a('<i class="fa-th-list"></i><span> Create Invoice</span>', ['generate-invoice/create'], ['class' => 'btn btn-warning  btn-icon btn-icon-standalone']) ?>
+                                <?= Html::a('<i class="fa-th-list"></i><span> Generate Invoice</span>', ['generate-invoice/reports', 'id' => $id], ['class' => 'btn btn-secondary btn-icon btn-icon-standalone', 'target' => '_blank']) ?>
                                 <ul class="estimat nav nav-tabs nav-tabs-justified">
                                         <li>
                                                 <?php

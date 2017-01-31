@@ -39,9 +39,21 @@ and open the template in the editor.
                 margin-top: 18px;
         }
         .Invoice-list span{
-                color: red ! important;
-                /*padding: 0px 94px 0px 80px;*/
-                text-decoration: underline;
+                padding: 0px 80px;
+                border-bottom: 1px solid black;
+                font-weight: bold;
+                margin: 23px 0px;
+        }
+        .middle-content{
+                width: 100%;
+                display: inline-block;
+                font-size: 15px;
+                margin-top: 60px;
+        }
+        .middle-content p{
+                text-align: left;
+                font-size: 8px;
+                margin: 0px !important;
         }
 
 </style>
@@ -69,13 +81,13 @@ and open the template in the editor.
 
                 <tr>
                         <td>
-                                <div class="heading" style="margin-bottom: 8px;">Invoice</div>
-                                <div class="heading-top" style="margin-bottom: 26px;">
+                                <div class="heading" style="margin-bottom: 8px;">DELIVERY ORDER</div>
+                                <div class="heading-top" style="margin-bottom: 50px;">
                                         <div class="main-left">
                                                 <table class="tb2">
                                                         <tr>
                                                                 <td>TO </td> <td style="width: 50px;text-align: center">:</td>
-                                                                <td style="max-width: 405px"><?= $order->to; ?></td>
+                                                                <td style="max-width: 212px;"><?= $order->to; ?></td>
                                                         </tr>
                                                 </table>
                                         </div>
@@ -88,7 +100,7 @@ and open the template in the editor.
 
                                                         <tr>
                                                                 <td>Date </td> <td style="width: 50px;text-align: center">:</td>
-                                                                <td style="max-width: 200px"><?= date("d-M-Y") ?></td>
+                                                                <td style="max-width: 200px"><?= Yii::$app->SetValues->DateFormate($order->arrived_on); ?></td>
                                                         </tr>
 
                                                 </table>
@@ -100,9 +112,9 @@ and open the template in the editor.
         <tr>
                 <td>
                         <div class="Invoice-list">
-                                <p>Please deliver to M/s.  <span><?= $order->name; ?></span>  of P.O. Box  <span><?= $order->po_box; ?></span>
+                                <p style="line-height: 30px;font-size: 11px;">Please deliver to M/s.  <span><?= $order->name; ?></span>  of P.O. Box  <span><?= $order->po_box; ?></span>
                                         the undermentiond packages arrived from <span><?= $order->arrived_from; ?></span> on <span><?= date('d-M-Y', strtotime($order->arrived_on)); ?></span>
-                                        per vessel <span><?= $order->vessel_name; ?></span> Voyage no. <span><?= $order->voyage_no; ?></span>
+                                        per vessel <span><?= $order->vessel_name; ?></span> Voyage no <span><?= $order->voyage_no; ?></span>
                                 </p>
 
                         </div>
@@ -111,6 +123,7 @@ and open the template in the editor.
 
         <tr>
                 <td>
+                        <div class="heading" style="margin-bottom: 12px;font-weight: normal;">PARTICULARS DECLARED BY SHIPPERS</div>
                         <div class="Invoice-list">
                                 <table class="table">
                                         <tr>
@@ -121,6 +134,7 @@ and open the template in the editor.
                                         </tr>
                                         <?php
                                         $i = 0;
+                                        $grandtotal = 0;
                                         foreach ($order_details as $value) {
                                                 $i++;
                                                 ?>
@@ -131,12 +145,34 @@ and open the template in the editor.
                                                         <td><?= $value->description ?></td>
                                                 </tr>
                                                 <?php
+                                                $grandtotal += $value->total;
                                         }
                                         ?>
+                                        <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td style="font-weight:bold;font-size:10px">Total</td>
+                                                <td style="font-weight:bold;font-size:10px"><?= Yii::$app->SetValues->NumberFormat($grandtotal); ?> MT</td>
+                                        </tr>
                                 </table>
                         </div>
                         <div class="note">
                                 <p style="font-size: 10px;">NOTE : Goods are lightered on the same terms and conditions as the Ocean carrier's Bill of Lading</p>
+                        </div>
+                </td>
+        </tr>
+        <tr>
+                <td>
+                        <div class="middle-content">
+                                <div class="" style="display:inline-block;width:100%;">
+                                        <div style="width:40%;float: left;">
+                                                <p style="text-align: left;">CARGO DISCHARGED AT MINA SAQR, RAS AL KHAIMAH</p>
+
+                                        </div>
+                                        <div style="width:40%;float: right;">
+                                                <p style="padding-left: 135px;">For Emperor Shipping Lines LLC<br/>(As Agents Only)<br/></p>
+                                        </div>
+                                </div>
                         </div>
                 </td>
         </tr>
@@ -147,15 +183,21 @@ and open the template in the editor.
         <tr>
                 <td style="width:100%">
                         <div class="footer">
-                                <div class="" style="display:inline-block;width:100%;">
-                                        <div style="width:40%;float: left;">
-                                                <p style="text-align: left;">CARGO DISCHARGED AT MINA SAQR, RAS AL KHAIMAH</p>
 
-                                        </div>
-                                        <div style="width:40%;float: right;">
-                                                <p style="padding-left: 135px;">For Emperor Shipping Lines LLC<br/>(As Agents Only)<br/></p>
-                                        </div>
-                                </div>
+                                <span>
+                                        <p>
+                                                <span class="footer-red">Emperor</span> <span  class="footer-blue1">Shipping Lines LLC</span> &#8208; Ras Al Khaimah (Br)| P.O.Box-328231 |Ops Email: <span class="footer-blue2">opsrak@emperor.ae</span> |Accts Email: <span class="footer-blue2">accrak@emperor.ae</span>
+                                        </p>
+                                        <p>
+                                                www.emperor.ae
+                                        </p>
+                                        <p>
+                                                Main Office: RAK Medical Centre Bldg |Floor II, Room 06 | Al Shaam, RAK, UAE | Tel: +971 7 268 9676 |Fax: +971 7 268 9677
+                                        </p>
+                                        <p>
+                                                Port Office: Shipping Agents Bldg |Ground Floor, Room: 10 A | Saqr Port Authority, Ras Al Khaimah, UAE | Tel: +971 7 268 9626
+                                        </p>
+                                </span>
                         </div>
                 </td>
         </tr>

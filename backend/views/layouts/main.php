@@ -222,7 +222,7 @@ AppAsset::register($this);
                                                         </a>
                                                         <ul>
                                                                 <li>
-                                                                        <?= Html::a('Generate Invoice', ['/invoice/generate-invoice/index'], ['class' => 'title']) ?>
+                                                                        <?= Html::a('General Invoice', ['/invoice/generate-invoice/index'], ['class' => 'title']) ?>
                                                                 </li>
 
                                                                 <li>

@@ -65,9 +65,7 @@ class GenerateInvoiceController extends Controller {
                         Yii::$app->SetValues->Attributes($model);
                         $last_invoice = GenerateInvoice::find()->orderBy(['id' => SORT_DESC])->where(['status' => 1])->one();
                         $last = $last_invoice->id + 1;
-                        $model->invoice_number = 'GI/' . date('M' . '/' . date('Y') . '/' . $last);
-                        $model->date = date('Y-m-d');
-                        $model->oops_id = 'app';
+                        $model->invoice_number = 'GI/' . date('m') . '/' . date('Y') . '/' . $last;
                         $doc_start = $this->GenerateDoc($model->on_account_of);
                         $model->doc_no = $doc_start . $last;
                         if ($model->save())
@@ -99,6 +97,7 @@ class GenerateInvoiceController extends Controller {
 
         public function actionAdd($id, $invoice_details_id = NULL) {
                 $invoice_details = InvoiceGenerateDetails::findAll(['invoice_id' => $id]);
+                $invoice_data = GenerateInvoice::findOne(['id' => $id]);
                 if (!isset($invoice_details_id)) {
                         $model = new InvoiceGenerateDetails();
                 } else {
@@ -116,6 +115,7 @@ class GenerateInvoiceController extends Controller {
                             'model' => $model,
                             'invoice_details' => $invoice_details,
                             'id' => $id,
+                            'invoice_data' => $invoice_data,
                 ]);
         }
 

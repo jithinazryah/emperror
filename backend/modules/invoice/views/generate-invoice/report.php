@@ -65,12 +65,12 @@ and open the template in the editor.
                 <tr>
                         <td>
                                 <div class="heading" style="margin-bottom: 8px;">Invoice</div>
-                                <div class="heading-top" style="margin-bottom: 26px;">
+                                <div class="heading-top" style="margin-bottom: 72px;">
                                         <div class="main-left">
                                                 <table class="tb2">
                                                         <tr>
                                                                 <td>TO </td> <td style="width: 50px;text-align: center">:</td>
-                                                                <td style="max-width: 405px"><?= $invoice->to_address; ?></td>
+                                                                <td style="max-width: 212px;"><?= $invoice->to_address; ?></td>
                                                         </tr>
                                                 </table>
                                         </div>
@@ -83,11 +83,11 @@ and open the template in the editor.
 
                                                         <tr>
                                                                 <td>Date </td> <td style="width: 50px;text-align: center">:</td>
-                                                                <td style="max-width: 200px"><?= date("d-M-Y") ?></td>
+                                                                <td style="max-width: 200px"><?= Yii::$app->SetValues->DateFormate($invoice->date); ?></td>
                                                         </tr>
 
                                                         <tr>
-                                                                <td>Oops ID </td> <td style="width: 50px;text-align: center">:</td>
+                                                                <td>Ops ID </td> <td style="width: 50px;text-align: center">:</td>
                                                                 <td style="max-width: 200px"><?= $invoice->oops_id ?></td>
                                                         </tr>
                                                 </table>
@@ -149,6 +149,7 @@ and open the template in the editor.
                                                 </tr>
                                                 <?php
                                                 $i = 0;
+                                                $grand_total = 0;
                                                 foreach ($invoice_details as $value) {
                                                         $i++;
                                                         ?>
@@ -156,12 +157,17 @@ and open the template in the editor.
                                                                 <td><?= $i ?></td>
                                                                 <td><?= $value->description ?></td>
                                                                 <td><?= $value->qty ?></td>
-                                                                <td><?= $value->unit_price ?></td>
-                                                                <td><?= $value->total ?></td>
+                                                                <td>AED <?= $value->unit_price ?></td>
+                                                                <td>AED <?= $value->total ?></td>
                                                         </tr>
                                                         <?php
+                                                        $grand_total += $value->total;
                                                 }
                                                 ?>
+                                                <tr>
+                                                        <td colspan="4" style="text-align:right;font-size: 13px;font-weight: bold;">Total</td>
+                                                        <td style="font-size: 10px;font-weight: bold;">AED <?= $value->total ?></td>
+                                                </tr>
                                         </table>
                                 </div>
                         </td>

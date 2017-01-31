@@ -16,13 +16,33 @@ $this->title = 'Delivery Order Details';
 $this->params['breadcrumbs'][] = ['label' => ' Invoice', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
+<style>
+        .appoint{
+                width: 100%;
+        }
+        .appoint .value{
+                font-weight: bold;
+                text-align: left;
+        }
+        .appoint .labell{
+                text-align: left;
+        }
+        .appoint .colen{
 
+        }
+        .appoint td{
+                padding: 10px;
+        }
+        .top-content{
+                margin-bottom: 25px;
+        }
+</style>
 <div class="row">
         <div class="col-md-12">
 
                 <div class="panel panel-default">
                         <div class="panel-heading">
-                                <h2  class="appoint-title panel-title"><?= Html::encode($this->title) . ' # <b style="color: #008cbd;">' . $appointment->appointment_no . '</b>' ?></h2>
+                                <h2  class="appoint-title panel-title"><?= Html::encode($this->title) . ' # <b style="color: #008cbd;">' . $id . '</b>' ?></h2>
 
                                 <div class="panel-options">
                                         <a href="#" data-toggle="panel">
@@ -36,6 +56,29 @@ $this->params['breadcrumbs'][] = $this->title;
                         </div>
                         <?php //Pjax::begin();          ?>
                         <div class="panel-body">
+                                <div class="top-content">
+                                        <table class="appoint">
+                                                <tr>
+                                                        <td class="labell">To </td><td class="colen">:</td><td class="value"><?= $delivey_order->to; ?> </td>
+                                                        <td class="labell">Ref.No </td><td class="colen">:</td><td class="value"><?= $delivey_order->ref_no; ?> </td>
+                                                        <td class="labell">Name </td><td class="colen">:</td><td class="value"><?= $delivey_order->name; ?> </td>
+                                                </tr>
+                                                <tr>
+                                                        <td class="labell">PO Box </td><td class="colen">:</td><td class="value"><?= $delivey_order->po_box; ?> </td>
+                                                        <td class="labell">Arrived From </td><td class="colen">:</td><td class="value"><?= $delivey_order->arrived_from; ?> </td>
+                                                        <td class="labell">Arrived On </td><td class="colen">:</td><td class="value"><?= $delivey_order->arrived_on; ?> </td>
+                                                </tr>
+                                                <tr>
+                                                        <td class="labell">Vessel Name </td><td class="colen">:</td><td class="value"><?= $delivey_order->vessel_name; ?> </td>
+                                                        <td class="labell">Voyage No </td><td class="colen">:</td><td class="value"><?= $delivey_order->voyage_no; ?> </td>
+                                                        <td class="labell"></td><td class="colen"></td><td class="value"></td>
+                                                </tr>
+
+                                        </table>
+                                </div>
+                                <?= Html::a('<i class="fa-th-list"></i><span> Manage Delivery Order</span>', ['delivery-order/index'], ['class' => 'btn btn-warning  btn-icon btn-icon-standalone']) ?>
+                                <?= Html::a('<i class="fa-th-list"></i><span> Create Delivery Order</span>', ['delivery-order/create'], ['class' => 'btn btn-warning  btn-icon btn-icon-standalone']) ?>
+                                <?= Html::a('<i class="fa-th-list"></i><span> Print Order</span>', ['delivery-order/reports', 'id' => $id], ['class' => 'btn btn-secondary btn-icon btn-icon-standalone', 'target' => '_blank']) ?>
 
                                 <ul class="estimat nav nav-tabs nav-tabs-justified">
                                         <li>
@@ -109,6 +152,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                                 <th>B/L No</th>
                                                                 <th>Marks & NUmbers</th>
                                                                 <th>Description</th>
+                                                                <th>Total</th>
                                                                 <th data-priority="1">ACTIONS</th>
                                                         </tr>
                                                 </thead>
@@ -119,6 +163,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                                 <td><?= $form->field($model, 'bl_no')->textInput(['placeholder' => 'B/L No'])->label(false) ?></td>
                                                                 <td><?= $form->field($model, 'marks_numbers')->textInput(['placeholder' => 'Marks & NUmbers'])->label(false) ?></td>
                                                                 <td><?= $form->field($model, 'description')->textInput(['placeholder' => 'Description'])->label(false) ?></td>
+                                                                <td><?= $form->field($model, 'total')->textInput(['placeholder' => 'Total'])->label(false) ?></td>
                                                                 <td><?= Html::submitButton($model->isNewRecord ? 'Add' : 'Update', ['class' => 'btn btn-success']) ?>
                                                                 </td>
                                                                 <?php ActiveForm::end(); ?>
@@ -166,24 +211,24 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
 </div>
 <!--<a href="javascript:;" onclick="showAjaxModal();" class="btn btn-primary btn-single btn-sm">Show Me</a>
- Modal code
+Modal code
 <script type="text/javascript">
-        function showAjaxModal(id)
-        {
-            jQuery('#add-sub').modal('show', {backdrop: 'static'});
-            jQuery('#add-sub .modal-body').html(id);
-            /*setTimeout(function ()
-             {
-             jQuery.ajax({
-             url: "data/ajax-content.txt",
-             success: function (response)
-             {
-             jQuery('#modal-7 .modal-body').html(response);
-             }
-             });
-             }, 800); // just an example
-             */
-        }
+function showAjaxModal(id)
+{
+jQuery('#add-sub').modal('show', {backdrop: 'static'});
+jQuery('#add-sub .modal-body').html(id);
+/*setTimeout(function ()
+{
+jQuery.ajax({
+url: "data/ajax-content.txt",
+success: function (response)
+{
+jQuery('#modal-7 .modal-body').html(response);
+}
+});
+}, 800); // just an example
+*/
+}
 </script>-->
 <div class="modal fade" id="add-sub">
         <div class="modal-dialog">

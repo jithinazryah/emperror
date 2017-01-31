@@ -11,7 +11,7 @@ use yii\widgets\ActiveForm;
 <div class="delivery-order-form form-inline">
 
         <?php $form = ActiveForm::begin(); ?>
-        <?= $form->errorSummary($model); ?>
+        <?php // $form->errorSummary($model); ?>
 
         <?= $form->field($model, 'to')->textarea(['rows' => 6]) ?>
 
@@ -29,6 +29,7 @@ use yii\widgets\ActiveForm;
         $form->field($model, 'arrived_on')->widget(\yii\jui\DatePicker::classname(), [
             //'language' => 'ru',
             'dateFormat' => 'yyyy-MM-dd',
+            'value' => date('Y-m-d'),
             'options' => ['class' => 'form-control']
         ])
         ?>

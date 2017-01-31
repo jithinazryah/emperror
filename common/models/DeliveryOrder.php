@@ -23,52 +23,51 @@ use Yii;
  * @property string $DOC
  * @property string $DOU
  */
-class DeliveryOrder extends \yii\db\ActiveRecord
-{
-    /**
-     * @inheritdoc
-     */
-    public static function tableName()
-    {
-        return 'delivery_order';
-    }
+class DeliveryOrder extends \yii\db\ActiveRecord {
 
-    /**
-     * @inheritdoc
-     */
-    public function rules()
-    {
-        return [
-            [['to'], 'string'],
-            [['date', 'arrived_on', 'DOC', 'DOU'], 'safe'],
-            [['status', 'CB', 'UB'], 'integer'],
-            [['CB', 'UB', 'DOC'], 'required'],
-            [['ref_no', 'name', 'po_box', 'vessel_name', 'voyage_no'], 'string', 'max' => 100],
-            [['arrived_from'], 'string', 'max' => 200],
-        ];
-    }
+        /**
+         * @inheritdoc
+         */
+        public static function tableName() {
+                return 'delivery_order';
+        }
 
-    /**
-     * @inheritdoc
-     */
-    public function attributeLabels()
-    {
-        return [
-            'id' => 'ID',
-            'to' => 'To',
-            'ref_no' => 'Ref No',
-            'date' => 'Date',
-            'name' => 'Name',
-            'po_box' => 'Po Box',
-            'arrived_from' => 'Arrived From',
-            'arrived_on' => 'Arrived On',
-            'vessel_name' => 'Vessel Name',
-            'voyage_no' => 'Voyage No',
-            'status' => 'Status',
-            'CB' => 'Cb',
-            'UB' => 'Ub',
-            'DOC' => 'Doc',
-            'DOU' => 'Dou',
-        ];
-    }
+        /**
+         * @inheritdoc
+         */
+        public function rules() {
+                return [
+                        [['to', 'name', 'arrived_on', 'arrived_from', 'po_box', 'vessel_name', 'voyage_no'], 'required'],
+                        [['to'], 'string'],
+                        [['date', 'arrived_on', 'DOC', 'DOU'], 'safe'],
+                        [['status', 'CB', 'UB'], 'integer'],
+                        [['CB', 'UB', 'DOC'], 'required'],
+                        [['ref_no', 'name', 'po_box', 'vessel_name', 'voyage_no'], 'string', 'max' => 100],
+                        [['arrived_from'], 'string', 'max' => 200],
+                ];
+        }
+
+        /**
+         * @inheritdoc
+         */
+        public function attributeLabels() {
+                return [
+                    'id' => 'ID',
+                    'to' => 'To',
+                    'ref_no' => 'Ref No',
+                    'date' => 'Date',
+                    'name' => 'Name',
+                    'po_box' => 'Po Box',
+                    'arrived_from' => 'Arrived From',
+                    'arrived_on' => 'Arrived On',
+                    'vessel_name' => 'Vessel Name',
+                    'voyage_no' => 'Voyage No',
+                    'status' => 'Status',
+                    'CB' => 'Cb',
+                    'UB' => 'Ub',
+                    'DOC' => 'Doc',
+                    'DOU' => 'Dou',
+                ];
+        }
+
 }

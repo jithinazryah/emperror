@@ -18,12 +18,21 @@ use yii\helpers\ArrayHelper;
         <?= $form->field($model, 'invoice')->dropDownList(ArrayHelper::map(Debtor::findAll(['status' => 1]), 'id', 'principal_name'), ['prompt' => '-Choose a Principal-']) ?>
 
         <?= $form->field($model, 'to_address')->textarea(['rows' => 6]) ?>
-
+        <?php $model->date = date('Y-m-d'); ?>
         <?php // $form->field($model, 'invoice_number')->textInput(['maxlength' => true]) ?>
+
+        <?=
+        $form->field($model, 'date')->widget(\yii\jui\DatePicker::classname(), [
+            //'language' => 'ru',
+//            'value' => date('Y-m-d'),
+            'dateFormat' => 'yyyy-MM-dd',
+            'options' => ['class' => 'form-control']
+        ])
+        ?>
 
         <?php // $form->field($model, 'date')->textInput() ?>
 
-        <?php // $form->field($model, 'oops_id')->textInput(['maxlength' => true]) ?>
+        <?= $form->field($model, 'oops_id')->textInput(['maxlength' => true]) ?>
 
         <?= $form->field($model, 'on_account_of')->dropDownList(['1' => 'CUSTOMS GATE PASS', '2' => 'CARGO CLEARANCE', '3' => 'EQUIPMENT HIRE', '4' => 'TRUCK CLEARANCE']) ?>
 

@@ -64,7 +64,9 @@ class DeliveryOrderController extends Controller {
 
                 if ($model->load(Yii::$app->request->post())) {
                         Yii::$app->SetValues->Attributes($model);
-                        $model->ref_no = 'DO' . rand(0, 100000) . '/' . date('Y');
+                        $last_invoice = DeliveryOrder::find()->orderBy(['id' => SORT_DESC])->where(['status' => 1])->one();
+                        $last = $last_invoice->id + 1;
+                        $model->ref_no = 'DO' . $last . '/' . date('Y');
                         $model->date = date('Y-m-d');
                         if ($model->save())
                                 return $this->redirect(['/invoice/delivery-order/add', 'id' => $model->id]);
@@ -82,6 +84,7 @@ class DeliveryOrderController extends Controller {
 
         public function actionAdd($id, $invoice_details_id = NULL) {
                 $order_details = Orders::findAll(['order_id' => $id]);
+                $delivey_order = DeliveryOrder::findOne(['id' => $id]);
                 if (!isset($invoice_details_id)) {
                         $model = new Orders();
                 } else {
@@ -98,6 +101,7 @@ class DeliveryOrderController extends Controller {
                             'model' => $model,
                             'order_details' => $order_details,
                             'id' => $id,
+                            'delivey_order' => $delivey_order,
                 ]);
         }
 
