@@ -40,7 +40,7 @@ class GenerateInvoice extends \yii\db\ActiveRecord {
                         [['on_account_of', 'to_address', 'job'], 'required'],
                         [['invoice', 'on_account_of', 'job', 'payment_terms', 'status', 'CB', 'UB'], 'integer'],
                         [['to_address'], 'string'],
-                        [['date', 'DOC', 'DOU', 'oops_id'], 'safe'],
+                        [['date', 'DOC', 'DOU', 'oops_id', 'currency'], 'safe'],
 //            [['CB', 'UB', 'DOC'], 'required'],
                     [['invoice_number', 'doc_no', 'cheque_no'], 'string', 'max' => 100],
                 ];
@@ -61,6 +61,7 @@ class GenerateInvoice extends \yii\db\ActiveRecord {
                     'job' => 'Job',
                     'payment_terms' => 'Payment Terms',
                     'doc_no' => 'Doc No',
+                    'currency' => 'Currency',
                     'status' => 'Status',
                     'CB' => 'Cb',
                     'UB' => 'Ub',

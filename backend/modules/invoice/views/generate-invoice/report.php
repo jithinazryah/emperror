@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 use common\models\GenerateInvoice;
 use common\models\InvoiceGenerateDetails;
+use common\models\Currency;
 ?>
 <!DOCTYPE html>
 <!--
@@ -110,6 +111,12 @@ and open the template in the editor.
                                                                 <?php
                                                                 if ($invoice->on_account_of == 1) {
                                                                         echo 'CUSTOMS GATE PASS';
+                                                                } elseif ($invoice->on_account_of == 2) {
+                                                                        echo 'CARGO CLEARANCE';
+                                                                } elseif ($invoice->on_account_of == 3) {
+                                                                        echo 'EQUIPMENT HIRE';
+                                                                } elseif ($invoice->on_account_of == 4) {
+                                                                        echo 'TRUCK CLEARANCE';
                                                                 }
                                                                 ?>
                                                         </td>
@@ -117,6 +124,8 @@ and open the template in the editor.
                                                                 <?php
                                                                 if ($invoice->job == 1) {
                                                                         echo 'SERVICE / ATTENDANCE';
+                                                                } elseif ($invoice->job == 2) {
+                                                                        echo 'AGENTS / ATTENDANCE';
                                                                 }
                                                                 ?>
                                                         </td>
@@ -150,6 +159,7 @@ and open the template in the editor.
                                                 <?php
                                                 $i = 0;
                                                 $grand_total = 0;
+                                                $currency = Currency::findOne(['id' => 1]);
                                                 foreach ($invoice_details as $value) {
                                                         $i++;
                                                         ?>
@@ -157,8 +167,8 @@ and open the template in the editor.
                                                                 <td><?= $i ?></td>
                                                                 <td><?= $value->description ?></td>
                                                                 <td><?= $value->qty ?></td>
-                                                                <td>AED <?= $value->unit_price ?></td>
-                                                                <td>AED <?= $value->total ?></td>
+                                                                <td><?= $value->unit_price ?></td>
+                                                                <td><?= $value->total ?></td>
                                                         </tr>
                                                         <?php
                                                         $grand_total += $value->total;
@@ -166,7 +176,16 @@ and open the template in the editor.
                                                 ?>
                                                 <tr>
                                                         <td colspan="4" style="text-align:right;font-size: 13px;font-weight: bold;">Total</td>
-                                                        <td style="font-size: 10px;font-weight: bold;">AED <?= $value->total ?></td>
+                                                        <td style="font-size: 10px;font-weight: bold;">
+                                                                <?php
+                                                                if ($invoice->currency == 1) {
+                                                                        echo 'AED ' . Yii::$app->SetValues->NumberFormat($grand_total);
+                                                                } else {
+
+                                                                        echo 'USD ' . Yii::$app->SetValues->NumberFormat($grand_total);
+                                                                }
+                                                                ?>
+                                                        </td>
                                                 </tr>
                                         </table>
                                 </div>

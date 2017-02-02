@@ -39,7 +39,7 @@ and open the template in the editor.
                 margin-top: 18px;
         }
         .Invoice-list span{
-                padding: 0px 80px;
+                padding: 0px 70px;
                 border-bottom: 1px solid black;
                 font-weight: bold;
                 margin: 23px 0px;

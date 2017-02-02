@@ -36,11 +36,13 @@ use yii\helpers\ArrayHelper;
 
         <?= $form->field($model, 'on_account_of')->dropDownList(['1' => 'CUSTOMS GATE PASS', '2' => 'CARGO CLEARANCE', '3' => 'EQUIPMENT HIRE', '4' => 'TRUCK CLEARANCE']) ?>
 
-        <?= $form->field($model, 'job')->dropDownList(['1' => 'SERVICE / ATTENDANCE', '2' => 'AGENENTS / ATTENDANCE']) ?>
+        <?= $form->field($model, 'job')->dropDownList(['1' => 'SERVICE / ATTENDANCE', '2' => 'AGENTS / ATTENDANCE']) ?>
 
         <?= $form->field($model, 'payment_terms')->dropDownList(['1' => 'Cash', '2' => 'Cheque']) ?>
 
         <?= $form->field($model, 'cheque_no')->textInput() ?>
+
+        <?= $form->field($model, 'currency')->dropDownList(['1' => 'AED', '2' => 'Dollar ']) ?>
 
         <?php // $form->field($model, 'doc_no')->textInput(['maxlength' => true]) ?>
 
