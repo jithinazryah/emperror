@@ -5,6 +5,7 @@ use yii\widgets\DetailView;
 use common\models\GenerateInvoice;
 use common\models\InvoiceGenerateDetails;
 use common\models\Currency;
+use common\models\OnAccountOf;
 ?>
 <!DOCTYPE html>
 <!--
@@ -65,8 +66,8 @@ and open the template in the editor.
 
                 <tr>
                         <td>
-                                <div class="heading" style="margin-bottom: 8px;">Invoice</div>
-                                <div class="heading-top" style="margin-bottom: 72px;">
+                                <div class="heading" style="margin-bottom: 8px;"><?= OnAccountOf::findOne($invoice->on_account_of)->invoice_name; ?></div>
+                                <div class="heading-top" style="margin-bottom: 80px;">
                                         <div class="main-left">
                                                 <table class="tb2">
                                                         <tr>
@@ -91,6 +92,10 @@ and open the template in the editor.
                                                                 <td>Ops ID </td> <td style="width: 50px;text-align: center">:</td>
                                                                 <td style="max-width: 200px"><?= $invoice->oops_id ?></td>
                                                         </tr>
+                                                        <tr>
+                                                                <td>Customer Code </td> <td style="width: 50px;text-align: center">:</td>
+                                                                <td style="max-width: 200px"><?= $invoice->customer_code ?></td>
+                                                        </tr>
                                                 </table>
                                         </div>
                                 </div>
@@ -98,7 +103,7 @@ and open the template in the editor.
                 </tr>
                 <tr>
                         <td>
-                                <div class="Invoice-list">
+                                <div class="Invoice-list" style="margin-bottom: 15px;">
                                         <table class="table">
                                                 <tr>
                                                         <th>ON ACCOUNT OF</th>
@@ -108,17 +113,7 @@ and open the template in the editor.
                                                 </tr>
                                                 <tr>
                                                         <td>
-                                                                <?php
-                                                                if ($invoice->on_account_of == 1) {
-                                                                        echo 'CUSTOMS GATE PASS';
-                                                                } elseif ($invoice->on_account_of == 2) {
-                                                                        echo 'CARGO CLEARANCE';
-                                                                } elseif ($invoice->on_account_of == 3) {
-                                                                        echo 'EQUIPMENT HIRE';
-                                                                } elseif ($invoice->on_account_of == 4) {
-                                                                        echo 'TRUCK CLEARANCE';
-                                                                }
-                                                                ?>
+                                                                <?= OnAccountOf::findOne($invoice->on_account_of)->on_account_of; ?>
                                                         </td>
                                                         <td>
                                                                 <?php
@@ -157,6 +152,7 @@ and open the template in the editor.
                                                         <th>TOTAL</th>
                                                 </tr>
                                                 <?php
+                                                $k = 0;
                                                 $i = 0;
                                                 $grand_total = 0;
                                                 $currency = Currency::findOne(['id' => 1]);
@@ -165,17 +161,32 @@ and open the template in the editor.
                                                         ?>
                                                         <tr>
                                                                 <td><?= $i ?></td>
-                                                                <td><?= $value->description ?></td>
+                                                                <td>
+                                                                        <?= $value->description ?><br/>
+                                                                        <span style="font-style: italic;"><?= $value->comments ?></span>
+                                                                </td>
                                                                 <td><?= $value->qty ?></td>
                                                                 <td><?= $value->unit_price ?></td>
                                                                 <td><?= $value->total ?></td>
                                                         </tr>
                                                         <?php
                                                         $grand_total += $value->total;
+                                                        $k++;
                                                 }
+                                                for ($j = $k; $j <= 10; $j++) {
+                                                        ?>
+                                                        <tr>
+                                                                <td style="height: 16px;"></td>
+                                                                <td style="height: 16px;"></td>
+                                                                <td style="height: 16px;"></td>
+                                                                <td style="height: 16px;"></td>
+                                                                <td style="height: 16px;"></td>
+                                                        </tr>
+                                                <?php }
                                                 ?>
                                                 <tr>
-                                                        <td colspan="4" style="text-align:right;font-size: 13px;font-weight: bold;">Total</td>
+                                                        <td colspan="3" style="text-align:left;font-size: 11px;font-style: italic;color: red !important;"><?= $invoice->remarks ?></td>
+                                                        <td style="text-align:right;font-size: 13px;font-weight: bold;">Total</td>
                                                         <td style="font-size: 10px;font-weight: bold;">
                                                                 <?php
                                                                 if ($invoice->currency == 1) {
@@ -191,6 +202,69 @@ and open the template in the editor.
                                 </div>
                         </td>
                 </tr>
+                <tr>
+                        <td>
+                                <div class="amount-word" style="margin-top: 75px;">
+                                        <?php if ($invoice->currency == 1) { ?>
+                                                <p style="font-size: 12px;font-weight: bold;font-style: italic;">AED <?php echo ucwords(Yii::$app->NumToWord->ConvertNumberToWords($grand_total)) . ' Only'; ?> </p>
+                                        <?php } else {
+                                                ?>
+
+                                                <p style="font-size: 12px;font-weight: bold;font-style: italic;">USD <?php echo ucwords(Yii::$app->NumToWord->ConvertNumberToWords($grand_total, 'USD')) . ' Only'; ?> </p>
+                                        <?php }
+                                        ?>
+
+
+                                </div>
+                        </td>
+                </tr>
+                <?php
+                if ($invoice->bank_details == 1) {
+                        ?>
+                        <tr>
+                                <td>
+                                        <div class="bank-details" style="float:right;margin-top: 75px;">
+
+                                                <table>
+                                                        <tr>
+                                                                <td style="font-size: 12px;font-weight: bold;">Name</td>
+                                                                <td>:</td>
+                                                                <td style="font-size: 12px;font-weight: bold;">EMPEROR SHIPPING LINES LLC</td>
+                                                        </tr>
+                                                        <tr>
+                                                                <td style="font-size: 12px;font-weight: bold;">Bank Name</td>
+                                                                <td>:</td>
+                                                                <td style="font-size: 12px;font-weight: bold;">Bank Of Baroda</td>
+                                                        </tr>
+                                                        <tr>
+                                                                <td style="font-size: 12px;font-weight: bold;">Branch</td>
+                                                                <td>:</td>
+                                                                <td style="font-size: 12px;font-weight: bold;">Ras Al Khaimah, UAE</td>
+                                                        </tr>
+                                                        <tr>
+                                                                <td style="font-size: 12px;font-weight: bold;">Acct No</td>
+                                                                <td>:</td>
+                                                                <td style="font-size: 12px;font-weight: bold;">90050200004102</td>
+                                                        </tr>
+                                                        <tr>
+                                                                <td style="font-size: 12px;font-weight: bold;">IBAN No</td>
+                                                                <td>:</td>
+                                                                <td style="font-size: 12px;font-weight: bold;">AE150110090050200004102</td>
+                                                        </tr>
+                                                        <tr>
+                                                                <td style="font-size: 12px;font-weight: bold;">Swift</td>
+                                                                <td>:</td>
+                                                                <td style="font-size: 12px;font-weight: bold;">BARBAEADRAK</td>
+                                                        </tr>
+                                                </table>
+
+                                        </div>
+                                </td>
+                        </tr>
+
+                        <?php
+                }
+                ?>
 
         </tbody>
 

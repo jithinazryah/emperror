@@ -9,6 +9,8 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use common\models\InvoiceGenerateDetails;
+use common\models\OnAccountOf;
+use common\models\Contacts;
 
 /**
  * GenerateInvoiceController implements the CRUD actions for GenerateInvoice model.
@@ -65,9 +67,11 @@ class GenerateInvoiceController extends Controller {
                         Yii::$app->SetValues->Attributes($model);
                         $last_invoice = GenerateInvoice::find()->orderBy(['id' => SORT_DESC])->where(['status' => 1])->one();
                         $last = $last_invoice->id + 1;
+                        $on_account = OnAccountOf::findOne(['id' => $model->on_account_of]);
                         $model->invoice_number = 'GI/' . date('m') . '/' . date('Y') . '/' . $last;
-                        $doc_start = $this->GenerateDoc($model->on_account_of);
-                        $model->doc_no = $doc_start . $last;
+//                        $doc_start = $this->GenerateDoc($model->on_account_of);
+                        $model->doc_no = $on_account->code . $last;
+                        $model->bank_details = $_POST['bank_details'];
                         if ($model->save())
                                 return $this->redirect(['/invoice/generate-invoice/add', 'id' => $model->id]);
                         else {
@@ -172,6 +176,14 @@ class GenerateInvoiceController extends Controller {
                         $invoice_id = $_POST['invoice_id'];
                         $invoice_address = \common\models\Debtor::find()->where(['id' => $invoice_id])->one();
                         return $invoice_address->invoicing_address;
+                }
+        }
+
+        public function actionSupplierAddress() {
+                if (Yii::$app->request->isAjax) {
+                        $supplier_id = $_POST['supplier_id'];
+                        $supplier_address = Contacts::find()->where(['id' => $supplier_id])->one();
+                        return $supplier_address->address;
                 }
         }
 

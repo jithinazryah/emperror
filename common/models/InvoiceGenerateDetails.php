@@ -29,7 +29,7 @@ class InvoiceGenerateDetails extends \yii\db\ActiveRecord {
                 return [
                         [['description'], 'string'],
                         [['qty', 'unit_price', 'total'], 'number'],
-                        [['invoice_id', 'status', 'CB', 'UB', 'DOC', 'DOU'], 'safe'],
+                        [['invoice_id', 'status', 'CB', 'UB', 'DOC', 'DOU', 'comments'], 'safe'],
                 ];
         }
 
@@ -42,7 +42,8 @@ class InvoiceGenerateDetails extends \yii\db\ActiveRecord {
                     'description' => 'Description',
                     'qty' => 'Qty',
                     'unit_price' => 'Unit Price',
-                    'Total' => 'Total',
+                    'total' => 'Total',
+                    'comments' => 'Comments',
                 ];
         }
 

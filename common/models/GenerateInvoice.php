@@ -38,9 +38,9 @@ class GenerateInvoice extends \yii\db\ActiveRecord {
         public function rules() {
                 return [
                         [['on_account_of', 'to_address', 'job'], 'required'],
-                        [['invoice', 'on_account_of', 'job', 'payment_terms', 'status', 'CB', 'UB'], 'integer'],
+                        [['invoice', 'on_account_of', 'job', 'payment_terms', 'status', 'CB', 'UB', 'supplier'], 'integer'],
                         [['to_address'], 'string'],
-                        [['date', 'DOC', 'DOU', 'oops_id', 'currency'], 'safe'],
+                        [['date', 'DOC', 'DOU', 'oops_id', 'currency', 'customer_code', 'remarks', 'bank_details'], 'safe'],
 //            [['CB', 'UB', 'DOC'], 'required'],
                     [['invoice_number', 'doc_no', 'cheque_no'], 'string', 'max' => 100],
                 ];
@@ -52,7 +52,8 @@ class GenerateInvoice extends \yii\db\ActiveRecord {
         public function attributeLabels() {
                 return [
                     'id' => 'ID',
-                    'invoice' => 'Invoice',
+                    'invoice' => 'Debtor',
+                    'supplier' => 'Contacts',
                     'to_address' => 'To Address',
                     'invoice_number' => 'Invoice Number',
                     'date' => 'Date',
@@ -62,6 +63,8 @@ class GenerateInvoice extends \yii\db\ActiveRecord {
                     'payment_terms' => 'Payment Terms',
                     'doc_no' => 'Doc No',
                     'currency' => 'Currency',
+                    'customer_code' => 'Customer Code',
+                    'remarks' => 'Remarks',
                     'status' => 'Status',
                     'CB' => 'Cb',
                     'UB' => 'Ub',

@@ -131,6 +131,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                         <tr>
                                                                 <th>#</th>
                                                                 <th>Description</th>
+                                                                <th>Comments</th>
                                                                 <th>Quantity</th>
                                                                 <th>Unit Price</th>
                                                                 <th>Total</th>
@@ -150,6 +151,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                                 <tr>
                                                                         <td><?= $i; ?></td>
                                                                         <td><?= $invoice_detail->description; ?></td>
+                                                                        <td><?= $invoice_detail->comments; ?></td>
                                                                         <td><?= $invoice_detail->qty; ?></td>
                                                                         <td><?= $invoice_detail->unit_price; ?></td>
                                                                         <td><?= $invoice_detail->total; ?></td>
@@ -167,7 +169,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                         ?>
 
                                                         <tr>
-                                                                <td colspan="4">Total</td>
+                                                                <td colspan="5">Total</td>
                                                                 <td><?= $totalamount ?></td>
                                                                 <td></td>
                                                         </tr>
@@ -182,6 +184,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                 <thead>
                                                         <tr>
                                                                 <th>Description</th>
+                                                                <th>Comments</th>
                                                                 <th>Quantity</th>
                                                                 <th>Unit Price</th>
                                                                 <th>Total</th>
@@ -193,6 +196,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                                                 <?php $form = ActiveForm::begin(); ?>
 
                                                                 <td><?= $form->field($model, 'description')->textInput(['placeholder' => 'Description'])->label(false) ?></td>
+                                                                <td><?= $form->field($model, 'comments')->textInput(['placeholder' => 'Comments'])->label(false) ?></td>
                                                                 <td><?= $form->field($model, 'qty')->textInput(['placeholder' => 'Quantity'])->label(false) ?></td>
                                                                 <td><?= $form->field($model, 'unit_price')->textInput(['placeholder' => 'Unit Price'])->label(false) ?></td>
                                                                 <td><?= $form->field($model, 'total')->textInput(['placeholder' => 'Total'])->label(false) ?></td>
